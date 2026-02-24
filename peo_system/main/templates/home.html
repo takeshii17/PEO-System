@@ -1,0 +1,20 @@
+<h1>Home Page</h1>
+
+{% if user.is_authenticated %}
+    <p>Welcome back, <strong>{{user.username }}</strong>!</p>
+
+    {% if user.is_staff %}
+        <p>Role: Staff/Admin</p>
+    {% else %}
+    <p>Role: Regular User</p>
+    {% endif %}
+
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Log Out</button>
+    </form>
+
+    {% else %}
+    <p>You are not logged in.</p>
+    <a href="{% url 'login' %}">Click here to Login</a>
+    {% endif %}
