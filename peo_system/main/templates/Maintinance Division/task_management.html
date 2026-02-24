@@ -6,9 +6,138 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'styles.css' %}">
   <title>Task Management</title>
-  
-</head>
-<body class="view-maintenance-task">
+ <style>
+    :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Sora","Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
+    .layout{min-height:100vh;display:block}
+    .sidebar{display:none}
+    .brand{display:flex;align-items:center;gap:14px;padding:24px 22px;border-bottom:1px solid rgba(217,229,245,.16)}
+    .logo{width:62px;height:62px;border-radius:10px;border:2px solid #f0d06a;background:radial-gradient(circle at 35% 35%,#ffe887 0,#f4c21d 62%,#e3aa0a 100%);color:#8f0618;font-weight:700;font-size:.82rem;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #17395f}
+    .brand h1{margin:0;color:#f1f6fc;font-size:1.8rem;line-height:1.1}
+    .brand p{margin:4px 0 0;color:#b9c8d9;font-size:.98rem}
+    .menu{padding:16px 20px;display:grid;gap:8px}
+    .menu-item{color:#c7d6e6;text-decoration:none;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:1.9rem;font-size:clamp(1rem,1.2vw,1.85rem)}
+    .menu-item:hover{background:rgba(255,255,255,.08)}
+    .menu-item.active{background:var(--active);color:#fff;font-weight:600}
+    .menu-item svg{width:24px;height:24px;flex:0 0 auto}
+    .menu-group{display:grid;gap:8px}
+    .menu-item-group{width:100%;padding:0;border:0;background:transparent;overflow:hidden;color:#fff;font:inherit;cursor:pointer;justify-content:space-between}
+    .menu-main{display:flex;align-items:center;gap:12px;padding:14px 16px;flex:1;text-align:left}
+    .menu-caret{display:grid;place-items:center;min-width:54px;border-left:1px solid rgba(189,214,238,.14)}
+    .menu-caret svg{width:16px;height:16px;transition:transform .2s ease}
+    .menu-group.open .menu-caret svg{transform:rotate(180deg)}
+    .menu-submenu{display:grid;gap:8px;padding-left:14px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);pointer-events:none;transition:max-height .28s ease,opacity .2s ease,transform .2s ease}
+    .menu-group.open .menu-submenu{max-height:180px;opacity:1;transform:translateY(0);pointer-events:auto}
+    .menu-subitem{color:#c7d6e6;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:1.02rem;background:rgba(9,39,72,.36)}
+    
+    .stats,.tabs,.conditions,.filters,.roads,.ctm{display:none!important}
+    .tms{margin-top:0}
+    .content{min-width:0;width:100%}
+    .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
+    .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
+    .heading p{margin:6px 0 0;color:var(--muted);font-size:1.1rem}
+    .profile{display:flex;align-items:center;gap:14px}
+    .chip{border-radius:999px;background:#efe1ff;color:#7d18e4;border:1px solid #e6d1ff;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;font-size:1.02rem;font-weight:600}
+    .seal{width:52px;height:52px;border-radius:50%;border:2px solid #d3dbe4;background:radial-gradient(circle at 35% 35%,#eff7ff,#dce9f8 46%,#bfcee3);display:grid;place-items:center;font-size:.53rem;font-weight:700;line-height:1.14;color:#0f2c4f;text-align:center}
+    .page{padding:30px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:26px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);min-height:160px;padding:22px 20px;display:flex;align-items:center;gap:16px}
+    .ibox{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:0 0 auto}
+    .ibox svg{width:27px;height:27px}
+    .i-gray{background:#dfe4ea;color:#1d466e}.i-blue{background:#d6e5f8;color:#2166dc}.i-green{background:#caedd9;color:#0a9a4a}.i-gold{background:#f7e7bc;color:#de7d00}
+    .card strong{display:block;font-size:2.4rem;line-height:1.05}
+    .card span{color:#47607d;font-size:1.06rem}
+    .tabs{display:inline-flex;background:#dfe4ea;border-radius:14px;padding:4px;gap:2px;margin-bottom:12px}
+    .tabs button{border:0;background:transparent;font-family:inherit;font-size:1rem;color:#102741;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .tabs button.active{background:#f8fafd;box-shadow:0 1px 2px rgba(12,33,56,.12);font-weight:600}
+    .conditions{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:20px}
+    .ccard{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}
+    .chead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+    .chead h3{margin:0;font-size:1.35rem}
+    .count{border-radius:999px;padding:5px 12px;font-weight:600;font-size:1rem}
+    .good{background:#cdeed9;color:#08923f}.fair{background:#cfe0f4;color:#1755dd}.poor{background:#f6e5b9;color:#d07300}.bad{background:#f03a49;color:#fff}
+    .bar{height:12px;border-radius:999px;background:#cfd6de;overflow:hidden}.bar>span{display:block;height:100%;background:#18395a}
+    .w1{width:22%}.w2{width:49%}.w3{width:22%}.w4{width:6%}
+    .filters{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
+    .frow{display:grid;grid-template-columns:minmax(250px,1fr) 230px 190px 200px 150px;gap:12px;align-items:center}
+    .search,.sel{border:1px solid #c9d0d9;border-radius:14px;background:#f9fbfd;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .search input,.sel select{width:100%;border:0;outline:none;background:transparent;color:#2f4a66;font-family:inherit;font-size:1.05rem}
+    .roads{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
+    .roads h2{margin:10px 10px 4px;font-size:2.1rem}
+    .roads .sub{margin:0 10px 12px;color:#4d647e;font-size:1.05rem}
+    .muni{border:1px solid #c8d0d9;border-radius:16px;overflow:hidden;margin:12px 0;background:#f9fbfd}
+    .mhead{background:#d0d6dc;color:#0e3155;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.65rem;font-size:clamp(1.2rem,1.4vw,1.65rem)}
+    .mhead .tag{margin-left:10px;border:1px solid #bcc5d0;border-radius:999px;font-weight:500;padding:3px 10px;font-size:.92rem;color:#0f2945;background:#d8dde3}
+    .mhead svg{width:22px;height:22px}
+    table{width:100%;border-collapse:collapse}
+    th,td{text-align:left;padding:13px 16px;border-bottom:1px solid #c9d0d9;font-size:1.05rem}
+    th{background:#f4f7fa;color:#0f2138;font-size:1.12rem}
+    tr:last-child td{border-bottom:0}
+    .pill{display:inline-block;border-radius:999px;padding:5px 12px;font-size:.96rem;font-weight:600}
+    .pill.good{background:#cdeed9;color:#08923f}.pill.fair{background:#cfe0f4;color:#1755dd}.pill.poor{background:#f6e5b9;color:#d07300}
+    .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:4px 2px 2px;color:#314a65;font-size:1.05rem}
+    .pager{display:inline-flex;gap:8px}.pager button{width:48px;height:40px;border:1px solid #c8d0d9;border-radius:12px;background:#f8fafd;color:#314a65;font-size:1.45rem;cursor:pointer}
+    .ctm{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px}
+    .ctm h2{margin:2px 2px 4px;font-size:2rem}
+    .ctm .sub{margin:0 2px 14px;color:#52657b;font-size:1.05rem}
+    .ctm-stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:16px;margin-bottom:16px}
+    .ctm-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:138px;padding:16px;display:flex;align-items:center;gap:14px}
+    .ctm-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;flex:0 0 auto}
+    .ctm-icon svg{width:28px;height:28px}
+    .ctm-i1{background:#dee4ec;color:#183758}.ctm-i2{background:#caeee9;color:#00a69b}.ctm-i3{background:#f5e8cf;color:#f59300}.ctm-i4{background:#f4dce1;color:#ff3b4a}
+    .ctm-card strong{display:block;font-size:2.2rem;line-height:1}
+    .ctm-card span{color:#4a627c;font-size:1.05rem}
+    .ctm-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:20px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px}
+    .ctm-row{display:grid;grid-template-columns:minmax(280px,1fr) 190px 190px 200px;gap:12px;align-items:center}
+    .ctm-search,.ctm-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .ctm-search input,.ctm-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
+    .ctm-add{border:0;border-radius:14px;background:#10385f;color:#fff;font-family:inherit;font-size:1.06rem;font-weight:600;padding:11px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+    .ctm-list{margin-top:8px}
+    .ctm-list h3{margin:0 2px 4px;font-size:1.8rem}
+    .ctm-list .sub{margin:0 2px 10px;color:#52657b}
+    .ctm-item{background:#f8fafc;border:1px solid #c8d0da;border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;margin:10px 0;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .ctm-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .ctm-title h4{margin:0;font-size:1.18rem}
+    .badge{display:inline-block;border-radius:999px;background:#bcece4;color:#007f74;padding:5px 12px;font-weight:600;font-size:.96rem}
+    .tin{margin:6px 0 0;color:#546b84}
+    .ctm-meta{margin-top:6px;display:flex;gap:14px;align-items:center;color:#0d2138}
+    .ctm-meta .muted{color:#4f657f}
+    .ctm-actions{display:flex;gap:8px}
+    .ctm-actions button{width:44px;height:40px;border:1px solid #c7ced8;border-radius:12px;background:#f9fbfd;color:#1b2b3c;display:grid;place-items:center;cursor:pointer}
+    .ctm-actions svg{width:20px;height:20px}
+    .ctm-paging{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .ctm-paging button{border:1px solid #c7ced8;background:#f9fbfd;color:#192a3b;border-radius:12px;padding:8px 14px;font-size:1.05rem;cursor:pointer}
+    .tms{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
+    .tms-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px 14px;border-bottom:1px solid #ccd4de}
+    .tms-left{display:flex;align-items:center;gap:16px}
+    .tms-back{display:inline-flex;align-items:center;gap:8px;color:#1b2f44;text-decoration:none;font-size:1rem;padding:8px 10px;border-radius:10px}
+    .tms-back:hover{background:#ecf1f6}
+    .tms-head h2{margin:0;font-size:2.2rem;font-size:clamp(1.5rem,2.1vw,2.2rem)}
+    .tms-actions{display:flex;gap:10px;align-items:center}
+    .btn-light,.btn-dark{border-radius:14px;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    .btn-light{border:1px solid #cad2dd;background:#f8fafc;color:#1c334b}
+    .btn-dark{border:0;background:#133b64;color:#fff;font-weight:600}
+    .tms-body{padding:16px 8px 8px}
+    .tms-cards{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:14px;margin-bottom:16px}
+    .tms-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:132px;padding:14px 16px;display:flex;align-items:center}
+    .tms-card strong{display:block;font-size:2rem;line-height:1}
+    .tms-card span{color:#4e657f;font-size:1.05rem}
+    .tms-alert{display:flex;align-items:center;gap:10px}
+    .tms-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
+    .tms-row{display:grid;grid-template-columns:minmax(280px,1fr) 170px 170px 170px;gap:12px;align-items:center}
+    .tms-search,.tms-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .tms-search input,.tms-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
+    .tms-list{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;min-height:260px;display:flex;flex-direction:column}
+    .tms-list h3{margin:4px 0 0;font-size:1.8rem}
+    .tms-list .sub{margin:4px 0 24px;color:#516881}
+    .tms-empty{margin:auto;display:grid;place-items:center;gap:10px;color:#5f7389}
+    .tms-empty svg{width:54px;height:54px;color:#a7b2bf}
+    .btn-create{border:0;border-radius:14px;background:#133b64;color:#fff;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    @media (max-width:1450px){.sidebar{width:300px}.stats,.conditions,.ctm-stats{grid-template-columns:repeat(2,minmax(220px,1fr))}.frow,.ctm-row{grid-template-columns:repeat(3,minmax(200px,1fr))}.tms-cards{grid-template-columns:repeat(3,minmax(180px,1fr))}.tms-row{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+    @media (max-width:980px){.layout{flex-direction:column}.sidebar{width:100%}.topbar{flex-direction:column}.profile{width:100%;justify-content:flex-end}.stats,.conditions,.frow,.ctm-stats,.ctm-row,.tms-cards,.tms-row{grid-template-columns:1fr}.ctm-item,.tms-head{flex-direction:column;align-items:flex-start}}
+  </style> 
+<body>
   <div class="layout">
     <aside class="sidebar">
       <div class="brand"><div class="logo">PEO</div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
@@ -191,6 +320,10 @@
         <section class="tms" id="task-management">
           <div class="tms-head">
             <div class="tms-left">
+              <a class="tms-back" href="{% url 'home' %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Back to Dashboard
+              </a>
               <h2>Task Management</h2>
             </div>
             <div class="tms-actions">
@@ -236,112 +369,6 @@
       var group = document.getElementById("maintenanceMenuGroup");
       var btn = document.getElementById("maintenanceMenuBtn");
       var submenu = document.getElementById("maintenanceSubmenu");
-      var shell = document.querySelector(".app-shell, .layout");
-      var sidebar = document.querySelector(".sidebar");
-      var sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
-      var topbar = document.querySelector(".topbar");
-      var sidebarStorageKey = "peo_sidebar_collapsed";
-
-      function applySidebarState(isCollapsed) {
-        if (!shell) return;
-        shell.classList.toggle("sidebar-collapsed", isCollapsed);
-        if (sidebarToggleBtn) {
-          sidebarToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
-          sidebarToggleBtn.setAttribute("aria-label", isCollapsed ? "Show sidebar" : "Hide sidebar");
-        }
-      }
-
-      if (shell && sidebar) {
-        var sidebarVisible = window.getComputedStyle(sidebar).display !== "none";
-        if (!sidebarVisible) {
-          if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-        } else {
-          if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-          var isMobileLayout = window.matchMedia("(max-width: 980px)").matches;
-          var storedCollapsed = window.localStorage.getItem(sidebarStorageKey) === "1";
-          applySidebarState(!isMobileLayout && storedCollapsed);
-
-          var autoHideDelayMs = 5000;
-          var autoHideTimer = null;
-          var lastMouseX = null;
-
-          function isDesktopAutoMode() {
-            return !window.matchMedia("(max-width: 980px)").matches;
-          }
-
-          function clearAutoHideTimer() {
-            if (autoHideTimer) {
-              window.clearTimeout(autoHideTimer);
-              autoHideTimer = null;
-            }
-          }
-
-          function expandSidebar() {
-            if (!shell.classList.contains("sidebar-collapsed")) {
-              return;
-            }
-            applySidebarState(false);
-            window.localStorage.setItem(sidebarStorageKey, "0");
-          }
-
-          function collapseSidebar() {
-            if (shell.classList.contains("sidebar-collapsed")) {
-              return;
-            }
-            applySidebarState(true);
-            window.localStorage.setItem(sidebarStorageKey, "1");
-          }
-
-          function restartAutoHideTimer() {
-            clearAutoHideTimer();
-            if (!isDesktopAutoMode()) {
-              return;
-            }
-            if (shell.classList.contains("sidebar-collapsed")) {
-              return;
-            }
-            autoHideTimer = window.setTimeout(collapseSidebar, autoHideDelayMs);
-          }
-
-          function handlePointerActivity(event) {
-            if (!isDesktopAutoMode()) {
-              return;
-            }
-            var currentX = typeof event.clientX === "number" ? event.clientX : lastMouseX;
-            var movingLeft = typeof currentX === "number" && typeof lastMouseX === "number" && currentX < (lastMouseX - 4);
-            var pointerInsideSidebar = sidebar.contains(event.target);
-            var nearLeftEdge = typeof currentX === "number" && currentX <= 80;
-            if (pointerInsideSidebar || nearLeftEdge || movingLeft) {
-              expandSidebar();
-            }
-            restartAutoHideTimer();
-            if (typeof currentX === "number") {
-              lastMouseX = currentX;
-            }
-          }
-
-          document.addEventListener("mousemove", handlePointerActivity);
-          document.addEventListener("mousedown", handlePointerActivity);
-          document.addEventListener("keydown", restartAutoHideTimer);
-          document.addEventListener("wheel", restartAutoHideTimer, { passive: true });
-          window.addEventListener("focus", restartAutoHideTimer);
-
-          window.addEventListener("resize", function () {
-            clearAutoHideTimer();
-            lastMouseX = null;
-            if (window.matchMedia("(max-width: 980px)").matches) {
-              applySidebarState(false);
-              return;
-            }
-            var collapsedState = window.localStorage.getItem(sidebarStorageKey) === "1";
-            applySidebarState(collapsedState);
-            restartAutoHideTimer();
-          });
-
-          restartAutoHideTimer();
-        }
-      }
-
       if (!group || !btn || !submenu) {
         return;
       }

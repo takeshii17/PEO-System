@@ -6,9 +6,637 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Planning Division Dashboard</title>
-    
+     <style>
+        :root {
+            --bg: #eef1f5;
+            --panel: #f5f7fa;
+            --line: #ccd3dc;
+            --text: #0c2137;
+            --muted: #5a6e86;
+            --sidebar: #072645;
+            --sidebar-soft: #10385f;
+            --primary: #123a63;
+            --chip: #dce7f7;
+            --shadow: 0 2px 8px rgba(8, 32, 57, 0.1);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: block;
+        }
+
+        .sidebar { display: none; }
+
+        .brand {
+            padding: 28px 24px;
+            border-bottom: 1px solid rgba(211, 223, 238, 0.18);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            border: 2px solid #f0d364;
+            background: radial-gradient(circle at 35% 35%, #ffe889 0%, #f8ca22 60%, #e0a90a 100%);
+            color: #8a0010;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: grid;
+            place-items: center;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: #f4f8fe;
+            font-size: clamp(1.1rem, 1.65vw, 1.85rem);
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            color: #c2d0df;
+            font-size: 0.92rem;
+        }
+
+        .nav {
+            padding: 18px 16px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .nav a {
+            color: #c9d8e8;
+            text-decoration: none;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav a.active {
+            background: #113861;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav svg {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+        }
+
+        .caret {
+            margin-left: auto;
+        }
+
+        .content {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .topbar { display: none; }
+
+        .title-wrap h2 {
+            margin: 0;
+            font-size: 1.55rem;
+        }
+
+        .title-sub {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 0.82rem;
+        }
+
+        .division-chip {
+            border: 1px solid #b8ccf0;
+            background: var(--chip);
+            color: #1a58a7;
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .seal {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid #cfd7e1;
+            background: radial-gradient(circle at 35% 35%, #f1f9ff 0%, #dbe8f7 45%, #b9cade 100%);
+            color: #0f2e53;
+            font-size: 0.54rem;
+            font-weight: 700;
+            line-height: 1.12;
+            display: grid;
+            place-items: center;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #0f365f;
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .logout {
+            border: 0;
+            background: transparent;
+            color: #182d43;
+            font-size: 0.95rem;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        .logout:hover {
+            background: #e6edf6;
+        }
+
+        .main {
+            padding: 24px 26px;
+        }
+
+        .section-tabs {
+            width: min(780px, 100%);
+            background: #dfe3e8;
+            border-radius: 14px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 22px;
+        }
+
+        .section-tab {
+            border: 0;
+            border-radius: 11px;
+            padding: 9px 12px;
+            background: transparent;
+            color: #0d253e;
+            font-family: inherit;
+            font-size: 0.84rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .section-tab.active {
+            background: #f7f9fb;
+            box-shadow: 0 1px 3px rgba(15, 39, 63, 0.12);
+            font-weight: 600;
+        }
+
+        .section-tab svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            min-height: 150px;
+            padding: 22px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+        }
+
+        .card-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .blue { background: #d7e4f7; color: #2267d8; }
+        .green { background: #cdeed9; color: #109145; }
+        .gold { background: #f6e9c2; color: #d98600; }
+        .violet { background: #e6daf8; color: #9738f7; }
+
+        .card strong {
+            display: block;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .card span {
+            color: #4d627b;
+            font-size: 0.8rem;
+        }
+
+        .budget-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px 28px 22px;
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .panel-head h3 {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .panel-head p {
+            margin: 4px 0 0;
+            color: #4f637c;
+            font-size: 0.8rem;
+        }
+
+        .new-budget {
+            border: 0;
+            background: #10385f;
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 11px 18px;
+            font-size: 0.82rem;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .budget-item {
+            background: #f8fafc;
+            border: 1px solid #cdd4dd;
+            border-radius: 16px;
+            padding: 18px 18px 16px;
+            margin-top: 14px;
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .title-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .title-line h4 {
+            margin: 0;
+            font-size: 0.98rem;
+        }
+
+        .title-line a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .title-line a:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            background: #153d66;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 8px 16px;
+            margin: 4px 0 10px;
+            color: #4a607b;
+            font-size: 0.8rem;
+        }
+
+        .meta strong {
+            color: #0e2238;
+            font-weight: 700;
+        }
+
+        .ok {
+            color: #0d9d42;
+            font-weight: 700;
+        }
+
+        .icon-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-actions form {
+            margin: 0;
+        }
+
+        .icon-btn {
+            border: 1px solid #cdd4de;
+            background: #ffffff;
+            width: 44px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            color: #0e243c;
+        }
+
+        button.icon-btn {
+            font-family: inherit;
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .util-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+            color: #2f4560;
+            font-size: 0.8rem;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 999px;
+            background: #dce3eb;
+            overflow: hidden;
+        }
+
+        .progress > span {
+            display: block;
+            height: 100%;
+            width: 100%;
+            background: #123d67;
+        }
+
+        .pow-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pow-tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pow-tools input,
+        .pow-tools select {
+            border: 1px solid #c5ced9;
+            border-radius: 10px;
+            background: #f7f9fb;
+            color: #21354a;
+            padding: 9px 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .pow-tools input {
+            min-width: 230px;
+        }
+
+        .pow-empty {
+            border: 1px solid #d2d9e2;
+            border-radius: 14px;
+            min-height: 130px;
+            margin-top: 14px;
+            display: grid;
+            place-items: center;
+            color: #5c6f87;
+            font-size: 1rem;
+            text-align: center;
+            padding: 16px;
+            background: #f8fafc;
+        }
+
+        .pow-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+            background: #f8fafc;
+            border: 1px solid #d2d9e2;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .pow-table th,
+        .pow-table td {
+            border-bottom: 1px solid #dde3eb;
+            padding: 9px 10px;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .pow-table th {
+            background: #eef3f8;
+            color: #23384f;
+            font-weight: 600;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 21, 37, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 70;
+            padding: 16px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(620px, 100%);
+            background: #f8fafc;
+            border: 1px solid #ccd4df;
+            border-radius: 14px;
+            box-shadow: 0 10px 28px rgba(7, 23, 43, 0.3);
+        }
+
+        .modal-head {
+            border-bottom: 1px solid #d7dde6;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .modal-body {
+            padding: 12px 14px 14px;
+        }
+
+        .budget-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.76rem;
+            color: #2f4762;
+            font-weight: 600;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            border: 1px solid #c3ceda;
+            border-radius: 8px;
+            padding: 8px 9px;
+            font-family: inherit;
+            font-size: 0.82rem;
+            background: #ffffff;
+        }
+
+        .form-field.full {
+            grid-column: span 2;
+        }
+
+        .modal-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        @media (max-width: 1440px) {
+            .sidebar {
+                width: 282px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .profile {
+                justify-content: flex-end;
+            }
+
+            .section-tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .meta {
+                grid-template-columns: 1fr;
+            }
+
+            .budget-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full {
+                grid-column: span 1;
+            }
+
+            .item-top {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
-<body class="view-planning">
+<body>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
@@ -360,102 +988,6 @@
             const closeProjectBtn = document.getElementById("closeProjectModal");
             const modal = document.getElementById("budgetModal");
             const closeBtn = document.getElementById("closeBudgetModal");
-            const shell = document.querySelector(".app-shell, .layout");
-            const sidebar = document.querySelector(".sidebar");
-            const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
-            const topbar = document.querySelector(".topbar");
-            const sidebarStorageKey = "peo_sidebar_collapsed";
-
-            function applySidebarState(isCollapsed) {
-                if (!shell) return;
-                shell.classList.toggle("sidebar-collapsed", isCollapsed);
-                if (sidebarToggleBtn) {
-                    sidebarToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
-                    sidebarToggleBtn.setAttribute("aria-label", isCollapsed ? "Show sidebar" : "Hide sidebar");
-                }
-            }
-
-            if (shell && sidebar) {
-                const sidebarVisible = window.getComputedStyle(sidebar).display !== "none";
-                if (!sidebarVisible) {
-                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-                } else {
-                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-                    const isMobileLayout = window.matchMedia("(max-width: 980px)").matches;
-                    const storedCollapsed = window.localStorage.getItem(sidebarStorageKey) === "1";
-                    applySidebarState(!isMobileLayout && storedCollapsed);
-
-                    const autoHideDelayMs = 5000;
-                    let autoHideTimer = null;
-                    let lastMouseX = null;
-
-                    function isDesktopAutoMode() {
-                        return !window.matchMedia("(max-width: 980px)").matches;
-                    }
-
-                    function clearAutoHideTimer() {
-                        if (autoHideTimer) {
-                            window.clearTimeout(autoHideTimer);
-                            autoHideTimer = null;
-                        }
-                    }
-
-                    function expandSidebar() {
-                        if (!shell.classList.contains("sidebar-collapsed")) return;
-                        applySidebarState(false);
-                        window.localStorage.setItem(sidebarStorageKey, "0");
-                    }
-
-                    function collapseSidebar() {
-                        if (shell.classList.contains("sidebar-collapsed")) return;
-                        applySidebarState(true);
-                        window.localStorage.setItem(sidebarStorageKey, "1");
-                    }
-
-                    function restartAutoHideTimer() {
-                        clearAutoHideTimer();
-                        if (!isDesktopAutoMode()) return;
-                        if (shell.classList.contains("sidebar-collapsed")) return;
-                        autoHideTimer = window.setTimeout(collapseSidebar, autoHideDelayMs);
-                    }
-
-                    function handlePointerActivity(event) {
-                        if (!isDesktopAutoMode()) return;
-                        const currentX = typeof event.clientX === "number" ? event.clientX : lastMouseX;
-                        const movingLeft = typeof currentX === "number" && typeof lastMouseX === "number" && currentX < (lastMouseX - 4);
-                        const pointerInsideSidebar = sidebar.contains(event.target);
-                        const nearLeftEdge = typeof currentX === "number" && currentX <= 80;
-                        if (pointerInsideSidebar || nearLeftEdge || movingLeft) {
-                            expandSidebar();
-                        }
-                        restartAutoHideTimer();
-                        if (typeof currentX === "number") {
-                            lastMouseX = currentX;
-                        }
-                    }
-
-                    document.addEventListener("mousemove", handlePointerActivity);
-                    document.addEventListener("mousedown", handlePointerActivity);
-                    document.addEventListener("keydown", restartAutoHideTimer);
-                    document.addEventListener("wheel", restartAutoHideTimer, { passive: true });
-                    window.addEventListener("focus", restartAutoHideTimer);
-
-                    window.addEventListener("resize", function () {
-                        clearAutoHideTimer();
-                        lastMouseX = null;
-                        if (window.matchMedia("(max-width: 980px)").matches) {
-                            applySidebarState(false);
-                            return;
-                        }
-                        const collapsedState = window.localStorage.getItem(sidebarStorageKey) === "1";
-                        applySidebarState(collapsedState);
-                        restartAutoHideTimer();
-                    });
-
-                    restartAutoHideTimer();
-                }
-            }
-
             if (openProjectBtn && projectModal) {
                 openProjectBtn.addEventListener("click", function () {
                     projectModal.classList.add("show");
