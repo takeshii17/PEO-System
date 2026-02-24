@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maintenance Division</title>
+  <title>Contractor Management</title>
   <style>
     :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
     *{box-sizing:border-box}
@@ -26,9 +26,11 @@
     .menu-caret svg{width:16px;height:16px;transition:transform .2s ease}
     .menu-group.open .menu-caret svg{transform:rotate(180deg)}
     .menu-submenu{display:grid;gap:8px;padding-left:14px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);pointer-events:none;transition:max-height .28s ease,opacity .2s ease,transform .2s ease}
-    .menu-group.open .menu-submenu{max-height:130px;opacity:1;transform:translateY(0);pointer-events:auto}
+    .menu-group.open .menu-submenu{max-height:180px;opacity:1;transform:translateY(0);pointer-events:auto}
     .menu-subitem{color:#c7d6e6;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:1.02rem;background:rgba(9,39,72,.36)}
-    .menu-subitem:hover{background:rgba(255,255,255,.08);color:#fff}
+    
+    .stats,.tabs,.conditions,.filters,.roads,.tms{display:none!important}
+    .ctm{margin-top:0}
     .content{flex:1;min-width:0}
     .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
     .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
@@ -153,8 +155,9 @@
             </span>
           </button>
           <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
+            <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintinance Management</a>
             <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+            <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Managment</a>
           </div>
         </div>
       </nav>
@@ -375,3 +378,5 @@
   </script>
 </body>
 </html>
+
+

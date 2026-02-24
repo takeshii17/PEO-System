@@ -110,6 +110,120 @@
             font-weight: 600;
         }
 
+        .nav-group {
+            display: grid;
+            gap: 6px;
+        }
+
+        .nav-item-group {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .nav-main-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
+            text-decoration: none;
+            padding: 14px 16px;
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            background: transparent;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .nav-action-btn {
+            border: 0;
+            background: transparent;
+            color: #c7d5e5;
+            padding: 0 14px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            border-left: 1px solid rgba(189, 214, 238, 0.1);
+            height: 100%;
+        }
+
+        .nav-action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-action-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-group.open .nav-action-btn svg {
+            transform: rotate(180deg);
+        }
+
+        .nav-submenu {
+            display: grid;
+            gap: 6px;
+            padding-left: 18px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-6px);
+            pointer-events: none;
+            transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .nav-group.open .nav-submenu {
+            max-height: 180px;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .nav-subitem {
+            color: #b8cbdf;
+            text-decoration: none;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.98rem;
+            background: rgba(8, 39, 74, 0.32);
+        }
+
+        .nav-subitem:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        
+        .nav-subitem.blink {
+            animation: navItemBlink 0.32s ease 2;
+        }
+
+        .page.panel-blink {
+            animation: dashboardBlink 0.42s ease;
+        }
+
+        @keyframes navItemBlink {
+            0%, 100% {
+                background: rgba(8, 39, 74, 0.32);
+                color: #b8cbdf;
+            }
+            50% {
+                background: rgba(255, 255, 255, 0.16);
+                color: #ffffff;
+            }
+        }
+
+        @keyframes dashboardBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.72;
+            }
+        }
+
         .nav-icon {
             width: 22px;
             height: 22px;
@@ -446,10 +560,23 @@
                 <a class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
                 <a class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
                 <a class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
-                <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance Division</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
+                <div class="nav-group open" id="maintenanceNavGroup">
+                    <div class="nav-item nav-item-group active">
+                        <button class="nav-main-link" id="maintenanceMainLink" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
+                            Maintenance Division
+                        </button>
+                        <button class="nav-action-btn" id="maintenanceActionBtn" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu" aria-label="Open maintenance actions">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                    <div class="nav-submenu" id="maintenanceSubmenu" aria-hidden="false">
+                        <a class="nav-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintinance Managment</a>
+                        <a class="nav-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
+                        <a class="nav-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+                    </div>
+</div>
+                <a class="nav-item" href="{% url 'my_assignments' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
             </nav>
         </aside>
 
@@ -556,6 +683,62 @@
             </main>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var mainLink = document.getElementById("maintenanceMainLink");
+            var actionBtn = document.getElementById("maintenanceActionBtn");
+            var submenu = document.getElementById("maintenanceSubmenu");
+            var group = document.getElementById("maintenanceNavGroup");
+            var page = document.querySelector(".page");
+            if (!mainLink || !actionBtn || !submenu || !group) {
+                return;
+            }
+
+            var subItems = submenu.querySelectorAll(".nav-subitem");
+
+            function playBlink(target) {
+                if (target) {
+                    target.classList.remove("blink");
+                    void target.offsetWidth;
+                    target.classList.add("blink");
+                    window.setTimeout(function () {
+                        target.classList.remove("blink");
+                    }, 520);
+                }
+
+                if (page) {
+                    page.classList.remove("panel-blink");
+                    void page.offsetWidth;
+                    page.classList.add("panel-blink");
+                    window.setTimeout(function () {
+                        page.classList.remove("panel-blink");
+                    }, 440);
+                }
+            }
+
+            function toggleMaintenanceMenu(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+
+                var isOpen = actionBtn.getAttribute("aria-expanded") === "true";
+                actionBtn.setAttribute("aria-expanded", String(!isOpen));
+                mainLink.setAttribute("aria-expanded", String(!isOpen));
+                submenu.setAttribute("aria-hidden", String(isOpen));
+                group.classList.toggle("open", !isOpen);
+            }
+
+            mainLink.addEventListener("click", toggleMaintenanceMenu);
+            actionBtn.addEventListener("click", toggleMaintenanceMenu);
+
+            subItems.forEach(function (item) {
+                item.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(item);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 {% else %}
