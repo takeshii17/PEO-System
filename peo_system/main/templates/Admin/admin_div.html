@@ -7,14 +7,9 @@
     <style>
         :root {
             --bg: #eef1f5;
-            --sidebar: #072445;
-            --sidebar-2: #0a2e54;
             --text: #0c2137;
-            --muted: #5c6f85;
             --line: #ced5de;
-            --white: #ffffff;
             --shadow: 0 2px 8px rgba(8, 34, 61, 0.12);
-            --radius: 18px;
         }
 
         * { box-sizing: border-box; }
@@ -27,17 +22,13 @@
             background: var(--bg);
         }
 
-        .app-shell {
-            display: flex;
-            min-height: 100vh;
-        }
+        .app-shell { display: flex; min-height: 100vh; }
 
         .sidebar {
             width: 340px;
             background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
             color: #d5dfeb;
             border-right: 1px solid #15385f;
-            padding: 0;
             display: flex;
             flex-direction: column;
         }
@@ -76,11 +67,7 @@
             color: #bdcada;
         }
 
-        .nav-menu {
-            padding: 20px 16px 24px;
-            display: grid;
-            gap: 8px;
-        }
+        .nav-menu { padding: 20px 16px 24px; display: grid; gap: 8px; }
 
         .nav-item {
             display: flex;
@@ -103,85 +90,21 @@
             font-weight: 600;
         }
 
-        .nav-icon {
-            width: 22px;
-            height: 22px;
-            flex: 0 0 auto;
-            opacity: 0.95;
-        }
+        .nav-icon { width: 22px; height: 22px; flex: 0 0 auto; opacity: 0.95; }
 
-        .caret {
-            margin-left: auto;
-            opacity: 0.85;
-        }
-
-        .workspace {
-            flex: 1;
-            min-width: 0;
-            background: #f2f4f7;
-        }
+        .workspace { flex: 1; min-width: 0; background: #f2f4f7; }
 
         .topbar {
             height: 92px;
             border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 18px;
+            justify-content: flex-end;
             padding: 0 28px;
             background: #f5f7fa;
         }
 
-        .top-controls {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: min(54vw, 900px);
-        }
-
-        .search {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #e7ebf0;
-            border: 1px solid #d6dde7;
-            border-radius: 14px;
-            padding: 12px 14px;
-            flex: 1;
-            min-width: 260px;
-        }
-
-        .search input {
-            border: 0;
-            outline: none;
-            background: transparent;
-            width: 100%;
-            font-family: inherit;
-            font-size: 1.05rem;
-            color: #324a63;
-        }
-
-        .search input::placeholder { color: #5b6f87; }
-
-        .filter-btn {
-            border: 1px solid #ccd5e1;
-            background: #eef2f7;
-            color: #142f4f;
-            border-radius: 14px;
-            font-size: 1.05rem;
-            font-family: inherit;
-            padding: 12px 20px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .account {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+        .account { display: flex; align-items: center; gap: 14px; }
 
         .seal {
             width: 52px;
@@ -223,217 +146,263 @@
             border-radius: 10px;
         }
 
-        .logout-btn:hover { background: #e7edf5; }
+        .page { padding: 24px 28px; }
 
-        .page { padding: 28px; }
+        .page h2 { margin: 0; font-size: 2rem; }
 
-        .hero {
-            border-radius: 22px;
-            overflow: hidden;
-            min-height: 280px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(95deg, rgba(7, 30, 58, 0.86) 4%, rgba(7, 30, 58, 0.58) 46%, rgba(7, 30, 58, 0.25) 100%),
-                        url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-body {
-            width: min(860px, 100%);
-            padding: 38px 46px;
-            color: #f8fbff;
-        }
-
-        .hero h2 {
-            margin: 0;
-            font-size: clamp(2rem, 3.8vw, 4.1rem);
-            line-height: 1.1;
-        }
-
-        .hero p {
-            margin: 16px 0 0;
-            max-width: 900px;
-            font-size: clamp(1.05rem, 1.55vw, 1.6rem);
-            line-height: 1.38;
-            color: #e4edf7;
-        }
-
-        .hero-actions {
-            margin-top: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary,
-        .btn-secondary {
-            border-radius: 14px;
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-family: inherit;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            border: 0;
-            background: #f9fbff;
-            color: #0c2b4b;
-        }
-
-        .btn-secondary {
-            background: rgba(9, 37, 67, 0.25);
-            color: #f8fbff;
-            border: 1px solid rgba(235, 243, 252, 0.34);
-            backdrop-filter: blur(2px);
-        }
+        .page-sub { margin: 8px 0 0; color: #5c6f85; }
 
         .metrics {
-            margin-top: 28px;
+            margin-top: 20px;
             display: grid;
-            grid-template-columns: repeat(4, minmax(180px, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(4, minmax(170px, 1fr));
+            gap: 14px;
         }
 
         .metric-card {
             background: #f7f8fa;
             border: 1px solid #ccd4df;
-            border-radius: 18px;
-            min-height: 130px;
-            padding: 20px 20px;
+            border-radius: 14px;
+            padding: 14px 16px;
             box-shadow: var(--shadow);
         }
 
         .metric-card h3 {
             margin: 0;
-            font-size: 1.15rem;
-            color: #3d516a;
+            font-size: 0.95rem;
+            color: #485f7b;
             font-weight: 500;
         }
 
         .metric-card strong {
             display: block;
-            margin-top: 22px;
-            font-size: 2rem;
-            line-height: 1;
-            color: #0c2137;
+            margin-top: 14px;
+            font-size: 1.75rem;
         }
 
-        .metric-card strong.blue { color: #2563eb; }
-        .metric-card strong.orange { color: #d97706; }
-        .metric-card strong.red { color: #dc2626; }
+        .metric-card .blue { color: #2563eb; }
+        .metric-card .orange { color: #d97706; }
+        .metric-card .red { color: #dc2626; }
 
-        .data-tabs {
-            margin-top: 18px;
-            width: fit-content;
-            display: inline-flex;
-            background: #e8edf3;
-            border: 1px solid #d0d8e3;
-            border-radius: 14px;
-            padding: 4px;
-            gap: 2px;
-        }
-
-        .data-tab {
-            border: 0;
-            background: transparent;
-            font-family: inherit;
-            font-size: 1rem;
-            color: #0c233d;
-            padding: 8px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .data-tab.active {
-            background: #f8fafc;
-            box-shadow: 0 1px 2px rgba(12, 35, 61, 0.12);
-        }
-
-        .toolbar,
-        .register {
-            margin-top: 18px;
+        .toolbar {
+            margin-top: 16px;
             background: #f7f8fa;
             border: 1px solid #ccd4df;
-            border-radius: 18px;
+            border-radius: 14px;
             box-shadow: var(--shadow);
+            padding: 12px;
         }
 
-        .toolbar { padding: 16px; }
-
-        .toolbar-grid {
+        .toolbar form {
             display: grid;
-            grid-template-columns: 1.6fr .6fr .6fr auto;
-            gap: 12px;
+            grid-template-columns: 1.8fr .8fr .8fr auto auto;
+            gap: 10px;
         }
 
+        .input,
         .select,
-        .toolbar .search {
-            height: 48px;
-            margin: 0;
+        .btn {
+            width: 100%;
+            height: 42px;
+            border-radius: 10px;
+            border: 1px solid #c7d2df;
+            background: #fff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            padding: 0 10px;
         }
 
-        .select {
-            border: 1px solid #ccd5e1;
+        .btn {
+            background: #123760;
+            color: #fff;
+            border: 0;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 0 14px;
+        }
+
+        .btn.alt {
             background: #eef2f7;
+            color: #123760;
+            border: 1px solid #c7d2df;
+        }
+
+        .register {
+            margin-top: 16px;
+            background: #f7f8fa;
+            border: 1px solid #ccd4df;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .register-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #d6dce6;
+            background: #f2f5f9;
+        }
+
+        .register-head h3 { margin: 0; font-size: 1.05rem; }
+
+        .register table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .register th,
+        .register td {
+            text-align: left;
+            border-bottom: 1px solid #e0e6ee;
+            padding: 10px 12px;
+        }
+
+        .register th {
+            background: #f7f9fc;
+            color: #3e5672;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            background: #e7edf7;
+            color: #1e3a5f;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 12px 16px;
+        }
+
+        .pagination a,
+        .pagination span {
+            font-size: 0.88rem;
+        }
+
+        .pagination a {
+            color: #123760;
+            text-decoration: none;
+            padding: 6px 9px;
+            border: 1px solid #c7d2df;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 16px;
+        }
+
+        .modal.show { display: flex; }
+
+        .modal-card {
+            width: min(760px, 100%);
+            max-height: 92vh;
+            overflow: auto;
+            background: #f7f8fa;
             border-radius: 12px;
-            padding: 0 12px;
-            color: #304a67;
+            border: 1px solid #d0d8e3;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+        }
+
+        .modal-head {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 1rem;
+            padding: 14px 16px;
+            border-bottom: 1px solid #d6dde8;
         }
 
-        .btn-dark {
-            border: 0;
-            background: #123760;
-            color: #fff;
-            border-radius: 12px;
-            padding: 0 18px;
-            height: 48px;
-            font-size: 1rem;
+        .modal-head h3 { margin: 0; font-size: 1.1rem; }
+
+        .modal-body { padding: 14px 16px; }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 12px;
+            margin-bottom: 12px;
+        }
+
+        .field-grid.one { grid-template-columns: 1fr; }
+
+        .field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
+            color: #475d77;
             font-weight: 600;
-            cursor: pointer;
         }
 
-        .register {
-            min-height: 180px;
-            padding: 20px 24px;
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            border: 1px solid #c5cfdb;
+            border-radius: 8px;
+            background: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            padding: 8px 10px;
         }
 
-        .register h3 {
-            margin: 0;
-            font-size: 1.45rem;
-            color: #0f2743;
+        .form-section {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid #dce3ec;
         }
 
-        .register p {
-            margin: 8px 0 0;
-            color: #61768f;
-            font-size: 1rem;
+        .form-section h4 {
+            margin: 0 0 8px;
+            font-size: 0.9rem;
+            color: #3d5876;
         }
 
-        @media (max-width: 1400px) {
+        .modal-actions {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .error-list {
+            margin: 0 0 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 0.86rem;
+        }
+
+        @media (max-width: 1200px) {
             .sidebar { width: 280px; }
-            .metrics { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
+            .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+            .toolbar form { grid-template-columns: 1fr 1fr; }
         }
 
-        @media (max-width: 980px) {
+        @media (max-width: 900px) {
             .app-shell { flex-direction: column; }
             .sidebar { width: 100%; }
-            .topbar {
-                flex-direction: column;
-                align-items: stretch;
-                height: auto;
-                padding: 16px;
-            }
-            .top-controls { width: 100%; }
-            .account { justify-content: flex-end; }
-            .hero-body { padding: 28px; }
-            .metrics,
-            .toolbar-grid { grid-template-columns: 1fr; }
+            .topbar { height: auto; padding: 12px 16px; }
+            .field-grid,
+            .toolbar form,
+            .metrics { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -449,44 +418,17 @@
             </div>
 
             <nav class="nav-menu">
-                <a class="nav-item" href="{% url 'home' %}">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
-                        <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
-                        <rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
-                        <rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Dashboard
-                </a>
-                <a class="nav-item active" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
-                <a class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
-                <a class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
-                <a class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance Division</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
+                <a class="nav-item" href="{% url 'home' %}">Dashboard</a>
+                <a class="nav-item active" href="{% url 'admin_div_dashboard' %}">Admin Division</a>
+                <a class="nav-item" href="{% url 'planning_div_dashboard' %}">Planning Division</a>
+                <a class="nav-item" href="{% url 'construction_div_dashboard' %}">Construction Division</a>
+                <a class="nav-item" href="{% url 'quality_div_dashboard' %}">Quality Division</a>
+                <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}">Maintenance Division</a>
             </nav>
         </aside>
 
         <div class="workspace">
             <header class="topbar">
-                <div class="top-controls">
-                    <label class="search">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <circle cx="11" cy="11" r="6.8" stroke="#4f647d" stroke-width="2"></circle>
-                            <path d="M16 16L21 21" stroke="#4f647d" stroke-width="2" stroke-linecap="round"></path>
-                        </svg>
-                        <input type="text" placeholder="Search documents, billing, records..." />
-                    </label>
-                    <button class="filter-btn" type="button">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        </svg>
-                        Filter
-                    </button>
-                </div>
-
                 <div class="account">
                     <div class="seal">OFFICE<br>OF PEO</div>
                     <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
@@ -498,62 +440,191 @@
             </header>
 
             <main class="page">
-                <section class="hero">
-                    <div class="hero-body">
-                        <h2>Admin Division</h2>
-                        <p>People, finance, procurement support, and records management for the Provincial Engineering Office.</p>
-                        <div class="hero-actions">
-                            <button class="btn-primary" type="button">New Document</button>
-                            <button class="btn-secondary" type="button">Export Register</button>
-                        </div>
-                    </div>
-                </section>
-
-                <div class="data-tabs">
-                    <button class="data-tab active" type="button">Documents</button>
-                    <button class="data-tab" type="button">Billing</button>
-                </div>
+                <h2>Admin Division</h2>
+                <p class="page-sub">People, finance, procurement support, and records management.</p>
 
                 <section class="metrics">
                     <article class="metric-card">
                         <h3>Total Documents</h3>
-                        <strong>0</strong>
+                        <strong>{{ total_documents }}</strong>
                     </article>
                     <article class="metric-card">
                         <h3>For Review</h3>
-                        <strong class="blue">0</strong>
+                        <strong class="blue">{{ for_review_count }}</strong>
                     </article>
                     <article class="metric-card">
                         <h3>Processing</h3>
-                        <strong class="orange">0</strong>
+                        <strong class="orange">{{ processing_count }}</strong>
                     </article>
                     <article class="metric-card">
                         <h3>Open Issues</h3>
-                        <strong class="red">0</strong>
+                        <strong class="red">{{ open_issues_count }}</strong>
                     </article>
                 </section>
 
                 <section class="toolbar">
-                    <div class="toolbar-grid">
-                        <label class="search">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <circle cx="11" cy="11" r="6.8" stroke="#4f647d" stroke-width="2"></circle>
-                                <path d="M16 16L21 21" stroke="#4f647d" stroke-width="2" stroke-linecap="round"></path>
-                            </svg>
-                            <input type="text" placeholder="Search documents..." />
-                        </label>
-                        <div class="select"><span>All Divisions</span><span>?</span></div>
-                        <div class="select"><span>All Statuses</span><span>?</span></div>
-                        <button class="btn-dark" type="button">+ New Document</button>
-                    </div>
+                    <form method="get">
+                        <input class="input" type="text" name="q" value="{{ search }}" placeholder="Search documents...">
+                        <select class="select" name="division">
+                            <option value="">All Divisions</option>
+                            {% for value, label in division_choices %}
+                            <option value="{{ value }}" {% if selected_division == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <select class="select" name="status">
+                            <option value="">All Statuses</option>
+                            {% for value, label in status_choices %}
+                            <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn alt" type="submit">Apply</button>
+                        <button class="btn" type="button" id="openCreateModal">+ New Document</button>
+                    </form>
                 </section>
 
                 <section class="register">
-                    <h3>Document Register</h3>
-                    <p>0 documents found</p>
+                    <div class="register-head">
+                        <h3>Document Register</h3>
+                        <span>{{ page_obj.paginator.count }} documents found</span>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th>Type</th>
+                                <th>Division</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in documents %}
+                            <tr>
+                                <td>{{ doc.document_name }}</td>
+                                <td>{{ doc.get_doc_type_display }}</td>
+                                <td>{{ doc.get_division_display }}</td>
+                                <td><span class="badge">{{ doc.get_status_display }}</span></td>
+                                <td>{{ doc.created_at|date:"M d, Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No documents found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    {% if page_obj.paginator.num_pages > 1 %}
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Previous</a>
+                        {% endif %}
+                        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Next</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </section>
             </main>
         </div>
     </div>
+
+    <div class="modal {% if show_modal %}show{% endif %}" id="createModal">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3>Create New Document</h3>
+                <button class="btn alt" type="button" id="closeCreateModal">Close</button>
+            </div>
+            <div class="modal-body">
+                {% if form.errors %}
+                <div class="error-list">
+                    Please check required fields and valid values.
+                </div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="field-grid one">
+                        <div class="field">
+                            <label>Document Name *</label>
+                            {{ form.document_name }}
+                        </div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field"><label>Type *</label>{{ form.doc_type }}</div>
+                        <div class="field"><label>Division *</label>{{ form.division }}</div>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field"><label>Status *</label>{{ form.status }}</div>
+                        <div></div>
+                    </div>
+
+                    <div class="field-grid one">
+                        <div class="field"><label>Description</label>{{ form.description }}</div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Document Routing</h4>
+                        <div class="field-grid">
+                            <div class="field"><label>Date Received by PEO</label>{{ form.date_received_by_peo }}</div>
+                            <div class="field"><label>Date Released to Admin</label>{{ form.date_released_to_admin }}</div>
+                            <div class="field"><label>Date Received from Admin</label>{{ form.date_received_from_admin }}</div>
+                            <div class="field"><label>Date Released to Accounting</label>{{ form.date_released_to_accounting }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Billing Information</h4>
+                        <div class="field-grid">
+                            <div class="field"><label>Type of Billing</label>{{ form.billing_type }}</div>
+                            <div class="field"><label>Percentage</label>{{ form.percentage }}</div>
+                            <div class="field"><label>Contract Amount</label>{{ form.contract_amount }}</div>
+                            <div class="field"><label>Revised Contract Amount</label>{{ form.revised_contract_amount }}</div>
+                            <div class="field"><label>Period Covered</label>{{ form.period_covered }}</div>
+                            <div class="field"><label>Date Started</label>{{ form.date_started }}</div>
+                            <div class="field"><label>Completion Date</label>{{ form.completion_date }}</div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button class="btn alt" type="button" id="cancelCreateModal">Cancel</button>
+                        <button class="btn" type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const modal = document.getElementById("createModal");
+            const openBtn = document.getElementById("openCreateModal");
+            const closeBtn = document.getElementById("closeCreateModal");
+            const cancelBtn = document.getElementById("cancelCreateModal");
+
+            function showModal() {
+                modal.classList.add("show");
+            }
+
+            function hideModal() {
+                modal.classList.remove("show");
+            }
+
+            if (openBtn) openBtn.addEventListener("click", showModal);
+            if (closeBtn) closeBtn.addEventListener("click", hideModal);
+            if (cancelBtn) cancelBtn.addEventListener("click", hideModal);
+
+            modal.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    hideModal();
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
