@@ -159,6 +159,36 @@
             gap: 14px;
         }
 
+        .division-tabs {
+            margin-top: 14px;
+            display: inline-flex;
+            gap: 2px;
+            background: #e7edf5;
+            border: 1px solid #cfd8e4;
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .division-tab {
+            border: 0;
+            background: transparent;
+            color: #18395d;
+            font-family: inherit;
+            font-size: 0.82rem;
+            padding: 6px 10px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .division-tab.active {
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(8, 34, 61, 0.14);
+        }
+
         .metric-card {
             background: #f7f8fa;
             border: 1px solid #ccd4df;
@@ -195,7 +225,7 @@
 
         .toolbar form {
             display: grid;
-            grid-template-columns: 1.8fr .8fr .8fr auto auto;
+            grid-template-columns: 1.8fr .8fr .8fr auto;
             gap: 10px;
         }
 
@@ -274,6 +304,36 @@
             display: inline-block;
             background: #e7edf7;
             color: #1e3a5f;
+        }
+
+        .row-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            padding: 4px 8px;
+            border: 1px solid #c7d2df;
+            border-radius: 8px;
+            background: #fff;
+            color: #123760;
+            font-size: 0.8rem;
+        }
+
+        .action-btn {
+            border: 1px solid #c7d2df;
+            border-radius: 8px;
+            background: #fff;
+            color: #123760;
+            font-family: inherit;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            cursor: pointer;
         }
 
         .pagination {
@@ -418,12 +478,23 @@
             </div>
 
             <nav class="nav-menu">
-                <a class="nav-item" href="{% url 'home' %}">Dashboard</a>
-                <a class="nav-item active" href="{% url 'admin_div_dashboard' %}">Admin Division</a>
-                <a class="nav-item" href="{% url 'planning_div_dashboard' %}">Planning Division</a>
-                <a class="nav-item" href="{% url 'construction_div_dashboard' %}">Construction Division</a>
-                <a class="nav-item" href="{% url 'quality_div_dashboard' %}">Quality Division</a>
-                <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}">Maintenance Division</a>
+                <a class="nav-item" href="{% url 'home' %}">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="nav-item active" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
+                <a class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
+                <a class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
+                <a class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
+                <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
             </nav>
         </aside>
 
@@ -442,8 +513,30 @@
             <main class="page">
                 <h2>Admin Division</h2>
                 <p class="page-sub">People, finance, procurement support, and records management.</p>
+                <div class="division-tabs" aria-label="Admin Division Tabs">
+                    <a class="division-tab {% if active_tab == 'documents' %}active{% endif %}" href="?tab=documents">Documents</a>
+                    <a class="division-tab {% if active_tab == 'billing' %}active{% endif %}" href="?tab=billing">Billing</a>
+                </div>
 
                 <section class="metrics">
+                    {% if active_tab == 'billing' %}
+                    <article class="metric-card">
+                        <h3>Total Billing Records</h3>
+                        <strong>{{ total_billing_records }}</strong>
+                    </article>
+                    <article class="metric-card">
+                        <h3>For Review</h3>
+                        <strong class="blue">{{ billing_for_review_count }}</strong>
+                    </article>
+                    <article class="metric-card">
+                        <h3>Processing</h3>
+                        <strong class="orange">{{ billing_processing_count }}</strong>
+                    </article>
+                    <article class="metric-card">
+                        <h3>Approved</h3>
+                        <strong class="blue">{{ billing_approved_count }}</strong>
+                    </article>
+                    {% else %}
                     <article class="metric-card">
                         <h3>Total Documents</h3>
                         <strong>{{ total_documents }}</strong>
@@ -460,35 +553,80 @@
                         <h3>Open Issues</h3>
                         <strong class="red">{{ open_issues_count }}</strong>
                     </article>
+                    {% endif %}
                 </section>
 
                 <section class="toolbar">
-                    <form method="get">
-                        <input class="input" type="text" name="q" value="{{ search }}" placeholder="Search documents...">
+                    <form method="get" id="docFilterForm">
+                        <input type="hidden" name="tab" value="{{ active_tab }}">
+                        <input class="input" type="text" name="q" value="{{ search }}" placeholder="{% if active_tab == 'billing' %}Search billing records...{% else %}Search documents...{% endif %}">
+                        {% if active_tab == 'documents' %}
                         <select class="select" name="division">
                             <option value="">All Divisions</option>
                             {% for value, label in division_choices %}
                             <option value="{{ value }}" {% if selected_division == value %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
+                        {% endif %}
                         <select class="select" name="status">
                             <option value="">All Statuses</option>
                             {% for value, label in status_choices %}
                             <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
                             {% endfor %}
                         </select>
-                        <button class="btn alt" type="submit">Apply</button>
+                        {% if active_tab == 'documents' %}
                         <button class="btn" type="button" id="openCreateModal">+ New Document</button>
+                        {% endif %}
                     </form>
                 </section>
 
                 <section class="register">
                     <div class="register-head">
-                        <h3>Document Register</h3>
-                        <span>{{ page_obj.paginator.count }} documents found</span>
+                        <h3>{% if active_tab == 'billing' %}Billing Records{% else %}Document Register{% endif %}</h3>
+                        <span>{{ page_obj.paginator.count }} {% if active_tab == 'billing' %}billing records{% else %}documents{% endif %} found</span>
                     </div>
 
                     <table>
+                        {% if active_tab == 'billing' %}
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Project Name</th>
+                                <th>Billing Type</th>
+                                <th>Percentage</th>
+                                <th>Amount</th>
+                                <th>Date Received</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in billing_records %}
+                            <tr>
+                                <td>BILL-{{ doc.id|stringformat:"04d" }}</td>
+                                <td>{{ doc.document_name }}</td>
+                                <td>{{ doc.billing_type|default:"-" }}</td>
+                                <td>{% if doc.percentage %}{{ doc.percentage }}%{% else %}-{% endif %}</td>
+                                <td>
+                                    {% if doc.revised_contract_amount %}
+                                        P{{ doc.revised_contract_amount }}
+                                    {% elif doc.contract_amount %}
+                                        P{{ doc.contract_amount }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{% if doc.date_received_by_peo %}{{ doc.date_received_by_peo|date:"M d, Y" }}{% else %}-{% endif %}</td>
+                                <td><span class="badge">{{ doc.get_status_display }}</span></td>
+                                <td>✎ 🗑</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8">No billing records found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% else %}
                         <thead>
                             <tr>
                                 <th>Document</th>
@@ -496,6 +634,7 @@
                                 <th>Division</th>
                                 <th>Status</th>
                                 <th>Created</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -506,23 +645,35 @@
                                 <td>{{ doc.get_division_display }}</td>
                                 <td><span class="badge">{{ doc.get_status_display }}</span></td>
                                 <td>{{ doc.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="row-actions">
+                                        <a class="action-link" href="{% url 'admin_div_dashboard' %}?tab=documents&edit_document={{ doc.id }}">Edit</a>
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_document">
+                                            <input type="hidden" name="delete_id" value="{{ doc.id }}">
+                                            <button class="action-btn" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="5">No documents found.</td>
+                                <td colspan="6">No documents found.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
+                        {% endif %}
                     </table>
 
                     {% if page_obj.paginator.num_pages > 1 %}
                     <div class="pagination">
                         {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Previous</a>
+                        <a href="?tab={{ active_tab }}&page={{ page_obj.previous_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Previous</a>
                         {% endif %}
                         <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
                         {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Next</a>
+                        <a href="?tab={{ active_tab }}&page={{ page_obj.next_page_number }}&q={{ search }}&division={{ selected_division }}&status={{ selected_status }}">Next</a>
                         {% endif %}
                     </div>
                     {% endif %}
@@ -531,11 +682,11 @@
         </div>
     </div>
 
+    {% if active_tab == 'documents' %}
     <div class="modal {% if show_modal %}show{% endif %}" id="createModal">
         <div class="modal-card">
             <div class="modal-head">
-                <h3>Create New Document</h3>
-                <button class="btn alt" type="button" id="closeCreateModal">Close</button>
+                <h3>{% if editing_document %}Edit Document{% else %}Create New Document{% endif %}</h3>
             </div>
             <div class="modal-body">
                 {% if form.errors %}
@@ -546,6 +697,10 @@
 
                 <form method="post">
                     {% csrf_token %}
+                    <input type="hidden" name="action" value="{% if editing_document %}update{% else %}create{% endif %}">
+                    {% if editing_document %}
+                    <input type="hidden" name="document_id" value="{{ editing_document.id }}">
+                    {% endif %}
 
                     <div class="field-grid one">
                         <div class="field">
@@ -593,7 +748,7 @@
 
                     <div class="modal-actions">
                         <button class="btn alt" type="button" id="cancelCreateModal">Cancel</button>
-                        <button class="btn" type="submit">Create</button>
+                        <button class="btn" type="submit">{% if editing_document %}Update{% else %}Create{% endif %}</button>
                     </div>
                 </form>
             </div>
@@ -604,20 +759,33 @@
         (function () {
             const modal = document.getElementById("createModal");
             const openBtn = document.getElementById("openCreateModal");
-            const closeBtn = document.getElementById("closeCreateModal");
             const cancelBtn = document.getElementById("cancelCreateModal");
+            const filterForm = document.getElementById("docFilterForm");
+            const divisionFilter = filterForm ? filterForm.querySelector("select[name='division']") : null;
+            const statusFilter = filterForm ? filterForm.querySelector("select[name='status']") : null;
+            const searchInput = filterForm ? filterForm.querySelector("input[name='q']") : null;
+            let searchTimer = null;
 
             function showModal() {
                 modal.classList.add("show");
             }
 
             function hideModal() {
-                modal.classList.remove("show");
+                window.location.href = "{% url 'admin_div_dashboard' %}?tab=documents";
             }
 
             if (openBtn) openBtn.addEventListener("click", showModal);
-            if (closeBtn) closeBtn.addEventListener("click", hideModal);
             if (cancelBtn) cancelBtn.addEventListener("click", hideModal);
+            if (divisionFilter) divisionFilter.addEventListener("change", function () { filterForm.submit(); });
+            if (statusFilter) statusFilter.addEventListener("change", function () { filterForm.submit(); });
+            if (searchInput) {
+                searchInput.addEventListener("input", function () {
+                    clearTimeout(searchTimer);
+                    searchTimer = setTimeout(function () {
+                        filterForm.submit();
+                    }, 500);
+                });
+            }
 
             modal.addEventListener("click", function (event) {
                 if (event.target === modal) {
@@ -626,5 +794,6 @@
             });
         })();
     </script>
+    {% endif %}
 </body>
 </html>
