@@ -5,273 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEO Portal - Construction Division</title>
     <style>
-        :root {
-            --bg: #eef1f5;
-            --sidebar: #072445;
-            --text: #0c2137;
-            --muted: #5c6f85;
-            --line: #ced5de;
-        }
-
+        :root { --bg:#eef1f5; --line:#ced5de; --text:#0c2137; }
         * { box-sizing: border-box; }
-
-        html, body {
-            margin: 0;
-            min-height: 100%;
-            font-family: "Sora", "Segoe UI", sans-serif;
-            color: var(--text);
-            background: var(--bg);
-        }
-
-        .app-shell {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 340px;
-            background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
-            color: #d5dfeb;
-            border-right: 1px solid #15385f;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 30px 26px;
-            border-bottom: 1px solid rgba(215, 229, 245, 0.16);
-        }
-
-        .brand-logo {
-            width: 58px;
-            height: 58px;
-            border-radius: 12px;
-            border: 2px solid #f2d65a;
-            background: radial-gradient(circle at 35% 35%, #ffeb84 0%, #f4c418 64%, #daaa08 100%);
-            color: #8f0010;
-            font-size: 0.85rem;
-            font-weight: 700;
-            display: grid;
-            place-items: center;
-            box-shadow: inset 0 0 0 2px #173860;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: clamp(1.1rem, 1.65vw, 1.85rem);
-            color: #f4f7fb;
-        }
-
-        .brand p {
-            margin: 4px 0 0;
-            font-size: 0.92rem;
-            color: #bdcada;
-        }
-
-        .nav-menu {
-            padding: 20px 16px 24px;
-            display: grid;
-            gap: 8px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #c7d5e5;
-            text-decoration: none;
-            border-radius: 14px;
-            padding: 14px 16px;
-            font-size: clamp(0.98rem, 1.08vw, 1.7rem);
-            line-height: 1.15;
-        }
-
-        .nav-item:hover { background: rgba(255, 255, 255, 0.08); }
-
-        .nav-item.active {
-            background: #123760;
-            color: #ffffff;
-            box-shadow: inset 0 0 0 1px rgba(189, 214, 238, 0.08);
-            font-weight: 600;
-        }
-
-        .nav-icon {
-            width: 22px;
-            height: 22px;
-            flex: 0 0 auto;
-            opacity: 0.95;
-        }
-
-        .caret {
-            margin-left: auto;
-            opacity: 0.85;
-        }
-
-        .workspace {
-            flex: 1;
-            min-width: 0;
-            background: #f2f4f7;
-        }
-
-        .topbar {
-            height: 92px;
-            border-bottom: 1px solid var(--line);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            background: #f5f7fa;
-        }
-
-        .account {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .seal {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            border: 2px solid #d2d9e1;
-            background: radial-gradient(circle at 35% 30%, #f2fbff 0%, #dce8f6 45%, #bccce0 100%);
-            display: grid;
-            place-items: center;
-            font-size: 0.56rem;
-            font-weight: 700;
-            color: #0b2a4c;
-            line-height: 1.15;
-            text-align: center;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #0f3459;
-            color: #f2f7ff;
-            display: grid;
-            place-items: center;
-            font-size: 1.15rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .logout-form { margin: 0; }
-
-        .logout-btn {
-            border: 0;
-            background: transparent;
-            color: #0b213a;
-            font-size: 0.95rem;
-            cursor: pointer;
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
-
-        .logout-btn:hover { background: #e7edf5; }
-
-        .page {
-            padding: 24px;
-        }
-
-        .page h2 {
-            margin: 0;
-            font-size: 1.85rem;
-            color: #1f2937;
-        }
-
-        .subhead {
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #5b6675;
-            font-size: 0.95rem;
-            flex-wrap: wrap;
-        }
-
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 10px;
-            border: 1px solid #f2bc94;
-            border-radius: 999px;
-            color: #c2410c;
-            background: #fff4ec;
-            font-size: 0.86rem;
-            line-height: 1;
-        }
-
-        .section-line {
-            margin: 16px -24px 0;
-            border-top: 1px solid var(--line);
-        }
-
-        .tab-strip {
-            margin-top: 22px;
-            width: min(100%, 450px);
-            background: #f4f6f9;
-            border: 1px solid #d7dfe8;
-            border-radius: 14px;
-            padding: 6px;
-            box-shadow: 0 1px 4px rgba(8, 34, 61, 0.1);
-        }
-
-        .tab-btn {
-            width: 100%;
-            border: 0;
-            border-radius: 10px;
-            background: transparent;
-            padding: 8px 12px;
-            font-family: inherit;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #111827;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .message {
-            margin-top: 28px;
-            font-size: 1.65rem;
-            line-height: 1.45;
-            color: #4b5f78;
-        }
-
-        @media (max-width: 1400px) {
-            .sidebar { width: 280px; }
-        }
-
-        @media (max-width: 980px) {
-            .app-shell { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .topbar {
-                height: auto;
-                padding: 14px 16px;
-                justify-content: flex-end;
-            }
-            .page h2 { font-size: 1.45rem; }
-            .message { font-size: 1.05rem; }
-        }
+        html, body { margin:0; min-height:100%; font-family:"Sora","Segoe UI",sans-serif; color:var(--text); background:var(--bg); }
+        .app-shell { display:flex; min-height:100vh; }
+        .sidebar { width:340px; background:linear-gradient(180deg,#08274a 0%,#07203f 100%); color:#d5dfeb; border-right:1px solid #15385f; }
+        .brand { display:flex; gap:14px; align-items:center; padding:30px 26px; border-bottom:1px solid rgba(215,229,245,.16); }
+        .brand-logo { width:58px; height:58px; border-radius:12px; border:2px solid #f2d65a; background:radial-gradient(circle at 35% 35%,#ffeb84 0%,#f4c418 64%,#daaa08 100%); display:grid; place-items:center; color:#8f0010; font-size:.85rem; font-weight:700; }
+        .brand h1 { margin:0; font-size:clamp(1.1rem,1.65vw,1.85rem); color:#f4f7fb; }
+        .brand p { margin:4px 0 0; font-size:.92rem; color:#bdcada; }
+        .nav-menu { padding:20px 16px 24px; display:grid; gap:8px; }
+        .nav-item { display:flex; gap:12px; align-items:center; color:#c7d5e5; text-decoration:none; border-radius:14px; padding:14px 16px; font-size:clamp(.98rem,1.08vw,1.7rem); }
+        .nav-item:hover { background:rgba(255,255,255,.08); }
+        .nav-item.active { background:#123760; color:#fff; font-weight:600; }
+        .workspace { flex:1; min-width:0; }
+        .topbar { height:92px; border-bottom:1px solid var(--line); display:flex; justify-content:flex-end; align-items:center; padding:0 28px; background:#f5f7fa; }
+        .account { display:flex; align-items:center; gap:14px; }
+        .seal { width:52px; height:52px; border-radius:50%; border:2px solid #d2d9e1; background:radial-gradient(circle at 35% 30%,#f2fbff 0%,#dce8f6 45%,#bccce0 100%); display:grid; place-items:center; font-size:.56rem; font-weight:700; color:#0b2a4c; text-align:center; line-height:1.15; }
+        .avatar { width:42px; height:42px; border-radius:50%; background:#0f3459; color:#f2f7ff; display:grid; place-items:center; font-size:1.15rem; font-weight:700; text-transform:uppercase; }
+        .logout-form { margin:0; }
+        .logout-btn { border:0; background:transparent; color:#0b213a; font-size:.95rem; padding:8px 10px; border-radius:10px; cursor:pointer; }
+        .page { padding:24px; }
+        .page h2 { margin:0; font-size:1.85rem; color:#1f2937; }
+        .subhead { margin-top:10px; display:flex; gap:10px; align-items:center; color:#5b6675; font-size:.95rem; }
+        .chip { display:inline-flex; align-items:center; padding:4px 10px; border:1px solid #f2bc94; border-radius:999px; color:#c2410c; background:#fff4ec; font-size:.86rem; }
+        .card { margin-top:20px; background:#f8fafc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 1px 4px rgba(8,34,61,.1); padding:20px; }
+        .card h3 { margin:0; font-size:1rem; }
+        .column-table { width:100%; border-collapse:collapse; margin-top:12px; font-size:.82rem; }
+        .column-table th, .column-table td { border:1px solid #cfd8e4; padding:8px; text-align:center; }
+        .column-table td { background:#fff; }
+        .toolbar { margin-top:12px; display:flex; justify-content:flex-end; }
+        .btn { border:1px solid #123760; background:#123760; color:#fff; border-radius:8px; padding:8px 12px; font-size:.82rem; cursor:pointer; }
+        .btn.light { background:#fff; color:#123760; }
+        .actions { display:flex; gap:6px; justify-content:center; }
+        .no-data { color:#5f6f84; text-align:center; padding:10px 0; }
+        .modal { position:fixed; inset:0; background:rgba(11,22,38,.45); display:none; align-items:center; justify-content:center; z-index:50; }
+        .modal.show { display:flex; }
+        .modal-card { width:min(980px,94vw); max-height:90vh; overflow:auto; background:#f7f9fc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.22); }
+        .modal-head { padding:14px 16px; border-bottom:1px solid #d5dde8; display:flex; justify-content:space-between; align-items:center; }
+        .modal-head h3 { margin:0; font-size:1rem; }
+        .modal-body { padding:14px 16px; }
+        .form-grid { display:grid; grid-template-columns:repeat(4, minmax(150px, 1fr)); gap:10px; }
+        .field label { display:block; margin-bottom:4px; font-size:.75rem; color:#334961; font-weight:600; }
+        .field input, .field textarea { width:100%; border:1px solid #bfcbd9; border-radius:8px; padding:8px; font-size:.8rem; font-family:inherit; background:#fff; }
+        .field.wide { grid-column:span 4; }
+        .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
+        @media (max-width:980px) { .form-grid { grid-template-columns:1fr; } .field.wide { grid-column:span 1; } }
     </style>
 </head>
 <body>
-    <div class="app-shell">
-        <aside class="sidebar">
-            <div class="brand">
-                <div class="brand-logo">PEO</div>
-                <div>
-                    <h1>PEO Portal</h1>
-                    <p>Workflow Management</p>
-                </div>
-            </div>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">PEO</div>
+            <div><h1>PEO Portal</h1><p>Workflow Management</p></div>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-item" href="{% url 'home' %}">Dashboard</a>
+            <a class="nav-item" href="{% url 'admin_div_dashboard' %}">Admin Division</a>
+            <a class="nav-item" href="{% url 'planning_div_dashboard' %}">Planning Division</a>
+            <a class="nav-item active" href="{% url 'construction_div_dashboard' %}">Construction Division</a>
+            <a class="nav-item" href="{% url 'quality_div_dashboard' %}">Quality Division</a>
+            <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}">Maintenance Division</a>
+        </nav>
+    </aside>
 
+    <div class="workspace">
+        <header class="topbar">
+            <div class="account">
+                <div class="seal">OFFICE<br>OF PEO</div>
+                <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                <form class="logout-form" action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="logout-btn" type="submit">Logout</button></form>
+            </div>
+        </header>
+
+<<<<<<< HEAD
             <nav class="nav-menu">
                 <a class="nav-item" href="{% url 'home' %}">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -302,29 +110,145 @@
                         {% csrf_token %}
                         <button class="logout-btn" type="submit">Logout</button>
                     </form>
+=======
+        <main class="page">
+            <h2>Construction Division</h2>
+            <div class="subhead"><span class="chip">Construction Division</span><span>Project Implementation &amp; Supervision</span></div>
+            <section class="card">
+                <h3>Physical Accomplishment Status Report</h3>
+                <div class="toolbar">
+                    <button class="btn" type="button" id="openReportModal">+ Add Record</button>
+>>>>>>> ec65c4109cb74a406ca21594a5c16fec1969a552
                 </div>
-            </header>
-
-            <main class="page">
-                <h2>Construction Division</h2>
-                <div class="subhead">
-                    <span class="chip">Construction Division</span>
-                    <span>Project Implementation &amp; Supervision</span>
+                <table class="column-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">#</th>
+                            <th rowspan="2">Project Name</th>
+                            <th rowspan="2">Location</th>
+                            <th rowspan="2">MUN</th>
+                            <th rowspan="2">Contractor</th>
+                            <th rowspan="2">Contract Cost</th>
+                            <th rowspan="2">NTP Date</th>
+                            <th rowspan="2">C.D</th>
+                            <th colspan="3">Contract Period</th>
+                            <th rowspan="2">Date Completed</th>
+                            <th rowspan="2">Revised Contract Cost</th>
+                            <th colspan="2">Status (%) DECEMBER 2025</th>
+                            <th rowspan="2">% of Time Elapsed</th>
+                            <th rowspan="2">Slippage (+) (-) %</th>
+                            <th rowspan="2">Remarks</th>
+                            <th rowspan="2">Actions</th>
+                        </tr>
+                        <tr>
+                            <th>Original Expiry Date</th>
+                            <th>Add'l. C.D</th>
+                            <th>Revised Expiry Date</th>
+                            <th>Previous</th>
+                            <th>Current</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ report.project_name }}</td>
+                            <td>{{ report.location|default:"-" }}</td>
+                            <td>{{ report.mun|default:"-" }}</td>
+                            <td>{{ report.contractor|default:"-" }}</td>
+                            <td>{% if report.contract_cost %}{{ report.contract_cost }}{% else %}-{% endif %}</td>
+                            <td>{% if report.ntp_date %}{{ report.ntp_date|date:"d-M-Y" }}{% else %}-{% endif %}</td>
+                            <td>{{ report.cd|default:"-" }}</td>
+                            <td>{% if report.original_expiry_date %}{{ report.original_expiry_date|date:"d-M-Y" }}{% else %}-{% endif %}</td>
+                            <td>{{ report.additional_cd|default:"-" }}</td>
+                            <td>{{ report.revised_expiry_date|default:"-" }}</td>
+                            <td>{% if report.date_completed %}{{ report.date_completed|date:"d-M-Y" }}{% else %}-{% endif %}</td>
+                            <td>{% if report.revised_contract_cost %}{{ report.revised_contract_cost }}{% else %}-{% endif %}</td>
+                            <td>{{ report.status_previous|default:"-" }}</td>
+                            <td>{{ report.status_current|default:"-" }}</td>
+                            <td>{% if report.percent_time_elapsed %}{{ report.percent_time_elapsed }}{% else %}-{% endif %}</td>
+                            <td>{% if report.slippage_percent %}{{ report.slippage_percent }}{% else %}-{% endif %}</td>
+                            <td>{{ report.remarks|default:"-" }}</td>
+                            <td>
+                                <div class="actions">
+                                    <a class="btn light" href="?edit={{ report.id }}">Edit</a>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="delete_id" value="{{ report.id }}">
+                                        <button class="btn light" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="19" class="no-data">No records yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+</div>
+<div class="modal {% if show_report_modal %}show{% endif %}" id="reportModal">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3>{% if editing_report %}Edit Report Record{% else %}Create Report Record{% endif %}</h3>
+            <button class="btn light" type="button" id="closeReportModal">Close</button>
+        </div>
+        <div class="modal-body">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="{% if editing_report %}update{% else %}create{% endif %}">
+                {% if editing_report %}
+                <input type="hidden" name="report_id" value="{{ editing_report.id }}">
+                {% endif %}
+                <div class="form-grid">
+                    <div class="field"><label>Project Name *</label>{{ report_form.project_name }}</div>
+                    <div class="field"><label>Location</label>{{ report_form.location }}</div>
+                    <div class="field"><label>MUN</label>{{ report_form.mun }}</div>
+                    <div class="field"><label>Contractor</label>{{ report_form.contractor }}</div>
+                    <div class="field"><label>Contract Cost</label>{{ report_form.contract_cost }}</div>
+                    <div class="field"><label>NTP Date</label>{{ report_form.ntp_date }}</div>
+                    <div class="field"><label>C.D</label>{{ report_form.cd }}</div>
+                    <div class="field"><label>Original Expiry Date</label>{{ report_form.original_expiry_date }}</div>
+                    <div class="field"><label>Add'l. C.D</label>{{ report_form.additional_cd }}</div>
+                    <div class="field"><label>Revised Expiry Date</label>{{ report_form.revised_expiry_date }}</div>
+                    <div class="field"><label>Date Completed</label>{{ report_form.date_completed }}</div>
+                    <div class="field"><label>Revised Contract Cost</label>{{ report_form.revised_contract_cost }}</div>
+                    <div class="field"><label>Previous</label>{{ report_form.status_previous }}</div>
+                    <div class="field"><label>Current</label>{{ report_form.status_current }}</div>
+                    <div class="field"><label>% of Time Elapsed</label>{{ report_form.percent_time_elapsed }}</div>
+                    <div class="field"><label>Slippage (+) (-) %</label>{{ report_form.slippage_percent }}</div>
+                    <div class="field wide"><label>Remarks</label>{{ report_form.remarks }}</div>
                 </div>
-                <div class="section-line"></div>
-
-                <section class="tab-strip">
-                    <button class="tab-btn" type="button">
-                        <span>??</span>
-                        <span>Projects</span>
-                    </button>
-                </section>
-
-                <p class="message">
-                    Construction Division projects management coming soon. For now, please use the standalone Projects page from the sidebar.
-                </p>
-            </main>
+                <div class="modal-actions">
+                    <button class="btn light" type="button" id="cancelReportModal">Cancel</button>
+                    <button class="btn" type="submit">{% if editing_report %}Update{% else %}Create{% endif %}</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+<script>
+    (function () {
+        const modal = document.getElementById("reportModal");
+        const openBtn = document.getElementById("openReportModal");
+        const closeBtn = document.getElementById("closeReportModal");
+        const cancelBtn = document.getElementById("cancelReportModal");
+        function openModal() { modal.classList.add("show"); }
+        function closeModal() { modal.classList.remove("show"); }
+        if (openBtn) openBtn.addEventListener("click", openModal);
+        if (closeBtn) closeBtn.addEventListener("click", closeModal);
+        if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+        if (modal) {
+            modal.addEventListener("click", function (event) {
+                if (event.target === modal) closeModal();
+            });
+        }
+    })();
+</script>
 </body>
 </html>

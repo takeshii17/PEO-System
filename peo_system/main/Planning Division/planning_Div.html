@@ -68,14 +68,13 @@
         .brand h1 {
             margin: 0;
             color: #f4f8fe;
-            font-size: 2rem;
-            font-size: clamp(1.2rem, 1.8vw, 2rem);
+            font-size: clamp(1.1rem, 1.65vw, 1.85rem);
         }
 
         .brand p {
             margin: 4px 0 0;
             color: #c2d0df;
-            font-size: 1rem;
+            font-size: 0.92rem;
         }
 
         .nav {
@@ -92,7 +91,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: clamp(1.05rem, 1.2vw, 1.95rem);
+            font-size: 0.9rem;
         }
 
         .nav a:hover {
@@ -132,7 +131,7 @@
 
         .title-wrap h2 {
             margin: 0;
-            font-size: clamp(1.7rem, 2.5vw, 2.8rem);
+            font-size: 1.55rem;
         }
 
         .title-sub {
@@ -142,7 +141,7 @@
             gap: 10px;
             flex-wrap: wrap;
             color: var(--muted);
-            font-size: clamp(1rem, 1.15vw, 1.8rem);
+            font-size: 0.82rem;
         }
 
         .division-chip {
@@ -185,14 +184,14 @@
             display: grid;
             place-items: center;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
         }
 
         .logout {
             border: 0;
             background: transparent;
             color: #182d43;
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 8px;
@@ -224,12 +223,13 @@
             background: transparent;
             color: #0d253e;
             font-family: inherit;
-            font-size: clamp(1rem, 1.1vw, 1.3rem);
+            font-size: 0.84rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            text-decoration: none;
         }
 
         .section-tab.active {
@@ -282,13 +282,13 @@
 
         .card strong {
             display: block;
-            font-size: clamp(2rem, 2.9vw, 3rem);
+            font-size: 1.2rem;
             line-height: 1;
         }
 
         .card span {
             color: #4d627b;
-            font-size: clamp(1rem, 1.1vw, 1.25rem);
+            font-size: 0.8rem;
         }
 
         .budget-panel {
@@ -309,13 +309,13 @@
 
         .panel-head h3 {
             margin: 0;
-            font-size: clamp(1.7rem, 2.2vw, 2.45rem);
+            font-size: 1.05rem;
         }
 
         .panel-head p {
             margin: 4px 0 0;
             color: #4f637c;
-            font-size: clamp(1rem, 1.1vw, 1.28rem);
+            font-size: 0.8rem;
         }
 
         .new-budget {
@@ -324,7 +324,7 @@
             color: #ffffff;
             border-radius: 14px;
             padding: 11px 18px;
-            font-size: clamp(1rem, 1vw, 1.2rem);
+            font-size: 0.82rem;
             font-family: inherit;
             font-weight: 600;
             cursor: pointer;
@@ -358,7 +358,16 @@
 
         .title-line h4 {
             margin: 0;
-            font-size: clamp(1.5rem, 2vw, 2.2rem);
+            font-size: 0.98rem;
+        }
+
+        .title-line a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .title-line a:hover {
+            text-decoration: underline;
         }
 
         .status {
@@ -366,7 +375,7 @@
             color: #ffffff;
             padding: 4px 10px;
             border-radius: 999px;
-            font-size: 0.95rem;
+            font-size: 0.75rem;
             font-weight: 600;
         }
 
@@ -376,7 +385,7 @@
             gap: 8px 16px;
             margin: 4px 0 10px;
             color: #4a607b;
-            font-size: clamp(1rem, 1.07vw, 1.2rem);
+            font-size: 0.8rem;
         }
 
         .meta strong {
@@ -394,6 +403,10 @@
             gap: 8px;
         }
 
+        .icon-actions form {
+            margin: 0;
+        }
+
         .icon-btn {
             border: 1px solid #cdd4de;
             background: #ffffff;
@@ -404,6 +417,10 @@
             place-items: center;
             cursor: pointer;
             color: #0e243c;
+        }
+
+        button.icon-btn {
+            font-family: inherit;
         }
 
         .icon-btn svg {
@@ -417,7 +434,7 @@
             gap: 8px;
             margin-bottom: 6px;
             color: #2f4560;
-            font-size: clamp(1rem, 1.06vw, 1.18rem);
+            font-size: 0.8rem;
         }
 
         .progress {
@@ -432,6 +449,150 @@
             height: 100%;
             width: 100%;
             background: #123d67;
+        }
+
+        .pow-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pow-tools {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .pow-tools input,
+        .pow-tools select {
+            border: 1px solid #c5ced9;
+            border-radius: 10px;
+            background: #f7f9fb;
+            color: #21354a;
+            padding: 9px 10px;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+
+        .pow-tools input {
+            min-width: 230px;
+        }
+
+        .pow-empty {
+            border: 1px solid #d2d9e2;
+            border-radius: 14px;
+            min-height: 130px;
+            margin-top: 14px;
+            display: grid;
+            place-items: center;
+            color: #5c6f87;
+            font-size: 1rem;
+            text-align: center;
+            padding: 16px;
+            background: #f8fafc;
+        }
+
+        .pow-table {
+            width: 100%;
+            margin-top: 12px;
+            border-collapse: collapse;
+            background: #f8fafc;
+            border: 1px solid #d2d9e2;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .pow-table th,
+        .pow-table td {
+            border-bottom: 1px solid #dde3eb;
+            padding: 9px 10px;
+            font-size: 0.8rem;
+            text-align: left;
+        }
+
+        .pow-table th {
+            background: #eef3f8;
+            color: #23384f;
+            font-weight: 600;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 21, 37, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 70;
+            padding: 16px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(620px, 100%);
+            background: #f8fafc;
+            border: 1px solid #ccd4df;
+            border-radius: 14px;
+            box-shadow: 0 10px 28px rgba(7, 23, 43, 0.3);
+        }
+
+        .modal-head {
+            border-bottom: 1px solid #d7dde6;
+            padding: 12px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-head h3 {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .modal-body {
+            padding: 12px 14px 14px;
+        }
+
+        .budget-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 0.76rem;
+            color: #2f4762;
+            font-weight: 600;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            border: 1px solid #c3ceda;
+            border-radius: 8px;
+            padding: 8px 9px;
+            font-family: inherit;
+            font-size: 0.82rem;
+            background: #ffffff;
+        }
+
+        .form-field.full {
+            grid-column: span 2;
+        }
+
+        .modal-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
         }
 
         @media (max-width: 1440px) {
@@ -474,6 +635,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .budget-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full {
+                grid-column: span 1;
+            }
+
             .item-top {
                 flex-direction: column;
             }
@@ -513,7 +682,7 @@
                     <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     Quality Division
                 </a>
-                <a href="#">
+                <a href="{% url 'maintinance_div_dashboard' %}">
                     <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
                     Maintenance Division
                 </a>
@@ -550,27 +719,28 @@
 
             <main class="main">
                 <section class="section-tabs">
-                    <button class="section-tab active" type="button">
+                    <a class="section-tab {% if active_tab == 'budget' %}active{% endif %}" href="{% url 'planning_div_dashboard' %}?tab=budget">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 7V5h6v2M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         Budget
-                    </button>
-                    <button class="section-tab" type="button">
+                    </a>
+                    <a class="section-tab {% if active_tab == 'ppa' %}active{% endif %}" href="{% url 'planning_div_dashboard' %}?tab=ppa{% if selected_fund %}&fund={{ selected_fund }}{% endif %}">
                         <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         PPA
-                    </button>
-                    <button class="section-tab" type="button">
+                    </a>
+                    <a class="section-tab {% if active_tab == 'timeline' %}active{% endif %}" href="{% url 'planning_div_dashboard' %}?tab=timeline">
                         <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         Timeline
-                    </button>
+                    </a>
                 </section>
 
+                {% if active_tab == "budget" %}
                 <section class="stats">
                     <article class="card">
                         <div class="card-icon blue">
                             <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 7V5h6v2M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
                         <div>
-                            <strong>2</strong>
+                            <strong>{{ total_budgets }}</strong>
                             <span>Total Budgets</span>
                         </div>
                     </article>
@@ -579,7 +749,7 @@
                             <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16.5 7.5A4.5 4.5 0 0 0 12 5c-2.5 0-4 1.2-4 3s1.5 3 4 3 4 1.2 4 3-1.5 3-4 3a4.5 4.5 0 0 1-4.5-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
                         <div>
-                            <strong>PHP 688,099,288</strong>
+                            <strong>PHP {{ total_allocated|floatformat:0 }}</strong>
                             <span>Total Allocated</span>
                         </div>
                     </article>
@@ -588,7 +758,7 @@
                             <svg viewBox="0 0 24 24" fill="none"><path d="M6 11h12v5a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-5Z" stroke="currentColor" stroke-width="2"/><path d="M7 11V9a5 5 0 0 1 10 0v2M5 13H3M21 13h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
                         <div>
-                            <strong>PHP 0</strong>
+                            <strong>PHP {{ total_remaining|floatformat:0 }}</strong>
                             <span>Total Remaining</span>
                         </div>
                     </article>
@@ -607,7 +777,7 @@
                     <div class="panel-head">
                         <div>
                             <h3>Annual Budget Allocations</h3>
-                            <p>20% Development Fund budget management</p>
+                            <p>Budget management</p>
                         </div>
                         <button class="new-budget" type="button">
                             <span>+</span>
@@ -615,66 +785,252 @@
                         </button>
                     </div>
 
+                    {% for budget in budgets %}
                     <article class="budget-item">
                         <div class="item-top">
                             <div>
                                 <div class="title-line">
-                                    <h4>20% Development Fund FY 2026</h4>
-                                    <span class="status">Approved</span>
+                                    <h4><a href="{% url 'planning_div_dashboard' %}?tab=ppa&fund={{ budget.fund }}">{{ budget.name }}</a></h4>
+                                    <span class="status">{{ budget.get_status_display }}</span>
                                 </div>
                                 <div class="meta">
-                                    <div>Total Budget: <strong>PHP 625,105,288</strong></div>
-                                    <div>Allocated: <strong>PHP 625,105,288</strong></div>
-                                    <div>Remaining: <strong class="ok">PHP 0</strong></div>
+                                    <div>Total Budget: <strong>PHP {{ budget.total_budget|floatformat:0 }}</strong></div>
+                                    <div>Allocated: <strong>PHP {{ budget.allocated_value|floatformat:0 }}</strong></div>
+                                    <div>Remaining: <strong class="ok">PHP {{ budget.remaining_amount|floatformat:0 }}</strong></div>
                                 </div>
                             </div>
                             <div class="icon-actions">
-                                <button class="icon-btn" type="button" aria-label="Edit">
+                                <a class="icon-btn" href="{% url 'planning_div_dashboard' %}?tab=budget&edit_budget={{ budget.id }}" aria-label="Edit">
                                     <svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg>
-                                </button>
-                                <button class="icon-btn" type="button" aria-label="Delete">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                                </button>
+                                </a>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_budget">
+                                    <input type="hidden" name="delete_id" value="{{ budget.id }}">
+                                    <button class="icon-btn" type="submit" aria-label="Delete">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div class="util-row">
                             <span>Utilization</span>
-                            <strong>100%</strong>
+                            <strong>{{ budget.utilization_percent|floatformat:0 }}%</strong>
                         </div>
-                        <div class="progress"><span></span></div>
+                        <div class="progress"><span style="width:{{ budget.utilization_percent|floatformat:0 }}%"></span></div>
                     </article>
-
+                    {% empty %}
                     <article class="budget-item">
-                        <div class="item-top">
-                            <div>
-                                <div class="title-line">
-                                    <h4>SEF FY 2026</h4>
-                                    <span class="status">Approved</span>
-                                </div>
-                                <div class="meta">
-                                    <div>Total Budget: <strong>PHP 62,994,000</strong></div>
-                                    <div>Allocated: <strong>PHP 62,994,000</strong></div>
-                                    <div>Remaining: <strong class="ok">PHP 0</strong></div>
-                                </div>
-                            </div>
-                            <div class="icon-actions">
-                                <button class="icon-btn" type="button" aria-label="Edit">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg>
-                                </button>
-                                <button class="icon-btn" type="button" aria-label="Delete">
-                                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                                </button>
-                            </div>
+                        <div class="meta">No budget records yet.</div>
+                    </article>
+                    {% endfor %}
+                </section>
+                {% elif active_tab == "ppa" %}
+                <section class="stats">
+                    <article class="card">
+                        <div class="card-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
-                        <div class="util-row">
-                            <span>Utilization</span>
-                            <strong>100%</strong>
+                        <div>
+                            <strong>{{ ppa_total }}</strong>
+                            <span>Total POWs</span>
                         </div>
-                        <div class="progress"><span></span></div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon green">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m8.5 12 2.2 2.2L15.5 9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>{{ ppa_approved }}</strong>
+                            <span>Approved</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon gold">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.5" r=".8" fill="currentColor"/><path d="M10 3h4l7 14H3L10 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>{{ ppa_for_review }}</strong>
+                            <span>For Review</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon violet">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16.5 7.5A4.5 4.5 0 0 0 12 5c-2.5 0-4 1.2-4 3s1.5 3 4 3 4 1.2 4 3-1.5 3-4 3a4.5 4.5 0 0 1-4.5-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>PHP {{ ppa_total_cost|floatformat:0 }}</strong>
+                            <span>Total Cost</span>
+                        </div>
                     </article>
                 </section>
+
+                <section class="budget-panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Program of Works</h3>
+                            <p>Infrastructure projects linked to approved budgets</p>
+                        </div>
+                    </div>
+                    <div class="pow-toolbar">
+                        <form class="pow-tools" method="get">
+                            <input type="hidden" name="tab" value="ppa">
+                            <input type="text" name="q" value="{{ ppa_search }}" placeholder="Search..." />
+                            <select name="status">
+                                <option value="">All Statuses</option>
+                                {% for value, label in project_status_choices %}
+                                <option value="{{ value }}" {% if ppa_status == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="fund_filter">
+                                <option value="">All Funds</option>
+                                {% for value, label in fund_choices %}
+                                <option value="{{ value }}" {% if ppa_fund == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            <button class="icon-btn" type="submit" aria-label="Apply">Go</button>
+                        </form>
+                        <button class="new-budget" type="button" id="openProjectModal"><span>+</span><span>New POW</span></button>
+                    </div>
+                    {% if ppa_projects %}
+                    <table class="pow-table">
+                        <thead>
+                            <tr>
+                                <th>Project Title</th>
+                                <th>Fund</th>
+                                <th>Budget Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in ppa_projects %}
+                            <tr>
+                                <td>{{ project.project_title }}</td>
+                                <td>{{ project.get_fund_display }}</td>
+                                <td>PHP {{ project.budget_amount|floatformat:0 }}</td>
+                                <td>{{ project.get_status_display }}</td>
+                                <td>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete_project">
+                                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                                        <button class="icon-btn" type="submit" aria-label="Delete">
+                                            <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <div class="pow-empty">No POWs found. Create a budget first, then add POWs.</div>
+                    {% endif %}
+                </section>
+                {% else %}
+                <section class="budget-panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Timeline</h3>
+                            <p>Timeline tracking view is not configured yet.</p>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
             </main>
         </div>
     </div>
+    <div class="modal {% if show_project_modal %}show{% endif %}" id="projectModal">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3>New POW Project</h3>
+                <button class="icon-btn" type="button" id="closeProjectModal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create_project">
+                    <div class="budget-form-grid">
+                        <div class="form-field full"><label>Project Title</label>{{ project_form.project_title }}</div>
+                        <div class="form-field"><label>Fund Category</label>{{ project_form.fund }}</div>
+                        <div class="form-field"><label>Budget Amount</label>{{ project_form.budget_amount }}</div>
+                        <div class="form-field full"><label>Status</label>{{ project_form.status }}</div>
+                    </div>
+                    <div class="modal-actions">
+                        <a class="icon-btn" href="{% url 'planning_div_dashboard' %}?tab=ppa{% if selected_fund %}&fund={{ selected_fund }}{% endif %}" aria-label="Cancel">Cancel</a>
+                        <button class="new-budget" type="submit">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal {% if show_budget_modal %}show{% endif %}" id="budgetModal">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3>Edit Budget</h3>
+                <button class="icon-btn" type="button" id="closeBudgetModal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="update_budget">
+                    {% if editing_budget %}
+                    <input type="hidden" name="budget_id" value="{{ editing_budget.id }}">
+                    {% endif %}
+                    <div class="budget-form-grid">
+                        <div class="form-field full"><label>Name</label>{{ budget_form.name }}</div>
+                        <div class="form-field"><label>Fund</label>{{ budget_form.fund }}</div>
+                        <div class="form-field"><label>Fiscal Year</label>{{ budget_form.fiscal_year }}</div>
+                        <div class="form-field"><label>Total Budget</label>{{ budget_form.total_budget }}</div>
+                        <div class="form-field"><label>Allocated Amount</label><input type="text" value="Auto-computed from POW projects" disabled></div>
+                        <div class="form-field full"><label>Status</label>{{ budget_form.status }}</div>
+                    </div>
+                    <div class="modal-actions">
+                        <a class="icon-btn" href="{% url 'planning_div_dashboard' %}?tab=budget" aria-label="Cancel">Cancel</a>
+                        <button class="new-budget" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            const projectModal = document.getElementById("projectModal");
+            const openProjectBtn = document.getElementById("openProjectModal");
+            const closeProjectBtn = document.getElementById("closeProjectModal");
+            const modal = document.getElementById("budgetModal");
+            const closeBtn = document.getElementById("closeBudgetModal");
+            if (openProjectBtn && projectModal) {
+                openProjectBtn.addEventListener("click", function () {
+                    projectModal.classList.add("show");
+                });
+            }
+            if (closeProjectBtn) {
+                closeProjectBtn.addEventListener("click", function () {
+                    window.location.href = "{% url 'planning_div_dashboard' %}?tab=ppa{% if selected_fund %}&fund={{ selected_fund }}{% endif %}";
+                });
+            }
+            if (projectModal) {
+                projectModal.addEventListener("click", function (event) {
+                    if (event.target === projectModal) {
+                        window.location.href = "{% url 'planning_div_dashboard' %}?tab=ppa{% if selected_fund %}&fund={{ selected_fund }}{% endif %}";
+                    }
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener("click", function () {
+                    window.location.href = "{% url 'planning_div_dashboard' %}?tab=budget";
+                });
+            }
+            if (modal) {
+                modal.addEventListener("click", function (event) {
+                    if (event.target === modal) {
+                        window.location.href = "{% url 'planning_div_dashboard' %}?tab=budget";
+                    }
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
