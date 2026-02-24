@@ -10,6 +10,8 @@ urlpatterns = [
     path("construction-division/dashboard/", views.construction_div_dashboard, name="construction_div_dashboard"),
     path("quality-division/dashboard/", views.quality_div_dashboard, name="quality_div_dashboard"),
     path("maintinance-division/dashboard/", views.maintinance_div_dashboard, name="maintinance_div_dashboard"),
+    path("construction-division/dashboard/", views.construction_div_dashboard, name="construction_div_dashboard"),
+    path("quality-division/dashboard/", views.quality_div_dashboard, name="quality_div_dashboard"),
     path("Admin/adminDiv.html", views.admin_div_dashboard, name="admin_div_dashboard_legacy"),
 ]
 
