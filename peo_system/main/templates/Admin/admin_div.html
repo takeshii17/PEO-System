@@ -1,10 +1,9 @@
-{% if user.is_authenticated %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEO Portal Dashboard</title>
+    <title>PEO Portal - Admin Division</title>
     <style>
         :root {
             --bg: #eef1f5;
@@ -18,9 +17,7 @@
             --radius: 18px;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         html, body {
             margin: 0;
@@ -69,7 +66,6 @@
 
         .brand h1 {
             margin: 0;
-            font-size: 2.05rem;
             font-size: clamp(1.2rem, 1.85vw, 2.05rem);
             color: #f4f7fb;
         }
@@ -94,14 +90,11 @@
             text-decoration: none;
             border-radius: 14px;
             padding: 14px 16px;
-            font-size: 2rem;
             font-size: clamp(1.05rem, 1.22vw, 2rem);
             line-height: 1.15;
         }
 
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-        }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.08); }
 
         .nav-item.active {
             background: #123760;
@@ -164,13 +157,11 @@
             background: transparent;
             width: 100%;
             font-family: inherit;
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: #324a63;
         }
 
-        .search input::placeholder {
-            color: #5b6f87;
-        }
+        .search input::placeholder { color: #5b6f87; }
 
         .filter-btn {
             border: 1px solid #ccd5e1;
@@ -220,9 +211,7 @@
             text-transform: uppercase;
         }
 
-        .logout-form {
-            margin: 0;
-        }
+        .logout-form { margin: 0; }
 
         .logout-btn {
             border: 0;
@@ -234,30 +223,25 @@
             border-radius: 10px;
         }
 
-        .logout-btn:hover {
-            background: #e7edf5;
-        }
+        .logout-btn:hover { background: #e7edf5; }
 
-        .page {
-            padding: 28px;
-        }
+        .page { padding: 28px; }
 
         .hero {
             border-radius: 22px;
             overflow: hidden;
-            min-height: 340px;
+            min-height: 280px;
             position: relative;
             display: flex;
             align-items: center;
-            background:
-                linear-gradient(95deg, rgba(7, 30, 58, 0.86) 4%, rgba(7, 30, 58, 0.58) 46%, rgba(7, 30, 58, 0.25) 100%),
-                url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+            background: linear-gradient(95deg, rgba(7, 30, 58, 0.86) 4%, rgba(7, 30, 58, 0.58) 46%, rgba(7, 30, 58, 0.25) 100%),
+                        url("https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
             box-shadow: var(--shadow);
         }
 
         .hero-body {
             width: min(860px, 100%);
-            padding: 44px 56px;
+            padding: 38px 46px;
             color: #f8fbff;
         }
 
@@ -268,15 +252,15 @@
         }
 
         .hero p {
-            margin: 18px 0 0;
+            margin: 16px 0 0;
             max-width: 900px;
-            font-size: clamp(1.15rem, 1.7vw, 2rem);
+            font-size: clamp(1.05rem, 1.55vw, 1.6rem);
             line-height: 1.38;
             color: #e4edf7;
         }
 
         .hero-actions {
-            margin-top: 28px;
+            margin-top: 24px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -287,7 +271,7 @@
         .btn-secondary {
             border-radius: 14px;
             padding: 12px 24px;
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-family: inherit;
             cursor: pointer;
         }
@@ -296,9 +280,6 @@
             border: 0;
             background: #f9fbff;
             color: #0c2b4b;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .btn-secondary {
@@ -311,7 +292,7 @@
         .metrics {
             margin-top: 28px;
             display: grid;
-            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            grid-template-columns: repeat(4, minmax(180px, 1fr));
             gap: 18px;
         }
 
@@ -319,35 +300,29 @@
             background: #f7f8fa;
             border: 1px solid #ccd4df;
             border-radius: 18px;
-            min-height: 150px;
-            padding: 24px 24px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
+            min-height: 130px;
+            padding: 20px 20px;
             box-shadow: var(--shadow);
         }
 
-        .metric-icon {
-            width: 58px;
-            height: 58px;
-            border-radius: 16px;
-            background: #e1e6ed;
-            color: #123a61;
-            display: grid;
-            place-items: center;
-            flex: 0 0 auto;
+        .metric-card h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #3d516a;
+            font-weight: 500;
         }
 
-        .metric-text strong {
+        .metric-card strong {
             display: block;
-            font-size: clamp(1.8rem, 2.5vw, 3rem);
+            margin-top: 22px;
+            font-size: 2rem;
             line-height: 1;
+            color: #0c2137;
         }
 
-        .metric-text span {
-            color: #445b76;
-            font-size: 1rem;
-        }
+        .metric-card strong.blue { color: #2563eb; }
+        .metric-card strong.orange { color: #d97706; }
+        .metric-card strong.red { color: #dc2626; }
 
         .data-tabs {
             margin-top: 18px;
@@ -376,47 +351,89 @@
             box-shadow: 0 1px 2px rgba(12, 35, 61, 0.12);
         }
 
-        @media (max-width: 1400px) {
-            .sidebar {
-                width: 280px;
-            }
+        .toolbar,
+        .register {
+            margin-top: 18px;
+            background: #f7f8fa;
+            border: 1px solid #ccd4df;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
 
-            .metrics {
-                grid-template-columns: repeat(2, minmax(200px, 1fr));
-            }
+        .toolbar { padding: 16px; }
+
+        .toolbar-grid {
+            display: grid;
+            grid-template-columns: 1.6fr .6fr .6fr auto;
+            gap: 12px;
+        }
+
+        .select,
+        .toolbar .search {
+            height: 48px;
+            margin: 0;
+        }
+
+        .select {
+            border: 1px solid #ccd5e1;
+            background: #eef2f7;
+            border-radius: 12px;
+            padding: 0 12px;
+            color: #304a67;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .btn-dark {
+            border: 0;
+            background: #123760;
+            color: #fff;
+            border-radius: 12px;
+            padding: 0 18px;
+            height: 48px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .register {
+            min-height: 180px;
+            padding: 20px 24px;
+        }
+
+        .register h3 {
+            margin: 0;
+            font-size: 1.45rem;
+            color: #0f2743;
+        }
+
+        .register p {
+            margin: 8px 0 0;
+            color: #61768f;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 1400px) {
+            .sidebar { width: 280px; }
+            .metrics { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
         }
 
         @media (max-width: 980px) {
-            .app-shell {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-
+            .app-shell { flex-direction: column; }
+            .sidebar { width: 100%; }
             .topbar {
                 flex-direction: column;
                 align-items: stretch;
                 height: auto;
                 padding: 16px;
             }
-
-            .top-controls {
-                width: 100%;
-            }
-
-            .account {
-                justify-content: flex-end;
-            }
-
-            .hero-body {
-                padding: 28px;
-            }
-
-            .metrics {
-                grid-template-columns: 1fr;
-            }
+            .top-controls { width: 100%; }
+            .account { justify-content: flex-end; }
+            .hero-body { padding: 28px; }
+            .metrics,
+            .toolbar-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -432,7 +449,7 @@
             </div>
 
             <nav class="nav-menu">
-                <a class="nav-item active" href="#">
+                <a class="nav-item" href="{% url 'home' %}">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
                         <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
@@ -440,9 +457,8 @@
                         <rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
                     </svg>
                     Dashboard
-                    <span class="caret">&#8250;</span>
                 </a>
-                <a class="nav-item" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
+                <a class="nav-item active" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
                 <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
                 <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
                 <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
@@ -461,7 +477,7 @@
                             <circle cx="11" cy="11" r="6.8" stroke="#4f647d" stroke-width="2"></circle>
                             <path d="M16 16L21 21" stroke="#4f647d" stroke-width="2" stroke-linecap="round"></path>
                         </svg>
-                        <input type="text" placeholder="Search projects, documents, tasks..." />
+                        <input type="text" placeholder="Search documents, billing, records..." />
                     </label>
                     <button class="filter-btn" type="button">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -484,119 +500,60 @@
             <main class="page">
                 <section class="hero">
                     <div class="hero-body">
-                        <h2>Operations Dashboard</h2>
-                        <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
+                        <h2>Admin Division</h2>
+                        <p>People, finance, procurement support, and records management for the Provincial Engineering Office.</p>
                         <div class="hero-actions">
-                            <button class="btn-primary" type="button">
-                                <span>+</span>
-                                <span>New item</span>
-                            </button>
-                            <button class="btn-secondary" type="button">Export Report</button>
+                            <button class="btn-primary" type="button">New Document</button>
+                            <button class="btn-secondary" type="button">Export Register</button>
                         </div>
                     </div>
                 </section>
 
+                <div class="data-tabs">
+                    <button class="data-tab active" type="button">Documents</button>
+                    <button class="data-tab" type="button">Billing</button>
+                </div>
+
                 <section class="metrics">
                     <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                                <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>1626</strong>
-                            <span>Total Projects</span>
-                        </div>
+                        <h3>Total Documents</h3>
+                        <strong>0</strong>
                     </article>
                     <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>1256</strong>
-                            <span>Completed</span>
-                        </div>
+                        <h3>For Review</h3>
+                        <strong class="blue">0</strong>
                     </article>
                     <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>49</strong>
-                            <span>Ongoing</span>
-                        </div>
+                        <h3>Processing</h3>
+                        <strong class="orange">0</strong>
                     </article>
                     <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>PHP 4.2B</strong>
-                            <span>Total Cost</span>
-                        </div>
+                        <h3>Open Issues</h3>
+                        <strong class="red">0</strong>
                     </article>
                 </section>
 
-                <section class="data-tabs" aria-label="Data sections">
-                    <button class="data-tab active" type="button">Divisions</button>
-                    <button class="data-tab" type="button">Projects</button>
-                    <button class="data-tab" type="button">Document Register</button>
-                    <button class="data-tab" type="button">Task Matrix</button>
+                <section class="toolbar">
+                    <div class="toolbar-grid">
+                        <label class="search">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle cx="11" cy="11" r="6.8" stroke="#4f647d" stroke-width="2"></circle>
+                                <path d="M16 16L21 21" stroke="#4f647d" stroke-width="2" stroke-linecap="round"></path>
+                            </svg>
+                            <input type="text" placeholder="Search documents..." />
+                        </label>
+                        <div class="select"><span>All Divisions</span><span>?</span></div>
+                        <div class="select"><span>All Statuses</span><span>?</span></div>
+                        <button class="btn-dark" type="button">+ New Document</button>
+                    </div>
+                </section>
+
+                <section class="register">
+                    <h3>Document Register</h3>
+                    <p>0 documents found</p>
                 </section>
             </main>
         </div>
     </div>
 </body>
 </html>
-{% else %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PEO Portal</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            background: #eef1f5;
-            font-family: "Sora", "Segoe UI", sans-serif;
-            color: #0f2f54;
-        }
-
-        .guest-card {
-            background: #ffffff;
-            border: 1px solid #d6dde6;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(10, 37, 65, 0.1);
-            padding: 28px;
-            text-align: center;
-        }
-
-        .guest-card a {
-            color: #0f3a67;
-            font-weight: 600;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="guest-card">
-        <h2>You are not logged in.</h2>
-        <p><a href="{% url 'login' %}">Click here to login</a></p>
-    </div>
-</body>
-</html>
-{% endif %}
