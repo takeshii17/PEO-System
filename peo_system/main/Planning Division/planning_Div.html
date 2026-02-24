@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Division Dashboard</title>
+    <style>
+        :root {
+            --bg: #eef1f5;
+            --panel: #f5f7fa;
+            --line: #ccd3dc;
+            --text: #0c2137;
+            --muted: #5a6e86;
+            --sidebar: #072645;
+            --sidebar-soft: #10385f;
+            --primary: #123a63;
+            --chip: #dce7f7;
+            --shadow: 0 2px 8px rgba(8, 32, 57, 0.1);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .layout {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 330px;
+            background: linear-gradient(180deg, #08294d 0%, #072340 100%);
+            color: #d2deeb;
+            border-right: 1px solid #173a61;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            padding: 28px 24px;
+            border-bottom: 1px solid rgba(211, 223, 238, 0.18);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            border: 2px solid #f0d364;
+            background: radial-gradient(circle at 35% 35%, #ffe889 0%, #f8ca22 60%, #e0a90a 100%);
+            color: #8a0010;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: grid;
+            place-items: center;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: #f4f8fe;
+            font-size: 2rem;
+            font-size: clamp(1.2rem, 1.8vw, 2rem);
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            color: #c2d0df;
+            font-size: 1rem;
+        }
+
+        .nav {
+            padding: 18px 16px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .nav a {
+            color: #c9d8e8;
+            text-decoration: none;
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: clamp(1.05rem, 1.2vw, 1.95rem);
+        }
+
+        .nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav a.active {
+            background: #113861;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav svg {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+        }
+
+        .caret {
+            margin-left: auto;
+        }
+
+        .content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .topbar {
+            border-bottom: 1px solid var(--line);
+            padding: 20px 26px 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            background: #f5f7fa;
+        }
+
+        .title-wrap h2 {
+            margin: 0;
+            font-size: clamp(1.7rem, 2.5vw, 2.8rem);
+        }
+
+        .title-sub {
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: clamp(1rem, 1.15vw, 1.8rem);
+        }
+
+        .division-chip {
+            border: 1px solid #b8ccf0;
+            background: var(--chip);
+            color: #1a58a7;
+            border-radius: 999px;
+            padding: 3px 10px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .seal {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid #cfd7e1;
+            background: radial-gradient(circle at 35% 35%, #f1f9ff 0%, #dbe8f7 45%, #b9cade 100%);
+            color: #0f2e53;
+            font-size: 0.54rem;
+            font-weight: 700;
+            line-height: 1.12;
+            display: grid;
+            place-items: center;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #0f365f;
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logout {
+            border: 0;
+            background: transparent;
+            color: #182d43;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 6px 8px;
+            border-radius: 8px;
+        }
+
+        .logout:hover {
+            background: #e6edf6;
+        }
+
+        .main {
+            padding: 24px 26px;
+        }
+
+        .section-tabs {
+            width: min(780px, 100%);
+            background: #dfe3e8;
+            border-radius: 14px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 22px;
+        }
+
+        .section-tab {
+            border: 0;
+            border-radius: 11px;
+            padding: 9px 12px;
+            background: transparent;
+            color: #0d253e;
+            font-family: inherit;
+            font-size: clamp(1rem, 1.1vw, 1.3rem);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .section-tab.active {
+            background: #f7f9fb;
+            box-shadow: 0 1px 3px rgba(15, 39, 63, 0.12);
+            font-weight: 600;
+        }
+
+        .section-tab svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(190px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            min-height: 150px;
+            padding: 22px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+        }
+
+        .card-icon svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .blue { background: #d7e4f7; color: #2267d8; }
+        .green { background: #cdeed9; color: #109145; }
+        .gold { background: #f6e9c2; color: #d98600; }
+        .violet { background: #e6daf8; color: #9738f7; }
+
+        .card strong {
+            display: block;
+            font-size: clamp(2rem, 2.9vw, 3rem);
+            line-height: 1;
+        }
+
+        .card span {
+            color: #4d627b;
+            font-size: clamp(1rem, 1.1vw, 1.25rem);
+        }
+
+        .budget-panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px 28px 22px;
+        }
+
+        .panel-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .panel-head h3 {
+            margin: 0;
+            font-size: clamp(1.7rem, 2.2vw, 2.45rem);
+        }
+
+        .panel-head p {
+            margin: 4px 0 0;
+            color: #4f637c;
+            font-size: clamp(1rem, 1.1vw, 1.28rem);
+        }
+
+        .new-budget {
+            border: 0;
+            background: #10385f;
+            color: #ffffff;
+            border-radius: 14px;
+            padding: 11px 18px;
+            font-size: clamp(1rem, 1vw, 1.2rem);
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .budget-item {
+            background: #f8fafc;
+            border: 1px solid #cdd4dd;
+            border-radius: 16px;
+            padding: 18px 18px 16px;
+            margin-top: 14px;
+        }
+
+        .item-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .title-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .title-line h4 {
+            margin: 0;
+            font-size: clamp(1.5rem, 2vw, 2.2rem);
+        }
+
+        .status {
+            background: #153d66;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 8px 16px;
+            margin: 4px 0 10px;
+            color: #4a607b;
+            font-size: clamp(1rem, 1.07vw, 1.2rem);
+        }
+
+        .meta strong {
+            color: #0e2238;
+            font-weight: 700;
+        }
+
+        .ok {
+            color: #0d9d42;
+            font-weight: 700;
+        }
+
+        .icon-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            border: 1px solid #cdd4de;
+            background: #ffffff;
+            width: 44px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            color: #0e243c;
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .util-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+            color: #2f4560;
+            font-size: clamp(1rem, 1.06vw, 1.18rem);
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 999px;
+            background: #dce3eb;
+            overflow: hidden;
+        }
+
+        .progress > span {
+            display: block;
+            height: 100%;
+            width: 100%;
+            background: #123d67;
+        }
+
+        @media (max-width: 1440px) {
+            .sidebar {
+                width: 282px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .profile {
+                justify-content: flex-end;
+            }
+
+            .section-tabs {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .meta {
+                grid-template-columns: 1fr;
+            }
+
+            .item-top {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="logo">PEO</div>
+                <div>
+                    <h1>PEO Portal</h1>
+                    <p>Workflow Management</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="{% url 'home' %}">
+                    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/></svg>
+                    Dashboard
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+                    Admin Division
+                </a>
+                <a href="#" class="active">
+                    <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Planning Division
+                    <span class="caret">&#8250;</span>
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                    Construction Division
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Quality Division
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
+                    Maintenance Division
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    My Assignments
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>
+                    Tasks
+                </a>
+                <a href="#">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>
+                    Contractors
+                </a>
+            </nav>
+        </aside>
+
+        <div class="content">
+            <header class="topbar">
+                <div class="title-wrap">
+                    <h2>Planning Division</h2>
+                    <div class="title-sub">
+                        <span class="division-chip">Planning Division</span>
+                        <span>Budget Allocation &amp; Program of Works Management</span>
+                    </div>
+                </div>
+                <div class="profile">
+                    <div class="seal">OFFICE<br>OF PEA</div>
+                    <div class="avatar">L</div>
+                    <button class="logout" type="button">Logout</button>
+                </div>
+            </header>
+
+            <main class="main">
+                <section class="section-tabs">
+                    <button class="section-tab active" type="button">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 7V5h6v2M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        Budget
+                    </button>
+                    <button class="section-tab" type="button">
+                        <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        PPA
+                    </button>
+                    <button class="section-tab" type="button">
+                        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        Timeline
+                    </button>
+                </section>
+
+                <section class="stats">
+                    <article class="card">
+                        <div class="card-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 7V5h6v2M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>2</strong>
+                            <span>Total Budgets</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon green">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16.5 7.5A4.5 4.5 0 0 0 12 5c-2.5 0-4 1.2-4 3s1.5 3 4 3 4 1.2 4 3-1.5 3-4 3a4.5 4.5 0 0 1-4.5-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>PHP 688,099,288</strong>
+                            <span>Total Allocated</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon gold">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M6 11h12v5a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-5Z" stroke="currentColor" stroke-width="2"/><path d="M7 11V9a5 5 0 0 1 10 0v2M5 13H3M21 13h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>PHP 0</strong>
+                            <span>Total Remaining</span>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-icon violet">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M4 16 10 10l4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12V8h-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div>
+                            <strong>FY 2026</strong>
+                            <span>Current Year</span>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="budget-panel">
+                    <div class="panel-head">
+                        <div>
+                            <h3>Annual Budget Allocations</h3>
+                            <p>20% Development Fund budget management</p>
+                        </div>
+                        <button class="new-budget" type="button">
+                            <span>+</span>
+                            <span>New Budget</span>
+                        </button>
+                    </div>
+
+                    <article class="budget-item">
+                        <div class="item-top">
+                            <div>
+                                <div class="title-line">
+                                    <h4>20% Development Fund FY 2026</h4>
+                                    <span class="status">Approved</span>
+                                </div>
+                                <div class="meta">
+                                    <div>Total Budget: <strong>PHP 625,105,288</strong></div>
+                                    <div>Allocated: <strong>PHP 625,105,288</strong></div>
+                                    <div>Remaining: <strong class="ok">PHP 0</strong></div>
+                                </div>
+                            </div>
+                            <div class="icon-actions">
+                                <button class="icon-btn" type="button" aria-label="Edit">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg>
+                                </button>
+                                <button class="icon-btn" type="button" aria-label="Delete">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="util-row">
+                            <span>Utilization</span>
+                            <strong>100%</strong>
+                        </div>
+                        <div class="progress"><span></span></div>
+                    </article>
+
+                    <article class="budget-item">
+                        <div class="item-top">
+                            <div>
+                                <div class="title-line">
+                                    <h4>SEF FY 2026</h4>
+                                    <span class="status">Approved</span>
+                                </div>
+                                <div class="meta">
+                                    <div>Total Budget: <strong>PHP 62,994,000</strong></div>
+                                    <div>Allocated: <strong>PHP 62,994,000</strong></div>
+                                    <div>Remaining: <strong class="ok">PHP 0</strong></div>
+                                </div>
+                            </div>
+                            <div class="icon-actions">
+                                <button class="icon-btn" type="button" aria-label="Edit">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg>
+                                </button>
+                                <button class="icon-btn" type="button" aria-label="Delete">
+                                    <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="util-row">
+                            <span>Utilization</span>
+                            <strong>100%</strong>
+                        </div>
+                        <div class="progress"><span></span></div>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
