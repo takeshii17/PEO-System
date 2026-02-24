@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from decimal import Decimal
 
 from .forms import ConstructionStatusReportForm, DocumentForm, PlanningBudgetForm, PlanningProjectForm
@@ -14,6 +15,7 @@ def home(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def planning_div_dashboard(request):
     active_tab = request.GET.get("tab", "budget")
     if active_tab not in {"budget", "ppa", "timeline"}:
@@ -142,6 +144,7 @@ def planning_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def admin_div_dashboard(request):
     active_tab = request.GET.get("tab", "documents")
     if active_tab not in {"documents", "billing"}:
@@ -266,11 +269,13 @@ def admin_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def maintinance_div_dashboard(request):
-    return render(request, "Maintinance Division/maintinance_management.html")
+    return _render_maintinance_dashboard(request)
 
 
 @login_required
+@xframe_options_sameorigin
 def construction_div_dashboard(request):
     reports = ConstructionStatusReport.objects.all()
     show_report_modal = False
@@ -322,35 +327,54 @@ def construction_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def quality_div_dashboard(request):
     return render(request, "Quality Division/quality_div.html")
 
 
 @login_required
+@xframe_options_sameorigin
 def my_assignments(request):
     return render(request, "My Assignments/my_Assigments.html")
 
 
 @login_required
+@xframe_options_sameorigin
 def maintinance_task_management(request):
+    return _render_maintinance_tasks(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintinance_contractor_management(request):
+    return _render_maintinance_contractors(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_div_dashboard(request):
+    return _render_maintinance_dashboard(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_task_management(request):
+    return _render_maintinance_tasks(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_contractor_management(request):
+    return _render_maintinance_contractors(request)
+
+
+def _render_maintinance_dashboard(request):
+    return render(request, "Maintinance Division/maintinance_management.html")
+
+
+def _render_maintinance_tasks(request):
     return render(request, "Maintinance Division/task_management.html")
 
 
-@login_required
-def maintinance_contractor_management(request):
+def _render_maintinance_contractors(request):
     return render(request, "Maintinance Division/contractor_management.html")
-
-
-@login_required
-def maintenance_div_dashboard(request):
-    return maintinance_div_dashboard(request)
-
-
-@login_required
-def maintenance_task_management(request):
-    return maintinance_task_management(request)
-
-
-@login_required
-def maintenance_contractor_management(request):
-    return maintinance_contractor_management(request)

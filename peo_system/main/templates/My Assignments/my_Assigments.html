@@ -1,62 +1,110 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
   <title>My Assignments</title>
-  <style>
-    :root{--bg:#eef2f6;--panel:#f8fafc;--line:#cdd5de;--text:#0f2339;--muted:#586d84;--nav:#08284b;--active:#143a62}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Sora","Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-    .layout{min-height:100vh;display:flex}
-    .side{width:320px;background:linear-gradient(180deg,var(--nav),#08233f);color:#d4dfeb;border-right:1px solid #163b61}
-    .brand{display:flex;align-items:center;gap:12px;padding:24px 20px;border-bottom:1px solid rgba(217,229,245,.16)}
-    .logo{width:54px;height:54px;border-radius:10px;border:2px solid #f0d06a;background:radial-gradient(circle at 35% 35%,#ffe887 0,#f4c21d 62%,#e3aa0a 100%);color:#8f0618;font-weight:700;display:grid;place-items:center}
-    .brand h1{margin:0;font-size:1.5rem;color:#f1f6fc}
-    .brand p{margin:2px 0 0;color:#b9c8d9}
-    .menu{padding:16px 14px;display:grid;gap:8px}
-    .menu a{display:flex;align-items:center;gap:10px;color:#c7d6e6;text-decoration:none;border-radius:12px;padding:12px 14px}
-    .menu a:hover{background:rgba(255,255,255,.08)}
-    .menu a.active{background:var(--active);color:#fff;font-weight:600}
-    .main{flex:1;min-width:0}
-    .top{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:#f6f8fb}
-    .top h2{margin:0;font-size:2rem}
-    .top p{margin:4px 0 0;color:var(--muted)}
-    .logout{border:1px solid #c7d0da;background:#f9fbfd;border-radius:10px;padding:8px 12px;color:#102640;text-decoration:none}
-    .content{padding:24px}
-    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
-    .panel h3{margin:0 0 8px}
-    .panel p{margin:0;color:var(--muted)}
-  </style>
+  
 </head>
-<body>
-  <div class="layout">
-    <aside class="side">
-      <div class="brand"><div class="logo">PEO</div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
-      <nav class="menu">
-        <a href="{% url 'home' %}">Dashboard</a>
-        <a href="{% url 'admin_div_dashboard' %}">Admin Division</a>
-        <a href="{% url 'planning_div_dashboard' %}">Planning Division</a>
-        <a href="{% url 'construction_div_dashboard' %}">Construction Division</a>
-        <a href="{% url 'quality_div_dashboard' %}">Quality Division</a>
-        <a href="{% url 'maintinance_div_dashboard' %}">Maintenance Division</a>
-        <a class="active" href="{% url 'my_assignments' %}">My Assignments</a>
-        <a href="{% url 'maintinance_task_management' %}">Tasks</a>
-        <a href="{% url 'maintinance_contractor_management' %}">Contractors</a>
-      </nav>
-    </aside>
-    <main class="main">
-      <header class="top">
-        <div><h2>My Assignments</h2><p>Your assigned projects, tasks, and activity history</p></div>
-        <a class="logout" href="{% url 'home' %}">Back to Dashboard</a>
-      </header>
-      <section class="content">
-        <div class="panel">
-          <h3>No assignments yet</h3>
-          <p>Assigned items will appear here once available.</p>
+<body class="view-my-assignments">
+  <main class="page">
+    <header class="header">
+      <div>
+        <h1>My Assignments</h1>
+        <p>Track and manage your assigned POW tasks</p>
+      </div>
+      <div class="total-pill">0 Total Tasks</div>
+    </header>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">Pending</p>
+          <p class="stat-value">0</p>
         </div>
-      </section>
-    </main>
-  </div>
+        <div class="stat-icon warn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">In Progress</p>
+          <p class="stat-value">0</p>
+        </div>
+        <div class="stat-icon info" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="16.5" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">Completed</p>
+          <p class="stat-value">0</p>
+        </div>
+        <div class="stat-icon ok" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="m8.8 12.2 2.2 2.2 4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </article>
+    </section>
+
+    <section class="filters">
+      <div class="filter-grid">
+        <div class="filter-field">
+          <label for="task-type">Task Type</label>
+          <div class="field-row">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="#65778a" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <div class="filter-box">
+              <select id="task-type">
+                <option selected>All Task Types</option>
+                <option>Plan</option>
+                <option>POW</option>
+                <option>Survey</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-field">
+          <label for="task-status">Status</label>
+          <div class="field-row">
+            <div class="filter-box">
+              <select id="task-status">
+                <option selected>All Statuses</option>
+                <option>Pending</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="empty-panel">
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h2>No assignments found</h2>
+        <p>You don't have any assigned tasks yet</p>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

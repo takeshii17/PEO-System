@@ -1,15 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
   <title>Contractor Management</title>
   <style>
     :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
     *{box-sizing:border-box}
     body{margin:0;font-family:"Sora","Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
-    .layout{min-height:100vh;display:flex}
-    .sidebar{width:350px;background:linear-gradient(180deg,var(--nav),#08233f);color:#d4dfeb;border-right:1px solid #163b61}
+    .layout{min-height:100vh;display:block}
+    .sidebar{display:none}
     .brand{display:flex;align-items:center;gap:14px;padding:24px 22px;border-bottom:1px solid rgba(217,229,245,.16)}
     .logo{width:62px;height:62px;border-radius:10px;border:2px solid #f0d06a;background:radial-gradient(circle at 35% 35%,#ffe887 0,#f4c21d 62%,#e3aa0a 100%);color:#8f0618;font-weight:700;font-size:.82rem;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #17395f}
     .brand h1{margin:0;color:#f1f6fc;font-size:1.8rem;line-height:1.1}
@@ -31,7 +33,7 @@
     
     .stats,.tabs,.conditions,.filters,.roads,.tms{display:none!important}
     .ctm{margin-top:0}
-    .content{flex:1;min-width:0}
+    .content{min-width:0;width:100%}
     .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
     .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
     .heading p{margin:6px 0 0;color:var(--muted);font-size:1.1rem}

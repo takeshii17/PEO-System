@@ -1,472 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>PEO Portal - Admin Division</title>
-    <style>
-        :root {
-            --bg: #eef1f5;
-            --text: #0c2137;
-            --line: #ced5de;
-            --shadow: 0 2px 8px rgba(8, 34, 61, 0.12);
-        }
-
-        * { box-sizing: border-box; }
-
-        html, body {
-            margin: 0;
-            min-height: 100%;
-            font-family: "Sora", "Segoe UI", sans-serif;
-            color: var(--text);
-            background: var(--bg);
-        }
-
-        .app-shell { display: flex; min-height: 100vh; }
-
-        .sidebar {
-            width: 340px;
-            background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
-            color: #d5dfeb;
-            border-right: 1px solid #15385f;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 30px 26px;
-            border-bottom: 1px solid rgba(215, 229, 245, 0.16);
-        }
-
-        .brand-logo {
-            width: 58px;
-            height: 58px;
-            border-radius: 12px;
-            border: 2px solid #f2d65a;
-            background: radial-gradient(circle at 35% 35%, #ffeb84 0%, #f4c418 64%, #daaa08 100%);
-            color: #8f0010;
-            font-size: 0.85rem;
-            font-weight: 700;
-            display: grid;
-            place-items: center;
-            box-shadow: inset 0 0 0 2px #173860;
-        }
-
-        .brand h1 {
-            margin: 0;
-            font-size: clamp(1.2rem, 1.85vw, 2.05rem);
-            color: #f4f7fb;
-        }
-
-        .brand p {
-            margin: 4px 0 0;
-            font-size: 1rem;
-            color: #bdcada;
-        }
-
-        .nav-menu { padding: 20px 16px 24px; display: grid; gap: 8px; }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #c7d5e5;
-            text-decoration: none;
-            border-radius: 14px;
-            padding: 14px 16px;
-            font-size: clamp(1.05rem, 1.22vw, 2rem);
-            line-height: 1.15;
-        }
-
-        .nav-item:hover { background: rgba(255, 255, 255, 0.08); }
-
-        .nav-item.active {
-            background: #123760;
-            color: #ffffff;
-            box-shadow: inset 0 0 0 1px rgba(189, 214, 238, 0.08);
-            font-weight: 600;
-        }
-
-        .nav-icon { width: 22px; height: 22px; flex: 0 0 auto; opacity: 0.95; }
-
-        .workspace { flex: 1; min-width: 0; background: #f2f4f7; }
-
-        .topbar {
-            height: 92px;
-            border-bottom: 1px solid var(--line);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 0 28px;
-            background: #f5f7fa;
-        }
-
-        .account { display: flex; align-items: center; gap: 14px; }
-
-        .seal {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            border: 2px solid #d2d9e1;
-            background: radial-gradient(circle at 35% 30%, #f2fbff 0%, #dce8f6 45%, #bccce0 100%);
-            display: grid;
-            place-items: center;
-            font-size: 0.56rem;
-            font-weight: 700;
-            color: #0b2a4c;
-            line-height: 1.15;
-            text-align: center;
-        }
-
-        .avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: #0f3459;
-            color: #f2f7ff;
-            display: grid;
-            place-items: center;
-            font-size: 1.15rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .logout-form { margin: 0; }
-
-        .logout-btn {
-            border: 0;
-            background: transparent;
-            color: #0b213a;
-            font-size: 1.05rem;
-            cursor: pointer;
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
-
-        .page { padding: 24px 28px; }
-
-        .page h2 { margin: 0; font-size: 2rem; }
-
-        .page-sub { margin: 8px 0 0; color: #5c6f85; }
-
-        .metrics {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(170px, 1fr));
-            gap: 14px;
-        }
-
-        .division-tabs {
-            margin-top: 14px;
-            display: inline-flex;
-            gap: 2px;
-            background: #e7edf5;
-            border: 1px solid #cfd8e4;
-            border-radius: 10px;
-            padding: 3px;
-        }
-
-        .division-tab {
-            border: 0;
-            background: transparent;
-            color: #18395d;
-            font-family: inherit;
-            font-size: 0.82rem;
-            padding: 6px 10px;
-            border-radius: 8px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .division-tab.active {
-            background: #ffffff;
-            box-shadow: 0 1px 2px rgba(8, 34, 61, 0.14);
-        }
-
-        .metric-card {
-            background: #f7f8fa;
-            border: 1px solid #ccd4df;
-            border-radius: 14px;
-            padding: 14px 16px;
-            box-shadow: var(--shadow);
-        }
-
-        .metric-card h3 {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #485f7b;
-            font-weight: 500;
-        }
-
-        .metric-card strong {
-            display: block;
-            margin-top: 14px;
-            font-size: 1.75rem;
-        }
-
-        .metric-card .blue { color: #2563eb; }
-        .metric-card .orange { color: #d97706; }
-        .metric-card .red { color: #dc2626; }
-
-        .toolbar {
-            margin-top: 16px;
-            background: #f7f8fa;
-            border: 1px solid #ccd4df;
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            padding: 12px;
-        }
-
-        .toolbar form {
-            display: grid;
-            grid-template-columns: 1.8fr .8fr .8fr auto;
-            gap: 10px;
-        }
-
-        .input,
-        .select,
-        .btn {
-            width: 100%;
-            height: 42px;
-            border-radius: 10px;
-            border: 1px solid #c7d2df;
-            background: #fff;
-            font-family: inherit;
-            font-size: 0.95rem;
-            padding: 0 10px;
-        }
-
-        .btn {
-            background: #123760;
-            color: #fff;
-            border: 0;
-            cursor: pointer;
-            font-weight: 600;
-            padding: 0 14px;
-        }
-
-        .btn.alt {
-            background: #eef2f7;
-            color: #123760;
-            border: 1px solid #c7d2df;
-        }
-
-        .register {
-            margin-top: 16px;
-            background: #f7f8fa;
-            border: 1px solid #ccd4df;
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .register-head {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid #d6dce6;
-            background: #f2f5f9;
-        }
-
-        .register-head h3 { margin: 0; font-size: 1.05rem; }
-
-        .register table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .register th,
-        .register td {
-            text-align: left;
-            border-bottom: 1px solid #e0e6ee;
-            padding: 10px 12px;
-        }
-
-        .register th {
-            background: #f7f9fc;
-            color: #3e5672;
-            font-weight: 600;
-        }
-
-        .badge {
-            padding: 3px 8px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-block;
-            background: #e7edf7;
-            color: #1e3a5f;
-        }
-
-        .row-actions {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .action-link {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            padding: 4px 8px;
-            border: 1px solid #c7d2df;
-            border-radius: 8px;
-            background: #fff;
-            color: #123760;
-            font-size: 0.8rem;
-        }
-
-        .action-btn {
-            border: 1px solid #c7d2df;
-            border-radius: 8px;
-            background: #fff;
-            color: #123760;
-            font-family: inherit;
-            font-size: 0.8rem;
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-
-        .pagination {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 12px 16px;
-        }
-
-        .pagination a,
-        .pagination span {
-            font-size: 0.88rem;
-        }
-
-        .pagination a {
-            color: #123760;
-            text-decoration: none;
-            padding: 6px 9px;
-            border: 1px solid #c7d2df;
-            border-radius: 8px;
-            background: #fff;
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-            padding: 16px;
-        }
-
-        .modal.show { display: flex; }
-
-        .modal-card {
-            width: min(760px, 100%);
-            max-height: 92vh;
-            overflow: auto;
-            background: #f7f8fa;
-            border-radius: 12px;
-            border: 1px solid #d0d8e3;
-            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
-        }
-
-        .modal-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            border-bottom: 1px solid #d6dde8;
-        }
-
-        .modal-head h3 { margin: 0; font-size: 1.1rem; }
-
-        .modal-body { padding: 14px 16px; }
-
-        .field-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px 12px;
-            margin-bottom: 12px;
-        }
-
-        .field-grid.one { grid-template-columns: 1fr; }
-
-        .field label {
-            display: block;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
-            color: #475d77;
-            font-weight: 600;
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            border: 1px solid #c5cfdb;
-            border-radius: 8px;
-            background: #fff;
-            font-family: inherit;
-            font-size: 0.9rem;
-            padding: 8px 10px;
-        }
-
-        .form-section {
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1px solid #dce3ec;
-        }
-
-        .form-section h4 {
-            margin: 0 0 8px;
-            font-size: 0.9rem;
-            color: #3d5876;
-        }
-
-        .modal-actions {
-            margin-top: 12px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .error-list {
-            margin: 0 0 10px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            background: #fee2e2;
-            color: #991b1b;
-            font-size: 0.86rem;
-        }
-
-        @media (max-width: 1200px) {
-            .sidebar { width: 280px; }
-            .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
-            .toolbar form { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 900px) {
-            .app-shell { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .topbar { height: auto; padding: 12px 16px; }
-            .field-grid,
-            .toolbar form,
-            .metrics { grid-template-columns: 1fr; }
-        }
-    </style>
+    
 </head>
-<body>
+<body class="view-admin">
     <div class="app-shell">
         <aside class="sidebar">
             <div class="brand">
@@ -795,5 +337,104 @@
         })();
     </script>
     {% endif %}
+    <script>
+        (function () {
+            const shell = document.querySelector(".app-shell, .layout");
+            const sidebar = document.querySelector(".sidebar");
+            const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
+            const topbar = document.querySelector(".topbar");
+            const sidebarStorageKey = "peo_sidebar_collapsed";
+
+            function applySidebarState(isCollapsed) {
+                if (!shell) return;
+                shell.classList.toggle("sidebar-collapsed", isCollapsed);
+                if (sidebarToggleBtn) {
+                    sidebarToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
+                    sidebarToggleBtn.setAttribute("aria-label", isCollapsed ? "Show sidebar" : "Hide sidebar");
+                }
+            }
+
+            if (shell && sidebar) {
+                const sidebarVisible = window.getComputedStyle(sidebar).display !== "none";
+                if (!sidebarVisible) {
+                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
+                } else {
+                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
+                    const isMobileLayout = window.matchMedia("(max-width: 980px)").matches;
+                    const storedCollapsed = window.localStorage.getItem(sidebarStorageKey) === "1";
+                    applySidebarState(!isMobileLayout && storedCollapsed);
+
+                    const autoHideDelayMs = 5000;
+                    let autoHideTimer = null;
+                    let lastMouseX = null;
+
+                    function isDesktopAutoMode() {
+                        return !window.matchMedia("(max-width: 980px)").matches;
+                    }
+
+                    function clearAutoHideTimer() {
+                        if (autoHideTimer) {
+                            window.clearTimeout(autoHideTimer);
+                            autoHideTimer = null;
+                        }
+                    }
+
+                    function expandSidebar() {
+                        if (!shell.classList.contains("sidebar-collapsed")) return;
+                        applySidebarState(false);
+                        window.localStorage.setItem(sidebarStorageKey, "0");
+                    }
+
+                    function collapseSidebar() {
+                        if (shell.classList.contains("sidebar-collapsed")) return;
+                        applySidebarState(true);
+                        window.localStorage.setItem(sidebarStorageKey, "1");
+                    }
+
+                    function restartAutoHideTimer() {
+                        clearAutoHideTimer();
+                        if (!isDesktopAutoMode()) return;
+                        if (shell.classList.contains("sidebar-collapsed")) return;
+                        autoHideTimer = window.setTimeout(collapseSidebar, autoHideDelayMs);
+                    }
+
+                    function handlePointerActivity(event) {
+                        if (!isDesktopAutoMode()) return;
+                        const currentX = typeof event.clientX === "number" ? event.clientX : lastMouseX;
+                        const movingLeft = typeof currentX === "number" && typeof lastMouseX === "number" && currentX < (lastMouseX - 4);
+                        const pointerInsideSidebar = sidebar.contains(event.target);
+                        const nearLeftEdge = typeof currentX === "number" && currentX <= 80;
+                        if (pointerInsideSidebar || nearLeftEdge || movingLeft) {
+                            expandSidebar();
+                        }
+                        restartAutoHideTimer();
+                        if (typeof currentX === "number") {
+                            lastMouseX = currentX;
+                        }
+                    }
+
+                    document.addEventListener("mousemove", handlePointerActivity);
+                    document.addEventListener("mousedown", handlePointerActivity);
+                    document.addEventListener("keydown", restartAutoHideTimer);
+                    document.addEventListener("wheel", restartAutoHideTimer, { passive: true });
+                    window.addEventListener("focus", restartAutoHideTimer);
+
+                    window.addEventListener("resize", function () {
+                        clearAutoHideTimer();
+                        lastMouseX = null;
+                        if (window.matchMedia("(max-width: 980px)").matches) {
+                            applySidebarState(false);
+                            return;
+                        }
+                        const collapsedState = window.localStorage.getItem(sidebarStorageKey) === "1";
+                        applySidebarState(collapsedState);
+                        restartAutoHideTimer();
+                    });
+
+                    restartAutoHideTimer();
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
