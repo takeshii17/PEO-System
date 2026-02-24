@@ -496,7 +496,7 @@
                     <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/></svg>
                     Dashboard
                 </a>
-                <a href="#">
+                <a href="{% url 'admin_div_dashboard' %}">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
                     Admin Division
                 </a>
@@ -505,11 +505,11 @@
                     Planning Division
                     <span class="caret">&#8250;</span>
                 </a>
-                <a href="#">
+                <a href="{% url 'construction_div_dashboard' %}">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
                     Construction Division
                 </a>
-                <a href="#">
+                <a href="{% url 'quality_div_dashboard' %}">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     Quality Division
                 </a>
