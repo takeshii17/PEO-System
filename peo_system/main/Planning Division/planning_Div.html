@@ -1,14 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Planning Division Dashboard</title>
-    
 </head>
-<body class="view-planning">
+<body>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
@@ -45,15 +42,15 @@
                     <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
                     Maintenance Division
                 </a>
-                <a href="{% url 'my_assignments' %}">
+                <a href="#">
                     <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     My Assignments
                 </a>
-                <a href="{% url 'maintinance_task_management' %}">
+                <a href="#">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>
                     Tasks
                 </a>
-                <a href="{% url 'maintinance_contractor_management' %}">
+                <a href="#">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>
                     Contractors
                 </a>
@@ -360,102 +357,6 @@
             const closeProjectBtn = document.getElementById("closeProjectModal");
             const modal = document.getElementById("budgetModal");
             const closeBtn = document.getElementById("closeBudgetModal");
-            const shell = document.querySelector(".app-shell, .layout");
-            const sidebar = document.querySelector(".sidebar");
-            const sidebarToggleBtn = document.getElementById("sidebarToggleBtn");
-            const topbar = document.querySelector(".topbar");
-            const sidebarStorageKey = "peo_sidebar_collapsed";
-
-            function applySidebarState(isCollapsed) {
-                if (!shell) return;
-                shell.classList.toggle("sidebar-collapsed", isCollapsed);
-                if (sidebarToggleBtn) {
-                    sidebarToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
-                    sidebarToggleBtn.setAttribute("aria-label", isCollapsed ? "Show sidebar" : "Hide sidebar");
-                }
-            }
-
-            if (shell && sidebar) {
-                const sidebarVisible = window.getComputedStyle(sidebar).display !== "none";
-                if (!sidebarVisible) {
-                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-                } else {
-                    if (sidebarToggleBtn) sidebarToggleBtn.style.display = "none";
-                    const isMobileLayout = window.matchMedia("(max-width: 980px)").matches;
-                    const storedCollapsed = window.localStorage.getItem(sidebarStorageKey) === "1";
-                    applySidebarState(!isMobileLayout && storedCollapsed);
-
-                    const autoHideDelayMs = 5000;
-                    let autoHideTimer = null;
-                    let lastMouseX = null;
-
-                    function isDesktopAutoMode() {
-                        return !window.matchMedia("(max-width: 980px)").matches;
-                    }
-
-                    function clearAutoHideTimer() {
-                        if (autoHideTimer) {
-                            window.clearTimeout(autoHideTimer);
-                            autoHideTimer = null;
-                        }
-                    }
-
-                    function expandSidebar() {
-                        if (!shell.classList.contains("sidebar-collapsed")) return;
-                        applySidebarState(false);
-                        window.localStorage.setItem(sidebarStorageKey, "0");
-                    }
-
-                    function collapseSidebar() {
-                        if (shell.classList.contains("sidebar-collapsed")) return;
-                        applySidebarState(true);
-                        window.localStorage.setItem(sidebarStorageKey, "1");
-                    }
-
-                    function restartAutoHideTimer() {
-                        clearAutoHideTimer();
-                        if (!isDesktopAutoMode()) return;
-                        if (shell.classList.contains("sidebar-collapsed")) return;
-                        autoHideTimer = window.setTimeout(collapseSidebar, autoHideDelayMs);
-                    }
-
-                    function handlePointerActivity(event) {
-                        if (!isDesktopAutoMode()) return;
-                        const currentX = typeof event.clientX === "number" ? event.clientX : lastMouseX;
-                        const movingLeft = typeof currentX === "number" && typeof lastMouseX === "number" && currentX < (lastMouseX - 4);
-                        const pointerInsideSidebar = sidebar.contains(event.target);
-                        const nearLeftEdge = typeof currentX === "number" && currentX <= 80;
-                        if (pointerInsideSidebar || nearLeftEdge || movingLeft) {
-                            expandSidebar();
-                        }
-                        restartAutoHideTimer();
-                        if (typeof currentX === "number") {
-                            lastMouseX = currentX;
-                        }
-                    }
-
-                    document.addEventListener("mousemove", handlePointerActivity);
-                    document.addEventListener("mousedown", handlePointerActivity);
-                    document.addEventListener("keydown", restartAutoHideTimer);
-                    document.addEventListener("wheel", restartAutoHideTimer, { passive: true });
-                    window.addEventListener("focus", restartAutoHideTimer);
-
-                    window.addEventListener("resize", function () {
-                        clearAutoHideTimer();
-                        lastMouseX = null;
-                        if (window.matchMedia("(max-width: 980px)").matches) {
-                            applySidebarState(false);
-                            return;
-                        }
-                        const collapsedState = window.localStorage.getItem(sidebarStorageKey) === "1";
-                        applySidebarState(collapsedState);
-                        restartAutoHideTimer();
-                    });
-
-                    restartAutoHideTimer();
-                }
-            }
-
             if (openProjectBtn && projectModal) {
                 openProjectBtn.addEventListener("click", function () {
                     projectModal.classList.add("show");
@@ -489,4 +390,3 @@
     </script>
 </body>
 </html>
-
