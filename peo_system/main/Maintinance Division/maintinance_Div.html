@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance Division</title>
+  <style>
+    :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Sora","Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
+    .layout{min-height:100vh;display:flex}
+    .sidebar{width:350px;background:linear-gradient(180deg,var(--nav),#08233f);color:#d4dfeb;border-right:1px solid #163b61}
+    .brand{display:flex;align-items:center;gap:14px;padding:24px 22px;border-bottom:1px solid rgba(217,229,245,.16)}
+    .logo{width:62px;height:62px;border-radius:10px;border:2px solid #f0d06a;background:radial-gradient(circle at 35% 35%,#ffe887 0,#f4c21d 62%,#e3aa0a 100%);color:#8f0618;font-weight:700;font-size:.82rem;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #17395f}
+    .brand h1{margin:0;color:#f1f6fc;font-size:1.8rem;line-height:1.1}
+    .brand p{margin:4px 0 0;color:#b9c8d9;font-size:.98rem}
+    .menu{padding:16px 20px;display:grid;gap:8px}
+    .menu-item{color:#c7d6e6;text-decoration:none;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:1.9rem;font-size:clamp(1rem,1.2vw,1.85rem)}
+    .menu-item:hover{background:rgba(255,255,255,.08)}
+    .menu-item.active{background:var(--active);color:#fff;font-weight:600}
+    .menu-item svg{width:24px;height:24px;flex:0 0 auto}
+    .content{flex:1;min-width:0}
+    .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
+    .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
+    .heading p{margin:6px 0 0;color:var(--muted);font-size:1.1rem}
+    .profile{display:flex;align-items:center;gap:14px}
+    .chip{border-radius:999px;background:#efe1ff;color:#7d18e4;border:1px solid #e6d1ff;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;font-size:1.02rem;font-weight:600}
+    .seal{width:52px;height:52px;border-radius:50%;border:2px solid #d3dbe4;background:radial-gradient(circle at 35% 35%,#eff7ff,#dce9f8 46%,#bfcee3);display:grid;place-items:center;font-size:.53rem;font-weight:700;line-height:1.14;color:#0f2c4f;text-align:center}
+    .page{padding:30px}
+    .stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:26px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);min-height:160px;padding:22px 20px;display:flex;align-items:center;gap:16px}
+    .ibox{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:0 0 auto}
+    .ibox svg{width:27px;height:27px}
+    .i-gray{background:#dfe4ea;color:#1d466e}.i-blue{background:#d6e5f8;color:#2166dc}.i-green{background:#caedd9;color:#0a9a4a}.i-gold{background:#f7e7bc;color:#de7d00}
+    .card strong{display:block;font-size:2.4rem;line-height:1.05}
+    .card span{color:#47607d;font-size:1.06rem}
+    .tabs{display:inline-flex;background:#dfe4ea;border-radius:14px;padding:4px;gap:2px;margin-bottom:12px}
+    .tabs button{border:0;background:transparent;font-family:inherit;font-size:1rem;color:#102741;border-radius:10px;padding:8px 12px;cursor:pointer}
+    .tabs button.active{background:#f8fafd;box-shadow:0 1px 2px rgba(12,33,56,.12);font-weight:600}
+    .conditions{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:20px}
+    .ccard{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}
+    .chead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+    .chead h3{margin:0;font-size:1.35rem}
+    .count{border-radius:999px;padding:5px 12px;font-weight:600;font-size:1rem}
+    .good{background:#cdeed9;color:#08923f}.fair{background:#cfe0f4;color:#1755dd}.poor{background:#f6e5b9;color:#d07300}.bad{background:#f03a49;color:#fff}
+    .bar{height:12px;border-radius:999px;background:#cfd6de;overflow:hidden}.bar>span{display:block;height:100%;background:#18395a}
+    .w1{width:22%}.w2{width:49%}.w3{width:22%}.w4{width:6%}
+    .filters{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
+    .frow{display:grid;grid-template-columns:minmax(250px,1fr) 230px 190px 200px 150px;gap:12px;align-items:center}
+    .search,.sel{border:1px solid #c9d0d9;border-radius:14px;background:#f9fbfd;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .search input,.sel select{width:100%;border:0;outline:none;background:transparent;color:#2f4a66;font-family:inherit;font-size:1.05rem}
+    .roads{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
+    .roads h2{margin:10px 10px 4px;font-size:2.1rem}
+    .roads .sub{margin:0 10px 12px;color:#4d647e;font-size:1.05rem}
+    .muni{border:1px solid #c8d0d9;border-radius:16px;overflow:hidden;margin:12px 0;background:#f9fbfd}
+    .mhead{background:#d0d6dc;color:#0e3155;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.65rem;font-size:clamp(1.2rem,1.4vw,1.65rem)}
+    .mhead .tag{margin-left:10px;border:1px solid #bcc5d0;border-radius:999px;font-weight:500;padding:3px 10px;font-size:.92rem;color:#0f2945;background:#d8dde3}
+    .mhead svg{width:22px;height:22px}
+    table{width:100%;border-collapse:collapse}
+    th,td{text-align:left;padding:13px 16px;border-bottom:1px solid #c9d0d9;font-size:1.05rem}
+    th{background:#f4f7fa;color:#0f2138;font-size:1.12rem}
+    tr:last-child td{border-bottom:0}
+    .pill{display:inline-block;border-radius:999px;padding:5px 12px;font-size:.96rem;font-weight:600}
+    .pill.good{background:#cdeed9;color:#08923f}.pill.fair{background:#cfe0f4;color:#1755dd}.pill.poor{background:#f6e5b9;color:#d07300}
+    .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:4px 2px 2px;color:#314a65;font-size:1.05rem}
+    .pager{display:inline-flex;gap:8px}.pager button{width:48px;height:40px;border:1px solid #c8d0d9;border-radius:12px;background:#f8fafd;color:#314a65;font-size:1.45rem;cursor:pointer}
+    .ctm{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px}
+    .ctm h2{margin:2px 2px 4px;font-size:2rem}
+    .ctm .sub{margin:0 2px 14px;color:#52657b;font-size:1.05rem}
+    .ctm-stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:16px;margin-bottom:16px}
+    .ctm-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:138px;padding:16px;display:flex;align-items:center;gap:14px}
+    .ctm-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;flex:0 0 auto}
+    .ctm-icon svg{width:28px;height:28px}
+    .ctm-i1{background:#dee4ec;color:#183758}.ctm-i2{background:#caeee9;color:#00a69b}.ctm-i3{background:#f5e8cf;color:#f59300}.ctm-i4{background:#f4dce1;color:#ff3b4a}
+    .ctm-card strong{display:block;font-size:2.2rem;line-height:1}
+    .ctm-card span{color:#4a627c;font-size:1.05rem}
+    .ctm-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:20px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px}
+    .ctm-row{display:grid;grid-template-columns:minmax(280px,1fr) 190px 190px 200px;gap:12px;align-items:center}
+    .ctm-search,.ctm-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .ctm-search input,.ctm-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
+    .ctm-add{border:0;border-radius:14px;background:#10385f;color:#fff;font-family:inherit;font-size:1.06rem;font-weight:600;padding:11px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+    .ctm-list{margin-top:8px}
+    .ctm-list h3{margin:0 2px 4px;font-size:1.8rem}
+    .ctm-list .sub{margin:0 2px 10px;color:#52657b}
+    .ctm-item{background:#f8fafc;border:1px solid #c8d0da;border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;margin:10px 0;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+    .ctm-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .ctm-title h4{margin:0;font-size:1.18rem}
+    .badge{display:inline-block;border-radius:999px;background:#bcece4;color:#007f74;padding:5px 12px;font-weight:600;font-size:.96rem}
+    .tin{margin:6px 0 0;color:#546b84}
+    .ctm-meta{margin-top:6px;display:flex;gap:14px;align-items:center;color:#0d2138}
+    .ctm-meta .muted{color:#4f657f}
+    .ctm-actions{display:flex;gap:8px}
+    .ctm-actions button{width:44px;height:40px;border:1px solid #c7ced8;border-radius:12px;background:#f9fbfd;color:#1b2b3c;display:grid;place-items:center;cursor:pointer}
+    .ctm-actions svg{width:20px;height:20px}
+    .ctm-paging{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+    .ctm-paging button{border:1px solid #c7ced8;background:#f9fbfd;color:#192a3b;border-radius:12px;padding:8px 14px;font-size:1.05rem;cursor:pointer}
+    .tms{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
+    .tms-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px 14px;border-bottom:1px solid #ccd4de}
+    .tms-left{display:flex;align-items:center;gap:16px}
+    .tms-back{display:inline-flex;align-items:center;gap:8px;color:#1b2f44;text-decoration:none;font-size:1rem;padding:8px 10px;border-radius:10px}
+    .tms-back:hover{background:#ecf1f6}
+    .tms-head h2{margin:0;font-size:2.2rem;font-size:clamp(1.5rem,2.1vw,2.2rem)}
+    .tms-actions{display:flex;gap:10px;align-items:center}
+    .btn-light,.btn-dark{border-radius:14px;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    .btn-light{border:1px solid #cad2dd;background:#f8fafc;color:#1c334b}
+    .btn-dark{border:0;background:#133b64;color:#fff;font-weight:600}
+    .tms-body{padding:16px 8px 8px}
+    .tms-cards{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:14px;margin-bottom:16px}
+    .tms-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:132px;padding:14px 16px;display:flex;align-items:center}
+    .tms-card strong{display:block;font-size:2rem;line-height:1}
+    .tms-card span{color:#4e657f;font-size:1.05rem}
+    .tms-alert{display:flex;align-items:center;gap:10px}
+    .tms-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
+    .tms-row{display:grid;grid-template-columns:minmax(280px,1fr) 170px 170px 170px;gap:12px;align-items:center}
+    .tms-search,.tms-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
+    .tms-search input,.tms-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
+    .tms-list{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;min-height:260px;display:flex;flex-direction:column}
+    .tms-list h3{margin:4px 0 0;font-size:1.8rem}
+    .tms-list .sub{margin:4px 0 24px;color:#516881}
+    .tms-empty{margin:auto;display:grid;place-items:center;gap:10px;color:#5f7389}
+    .tms-empty svg{width:54px;height:54px;color:#a7b2bf}
+    .btn-create{border:0;border-radius:14px;background:#133b64;color:#fff;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+    @media (max-width:1450px){.sidebar{width:300px}.stats,.conditions,.ctm-stats{grid-template-columns:repeat(2,minmax(220px,1fr))}.frow,.ctm-row{grid-template-columns:repeat(3,minmax(200px,1fr))}.tms-cards{grid-template-columns:repeat(3,minmax(180px,1fr))}.tms-row{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+    @media (max-width:980px){.layout{flex-direction:column}.sidebar{width:100%}.topbar{flex-direction:column}.profile{width:100%;justify-content:flex-end}.stats,.conditions,.frow,.ctm-stats,.ctm-row,.tms-cards,.tms-row{grid-template-columns:1fr}.ctm-item,.tms-head{flex-direction:column;align-items:flex-start}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand"><div class="logo">PEO</div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
+      <nav class="menu">
+        <a class="menu-item" href="{% url 'home' %}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/></svg>Dashboard</a>
+        <a class="menu-item" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h7a2 2 0 0 1 2 2v9H6a2 2 0 0 1-2-2V6Z" stroke="currentColor" stroke-width="2"/><path d="M13 8h5a2 2 0 0 1 2 2v8h-7" stroke="currentColor" stroke-width="2"/></svg>Projects</a>
+        <a class="menu-item" href="#"><svg viewBox="0 0 24 24" fill="none"><path d="M8 3h7l5 5v11a2 2 0 0 1-2 2H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z" stroke="currentColor" stroke-width="2"/><path d="M15 3v6h5M9 13h6M9 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Documents</a>
+        <a class="menu-item" href="#task-management"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
+        <a class="menu-item" href="#contractor-management"><svg viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
+        <a class="menu-item active" href="{% url 'maintinance_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance</a>
+      </nav>
+    </aside>
+    <section class="content">
+      <header class="topbar">
+        <div class="heading"><h2>Maintenance Division</h2><p>Provincial roads, equipment, and maintenance scheduling</p></div>
+        <div class="profile"><div class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/></svg>Maintenance</div><div class="seal">OFFICE<br>OF PEO</div></div>
+      </header>
+      <main class="page">
+        <section class="stats">
+          <article class="card"><div class="ibox i-gray"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.8 15.5 7.3M8.6 13.2l6.9 3.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>228</strong><span>Provincial Roads</span></div></article>
+          <article class="card"><div class="ibox i-blue"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>1265.6 km</strong><span>Total Length</span></div></article>
+          <article class="card"><div class="ibox i-green"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="9" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 11h3l4 4v4h-2a2 2 0 0 1-2-2v-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Equipment</span></div></article>
+          <article class="card"><div class="ibox i-gold"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 3v5M16 3v5M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Scheduled Tasks</span></div></article>
+        </section>
+        <section class="tabs"><button class="active" type="button">Provincial Roads</button><button type="button">Equipment</button><button type="button">Maintenance Schedules</button></section>
+        <section class="conditions">
+          <article class="ccard"><div class="chead"><h3>Good Condition</h3><span class="count good">51</span></div><div class="bar"><span class="w1"></span></div></article>
+          <article class="ccard"><div class="chead"><h3>Fair Condition</h3><span class="count fair">111</span></div><div class="bar"><span class="w2"></span></div></article>
+          <article class="ccard"><div class="chead"><h3>Poor Condition</h3><span class="count poor">51</span></div><div class="bar"><span class="w3"></span></div></article>
+          <article class="ccard"><div class="chead"><h3>Bad Condition</h3><span class="count bad">14</span></div><div class="bar"><span class="w4"></span></div></article>
+        </section>
+        <section class="filters">
+          <div class="frow">
+            <label class="search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#556b84" stroke-width="2"/><path d="M16 16L21 21" stroke="#556b84" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search roads..."></label>
+            <label class="sel"><select><option>All Municipalities</option></select></label>
+            <label class="sel"><select><option>All Conditions</option></select></label>
+            <label class="sel"><select><option>Road ID</option></select></label>
+            <label class="sel"><select><option>Ascending</option></select></label>
+          </div>
+        </section>
+        <section class="roads">
+          <h2>Provincial Roads</h2>
+          <p class="sub">228 roads found</p>
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ABORLAN <span class="tag">3 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Sagpangan Road</td><td>3.47</td><td><span class="pill good">Good</span></td><td>Gravel: 3.470km</td></tr>
+                <tr><td>10</td><td>Plaridel - Apis Cabigaan Road</td><td>13.90</td><td><span class="pill good">Good</span></td><td>Concrete: 13.190km  Gravel: 0.710km</td></tr>
+                <tr><td>11</td><td>Tagpait Feeder Road</td><td>2.25</td><td><span class="pill fair">Fair</span></td><td>Concrete: 2.250km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>SOFRONIO ESPANOLA <span class="tag">2 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>100</td><td>Pulot III-Tabud Road</td><td>7.80</td><td><span class="pill poor">Poor</span></td><td>Gravel: 7.800km</td></tr>
+                <tr><td>116</td><td>Pulot I - Pulot III Road</td><td>13.17</td><td><span class="pill fair">Fair</span></td><td>Concrete: 13.170km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>QUEZON <span class="tag">3 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>101</td><td>Magsaysay Road</td><td>0.65</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.649km</td></tr>
+                <tr><td>102</td><td>Tabon - Tagpapasi Road</td><td>1.39</td><td><span class="pill poor">Poor</span></td><td>Concrete: 0.170km  Gravel: 1.220km</td></tr>
+                <tr><td>107</td><td>Tabon - Pinaglabanan Road</td><td>1.31</td><td><span class="pill fair">Fair</span></td><td>Gravel: 1.310km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>BROOKE'S POINT <span class="tag">1 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>103</td><td>Barong-Barong Feeder Road</td><td>1.26</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.254km  Gravel: 1.009km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>NARRA <span class="tag">3 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>104</td><td>Sandoval - Bagong Sikat Road</td><td>4.35</td><td><span class="pill poor">Poor</span></td><td>Concrete: 4.140km  Gravel: 0.210km</td></tr>
+                <tr><td>105</td><td>Bato-Bato Feeder Road</td><td>3.68</td><td><span class="pill fair">Fair</span></td><td>Gravel: 3.680km</td></tr>
+                <tr><td>106</td><td>Narra Panacan Road</td><td>3.28</td><td><span class="pill good">Good</span></td><td>Concrete: 3.283km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>RIZAL <span class="tag">1 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>108</td><td>Rancho - Puntabaja - Malapandeg Road</td><td>3.33</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.520km  Gravel: 2.810km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="muni">
+            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ROXAS <span class="tag">7 roads</span></div>
+            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
+              <tbody>
+                <tr><td>109</td><td>Highway Junction Caramay Road</td><td>2.66</td><td><span class="pill good">Good</span></td><td>Concrete: 0.760km  Gravel: 1.900km</td></tr>
+                <tr><td>110</td><td>Highway Junction Salvacion Road</td><td>7.50</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.840km  Gravel: 6.660km</td></tr>
+                <tr><td>111</td><td>H-way Jct. Little Caramay-Caruray Rd.-B</td><td>15.49</td><td><span class="pill fair">Fair</span></td><td>Concrete: 6.600km  Gravel: 8.890km</td></tr>
+                <tr><td>112</td><td>Highway Jct. Tagumpay-Maliko Rd.</td><td>8.96</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.214km  Gravel: 8.745km</td></tr>
+                <tr><td>113</td><td>Highway Jct. Talakaigan Road</td><td>1.59</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.100km  Gravel: 1.490km</td></tr>
+                <tr><td>114</td><td>Highway Jct. New Cuyo - Rizal Road</td><td>9.67</td><td><span class="pill fair">Fair</span></td><td>Concrete: 4.051km  Gravel: 5.622km</td></tr>
+                <tr><td>115</td><td>San Jose Port Barton Road - A</td><td>11.55</td><td><span class="pill good">Good</span></td><td>Concrete: 11.551km</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <div class="pagination">
+            <span>Page 1 of 12</span>
+            <div class="pager"><button type="button" aria-label="Previous">&#8249;</button><button type="button" aria-label="Next">&#8250;</button></div>
+          </div>
+        </section>
+
+        <section class="ctm" id="contractor-management">
+          <h2>Contractor Management</h2>
+          <p class="sub">Track bidders, performance ratings, and contract history</p>
+
+          <section class="ctm-stats">
+            <article class="ctm-card"><div class="ctm-icon ctm-i1"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>134</strong><span>Total Contractors</span></div></article>
+            <article class="ctm-card"><div class="ctm-icon ctm-i2"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>134</strong><span>Active</span></div></article>
+            <article class="ctm-card"><div class="ctm-icon ctm-i3"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.4 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><strong>0.0</strong><span>Avg Rating</span></div></article>
+            <article class="ctm-card"><div class="ctm-icon ctm-i4"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4 3.5 19h17L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Blacklisted</span></div></article>
+          </section>
+
+          <section class="ctm-filter">
+            <div class="ctm-row">
+              <label class="ctm-search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#586e86" stroke-width="2"/><path d="M16 16L21 21" stroke="#586e86" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search by name, TIN, PhilGEPS, PCAB..."></label>
+              <label class="ctm-select"><select><option>All Status</option></select></label>
+              <label class="ctm-select"><select><option>All PCAB</option></select></label>
+              <button class="ctm-add" type="button"><span>+</span><span>Add Contractor</span></button>
+            </div>
+          </section>
+
+          <section class="ctm-list">
+            <h3>Contractors</h3>
+            <p class="sub">134 contractors found</p>
+
+            <article class="ctm-item"><div><div class="ctm-title"><h4>ZYK Construction</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>Yurich Builders &amp; Construction Supply</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 258-921-757-001</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>Western Fortune</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>Warlen Industrial and Sales Corporation</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>2 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>VCH Construction and Trading</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 924-818-554</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>UGM Construction</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 102-967-201</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>Triplestone Construction and Development Corporation</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 009-149-175</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>TCC Powerserve Trading and Engineering Services</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>4 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+            <article class="ctm-item"><div><div class="ctm-title"><h4>St. Gerrard Construction Gen. Contractor &amp; Development Corp.</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>6 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+
+            <div class="ctm-paging"><button type="button">Previous</button><span>Page 1 of 7</span><button type="button">Next</button></div>
+          </section>
+        </section>
+
+        <section class="tms" id="task-management">
+          <div class="tms-head">
+            <div class="tms-left">
+              <a class="tms-back" href="{% url 'home' %}">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Back to Dashboard
+              </a>
+              <h2>Task Management</h2>
+            </div>
+            <div class="tms-actions">
+              <button class="btn-light" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M18 8a3 3 0 1 1 0 6M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add Personnel</button>
+              <button class="btn-dark" type="button"><span>+</span><span>New Task</span></button>
+            </div>
+          </div>
+          <div class="tms-body">
+            <section class="tms-cards">
+              <article class="tms-card"><div><strong>0</strong><span>Total Tasks</span></div></article>
+              <article class="tms-card"><div><strong>0</strong><span>Pending</span></div></article>
+              <article class="tms-card"><div><strong>0</strong><span>In Progress</span></div></article>
+              <article class="tms-card"><div><strong>0</strong><span>Completed</span></div></article>
+              <article class="tms-card"><div class="tms-alert"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4 3.5 19h17L12 4Z" stroke="#ff3b4a" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="#ff3b4a" stroke-width="2" stroke-linecap="round"/></svg><div><strong>0</strong><span>Overdue</span></div></div></article>
+            </section>
+
+            <section class="tms-filter">
+              <div class="tms-row">
+                <label class="tms-search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#586e86" stroke-width="2"/><path d="M16 16L21 21" stroke="#586e86" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search tasks..."></label>
+                <label class="tms-select"><select><option>Division</option></select></label>
+                <label class="tms-select"><select><option>Status</option></select></label>
+                <label class="tms-select"><select><option>Priority</option></select></label>
+              </div>
+            </section>
+
+            <section class="tms-list">
+              <h3>Tasks</h3>
+              <p class="sub">0 tasks found</p>
+              <div class="tms-empty">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m2.5 18 1.3 1.3L6.5 16.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <div>No tasks found</div>
+                <button class="btn-create" type="button"><span>+</span><span>Create First Task</span></button>
+              </div>
+            </section>
+          </div>
+        </section>
+
+      </main>
+    </section>
+  </div>
+</body>
+</html>
+
+

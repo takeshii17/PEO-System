@@ -13,3 +13,7 @@ def planning_div_dashboard(request):
 @login_required
 def admin_div_dashboard(request):
     return render(request, 'Admin/admin_div.html')
+
+@login_required
+def maintinance_div_dashboard(request):
+    return render(request, "Maintinance Division/maintinance_Div.html")
