@@ -1,20 +1,602 @@
-<h1>Home Page</h1>
-
 {% if user.is_authenticated %}
-    <p>Welcome back, <strong>{{user.username }}</strong>!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEO Portal Dashboard</title>
+    <style>
+        :root {
+            --bg: #eef1f5;
+            --sidebar: #072445;
+            --sidebar-2: #0a2e54;
+            --text: #0c2137;
+            --muted: #5c6f85;
+            --line: #ced5de;
+            --white: #ffffff;
+            --shadow: 0 2px 8px rgba(8, 34, 61, 0.12);
+            --radius: 18px;
+        }
 
-    {% if user.is_staff %}
-        <p>Role: Staff/Admin</p>
-    {% else %}
-    <p>Role: Regular User</p>
-    {% endif %}
+        * {
+            box-sizing: border-box;
+        }
 
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Log Out</button>
-    </form>
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
 
-    {% else %}
-    <p>You are not logged in.</p>
-    <a href="{% url 'login' %}">Click here to Login</a>
-    {% endif %}
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 340px;
+            background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
+            color: #d5dfeb;
+            border-right: 1px solid #15385f;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 30px 26px;
+            border-bottom: 1px solid rgba(215, 229, 245, 0.16);
+        }
+
+        .brand-logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            border: 2px solid #f2d65a;
+            background: radial-gradient(circle at 35% 35%, #ffeb84 0%, #f4c418 64%, #daaa08 100%);
+            color: #8f0010;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: grid;
+            place-items: center;
+            box-shadow: inset 0 0 0 2px #173860;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 2.05rem;
+            font-size: clamp(1.2rem, 1.85vw, 2.05rem);
+            color: #f4f7fb;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 1rem;
+            color: #bdcada;
+        }
+
+        .nav-menu {
+            padding: 20px 16px 24px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #c7d5e5;
+            text-decoration: none;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 2rem;
+            font-size: clamp(1.05rem, 1.22vw, 2rem);
+            line-height: 1.15;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-item.active {
+            background: #123760;
+            color: #ffffff;
+            box-shadow: inset 0 0 0 1px rgba(189, 214, 238, 0.08);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+            opacity: 0.95;
+        }
+
+        .caret {
+            margin-left: auto;
+            opacity: 0.85;
+        }
+
+        .workspace {
+            flex: 1;
+            min-width: 0;
+            background: #f2f4f7;
+        }
+
+        .topbar {
+            height: 92px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 0 28px;
+            background: #f5f7fa;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: min(54vw, 900px);
+        }
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #e7ebf0;
+            border: 1px solid #d6dde7;
+            border-radius: 14px;
+            padding: 12px 14px;
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .search input {
+            border: 0;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-family: inherit;
+            font-size: 1.15rem;
+            color: #324a63;
+        }
+
+        .search input::placeholder {
+            color: #5b6f87;
+        }
+
+        .filter-btn {
+            border: 1px solid #ccd5e1;
+            background: #eef2f7;
+            color: #142f4f;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            font-family: inherit;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .seal {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 2px solid #d2d9e1;
+            background: radial-gradient(circle at 35% 30%, #f2fbff 0%, #dce8f6 45%, #bccce0 100%);
+            display: grid;
+            place-items: center;
+            font-size: 0.56rem;
+            font-weight: 700;
+            color: #0b2a4c;
+            line-height: 1.15;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #0f3459;
+            color: #f2f7ff;
+            display: grid;
+            place-items: center;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            border: 0;
+            background: transparent;
+            color: #0b213a;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 10px;
+        }
+
+        .logout-btn:hover {
+            background: #e7edf5;
+        }
+
+        .page {
+            padding: 28px;
+        }
+
+        .hero {
+            border-radius: 22px;
+            overflow: hidden;
+            min-height: 340px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(95deg, rgba(7, 30, 58, 0.86) 4%, rgba(7, 30, 58, 0.58) 46%, rgba(7, 30, 58, 0.25) 100%),
+                url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-body {
+            width: min(860px, 100%);
+            padding: 44px 56px;
+            color: #f8fbff;
+        }
+
+        .hero h2 {
+            margin: 0;
+            font-size: clamp(2rem, 3.8vw, 4.1rem);
+            line-height: 1.1;
+        }
+
+        .hero p {
+            margin: 18px 0 0;
+            max-width: 900px;
+            font-size: clamp(1.15rem, 1.7vw, 2rem);
+            line-height: 1.38;
+            color: #e4edf7;
+        }
+
+        .hero-actions {
+            margin-top: 28px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border-radius: 14px;
+            padding: 12px 24px;
+            font-size: 1.05rem;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            border: 0;
+            background: #f9fbff;
+            color: #0c2b4b;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: rgba(9, 37, 67, 0.25);
+            color: #f8fbff;
+            border: 1px solid rgba(235, 243, 252, 0.34);
+            backdrop-filter: blur(2px);
+        }
+
+        .metrics {
+            margin-top: 28px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .metric-card {
+            background: #f7f8fa;
+            border: 1px solid #ccd4df;
+            border-radius: 18px;
+            min-height: 150px;
+            padding: 24px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .metric-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
+            background: #e1e6ed;
+            color: #123a61;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+        }
+
+        .metric-text strong {
+            display: block;
+            font-size: clamp(1.8rem, 2.5vw, 3rem);
+            line-height: 1;
+        }
+
+        .metric-text span {
+            color: #445b76;
+            font-size: 1rem;
+        }
+
+        .data-tabs {
+            margin-top: 18px;
+            width: fit-content;
+            display: inline-flex;
+            background: #e8edf3;
+            border: 1px solid #d0d8e3;
+            border-radius: 14px;
+            padding: 4px;
+            gap: 2px;
+        }
+
+        .data-tab {
+            border: 0;
+            background: transparent;
+            font-family: inherit;
+            font-size: 1rem;
+            color: #0c233d;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .data-tab.active {
+            background: #f8fafc;
+            box-shadow: 0 1px 2px rgba(12, 35, 61, 0.12);
+        }
+
+        @media (max-width: 1400px) {
+            .sidebar {
+                width: 280px;
+            }
+
+            .metrics {
+                grid-template-columns: repeat(2, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 980px) {
+            .app-shell {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+                height: auto;
+                padding: 16px;
+            }
+
+            .top-controls {
+                width: 100%;
+            }
+
+            .account {
+                justify-content: flex-end;
+            }
+
+            .hero-body {
+                padding: 28px;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">PEO</div>
+                <div>
+                    <h1>PEO Portal</h1>
+                    <p>Workflow Management</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item active" href="#">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Dashboard
+                    <span class="caret">&#8250;</span>
+                </a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance Division</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
+                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
+            </nav>
+        </aside>
+
+        <div class="workspace">
+            <header class="topbar">
+                <div class="top-controls">
+                    <label class="search">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle cx="11" cy="11" r="6.8" stroke="#4f647d" stroke-width="2"></circle>
+                            <path d="M16 16L21 21" stroke="#4f647d" stroke-width="2" stroke-linecap="round"></path>
+                        </svg>
+                        <input type="text" placeholder="Search projects, documents, tasks..." />
+                    </label>
+                    <button class="filter-btn" type="button">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        Filter
+                    </button>
+                </div>
+
+                <div class="account">
+                    <div class="seal">OFFICE<br>OF PEO</div>
+                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                    <form class="logout-form" action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button class="logout-btn" type="submit">Logout</button>
+                    </form>
+                </div>
+            </header>
+
+            <main class="page">
+                <section class="hero">
+                    <div class="hero-body">
+                        <h2>Operations Dashboard</h2>
+                        <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
+                        <div class="hero-actions">
+                            <button class="btn-primary" type="button">
+                                <span>+</span>
+                                <span>New item</span>
+                            </button>
+                            <button class="btn-secondary" type="button">Export Report</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="metrics">
+                    <article class="metric-card">
+                        <div class="metric-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="metric-text">
+                            <strong>1626</strong>
+                            <span>Total Projects</span>
+                        </div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="metric-text">
+                            <strong>1256</strong>
+                            <span>Completed</span>
+                        </div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="metric-text">
+                            <strong>49</strong>
+                            <span>Ongoing</span>
+                        </div>
+                    </article>
+                    <article class="metric-card">
+                        <div class="metric-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="metric-text">
+                            <strong>PHP 4.2B</strong>
+                            <span>Total Cost</span>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="data-tabs" aria-label="Data sections">
+                    <button class="data-tab active" type="button">Divisions</button>
+                    <button class="data-tab" type="button">Projects</button>
+                    <button class="data-tab" type="button">Document Register</button>
+                    <button class="data-tab" type="button">Task Matrix</button>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEO Portal</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            background: #eef1f5;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            color: #0f2f54;
+        }
+
+        .guest-card {
+            background: #ffffff;
+            border: 1px solid #d6dde6;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(10, 37, 65, 0.1);
+            padding: 28px;
+            text-align: center;
+        }
+
+        .guest-card a {
+            color: #0f3a67;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="guest-card">
+        <h2>You are not logged in.</h2>
+        <p><a href="{% url 'login' %}">Click here to login</a></p>
+    </div>
+</body>
+</html>
+{% endif %}
