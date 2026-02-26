@@ -1,11 +1,13 @@
+{% load static %}
 {% if user.is_authenticated %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>PEO Portal Dashboard</title>
-    <style>
+   <style>
         :root {
             --bg: #eef1f5;
             --sidebar: #072445;
@@ -106,6 +108,147 @@
             color: #ffffff;
             box-shadow: inset 0 0 0 1px rgba(189, 214, 238, 0.08);
             font-weight: 600;
+        }
+
+        .nav-group {
+            display: grid;
+            gap: 6px;
+        }
+
+        .nav-item-group {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .nav-main-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
+            text-decoration: none;
+            padding: 14px 16px;
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            background: transparent;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .nav-action-btn {
+            border: 0;
+            background: transparent;
+            color: #c7d5e5;
+            padding: 0 14px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            border-left: 1px solid rgba(189, 214, 238, 0.1);
+            height: 100%;
+        }
+
+        .nav-action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-action-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-group.open .nav-action-btn svg {
+            transform: rotate(180deg);
+        }
+
+        .nav-submenu {
+            display: grid;
+            gap: 6px;
+            padding-left: 18px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transform: translateY(-6px);
+            pointer-events: none;
+            transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .nav-group.open .nav-submenu {
+            max-height: 180px;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .nav-subitem {
+            color: #b8cbdf;
+            text-decoration: none;
+            border-radius: 12px;
+            padding: 10px 12px;
+            font-size: 0.98rem;
+            background: rgba(8, 39, 74, 0.32);
+        }
+
+        .nav-subitem:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+        }
+
+        
+        .nav-subitem.blink,
+        .nav-item.blink {
+            animation: navItemBlink 0.32s ease 2;
+        }
+
+        .page.panel-blink {
+            animation: dashboardBlink 0.42s ease;
+        }
+
+        .dashboard-sections.hidden {
+            display: none;
+        }
+
+        .embedded-maintenance {
+            display: none;
+            margin-top: 18px;
+            border: 1px solid #d2d9e2;
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(8, 34, 61, 0.1);
+            overflow: hidden;
+        }
+
+        .embedded-maintenance.visible {
+            display: block;
+        }
+
+        .embedded-frame {
+            width: 100%;
+            min-height: 1100px;
+            border: 0;
+            display: block;
+            background: #f6f8fb;
+        }
+
+        @keyframes navItemBlink {
+            0%, 100% {
+                background: rgba(8, 39, 74, 0.32);
+                color: #b8cbdf;
+            }
+            50% {
+                background: rgba(255, 255, 255, 0.16);
+                color: #ffffff;
+            }
+        }
+
+        @keyframes dashboardBlink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.72;
+            }
         }
 
         .nav-icon {
@@ -416,7 +559,7 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
+    </style> 
 </head>
 <body>
     <div class="app-shell">
@@ -441,13 +584,26 @@
                     <span class="caret">&#8250;</span>
                 </a>
                 <a class="nav-item" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
-                <a class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
-                <a class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
-                <a class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
-                <a class="nav-item" href="{% url 'maintinance_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>Maintenance Division</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>Tasks</a>
-                <a class="nav-item" href="#"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Contractors</a>
+                <a id="planningDivisionNavLink" class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
+                <a id="constructionDivisionNavLink" class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
+                <a id="qualityDivisionNavLink" class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
+                <div class="nav-group open" id="maintenanceNavGroup">
+                    <div class="nav-item nav-item-group active">
+                        <button class="nav-main-link" id="maintenanceMainLink" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu">
+                            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
+                            Maintenance Division
+                        </button>
+                        <button class="nav-action-btn" id="maintenanceActionBtn" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu" aria-label="Open maintenance actions">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                    <div class="nav-submenu" id="maintenanceSubmenu" aria-hidden="false">
+                        <a class="nav-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintinance Management</a>
+                        <a class="nav-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
+                        <a class="nav-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+                    </div>
+</div>
+                <a id="myAssignmentsNavLink" class="nav-item" href="{% url 'my_assignments' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
             </nav>
         </aside>
 
@@ -480,80 +636,245 @@
             </header>
 
             <main class="page">
-                <section class="hero">
-                    <div class="hero-body">
-                        <h2>Operations Dashboard</h2>
-                        <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
-                        <div class="hero-actions">
-                            <button class="btn-primary" type="button">
-                                <span>+</span>
-                                <span>New item</span>
-                            </button>
-                            <button class="btn-secondary" type="button">Export Report</button>
+                <div id="homeDashboardSections" class="dashboard-sections">
+                    <section class="hero">
+                        <div class="hero-body">
+                            <h2>Operations Dashboard</h2>
+                            <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
+                            <div class="hero-actions">
+                                <button class="btn-primary" type="button">
+                                    <span>+</span>
+                                    <span>New item</span>
+                                </button>
+                                <button class="btn-secondary" type="button">Export Report</button>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section class="metrics">
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                                <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>1626</strong>
-                            <span>Total Projects</span>
-                        </div>
-                    </article>
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>1256</strong>
-                            <span>Completed</span>
-                        </div>
-                    </article>
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>49</strong>
-                            <span>Ongoing</span>
-                        </div>
-                    </article>
-                    <article class="metric-card">
-                        <div class="metric-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-                        <div class="metric-text">
-                            <strong>PHP 4.2B</strong>
-                            <span>Total Cost</span>
-                        </div>
-                    </article>
-                </section>
+                    <section class="metrics">
+                        <article class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                    <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="metric-text">
+                                <strong>1626</strong>
+                                <span>Total Projects</span>
+                            </div>
+                        </article>
+                        <article class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="metric-text">
+                                <strong>1256</strong>
+                                <span>Completed</span>
+                            </div>
+                        </article>
+                        <article class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="metric-text">
+                                <strong>49</strong>
+                                <span>Ongoing</span>
+                            </div>
+                        </article>
+                        <article class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                    <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="metric-text">
+                                <strong>PHP 4.2B</strong>
+                                <span>Total Cost</span>
+                            </div>
+                        </article>
+                    </section>
 
-                <section class="data-tabs" aria-label="Data sections">
-                    <button class="data-tab active" type="button">Divisions</button>
-                    <button class="data-tab" type="button">Projects</button>
-                    <button class="data-tab" type="button">Document Register</button>
-                    <button class="data-tab" type="button">Task Matrix</button>
+                    <section class="data-tabs" aria-label="Data sections">
+                        <button class="data-tab active" type="button">Divisions</button>
+                        <button class="data-tab" type="button">Projects</button>
+                        <button class="data-tab" type="button">Document Register</button>
+                        <button class="data-tab" type="button">Task Matrix</button>
+                    </section>
+                </div>
+
+                <section id="embeddedMaintenancePanel" class="embedded-maintenance" aria-hidden="true">
+                    <iframe id="embeddedMaintenanceFrame" class="embedded-frame" src="about:blank" loading="lazy" title="Maintenance View"></iframe>
                 </section>
             </main>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var mainLink = document.getElementById("maintenanceMainLink");
+            var actionBtn = document.getElementById("maintenanceActionBtn");
+            var submenu = document.getElementById("maintenanceSubmenu");
+            var group = document.getElementById("maintenanceNavGroup");
+            var page = document.querySelector(".page");
+            var dashboardSections = document.getElementById("homeDashboardSections");
+            var embeddedPanel = document.getElementById("embeddedMaintenancePanel");
+            var embeddedFrame = document.getElementById("embeddedMaintenanceFrame");
+            var myAssignmentsNavLink = document.getElementById("myAssignmentsNavLink");
+            var qualityDivisionNavLink = document.getElementById("qualityDivisionNavLink");
+            var planningDivisionNavLink = document.getElementById("planningDivisionNavLink");
+            var constructionDivisionNavLink = document.getElementById("constructionDivisionNavLink");
+            if (!mainLink || !actionBtn || !submenu || !group) {
+                return;
+            }
+
+            var subItems = submenu.querySelectorAll(".nav-subitem");
+
+            function playBlink(target) {
+                if (target) {
+                    target.classList.remove("blink");
+                    void target.offsetWidth;
+                    target.classList.add("blink");
+                    window.setTimeout(function () {
+                        target.classList.remove("blink");
+                    }, 520);
+                }
+
+                if (page) {
+                    page.classList.remove("panel-blink");
+                    void page.offsetWidth;
+                    page.classList.add("panel-blink");
+                    window.setTimeout(function () {
+                        page.classList.remove("panel-blink");
+                    }, 440);
+                }
+            }
+
+            function toggleMaintenanceMenu(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+
+                var isOpen = actionBtn.getAttribute("aria-expanded") === "true";
+                actionBtn.setAttribute("aria-expanded", String(!isOpen));
+                mainLink.setAttribute("aria-expanded", String(!isOpen));
+                submenu.setAttribute("aria-hidden", String(isOpen));
+                group.classList.toggle("open", !isOpen);
+            }
+
+            function openEmbeddedMaintenance(link, title) {
+                if (!embeddedPanel || !embeddedFrame) {
+                    window.location.href = link;
+                    return;
+                }
+
+                if (dashboardSections) {
+                    dashboardSections.classList.add("hidden");
+                }
+
+                embeddedPanel.classList.add("visible");
+                embeddedPanel.setAttribute("aria-hidden", "false");
+
+                if (embeddedFrame.getAttribute("src") !== link) {
+                    embeddedFrame.setAttribute("src", link);
+                }
+
+                var targetTop = embeddedPanel.getBoundingClientRect().top + window.scrollY - 88;
+                window.scrollTo({ top: targetTop, behavior: "smooth" });
+            }
+
+            function closeEmbeddedMaintenance() {
+                if (!embeddedPanel) {
+                    return;
+                }
+
+                embeddedPanel.classList.remove("visible");
+                embeddedPanel.setAttribute("aria-hidden", "true");
+
+                if (dashboardSections) {
+                    dashboardSections.classList.remove("hidden");
+                }
+            }
+
+            mainLink.addEventListener("click", toggleMaintenanceMenu);
+            actionBtn.addEventListener("click", toggleMaintenanceMenu);
+            subItems.forEach(function (item) {
+                item.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(item);
+
+                    var link = item.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, item.textContent.trim());
+                        }, 180);
+                    }
+                });
+            });
+
+            if (myAssignmentsNavLink) {
+                myAssignmentsNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(myAssignmentsNavLink);
+
+                    var link = myAssignmentsNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "My Assignments");
+                        }, 180);
+                    }
+                });
+            }
+
+            if (qualityDivisionNavLink) {
+                qualityDivisionNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(qualityDivisionNavLink);
+
+                    var link = qualityDivisionNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "Quality Division");
+                        }, 180);
+                    }
+                });
+            }
+
+            if (planningDivisionNavLink) {
+                planningDivisionNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(planningDivisionNavLink);
+
+                    var link = planningDivisionNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "Planning Division");
+                        }, 180);
+                    }
+                });
+            }
+
+            if (constructionDivisionNavLink) {
+                constructionDivisionNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    playBlink(constructionDivisionNavLink);
+
+                    var link = constructionDivisionNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "Construction Division");
+                        }, 180);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
 {% else %}

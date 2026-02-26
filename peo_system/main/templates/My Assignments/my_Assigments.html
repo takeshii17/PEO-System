@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <title>My Assignments</title>
+ <style>
+    :root {
+      --bg: #eef2f6;
+      --panel: #f8fafc;
+      --line: #cdd5de;
+      --text: #0f2339;
+      --muted: #586d84;
+      --warn: #f0ad00;
+      --info: #2876f8;
+      --ok: #08ba58;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Sora", "Segoe UI", sans-serif;
+    }
+
+    .page {
+      padding: 22px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.8vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+
+    .total-pill {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f7f9fc;
+      color: #102945;
+      padding: 7px 14px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 22px;
+      min-height: 116px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-title {
+      margin: 0;
+      color: #4f667f;
+      font-size: 1.05rem;
+    }
+
+    .stat-value {
+      margin: 4px 0 0;
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-icon svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .warn { color: var(--warn); }
+    .info { color: var(--info); }
+    .ok { color: var(--ok); }
+
+    .filters {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+      gap: 22px;
+      align-items: end;
+    }
+
+    .filter-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #102743;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f9fbfd;
+      padding: 8px 10px;
+      min-width: 140px;
+    }
+
+    .filter-box select {
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: #1a3553;
+      font: inherit;
+      width: 100%;
+    }
+
+    .empty-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .empty-panel svg {
+      width: 54px;
+      height: 54px;
+      color: #6a7a8c;
+      margin-bottom: 14px;
+    }
+
+    .empty-panel h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .empty-panel p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    @media (max-width: 980px) {
+      .stats { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
+    }
+  </style> 
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <h1>My Assignments</h1>
+        <p>Track and manage your assigned POW tasks</p>
+      </div>
+      <div class="total-pill">0 Total Tasks</div>
+    </header>
+
+    <section class="stats">
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">Pending</p>
+          <p class="stat-value">0</p>
+        </div>
+        <div class="stat-icon warn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">In Progress</p>
+          <p class="stat-value">0</p>
+        </div>
+        <div class="stat-icon info" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 8v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="16.5" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+      </article>
+
+      <article class="stat-card">
+        <div>
+          <p class="stat-title">Completed</p>
+          <p class="stat-value">0</p>
+        </div>
+        <div class="stat-icon ok" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+            <path d="m8.8 12.2 2.2 2.2 4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </article>
+    </section>
+
+    <section class="filters">
+      <div class="filter-grid">
+        <div class="filter-field">
+          <label for="task-type">Task Type</label>
+          <div class="field-row">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="#65778a" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+            <div class="filter-box">
+              <select id="task-type">
+                <option selected>All Task Types</option>
+                <option>Plan</option>
+                <option>POW</option>
+                <option>Survey</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-field">
+          <label for="task-status">Status</label>
+          <div class="field-row">
+            <div class="filter-box">
+              <select id="task-status">
+                <option selected>All Statuses</option>
+                <option>Pending</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="empty-panel">
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+          <path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h2>No assignments found</h2>
+        <p>You don't have any assigned tasks yet</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

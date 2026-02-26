@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db import connection
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from decimal import Decimal
 
 from .forms import ConstructionStatusReportForm, DocumentForm, PlanningBudgetForm, PlanningProjectForm
@@ -14,12 +16,16 @@ def home(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def planning_div_dashboard(request):
     active_tab = request.GET.get("tab", "budget")
     if active_tab not in {"budget", "ppa", "timeline"}:
         active_tab = "budget"
 
     selected_fund = request.GET.get("fund", "").strip()
+    if not _table_exists(PlanningBudget) or not _table_exists(PlanningProject):
+        context = _planning_fallback_context(active_tab=active_tab, selected_fund=selected_fund)
+        return render(request, "Planning Division/planning_Div.html", context)
 
     if not PlanningBudget.objects.exists():
         PlanningBudget.objects.create(
@@ -142,10 +148,14 @@ def planning_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def admin_div_dashboard(request):
     active_tab = request.GET.get("tab", "documents")
     if active_tab not in {"documents", "billing"}:
         active_tab = "documents"
+    if not _table_exists(Document):
+        context = _admin_fallback_context(active_tab=active_tab)
+        return render(request, "Admin/admin_div.html", context)
 
     form = DocumentForm()
     show_modal = False
@@ -266,12 +276,24 @@ def admin_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def maintinance_div_dashboard(request):
-    return render(request, "Maintinance Division/maintinance_Div.html")
+    return _render_maintinance_dashboard(request)
 
 
 @login_required
+@xframe_options_sameorigin
 def construction_div_dashboard(request):
+    if not _table_exists(ConstructionStatusReport):
+        context = {
+            "reports": [],
+            "report_form": ConstructionStatusReportForm(),
+            "show_report_modal": False,
+            "editing_report": None,
+            "db_not_ready": True,
+        }
+        return render(request, "Construction Division/construction_div.html", context)
+
     reports = ConstructionStatusReport.objects.all()
     show_report_modal = False
     editing_report = None
@@ -322,5 +344,116 @@ def construction_div_dashboard(request):
 
 
 @login_required
+@xframe_options_sameorigin
 def quality_div_dashboard(request):
     return render(request, "Quality Division/quality_div.html")
+
+
+@login_required
+@xframe_options_sameorigin
+def my_assignments(request):
+    return render(request, "My Assignments/my_Assigments.html")
+
+
+@login_required
+@xframe_options_sameorigin
+def maintinance_task_management(request):
+    return _render_maintinance_tasks(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintinance_contractor_management(request):
+    return _render_maintinance_contractors(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_div_dashboard(request):
+    return _render_maintinance_dashboard(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_task_management(request):
+    return _render_maintinance_tasks(request)
+
+
+@login_required
+@xframe_options_sameorigin
+def maintenance_contractor_management(request):
+    return _render_maintinance_contractors(request)
+
+
+def _render_maintinance_dashboard(request):
+    return render(request, "Maintinance Division/maintinance_management.html")
+
+
+def _render_maintinance_tasks(request):
+    return render(request, "Maintinance Division/task_management.html")
+
+
+def _render_maintinance_contractors(request):
+    return render(request, "Maintinance Division/contractor_management.html")
+
+
+def _table_exists(model):
+    table_name = model._meta.db_table
+    try:
+        return table_name in connection.introspection.table_names()
+    except Exception:
+        return False
+
+
+def _planning_fallback_context(active_tab="budget", selected_fund=""):
+    return {
+        "active_tab": active_tab,
+        "selected_fund": selected_fund,
+        "budgets": [],
+        "budget_form": PlanningBudgetForm(),
+        "show_budget_modal": False,
+        "editing_budget": None,
+        "project_form": PlanningProjectForm(initial={"fund": selected_fund or PlanningBudget.FUND_20_DEV}),
+        "show_project_modal": False,
+        "ppa_projects": [],
+        "ppa_search": "",
+        "ppa_status": "",
+        "ppa_fund": "",
+        "ppa_total": 0,
+        "ppa_approved": 0,
+        "ppa_for_review": 0,
+        "ppa_total_cost": Decimal("0"),
+        "project_status_choices": PlanningProject.STATUS_CHOICES,
+        "fund_choices": PlanningBudget.FUND_CHOICES,
+        "total_budgets": 0,
+        "total_allocated": Decimal("0"),
+        "total_remaining": Decimal("0"),
+        "db_not_ready": True,
+    }
+
+
+def _admin_fallback_context(active_tab="documents"):
+    empty_page = Paginator([], 8).get_page(1)
+    return {
+        "active_tab": active_tab,
+        "form": DocumentForm(),
+        "show_modal": False,
+        "editing_document": None,
+        "documents": [],
+        "billing_records": [],
+        "page_obj": empty_page,
+        "search": "",
+        "selected_division": "",
+        "selected_status": "",
+        "division_choices": Document.DIVISION_CHOICES,
+        "status_choices": Document.STATUS_CHOICES,
+        "total_documents": 0,
+        "for_review_count": 0,
+        "processing_count": 0,
+        "open_issues_count": 0,
+        "total_billing_records": 0,
+        "billing_for_review_count": 0,
+        "billing_processing_count": 0,
+        "billing_approved_count": 0,
+        "db_not_ready": True,
+    }
