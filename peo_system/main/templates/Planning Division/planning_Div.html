@@ -34,10 +34,9 @@
 
         .layout {
             min-height: 100vh;
-            display: block;
+            display: flex;
         }
 
-<<<<<<< HEAD
         .sidebar {
             width: 340px;
             background: linear-gradient(180deg, #08294d 0%, #072340 100%);
@@ -45,10 +44,11 @@
             border-right: 1px solid #173a61;
             display: flex;
             flex-direction: column;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
         }
-=======
-        .sidebar { display: none; }
->>>>>>> d636d885227702190114362938ab9de4f9007e50
 
         .brand {
             padding: 28px 24px;
@@ -121,11 +121,20 @@
         }
 
         .content {
+            flex: 1;
             min-width: 0;
-            width: 100%;
+            background: #f2f4f7;
         }
 
-        .topbar { display: none; }
+        .topbar {
+            height: 92px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 28px;
+            background: #f5f7fa;
+        }
 
         .title-wrap h2 {
             margin: 0;
@@ -189,7 +198,7 @@
             border: 0;
             background: transparent;
             color: #182d43;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             cursor: pointer;
             padding: 6px 8px;
             border-radius: 8px;
@@ -200,7 +209,11 @@
         }
 
         .main {
-            padding: 24px 26px;
+            padding: 24px 28px;
+        }
+
+        .title-wrap {
+            margin-bottom: 14px;
         }
 
         .section-tabs {
@@ -610,11 +623,13 @@
 
             .sidebar {
                 width: 100%;
+                position: static;
+                height: auto;
             }
 
             .topbar {
-                flex-direction: column;
-                align-items: stretch;
+                height: auto;
+                padding: 12px 16px;
             }
 
             .profile {
@@ -701,6 +716,17 @@
 
         <div class="content">
             <header class="topbar">
+                <div class="profile">
+                    <div class="seal">OFFICE<br>OF PEO</div>
+                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button class="logout" type="submit">Logout</button>
+                    </form>
+                </div>
+            </header>
+
+            <main class="main">
                 <div class="title-wrap">
                     <h2>Planning Division</h2>
                     <div class="title-sub">
@@ -708,14 +734,6 @@
                         <span>Budget Allocation &amp; Program of Works Management</span>
                     </div>
                 </div>
-                <div class="profile">
-                    <div class="seal">OFFICE<br>OF PEA</div>
-                    <div class="avatar">L</div>
-                    <button class="logout" type="button">Logout</button>
-                </div>
-            </header>
-
-            <main class="main">
                 <section class="section-tabs">
                     <a class="section-tab {% if active_tab == 'budget' %}active{% endif %}" href="{% url 'planning_div_dashboard' %}?tab=budget">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 7V5h6v2M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
