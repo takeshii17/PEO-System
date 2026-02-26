@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import connection
-from django.db.models import Q
+from django.db.models import Case, DecimalField, F, Q, Sum, Value, When
+from django.db.models.functions import Coalesce
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -63,6 +64,47 @@ def home(request):
         if selected_item_type != "document" and selected_division not in valid_divisions:
             new_item_error = "Invalid division selected."
 
+    total_documents = 0
+    completed_documents = 0
+    ongoing_documents = 0
+    total_cost_value = Decimal("0")
+
+    if _table_exists(Document):
+        documents_qs = Document.objects.all()
+        total_documents = documents_qs.count()
+        completed_documents = documents_qs.filter(
+            status__in=[Document.STATUS_APPROVED, Document.STATUS_CLOSED]
+        ).count()
+        ongoing_documents = documents_qs.exclude(
+            status__in=[Document.STATUS_APPROVED, Document.STATUS_CLOSED]
+        ).count()
+        total_cost_value = documents_qs.aggregate(
+            total=Coalesce(
+                Sum(
+                    Case(
+                        When(revised_contract_amount__isnull=False, then=F("revised_contract_amount")),
+                        default=Coalesce(
+                            F("contract_amount"),
+                            Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
+                            output_field=DecimalField(max_digits=14, decimal_places=2),
+                        ),
+                        output_field=DecimalField(max_digits=14, decimal_places=2),
+                    )
+                ),
+                Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
+                output_field=DecimalField(max_digits=14, decimal_places=2),
+            )
+        )["total"] or Decimal("0")
+
+    def _format_currency_short(amount):
+        amount = Decimal(amount or 0)
+        absolute = abs(amount)
+        if absolute >= Decimal("1000000000"):
+            return f"PHP {amount / Decimal('1000000000'):.1f}B"
+        if absolute >= Decimal("1000000"):
+            return f"PHP {amount / Decimal('1000000'):.1f}M"
+        return f"PHP {amount:,.0f}"
+
     context = {
         "item_type_choices": item_type_choices,
         "division_choices": division_choices,
@@ -72,6 +114,10 @@ def home(request):
         "new_item_description": description,
         "show_new_item_modal": show_new_item_modal,
         "new_item_error": new_item_error,
+        "total_documents": total_documents,
+        "completed_documents": completed_documents,
+        "ongoing_documents": ongoing_documents,
+        "total_cost_display": _format_currency_short(total_cost_value),
     }
     return render(request, "home.html", context)
 

@@ -808,8 +808,8 @@
                                 </svg>
                             </div>
                             <div class="metric-text">
-                                <strong>1626</strong>
-                                <span>Total Projects</span>
+                                <strong>{{ total_documents }}</strong>
+                                <span>Total Documents</span>
                             </div>
                         </article>
                         <article class="metric-card">
@@ -820,7 +820,7 @@
                                 </svg>
                             </div>
                             <div class="metric-text">
-                                <strong>1256</strong>
+                                <strong>{{ completed_documents }}</strong>
                                 <span>Completed</span>
                             </div>
                         </article>
@@ -832,7 +832,7 @@
                                 </svg>
                             </div>
                             <div class="metric-text">
-                                <strong>49</strong>
+                                <strong>{{ ongoing_documents }}</strong>
                                 <span>Ongoing</span>
                             </div>
                         </article>
@@ -844,17 +844,17 @@
                                 </svg>
                             </div>
                             <div class="metric-text">
-                                <strong>PHP 4.2B</strong>
+                                <strong>{{ total_cost_display }}</strong>
                                 <span>Total Cost</span>
                             </div>
                         </article>
                     </section>
 
                     <section class="data-tabs" aria-label="Data sections">
-                        <button class="data-tab active" type="button">Divisions</button>
-                        <button class="data-tab" type="button">Projects</button>
-                        <button class="data-tab" type="button">Document Register</button>
-                        <button class="data-tab" type="button">Task Matrix</button>
+                        <button class="data-tab active" id="tabDivisions" type="button">Divisions</button>
+                        <button class="data-tab" id="tabProjects" type="button" data-url="{% url 'planning_div_dashboard' %}?tab=ppa" data-title="Projects">Projects</button>
+                        <button class="data-tab" id="tabDocuments" type="button" data-url="{% url 'admin_div_dashboard' %}?tab=documents" data-title="Document Register">Document Register</button>
+                        <button class="data-tab" id="tabTaskMatrix" type="button" data-url="{% url 'maintenance_task_management' %}" data-title="Task Matrix">Task Matrix</button>
                     </section>
                 </div>
 
@@ -963,10 +963,18 @@
             var planningDivisionNavLink = document.getElementById("planningDivisionNavLink");
             var constructionDivisionNavLink = document.getElementById("constructionDivisionNavLink");
             var maintenanceManagementNavLink = document.getElementById("maintenanceManagementNavLink");
+            var dataTabs = document.querySelectorAll(".data-tab");
+            var tabDivisions = document.getElementById("tabDivisions");
             var hasMaintenanceToggle = !!(mainLink && actionBtn && submenu && group);
             var subItems = submenu ? submenu.querySelectorAll(".nav-subitem") : [];
             var topNavItems = document.querySelectorAll(".nav-menu > a.nav-item");
             var maintenanceGroupItem = group ? group.querySelector(".nav-item-group") : null;
+
+            function setActiveDataTab(activeTab) {
+                dataTabs.forEach(function (tab) {
+                    tab.classList.toggle("active", tab === activeTab);
+                });
+            }
 
             function clearSidebarActiveState() {
                 topNavItems.forEach(function (item) {
@@ -1145,6 +1153,10 @@
                 if (dashboardNavLink) {
                     setActiveTopNavItem(dashboardNavLink);
                 }
+
+                if (tabDivisions) {
+                    setActiveDataTab(tabDivisions);
+                }
             }
 
             if (hasMaintenanceToggle) {
@@ -1245,6 +1257,33 @@
                             openEmbeddedMaintenance(link, "Construction Division");
                         }, 180);
                     }
+                });
+            }
+
+            if (dataTabs.length) {
+                dataTabs.forEach(function (tab) {
+                    tab.addEventListener("click", function () {
+                        var link = tab.getAttribute("data-url");
+                        var viewTitle = tab.getAttribute("data-title") || tab.textContent.trim();
+                        setActiveDataTab(tab);
+
+                        if (!link) {
+                            closeEmbeddedMaintenance();
+                            return;
+                        }
+
+                        if (tab.id === "tabProjects" && planningDivisionNavLink) {
+                            setActiveTopNavItem(planningDivisionNavLink);
+                        } else if (tab.id === "tabDocuments" && adminDivisionNavLink) {
+                            setActiveTopNavItem(adminDivisionNavLink);
+                        } else if (tab.id === "tabTaskMatrix") {
+                            if (maintenanceManagementNavLink) {
+                                setActiveMaintenanceGroup(maintenanceManagementNavLink);
+                            }
+                        }
+
+                        openEmbeddedMaintenance(link, viewTitle);
+                    });
                 });
             }
 
