@@ -7,241 +7,590 @@
   <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
   <title>Maintenance Management</title>
   <style>
-    :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Sora","Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
-    .layout{min-height:100vh;display:block}
-    .sidebar{display:none}
-    .brand{display:flex;align-items:center;gap:14px;padding:24px 22px;border-bottom:1px solid rgba(217,229,245,.16)}
-    .logo{width:62px;height:62px;border-radius:10px;border:2px solid #f0d06a;background:radial-gradient(circle at 35% 35%,#ffe887 0,#f4c21d 62%,#e3aa0a 100%);color:#8f0618;font-weight:700;font-size:.82rem;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #17395f}
-    .brand h1{margin:0;color:#f1f6fc;font-size:1.8rem;line-height:1.1}
-    .brand p{margin:4px 0 0;color:#b9c8d9;font-size:.98rem}
-    .menu{padding:16px 20px;display:grid;gap:8px}
-    .menu-item{color:#c7d6e6;text-decoration:none;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:1.9rem;font-size:clamp(1rem,1.2vw,1.85rem)}
-    .menu-item:hover{background:rgba(255,255,255,.08)}
-    .menu-item.active{background:var(--active);color:#fff;font-weight:600}
-    .menu-item svg{width:24px;height:24px;flex:0 0 auto}
-    .menu-group{display:grid;gap:8px}
-    .menu-item-group{width:100%;padding:0;border:0;background:transparent;overflow:hidden;color:#fff;font:inherit;cursor:pointer;justify-content:space-between}
-    .menu-main{display:flex;align-items:center;gap:12px;padding:14px 16px;flex:1;text-align:left}
-    .menu-caret{display:grid;place-items:center;min-width:54px;border-left:1px solid rgba(189,214,238,.14)}
-    .menu-caret svg{width:16px;height:16px;transition:transform .2s ease}
-    .menu-group.open .menu-caret svg{transform:rotate(180deg)}
-    .menu-submenu{display:grid;gap:8px;padding-left:14px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);pointer-events:none;transition:max-height .28s ease,opacity .2s ease,transform .2s ease}
-    .menu-group.open .menu-submenu{max-height:180px;opacity:1;transform:translateY(0);pointer-events:auto}
-    .menu-subitem{color:#c7d6e6;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:1.02rem;background:rgba(9,39,72,.36)}
-    .menu-subitem:hover{background:rgba(255,255,255,.08);color:#fff}
-    .content{min-width:0;width:100%}
-    .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
-    .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
-    .heading p{margin:6px 0 0;color:var(--muted);font-size:1.1rem}
-    .profile{display:flex;align-items:center;gap:14px}
-    .chip{border-radius:999px;background:#efe1ff;color:#7d18e4;border:1px solid #e6d1ff;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;font-size:1.02rem;font-weight:600}
-    .seal{width:52px;height:52px;border-radius:50%;border:2px solid #d3dbe4;background:radial-gradient(circle at 35% 35%,#eff7ff,#dce9f8 46%,#bfcee3);display:grid;place-items:center;font-size:.53rem;font-weight:700;line-height:1.14;color:#0f2c4f;text-align:center}
-    .page{padding:30px}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:26px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);min-height:160px;padding:22px 20px;display:flex;align-items:center;gap:16px}
-    .ibox{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:0 0 auto}
-    .ibox svg{width:27px;height:27px}
-    .i-gray{background:#dfe4ea;color:#1d466e}.i-blue{background:#d6e5f8;color:#2166dc}.i-green{background:#caedd9;color:#0a9a4a}.i-gold{background:#f7e7bc;color:#de7d00}
-    .card strong{display:block;font-size:2.4rem;line-height:1.05}
-    .card span{color:#47607d;font-size:1.06rem}
-    .tabs{display:inline-flex;background:#dfe4ea;border-radius:14px;padding:4px;gap:2px;margin-bottom:12px}
-    .tabs button{border:0;background:transparent;font-family:inherit;font-size:1rem;color:#102741;border-radius:10px;padding:8px 12px;cursor:pointer}
-    .tabs button.active{background:#f8fafd;box-shadow:0 1px 2px rgba(12,33,56,.12);font-weight:600}
-    .conditions{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:20px}
-    .ccard{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}
-    .chead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
-    .chead h3{margin:0;font-size:1.35rem}
-    .count{border-radius:999px;padding:5px 12px;font-weight:600;font-size:1rem}
-    .good{background:#cdeed9;color:#08923f}.fair{background:#cfe0f4;color:#1755dd}.poor{background:#f6e5b9;color:#d07300}.bad{background:#f03a49;color:#fff}
-    .bar{height:12px;border-radius:999px;background:#cfd6de;overflow:hidden}.bar>span{display:block;height:100%;background:#18395a}
-    .w1{width:22%}.w2{width:49%}.w3{width:22%}.w4{width:6%}
-    .filters{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
-    .frow{display:grid;grid-template-columns:minmax(250px,1fr) 230px 190px 200px 150px;gap:12px;align-items:center}
-    .search,.sel{border:1px solid #c9d0d9;border-radius:14px;background:#f9fbfd;padding:10px 12px;display:flex;align-items:center;gap:8px}
-    .search input,.sel select{width:100%;border:0;outline:none;background:transparent;color:#2f4a66;font-family:inherit;font-size:1.05rem}
-    .roads{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
-    .roads h2{margin:10px 10px 4px;font-size:2.1rem}
-    .roads .sub{margin:0 10px 12px;color:#4d647e;font-size:1.05rem}
-    .muni{border:1px solid #c8d0d9;border-radius:16px;overflow:hidden;margin:12px 0;background:#f9fbfd}
-    .mhead{background:#d0d6dc;color:#0e3155;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.65rem;font-size:clamp(1.2rem,1.4vw,1.65rem)}
-    .mhead .tag{margin-left:10px;border:1px solid #bcc5d0;border-radius:999px;font-weight:500;padding:3px 10px;font-size:.92rem;color:#0f2945;background:#d8dde3}
-    .mhead svg{width:22px;height:22px}
-    table{width:100%;border-collapse:collapse}
-    th,td{text-align:left;padding:13px 16px;border-bottom:1px solid #c9d0d9;font-size:1.05rem}
-    th{background:#f4f7fa;color:#0f2138;font-size:1.12rem}
-    tr:last-child td{border-bottom:0}
-    .pill{display:inline-block;border-radius:999px;padding:5px 12px;font-size:.96rem;font-weight:600}
-    .pill.good{background:#cdeed9;color:#08923f}.pill.fair{background:#cfe0f4;color:#1755dd}.pill.poor{background:#f6e5b9;color:#d07300}
-    .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:4px 2px 2px;color:#314a65;font-size:1.05rem}
-    .pager{display:inline-flex;gap:8px}.pager button{width:48px;height:40px;border:1px solid #c8d0d9;border-radius:12px;background:#f8fafd;color:#314a65;font-size:1.45rem;cursor:pointer}
-    @media (max-width:1450px){.sidebar{width:300px}.stats,.conditions{grid-template-columns:repeat(2,minmax(220px,1fr))}.frow{grid-template-columns:repeat(3,minmax(200px,1fr))}}
-    @media (max-width:980px){.layout{flex-direction:column}.sidebar{width:100%}.topbar{flex-direction:column}.profile{width:100%;justify-content:flex-end}.stats,.conditions,.frow{grid-template-columns:1fr}}
+    :root {
+      --bg: #edf1f5;
+      --panel: #f8fafc;
+      --line: #cfd6de;
+      --text: #0f2238;
+      --muted: #536982;
+      --progress-track: #c7ced6;
+      --progress-fill: #132e4d;
+      --selected: #f7b333;
+      --selected-text: #0f2238;
+      --shadow: 0 1px 5px rgba(8, 34, 61, 0.12);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Sora", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .maintenance-dashboard {
+      max-width: 1700px;
+      margin: 0 auto;
+      padding: 22px 18px 16px;
+    }
+
+    body.embedded-maintenance-view .maintenance-dashboard {
+      padding-top: 10px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .kpi-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      min-height: 112px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 14px;
+    }
+
+    .kpi-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+
+    .kpi-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .i-road { background: #dde3ea; color: #173a60; }
+    .i-len { background: #d5e2f8; color: #2767de; }
+    .i-eq { background: #caecd8; color: #0a9a49; }
+    .i-task { background: #f7e8bf; color: #de8500; }
+
+    .kpi-value {
+      font-size: clamp(1.6rem, 1.1vw + 1rem, 2.25rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-label {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(0.88rem, 0.38vw + 0.75rem, 1rem);
+      line-height: 1.2;
+    }
+
+    .tabs {
+      display: inline-flex;
+      gap: 2px;
+      border-radius: 12px;
+      background: #dfe4ea;
+      padding: 4px;
+      margin-bottom: 10px;
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      color: #0d233a;
+      font-family: inherit;
+      font-size: clamp(0.9rem, 0.42vw + 0.75rem, 1.02rem);
+      line-height: 1;
+      border-radius: 9px;
+      padding: 10px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      background: #f8fafc;
+      box-shadow: 0 1px 2px rgba(8, 34, 61, 0.12);
+      font-weight: 600;
+    }
+
+    .condition-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .condition-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px 14px;
+    }
+
+    .condition-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .condition-head h3 {
+      margin: 0;
+      font-size: clamp(0.95rem, 0.55vw + 0.75rem, 1.18rem);
+      line-height: 1.15;
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 600;
+      font-size: clamp(0.8rem, 0.32vw + 0.68rem, 0.95rem);
+      line-height: 1;
+    }
+
+    .good { background: #c9efd8; color: #07933f; }
+    .fair { background: #cee0f7; color: #2159dc; }
+    .poor { background: #f8e6bc; color: #ce7600; }
+    .bad { background: #ed3343; color: #ffffff; }
+
+    .progress {
+      height: 10px;
+      width: 100%;
+      border-radius: 999px;
+      background: var(--progress-track);
+      overflow: hidden;
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      background: var(--progress-fill);
+    }
+
+    .p-good { width: 0%; }
+    .p-fair { width: 0%; }
+    .p-poor { width: 0%; }
+    .p-bad { width: 0%; }
+
+    .filter-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 18px 14px;
+    }
+
+    .filter-row {
+      display: grid;
+      grid-template-columns: minmax(300px, 2fr) repeat(4, minmax(140px, 1fr));
+      gap: 14px;
+      align-items: center;
+    }
+
+    .search-field {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #c8d0d9;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 11px 12px;
+      min-height: 52px;
+    }
+
+    .search-field svg {
+      width: 21px;
+      height: 21px;
+      color: #677c93;
+      flex: 0 0 auto;
+    }
+
+    .search-field input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: #243d57;
+      font-family: inherit;
+      font-size: clamp(0.92rem, 0.35vw + 0.78rem, 1.02rem);
+      line-height: 1.1;
+    }
+
+    .menu-select {
+      position: relative;
+    }
+
+    .menu-button {
+      width: 100%;
+      border: 1px solid #c8d0d9;
+      border-radius: 12px;
+      background: #f8fafc;
+      color: #102741;
+      min-height: 52px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: inherit;
+      font-size: clamp(0.92rem, 0.35vw + 0.78rem, 1.02rem);
+      line-height: 1.15;
+      cursor: pointer;
+    }
+
+    .button-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .menu-button svg {
+      width: 16px;
+      height: 16px;
+      color: #8b97a6;
+      flex: 0 0 auto;
+    }
+
+    .menu-list {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      min-width: 170px;
+      max-height: 260px;
+      overflow-y: auto;
+      border: 1px solid #c8d0d9;
+      border-radius: 10px;
+      background: #f8fafc;
+      box-shadow: 0 8px 20px rgba(8, 34, 61, 0.18);
+      padding: 6px;
+      z-index: 20;
+    }
+
+    .menu-select.open .menu-list {
+      display: block;
+    }
+
+    .menu-option {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #1f2f40;
+      border-radius: 8px;
+      min-height: 40px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: inherit;
+      font-size: clamp(0.92rem, 0.35vw + 0.78rem, 1.02rem);
+      line-height: 1.2;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .menu-option:hover {
+      background: #edf1f6;
+    }
+
+    .menu-option.active {
+      background: var(--selected);
+      color: var(--selected-text);
+    }
+
+    .option-check {
+      opacity: 0;
+      font-weight: 700;
+    }
+
+    .menu-option.active .option-check {
+      opacity: 1;
+    }
+
+    @media (max-width: 1280px) {
+      .maintenance-dashboard {
+        padding: 18px 14px 14px;
+      }
+
+      .kpi-grid,
+      .condition-grid {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+      }
+
+      .filter-row {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+      }
+
+      .search-field {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .maintenance-dashboard {
+        padding: 12px 10px;
+      }
+
+      .kpi-grid,
+      .condition-grid,
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-card {
+        min-height: auto;
+        padding: 14px 12px;
+      }
+
+      .condition-card {
+        padding: 14px 12px;
+      }
+
+      .filter-card {
+        padding: 12px;
+      }
+
+      .tabs {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+      }
+    }
   </style>
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="brand"><div class="logo">PEO</div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
-            <nav class="menu">
-        <a class="menu-item" href="{% url 'home' %}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/></svg>Dashboard</a>
-        <a class="menu-item" href="{% url 'admin_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
-        <a class="menu-item" href="{% url 'planning_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
-        <a class="menu-item" href="{% url 'construction_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
-        <a class="menu-item" href="{% url 'quality_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
-        <div class="menu-group open" id="maintenanceMenuGroup">
-          <button class="menu-item menu-item-group active" id="maintenanceMenuBtn" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu">
-            <span class="menu-main">
-              <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
-              Maintenance Division
-            </span>
-            <span class="menu-caret">
-              <svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
+  <main class="maintenance-dashboard">
+    <section class="kpi-grid" aria-label="Maintenance summary cards">
+      <article class="kpi-card">
+        <div class="kpi-icon i-road" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.8 15.5 7.3M8.6 13.2l6.9 3.5" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div>
+          <div class="kpi-value">0</div>
+          <div class="kpi-label">Provincial Roads</div>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-icon i-len" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div>
+          <div class="kpi-value">0 km</div>
+          <div class="kpi-label">Total Length</div>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-icon i-eq" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="9" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 11h3l4 4v4h-2a2 2 0 0 1-2-2v-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="kpi-value">0</div>
+          <div class="kpi-label">Equipment</div>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-icon i-task" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 3v5M16 3v5M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div class="kpi-value">0</div>
+          <div class="kpi-label">Scheduled Tasks</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="tabs" aria-label="Maintenance dashboard tabs">
+      <button type="button" class="tab active">Provincial Roads</button>
+      <button type="button" class="tab">Equipment</button>
+      <button type="button" class="tab">Maintenance Schedules</button>
+    </section>
+
+    <section class="condition-grid" aria-label="Road condition summary">
+      <article class="condition-card">
+        <div class="condition-head">
+          <h3>Good Condition</h3>
+          <span class="badge good">0</span>
+        </div>
+        <div class="progress"><span class="p-good"></span></div>
+      </article>
+
+      <article class="condition-card">
+        <div class="condition-head">
+          <h3>Fair Condition</h3>
+          <span class="badge fair">0</span>
+        </div>
+        <div class="progress"><span class="p-fair"></span></div>
+      </article>
+
+      <article class="condition-card">
+        <div class="condition-head">
+          <h3>Poor Condition</h3>
+          <span class="badge poor">0</span>
+        </div>
+        <div class="progress"><span class="p-poor"></span></div>
+      </article>
+
+      <article class="condition-card">
+        <div class="condition-head">
+          <h3>Bad Condition</h3>
+          <span class="badge bad">0</span>
+        </div>
+        <div class="progress"><span class="p-bad"></span></div>
+      </article>
+    </section>
+
+    <section class="filter-card" aria-label="Road filters">
+      <div class="filter-row">
+        <label class="search-field" for="road-search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="road-search" type="search" placeholder="Search roads..." autocomplete="off">
+        </label>
+
+        <div class="menu-select" data-name="municipality">
+          <input type="hidden" name="municipality" value="all">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">All Municipalities</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
-          <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
-            <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintinance Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="all" data-label="All Municipalities"><span>All Municipalities</span><span class="option-check">✓</span></button>
           </div>
         </div>
-        <a class="menu-item" href="{% url 'my_assignments' %}"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
-      </nav>
-    </aside>
-    <section class="content">
-      <header class="topbar">
-        <div class="heading"><h2>Maintenance Division</h2><p>Provincial roads, equipment, and maintenance scheduling</p></div>
-        <div class="profile"><div class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/></svg>Maintenance</div><div class="seal">OFFICE<br>OF PEO</div></div>
-      </header>
-      <main class="page">
-        <section class="stats">
-          <article class="card"><div class="ibox i-gray"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.8 15.5 7.3M8.6 13.2l6.9 3.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>228</strong><span>Provincial Roads</span></div></article>
-          <article class="card"><div class="ibox i-blue"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>1265.6 km</strong><span>Total Length</span></div></article>
-          <article class="card"><div class="ibox i-green"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="9" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 11h3l4 4v4h-2a2 2 0 0 1-2-2v-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Equipment</span></div></article>
-          <article class="card"><div class="ibox i-gold"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 3v5M16 3v5M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Scheduled Tasks</span></div></article>
-        </section>
-        <section class="tabs"><button class="active" type="button">Provincial Roads</button><button type="button">Equipment</button><button type="button">Maintenance Schedules</button></section>
-        <section class="conditions">
-          <article class="ccard"><div class="chead"><h3>Good Condition</h3><span class="count good">51</span></div><div class="bar"><span class="w1"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Fair Condition</h3><span class="count fair">111</span></div><div class="bar"><span class="w2"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Poor Condition</h3><span class="count poor">51</span></div><div class="bar"><span class="w3"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Bad Condition</h3><span class="count bad">14</span></div><div class="bar"><span class="w4"></span></div></article>
-        </section>
-        <section class="filters">
-          <div class="frow">
-            <label class="search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#556b84" stroke-width="2"/><path d="M16 16L21 21" stroke="#556b84" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search roads..."></label>
-            <label class="sel"><select><option>All Municipalities</option></select></label>
-            <label class="sel"><select><option>All Conditions</option></select></label>
-            <label class="sel"><select><option>Road ID</option></select></label>
-            <label class="sel"><select><option>Ascending</option></select></label>
+
+        <div class="menu-select" data-name="condition">
+          <input type="hidden" name="condition" value="all">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">All Conditions</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="all" data-label="All Conditions"><span>All Conditions</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="good" data-label="Good"><span>Good</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="fair" data-label="Fair"><span>Fair</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="poor" data-label="Poor"><span>Poor</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="bad" data-label="Bad"><span>Bad</span><span class="option-check">✓</span></button>
           </div>
-        </section>
-        <section class="roads">
-          <h2>Provincial Roads</h2>
-          <p class="sub">228 roads found</p>
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ABORLAN <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>1</td><td>Sagpangan Road</td><td>3.47</td><td><span class="pill good">Good</span></td><td>Gravel: 3.470km</td></tr>
-                <tr><td>10</td><td>Plaridel - Apis Cabigaan Road</td><td>13.90</td><td><span class="pill good">Good</span></td><td>Concrete: 13.190km  Gravel: 0.710km</td></tr>
-                <tr><td>11</td><td>Tagpait Feeder Road</td><td>2.25</td><td><span class="pill fair">Fair</span></td><td>Concrete: 2.250km</td></tr>
-              </tbody>
-            </table>
-          </article>
+        </div>
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>SOFRONIO ESPANOLA <span class="tag">2 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>100</td><td>Pulot III-Tabud Road</td><td>7.80</td><td><span class="pill poor">Poor</span></td><td>Gravel: 7.800km</td></tr>
-                <tr><td>116</td><td>Pulot I - Pulot III Road</td><td>13.17</td><td><span class="pill fair">Fair</span></td><td>Concrete: 13.170km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>QUEZON <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>101</td><td>Magsaysay Road</td><td>0.65</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.649km</td></tr>
-                <tr><td>102</td><td>Tabon - Tagpapasi Road</td><td>1.39</td><td><span class="pill poor">Poor</span></td><td>Concrete: 0.170km  Gravel: 1.220km</td></tr>
-                <tr><td>107</td><td>Tabon - Pinaglabanan Road</td><td>1.31</td><td><span class="pill fair">Fair</span></td><td>Gravel: 1.310km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>BROOKE'S POINT <span class="tag">1 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>103</td><td>Barong-Barong Feeder Road</td><td>1.26</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.254km  Gravel: 1.009km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>NARRA <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>104</td><td>Sandoval - Bagong Sikat Road</td><td>4.35</td><td><span class="pill poor">Poor</span></td><td>Concrete: 4.140km  Gravel: 0.210km</td></tr>
-                <tr><td>105</td><td>Bato-Bato Feeder Road</td><td>3.68</td><td><span class="pill fair">Fair</span></td><td>Gravel: 3.680km</td></tr>
-                <tr><td>106</td><td>Narra Panacan Road</td><td>3.28</td><td><span class="pill good">Good</span></td><td>Concrete: 3.283km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>RIZAL <span class="tag">1 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>108</td><td>Rancho - Puntabaja - Malapandeg Road</td><td>3.33</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.520km  Gravel: 2.810km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ROXAS <span class="tag">7 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>109</td><td>Highway Junction Caramay Road</td><td>2.66</td><td><span class="pill good">Good</span></td><td>Concrete: 0.760km  Gravel: 1.900km</td></tr>
-                <tr><td>110</td><td>Highway Junction Salvacion Road</td><td>7.50</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.840km  Gravel: 6.660km</td></tr>
-                <tr><td>111</td><td>H-way Jct. Little Caramay-Caruray Rd.-B</td><td>15.49</td><td><span class="pill fair">Fair</span></td><td>Concrete: 6.600km  Gravel: 8.890km</td></tr>
-                <tr><td>112</td><td>Highway Jct. Tagumpay-Maliko Rd.</td><td>8.96</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.214km  Gravel: 8.745km</td></tr>
-                <tr><td>113</td><td>Highway Jct. Talakaigan Road</td><td>1.59</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.100km  Gravel: 1.490km</td></tr>
-                <tr><td>114</td><td>Highway Jct. New Cuyo - Rizal Road</td><td>9.67</td><td><span class="pill fair">Fair</span></td><td>Concrete: 4.051km  Gravel: 5.622km</td></tr>
-                <tr><td>115</td><td>San Jose Port Barton Road - A</td><td>11.55</td><td><span class="pill good">Good</span></td><td>Concrete: 11.551km</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <div class="pagination">
-            <span>Page 1 of 12</span>
-            <div class="pager"><button type="button" aria-label="Previous">&#8249;</button><button type="button" aria-label="Next">&#8250;</button></div>
+        <div class="menu-select" data-name="sort_by">
+          <input type="hidden" name="sort_by" value="road_id">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">Road ID</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="road_id" data-label="Road ID"><span>Road ID</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="road_name" data-label="Road Name"><span>Road Name</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="municipality" data-label="Municipality"><span>Municipality</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="length" data-label="Length"><span>Length</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="condition" data-label="Condition"><span>Condition</span><span class="option-check">✓</span></button>
           </div>
-        </section>
+        </div>
 
-      </main>
+        <div class="menu-select" data-name="sort_order">
+          <input type="hidden" name="sort_order" value="asc">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">Ascending</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="asc" data-label="Ascending"><span>Ascending</span><span class="option-check">✓</span></button>
+            <button type="button" class="menu-option" data-value="desc" data-label="Descending"><span>Descending</span><span class="option-check">✓</span></button>
+          </div>
+        </div>
+      </div>
     </section>
-  </div>
+  </main>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      var group = document.getElementById("maintenanceMenuGroup");
-      var btn = document.getElementById("maintenanceMenuBtn");
-      var submenu = document.getElementById("maintenanceSubmenu");
-      if (!group || !btn || !submenu) {
-        return;
+      var selects = document.querySelectorAll(".menu-select");
+
+      function closeAll(exceptNode) {
+        selects.forEach(function (node) {
+          if (node !== exceptNode) {
+            node.classList.remove("open");
+            var nodeBtn = node.querySelector(".menu-button");
+            if (nodeBtn) {
+              nodeBtn.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
       }
 
-      btn.addEventListener("click", function () {
-        var isOpen = group.classList.toggle("open");
-        btn.setAttribute("aria-expanded", String(isOpen));
-        submenu.setAttribute("aria-hidden", String(!isOpen));
+      selects.forEach(function (select) {
+        var button = select.querySelector(".menu-button");
+        var label = select.querySelector(".button-label");
+        var hiddenInput = select.querySelector("input[type='hidden']");
+        var options = select.querySelectorAll(".menu-option");
+
+        if (!button || !options.length || !label) {
+          return;
+        }
+
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          var willOpen = !select.classList.contains("open");
+          closeAll(select);
+          select.classList.toggle("open", willOpen);
+          button.setAttribute("aria-expanded", String(willOpen));
+        });
+
+        options.forEach(function (option) {
+          option.addEventListener("click", function () {
+            options.forEach(function (opt) {
+              opt.classList.remove("active");
+            });
+
+            option.classList.add("active");
+
+            var nextLabel = option.getAttribute("data-label") || option.textContent.trim();
+            var nextValue = option.getAttribute("data-value") || nextLabel;
+
+            label.textContent = nextLabel;
+            if (hiddenInput) {
+              hiddenInput.value = nextValue;
+            }
+
+            select.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          });
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".menu-select")) {
+          closeAll(null);
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeAll(null);
+        }
       });
     });
   </script>
 </body>
 </html>
-
-
