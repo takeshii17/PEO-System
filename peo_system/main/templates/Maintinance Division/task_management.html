@@ -168,7 +168,6 @@
       border-radius: 14px;
       box-shadow: var(--shadow);
       padding: 12px;
-      position: relative;
     }
 
     .table-head {
@@ -198,101 +197,6 @@
       background: #fff;
     }
 
-    .task-record-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(7, 18, 30, 0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 980;
-    }
-
-    .task-record-overlay.open {
-      display: flex;
-    }
-
-    .task-float-card {
-      border: 1px solid #b7c5d5;
-      border-radius: 14px;
-      background: #f2f5f8;
-      box-shadow: 0 10px 22px rgba(20, 40, 62, 0.12);
-      width: min(1120px, 96vw);
-      max-height: calc(100vh - 40px);
-      overflow: auto;
-      overflow: hidden;
-    }
-
-    .task-float-head {
-      border-bottom: 1px solid #c7d2df;
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .task-float-title {
-      margin: 0;
-      font-size: 1.05rem;
-      color: #23364d;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    .task-float-close {
-      width: 30px;
-      height: 30px;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: #4f5b69;
-      font-size: 1.4rem;
-      line-height: 1;
-      cursor: pointer;
-      flex: 0 0 auto;
-    }
-
-    .task-float-close:hover {
-      background: rgba(25, 40, 56, 0.08);
-    }
-
-    .task-float-body {
-      padding: 12px 16px 14px;
-    }
-
-    .task-float-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(150px, 1fr));
-      gap: 10px 12px;
-      align-items: end;
-    }
-
-    .task-float-field {
-      display: grid;
-      gap: 5px;
-    }
-
-    .task-float-field.full {
-      grid-column: 1 / -1;
-    }
-
-    .task-float-field > span {
-      color: #344c67;
-      font-size: 0.86rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      white-space: nowrap;
-    }
-
-    .task-float-actions {
-      margin-top: 12px;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
-      gap: 10px;
-    }
-
     .tasks-table {
       width: 100%;
       border-collapse: collapse;
@@ -318,76 +222,6 @@
 
     .tasks-table tbody tr:last-child td {
       border-bottom: 0;
-    }
-
-    .task-cell-input,
-    .task-cell-select,
-    .task-cell-date {
-      width: 100%;
-      min-height: 40px;
-      border: 1px solid #b8c8d9;
-      border-radius: 10px;
-      background: #ffffff;
-      padding: 0 10px;
-      font: inherit;
-      font-size: 0.96rem;
-      color: #2a445f;
-      outline: none;
-    }
-
-    #nextTaskId {
-      font-weight: 700;
-      color: #1f3f60;
-      background: #edf3f9;
-    }
-
-    .task-cell-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%23798ba0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      padding-right: 30px;
-    }
-
-    .task-cell-textarea {
-      width: 100%;
-      min-height: 82px;
-      border: 1px solid #b8c8d9;
-      border-radius: 10px;
-      background: #ffffff;
-      padding: 10px;
-      font: inherit;
-      font-size: 0.95rem;
-      color: #2a445f;
-      resize: vertical;
-      outline: none;
-    }
-
-    .task-cell-input:focus,
-    .task-cell-select:focus,
-    .task-cell-date:focus,
-    .task-cell-textarea:focus {
-      border-color: #4f6b88;
-      box-shadow: 0 0 0 2px rgba(53, 86, 120, 0.2);
-    }
-
-    .task-inline-btn {
-      border: 1px solid #153a5f;
-      border-radius: 11px;
-      min-height: 46px;
-      padding: 0 12px;
-      background: #f2f5f8;
-      color: #153a5f;
-      font: inherit;
-      font-size: 1.02rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .task-inline-btn.save {
-      border-color: #153a5f;
-      background: #153a5f;
-      color: #fff;
     }
 
     .empty-row td {
@@ -592,27 +426,11 @@
         flex: 1 1 180px;
         justify-content: center;
       }
-
-      .task-float-grid {
-        grid-template-columns: repeat(2, minmax(180px, 1fr));
-      }
-
-      .task-float-actions {
-        grid-template-columns: 1fr;
-      }
-
-      .task-inline-btn {
-        width: 100%;
-      }
     }
 
     @media (max-width: 640px) {
       .stats-grid {
         grid-template-columns: 1fr 1fr;
-      }
-
-      .task-float-grid {
-        grid-template-columns: 1fr;
       }
 
       .personnel-form {
@@ -642,7 +460,7 @@
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M18 8a3 3 0 1 1 0 6M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           Add Personnel
         </button>
-        <button class="btn btn-primary" type="button" id="openTaskFormBtn">
+        <button class="btn btn-primary" type="button">
           <span>+</span>
           <span>New Task</span>
         </button>
@@ -700,7 +518,7 @@
     <section class="tasks-table-panel" aria-label="Tasks table">
       <div class="table-head">
         <h3>Task List</h3>
-        <p id="taskCountText">0 tasks found</p>
+        <p>0 tasks found</p>
       </div>
 
       <div class="table-wrap">
@@ -716,8 +534,8 @@
               <th>Due Date</th>
             </tr>
           </thead>
-          <tbody id="tasksTableBody">
-            <tr id="tasksEmptyRow" class="empty-row">
+          <tbody>
+            <tr class="empty-row">
               <td colspan="7">No tasks found</td>
             </tr>
           </tbody>
@@ -725,82 +543,6 @@
       </div>
     </section>
   </main>
-
-  <div class="task-record-overlay" id="taskRecordOverlay" aria-hidden="true">
-    <form id="newTaskFormCard" class="task-float-card">
-      <div class="task-float-head">
-        <h4 class="task-float-title">Create Task Record</h4>
-      </div>
-      <div class="task-float-body">
-        <div class="task-float-grid">
-          <label class="task-float-field">
-            <span>Task ID</span>
-            <input id="nextTaskId" class="task-cell-input" type="text" readonly>
-          </label>
-
-          <label class="task-float-field">
-            <span>Task Name *</span>
-            <input id="taskTitleInput" class="task-cell-input" type="text" placeholder="e.g., Bridge Rehabilitation Project" required>
-          </label>
-
-          <label class="task-float-field">
-            <span>Division</span>
-            <select id="taskDivisionInput" class="task-cell-select">
-              <option value="Maintenance">Maintenance</option>
-              <option value="Admin">Admin</option>
-              <option value="Planning Division">Planning Division</option>
-              <option value="Construction">Construction</option>
-              <option value="Quality">Quality</option>
-            </select>
-          </label>
-
-          <label class="task-float-field">
-            <span>Assigned To</span>
-            <input id="taskAssignedInput" class="task-cell-input" type="text" placeholder="Personnel name">
-          </label>
-
-          <label class="task-float-field">
-            <span>Priority</span>
-            <select id="taskPriorityInput" class="task-cell-select">
-              <option value="Low">Low</option>
-              <option value="Medium" selected>Medium</option>
-              <option value="High">High</option>
-              <option value="Urgent">Urgent</option>
-            </select>
-          </label>
-
-          <label class="task-float-field">
-            <span>Status</span>
-            <select id="taskStatusInput" class="task-cell-select">
-              <option value="Pending" selected>Pending</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </label>
-
-          <label class="task-float-field">
-            <span>Due Date</span>
-            <input id="taskDueDateInput" class="task-cell-date" type="date">
-          </label>
-
-          <label class="task-float-field">
-            <span>Task Owner</span>
-            <input class="task-cell-input" type="text" placeholder="e.g., Project Engineer">
-          </label>
-
-          <label class="task-float-field full">
-            <span>Remarks</span>
-            <textarea id="taskRemarksInput" class="task-cell-textarea" placeholder="Additional details"></textarea>
-          </label>
-        </div>
-
-        <div class="task-float-actions">
-          <button id="cancelTaskBtn" class="task-inline-btn" type="button">Cancel</button>
-          <button id="saveTaskBtn" class="task-inline-btn save" type="submit">Create</button>
-        </div>
-      </div>
-    </form>
-  </div>
 
   <div class="personnel-modal-overlay" id="personnelModal" aria-hidden="true">
     <div class="personnel-modal" role="dialog" aria-modal="true" aria-labelledby="personnelModalTitle">
@@ -842,7 +584,7 @@
 
         <label class="personnel-field">
           <span>Email</span>
-          <input type="email" placeholder="e.g., jdelacruz@peo.gov.ph">
+          <input type="email" placeholder="e.g., (emailname)@peo.gov.ph">
         </label>
 
         <label class="personnel-field">
@@ -865,163 +607,12 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      var openTaskFormBtn = document.getElementById("openTaskFormBtn");
-      var taskRecordOverlay = document.getElementById("taskRecordOverlay");
-      var newTaskFormCard = document.getElementById("newTaskFormCard");
-      var tasksTableBody = document.getElementById("tasksTableBody");
-      var tasksEmptyRow = document.getElementById("tasksEmptyRow");
-      var taskCountText = document.getElementById("taskCountText");
-      var nextTaskId = document.getElementById("nextTaskId");
-      var taskTitleInput = document.getElementById("taskTitleInput");
-      var taskDivisionInput = document.getElementById("taskDivisionInput");
-      var taskAssignedInput = document.getElementById("taskAssignedInput");
-      var taskPriorityInput = document.getElementById("taskPriorityInput");
-      var taskStatusInput = document.getElementById("taskStatusInput");
-      var taskDueDateInput = document.getElementById("taskDueDateInput");
-      var taskRemarksInput = document.getElementById("taskRemarksInput");
-      var saveTaskBtn = document.getElementById("saveTaskBtn");
-      var cancelTaskBtn = document.getElementById("cancelTaskBtn");
       var personnelModal = document.getElementById("personnelModal");
       var openPersonnelModalBtn = document.getElementById("openPersonnelModal");
       var closePersonnelModalBtn = document.getElementById("closePersonnelModal");
       var cancelPersonnelModalBtn = document.getElementById("cancelPersonnelModal");
       var personnelForm = document.getElementById("personnelForm");
       var personnelFirstField = document.getElementById("personnelFullName");
-
-      function syncBodyModalLock() {
-        var taskModalOpen = taskRecordOverlay && taskRecordOverlay.classList.contains("open");
-        var personnelModalOpen = personnelModal && personnelModal.classList.contains("open");
-        document.body.classList.toggle("modal-open", Boolean(taskModalOpen || personnelModalOpen));
-      }
-
-      function statusClass(status) {
-        if (status === "Completed") {
-          return "status-complete";
-        }
-        if (status === "In Progress") {
-          return "status-progress";
-        }
-        return "status-pending";
-      }
-
-      function refreshTaskCount() {
-        if (!tasksTableBody || !taskCountText) {
-          return;
-        }
-
-        var count = tasksTableBody.querySelectorAll("tr[data-task-row='1']").length;
-        taskCountText.textContent = String(count) + (count === 1 ? " task found" : " tasks found");
-
-        if (tasksEmptyRow) {
-          tasksEmptyRow.hidden = count > 0;
-        }
-      }
-
-      function resetTaskForm() {
-        if (taskTitleInput) {
-          taskTitleInput.value = "";
-        }
-        if (taskDivisionInput) {
-          taskDivisionInput.value = "Maintenance";
-        }
-        if (taskAssignedInput) {
-          taskAssignedInput.value = "";
-        }
-        if (taskPriorityInput) {
-          taskPriorityInput.value = "Medium";
-        }
-        if (taskStatusInput) {
-          taskStatusInput.value = "Pending";
-        }
-        if (taskDueDateInput) {
-          taskDueDateInput.value = "";
-        }
-        if (taskRemarksInput) {
-          taskRemarksInput.value = "";
-        }
-      }
-
-      function openTaskForm() {
-        if (!newTaskFormCard || !taskRecordOverlay) {
-          return;
-        }
-
-        var nextNumber = tasksTableBody ? tasksTableBody.querySelectorAll("tr[data-task-row='1']").length + 1 : 1;
-        if (nextTaskId) {
-          nextTaskId.value = "TSK-" + String(nextNumber).padStart(3, "0");
-        }
-
-        taskRecordOverlay.classList.add("open");
-        taskRecordOverlay.setAttribute("aria-hidden", "false");
-        syncBodyModalLock();
-        if (tasksEmptyRow) {
-          tasksEmptyRow.hidden = true;
-        }
-        if (taskTitleInput) {
-          taskTitleInput.focus();
-        }
-      }
-
-      function closeTaskForm() {
-        if (!taskRecordOverlay) {
-          return;
-        }
-
-        taskRecordOverlay.classList.remove("open");
-        taskRecordOverlay.setAttribute("aria-hidden", "true");
-        syncBodyModalLock();
-        resetTaskForm();
-        refreshTaskCount();
-      }
-
-      function formatDueDate(value) {
-        if (!value) {
-          return "-";
-        }
-        return value;
-      }
-
-      function saveTaskRow() {
-        if (!tasksTableBody || !taskTitleInput || !taskStatusInput) {
-          return;
-        }
-
-        var title = taskTitleInput.value.trim();
-        if (!title) {
-          taskTitleInput.focus();
-          return;
-        }
-
-        var assigned = taskAssignedInput && taskAssignedInput.value.trim() ? taskAssignedInput.value.trim() : "-";
-        var division = taskDivisionInput ? taskDivisionInput.value : "Maintenance";
-        var priority = taskPriorityInput ? taskPriorityInput.value : "Medium";
-        var status = taskStatusInput.value;
-        var dueDate = formatDueDate(taskDueDateInput ? taskDueDateInput.value : "");
-        var taskId = nextTaskId ? nextTaskId.value : "TSK-000";
-
-        var row = document.createElement("tr");
-        row.setAttribute("data-task-row", "1");
-        var cells = [taskId, title, division, assigned, priority, status, dueDate];
-
-        cells.forEach(function (value, index) {
-          var cell = document.createElement("td");
-
-          if (index === 5) {
-            var badge = document.createElement("span");
-            badge.className = "status-pill " + statusClass(String(value));
-            badge.textContent = String(value);
-            cell.appendChild(badge);
-          } else {
-            cell.textContent = String(value);
-          }
-
-          row.appendChild(cell);
-        });
-
-        tasksTableBody.appendChild(row);
-        closeTaskForm();
-        refreshTaskCount();
-      }
 
       function openPersonnelModal() {
         if (!personnelModal) {
@@ -1030,7 +621,7 @@
 
         personnelModal.classList.add("open");
         personnelModal.setAttribute("aria-hidden", "false");
-        syncBodyModalLock();
+        document.body.classList.add("modal-open");
 
         if (personnelFirstField) {
           window.setTimeout(function () {
@@ -1046,43 +637,7 @@
 
         personnelModal.classList.remove("open");
         personnelModal.setAttribute("aria-hidden", "true");
-        syncBodyModalLock();
-      }
-
-      if (openTaskFormBtn) {
-        openTaskFormBtn.addEventListener("click", function () {
-          if (taskRecordOverlay && taskRecordOverlay.classList.contains("open")) {
-            closeTaskForm();
-          } else {
-            openTaskForm();
-          }
-        });
-      }
-
-      if (newTaskFormCard) {
-        newTaskFormCard.addEventListener("submit", function (event) {
-          event.preventDefault();
-          saveTaskRow();
-        });
-      }
-
-      if (taskRecordOverlay) {
-        taskRecordOverlay.addEventListener("click", function (event) {
-          if (event.target === taskRecordOverlay) {
-            closeTaskForm();
-          }
-        });
-      }
-
-      if (saveTaskBtn) {
-        saveTaskBtn.addEventListener("click", function (event) {
-          event.preventDefault();
-          saveTaskRow();
-        });
-      }
-
-      if (cancelTaskBtn) {
-        cancelTaskBtn.addEventListener("click", closeTaskForm);
+        document.body.classList.remove("modal-open");
       }
 
       if (openPersonnelModalBtn) {
@@ -1114,12 +669,9 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
-          closeTaskForm();
           closePersonnelModal();
         }
       });
-
-      refreshTaskCount();
     });
   </script>
 </body>
