@@ -29,6 +29,7 @@
       background: var(--assign-bg);
       color: var(--assign-text);
       font-family: "Sora", "Segoe UI", sans-serif;
+      font-size: clamp(14px, 0.9vw, 15px);
     }
 
     .assignments-shell {
@@ -47,7 +48,7 @@
 
     .assignments-header h1 {
       margin: 0;
-      font-size: clamp(1.7rem, 2.5vw, 2.35rem);
+      font-size: clamp(1.8rem, 2.7vw, 2.45rem);
       line-height: 1.1;
       letter-spacing: -0.03em;
       color: #041b38;
@@ -56,7 +57,7 @@
     .assignments-header p {
       margin: 6px 0 0;
       color: #4f6278;
-      font-size: 0.98rem;
+      font-size: 1rem;
     }
 
     .total-pill {
@@ -65,7 +66,7 @@
       background: #f8f9fb;
       color: #112744;
       padding: 6px 12px;
-      font-size: 0.94rem;
+      font-size: 0.97rem;
       font-weight: 600;
       white-space: nowrap;
       margin-top: 2px;
@@ -92,13 +93,13 @@
     .stat-title {
       margin: 0;
       color: #5d6f85;
-      font-size: 0.98rem;
+      font-size: 1rem;
       font-weight: 500;
     }
 
     .stat-value {
       margin: 4px 0 0;
-      font-size: clamp(2rem, 3.1vw, 2.5rem);
+      font-size: clamp(2.1rem, 3.2vw, 2.65rem);
       line-height: 1;
       font-weight: 700;
       color: #031f3f;
@@ -140,7 +141,7 @@
       display: block;
       margin-bottom: 6px;
       color: #102946;
-      font-size: 0.95rem;
+      font-size: 0.97rem;
       font-weight: 600;
     }
 
@@ -174,7 +175,7 @@
       background: #f8fafc;
       color: #173455;
       font: inherit;
-      font-size: 0.97rem;
+      font-size: 0.99rem;
       padding: 8px 12px;
       display: flex;
       align-items: center;
@@ -230,7 +231,7 @@
       border-radius: 8px;
       padding: 8px 10px;
       font: inherit;
-      font-size: 0.95rem;
+      font-size: 0.97rem;
       line-height: 1.2;
       display: flex;
       align-items: center;
@@ -257,35 +258,137 @@
       opacity: 1;
     }
 
-    .assignments-empty {
+    .assignments-table-panel {
       background: var(--assign-panel);
       border: 1px solid var(--assign-border);
       border-radius: 16px;
-      min-height: clamp(220px, 36vh, 300px);
-      display: grid;
-      place-items: center;
+      overflow: hidden;
+    }
+
+    .assignments-table-wrap {
+      overflow-x: auto;
+      background: #fff;
+    }
+
+    .assignments-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1200px;
+    }
+
+    .assignments-table th,
+    .assignments-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #dce2ea;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .assignments-table th {
+      background: #f3f6fa;
+      color: #17314d;
+      font-size: 0.88rem;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .assignments-table td {
+      color: #20374f;
+      font-size: 0.93rem;
+    }
+
+    .assignments-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .assignments-empty-row td {
       text-align: center;
-      padding: clamp(18px, 2.4vw, 24px);
+      color: #60758d;
+      font-style: italic;
+      padding: 18px 12px;
     }
 
-    .assignments-empty svg {
-      width: clamp(42px, 4vw, 52px);
-      height: clamp(42px, 4vw, 52px);
-      color: #657383;
-      margin-bottom: 10px;
+    .status-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
-    .assignments-empty h2 {
-      margin: 0;
-      font-size: clamp(1.45rem, 2.8vw, 2.05rem);
-      line-height: 1.15;
-      color: #051f3c;
+    .status-pending {
+      background: #fdecc5;
+      color: #9a5b00;
     }
 
-    .assignments-empty p {
-      margin: 6px 0 0;
-      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
-      color: #566a80;
+    .status-progress {
+      background: #d8e9ff;
+      color: #1458c5;
+    }
+
+    .status-complete {
+      background: #d4f1df;
+      color: #0a8744;
+    }
+
+    .assignment-action {
+      display: grid;
+      gap: 6px;
+      min-width: 220px;
+    }
+
+    .assignment-action-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .action-select {
+      min-height: 34px;
+      border: 1px solid #bcc8d5;
+      border-radius: 8px;
+      background: #fff;
+      color: #24415d;
+      font: inherit;
+      font-size: 0.88rem;
+      padding: 0 8px;
+      min-width: 126px;
+    }
+
+    .percent-box {
+      min-height: 34px;
+      border: 1px solid #bcc8d5;
+      border-radius: 8px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+    }
+
+    .percent-value {
+      min-width: 52px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #284863;
+      text-align: right;
+    }
+
+    .progress-track {
+      height: 7px;
+      border-radius: 999px;
+      background: #e4ebf2;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2b74f8, #09bf55);
+      transition: width 0.2s ease;
     }
 
     @media (max-width: 1080px) {
@@ -313,7 +416,7 @@
       }
 
       .stat-value {
-        font-size: 2.1rem;
+        font-size: 2.15rem;
       }
 
       .select-wrap {
@@ -329,6 +432,10 @@
       .stat-card {
         padding: 14px;
       }
+
+      .assignment-action {
+        min-width: 190px;
+      }
     }
   </style>
 </head>
@@ -339,14 +446,14 @@
         <h1>My Assignments</h1>
         <p>Track and manage your assigned POW tasks</p>
       </div>
-      <div class="total-pill">0 Total Tasks</div>
+      <div class="total-pill" id="totalTasksPill">0 Total Tasks</div>
     </header>
 
     <section class="assignments-stats">
       <article class="stat-card">
         <div>
           <p class="stat-title">Pending</p>
-          <p class="stat-value">0</p>
+          <p class="stat-value" id="pendingCount">0</p>
         </div>
         <div class="stat-icon warn" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none">
@@ -359,7 +466,7 @@
       <article class="stat-card">
         <div>
           <p class="stat-title">In Progress</p>
-          <p class="stat-value">0</p>
+          <p class="stat-value" id="inProgressCount">0</p>
         </div>
         <div class="stat-icon info" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none">
@@ -373,7 +480,7 @@
       <article class="stat-card">
         <div>
           <p class="stat-title">Completed</p>
-          <p class="stat-value">0</p>
+          <p class="stat-value" id="completedCount">0</p>
         </div>
         <div class="stat-icon ok" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none">
@@ -402,19 +509,19 @@
               <div class="select-menu" role="listbox" aria-label="Task Type options">
                 <button class="select-option active" type="button" data-value="All Task Types">
                   <span>All Task Types</span>
-                  <span class="option-check">✓</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
-                <button class="select-option" type="button" data-value="Plan">
-                  <span>Plan</span>
-                  <span class="option-check">✓</span>
+                <button class="select-option" type="button" data-value="Inspection">
+                  <span>Inspection</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
-                <button class="select-option" type="button" data-value="POW">
-                  <span>POW</span>
-                  <span class="option-check">✓</span>
+                <button class="select-option" type="button" data-value="POW Review">
+                  <span>POW Review</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
-                <button class="select-option" type="button" data-value="Survey">
-                  <span>Survey</span>
-                  <span class="option-check">✓</span>
+                <button class="select-option" type="button" data-value="Construction Monitoring">
+                  <span>Construction Monitoring</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
               </div>
             </div>
@@ -434,19 +541,19 @@
               <div class="select-menu" role="listbox" aria-label="Status options">
                 <button class="select-option active" type="button" data-value="All Statuses">
                   <span>All Statuses</span>
-                  <span class="option-check">✓</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
                 <button class="select-option" type="button" data-value="Pending">
                   <span>Pending</span>
-                  <span class="option-check">✓</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
                 <button class="select-option" type="button" data-value="In Progress">
                   <span>In Progress</span>
-                  <span class="option-check">✓</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
                 <button class="select-option" type="button" data-value="Completed">
                   <span>Completed</span>
-                  <span class="option-check">✓</span>
+                  <span class="option-check">&#10003;</span>
                 </button>
               </div>
             </div>
@@ -455,20 +562,116 @@
       </div>
     </section>
 
-    <section class="assignments-empty">
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
-          <path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <h2>No assignments found</h2>
-        <p>You don't have any assigned tasks yet</p>
+    <section class="assignments-table-panel" aria-label="Assignments table">
+      <div class="assignments-table-wrap">
+        <table class="assignments-table">
+          <thead>
+            <tr>
+              <th>ID Track</th>
+              <th>Name Project</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Task Types</th>
+              <th>Date Received</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="assignmentTableBody">
+            <tr data-assignment-row="1" data-task-type="Inspection" data-default-progress="45">
+              <td>TRK-001</td>
+              <td>Riverside Bridge Rehabilitation</td>
+              <td>Bridge</td>
+              <td>Brgy. Riverside, San Isidro</td>
+              <td>Inspection</td>
+              <td>2026-02-20</td>
+              <td><span class="status-pill status-progress" data-status-pill>In Progress</span></td>
+              <td>
+                <div class="assignment-action">
+                  <div class="assignment-action-row">
+                    <select class="action-select" data-action-select>
+                      <option value="not-complete" selected>Not Complete</option>
+                      <option value="complete">Complete</option>
+                    </select>
+                    <div class="percent-box" aria-label="Progress percent">
+                      <span class="percent-value" data-progress-value>45%</span>
+                    </div>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <span class="progress-fill" data-progress-fill style="width: 45%;"></span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-assignment-row="1" data-task-type="POW Review" data-default-progress="0">
+              <td>TRK-002</td>
+              <td>Provincial Road Section 7 Overlay</td>
+              <td>Road</td>
+              <td>Section 7, Poblacion</td>
+              <td>POW Review</td>
+              <td>2026-02-18</td>
+              <td><span class="status-pill status-pending" data-status-pill>Pending</span></td>
+              <td>
+                <div class="assignment-action">
+                  <div class="assignment-action-row">
+                    <select class="action-select" data-action-select>
+                      <option value="not-complete" selected>Not Complete</option>
+                      <option value="complete">Complete</option>
+                    </select>
+                    <div class="percent-box" aria-label="Progress percent">
+                      <span class="percent-value" data-progress-value>0%</span>
+                    </div>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <span class="progress-fill" data-progress-fill style="width: 0%;"></span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-assignment-row="1" data-task-type="Construction Monitoring" data-default-progress="100">
+              <td>TRK-003</td>
+              <td>Barangay Access Road Concreting</td>
+              <td>Road</td>
+              <td>Brgy. Mabini Access Road</td>
+              <td>Construction Monitoring</td>
+              <td>2026-02-15</td>
+              <td><span class="status-pill status-complete" data-status-pill>Completed</span></td>
+              <td>
+                <div class="assignment-action">
+                  <div class="assignment-action-row">
+                    <select class="action-select" data-action-select>
+                      <option value="not-complete">Not Complete</option>
+                      <option value="complete" selected>Complete</option>
+                    </select>
+                    <div class="percent-box" aria-label="Progress percent">
+                      <span class="percent-value" data-progress-value>100%</span>
+                    </div>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <span class="progress-fill" data-progress-fill style="width: 100%;"></span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr id="assignmentEmptyRow" class="assignments-empty-row" hidden>
+              <td colspan="8">No assignments match the current filter.</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
   <script>
     (function () {
       var selectWrappers = document.querySelectorAll("[data-select]");
+      var assignmentRows = Array.prototype.slice.call(document.querySelectorAll("tr[data-assignment-row='1']"));
+      var taskTypeValue = document.getElementById("taskTypeValue");
+      var taskStatusValue = document.getElementById("taskStatusValue");
+      var assignmentEmptyRow = document.getElementById("assignmentEmptyRow");
+      var totalTasksPill = document.getElementById("totalTasksPill");
+      var pendingCountEl = document.getElementById("pendingCount");
+      var inProgressCountEl = document.getElementById("inProgressCount");
+      var completedCountEl = document.getElementById("completedCount");
 
       function closeAll(except) {
         selectWrappers.forEach(function (wrapper) {
@@ -480,6 +683,127 @@
             }
           }
         });
+      }
+
+      function normalize(value) {
+        return String(value || "").trim().toLowerCase();
+      }
+
+      function clampPercent(value, min, max) {
+        if (isNaN(value)) {
+          return min;
+        }
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function statusClassFromLabel(label) {
+        if (label === "Completed") {
+          return "status-complete";
+        }
+        if (label === "In Progress") {
+          return "status-progress";
+        }
+        return "status-pending";
+      }
+
+      function setRowStatus(row, statusLabel) {
+        var statusPill = row.querySelector("[data-status-pill]");
+        if (!statusPill) {
+          return;
+        }
+        statusPill.className = "status-pill " + statusClassFromLabel(statusLabel);
+        statusPill.textContent = statusLabel;
+        row.setAttribute("data-current-status", statusLabel);
+      }
+
+      function applyFilters() {
+        var selectedTaskType = normalize(taskTypeValue ? taskTypeValue.textContent : "All Task Types");
+        var selectedStatus = normalize(taskStatusValue ? taskStatusValue.textContent : "All Statuses");
+        var visibleRows = 0;
+
+        assignmentRows.forEach(function (row) {
+          var rowTaskType = normalize(row.getAttribute("data-task-type") || (row.cells[4] ? row.cells[4].textContent : ""));
+          var rowStatus = normalize(row.getAttribute("data-current-status") || "");
+          var matchesTaskType = selectedTaskType === "all task types" || rowTaskType === selectedTaskType;
+          var matchesStatus = selectedStatus === "all statuses" || rowStatus === selectedStatus;
+          var shouldShow = matchesTaskType && matchesStatus;
+
+          row.hidden = !shouldShow;
+          if (shouldShow) {
+            visibleRows += 1;
+          }
+        });
+
+        if (assignmentEmptyRow) {
+          assignmentEmptyRow.hidden = visibleRows !== 0;
+        }
+      }
+
+      function updateSummary() {
+        var pending = 0;
+        var inProgress = 0;
+        var completed = 0;
+
+        assignmentRows.forEach(function (row) {
+          if (row.hidden) {
+            return;
+          }
+
+          var statusPill = row.querySelector("[data-status-pill]");
+          var statusText = statusPill ? statusPill.textContent.trim() : "";
+          if (statusText === "Completed") {
+            completed += 1;
+          } else if (statusText === "In Progress") {
+            inProgress += 1;
+          } else {
+            pending += 1;
+          }
+        });
+
+        var total = pending + inProgress + completed;
+        if (totalTasksPill) {
+          totalTasksPill.textContent = String(total) + " Total Tasks";
+        }
+        if (pendingCountEl) {
+          pendingCountEl.textContent = String(pending);
+        }
+        if (inProgressCountEl) {
+          inProgressCountEl.textContent = String(inProgress);
+        }
+        if (completedCountEl) {
+          completedCountEl.textContent = String(completed);
+        }
+      }
+
+      function applyRowState(row) {
+        var actionSelect = row.querySelector("[data-action-select]");
+        var statusPill = row.querySelector("[data-status-pill]");
+        var progressValue = row.querySelector("[data-progress-value]");
+        var progressFill = row.querySelector("[data-progress-fill]");
+
+        if (!actionSelect || !statusPill) {
+          return;
+        }
+
+        var defaultPercent = clampPercent(parseInt(row.getAttribute("data-default-progress"), 10), 0, 99);
+        var percent = actionSelect.value === "complete" ? 100 : defaultPercent;
+
+        if (progressValue) {
+          progressValue.textContent = String(percent) + "%";
+        }
+
+        var statusLabel = "Pending";
+        if (percent >= 100) {
+          statusLabel = "Completed";
+        } else if (percent > 0) {
+          statusLabel = "In Progress";
+        }
+
+        setRowStatus(row, statusLabel);
+
+        if (progressFill) {
+          progressFill.style.width = String(percent) + "%";
+        }
       }
 
       selectWrappers.forEach(function (wrapper) {
@@ -508,8 +832,24 @@
             valueLabel.textContent = option.getAttribute("data-value") || option.textContent.trim();
             wrapper.classList.remove("open");
             trigger.setAttribute("aria-expanded", "false");
+            applyFilters();
+            updateSummary();
           });
         });
+      });
+
+      assignmentRows.forEach(function (row) {
+        var actionSelect = row.querySelector("[data-action-select]");
+
+        if (actionSelect) {
+          actionSelect.addEventListener("change", function () {
+            applyRowState(row);
+            applyFilters();
+            updateSummary();
+          });
+        }
+
+        applyRowState(row);
       });
 
       document.addEventListener("click", function (event) {
@@ -523,9 +863,10 @@
           closeAll(null);
         }
       });
+
+      applyFilters();
+      updateSummary();
     }());
   </script>
 </body>
 </html>
-
-
