@@ -9,7 +9,7 @@ from django.views.decorators.clickjacking import xframe_options_sameorigin
 from decimal import Decimal
 
 from .forms import ConstructionStatusReportForm, DocumentForm, PlanningBudgetForm, PlanningProjectForm
-from .models import ConstructionStatusReport, Document, PlanningBudget, PlanningProject
+from .models import ConstructionStatusReport, Document, DocumentScan, PlanningBudget, PlanningProject
 
 
 @login_required
@@ -311,6 +311,14 @@ def admin_div_dashboard(request):
                 if instance is None:
                     document.created_by = request.user
                 document.save()
+                for uploaded_file in request.FILES.getlist("scanned_files"):
+                    if uploaded_file:
+                        DocumentScan.objects.create(
+                            document=document,
+                            project=document.project,
+                            file=uploaded_file,
+                            uploaded_by=request.user,
+                        )
                 return redirect("admin_div_dashboard")
 
     search = request.GET.get("q", "").strip()
@@ -487,38 +495,73 @@ def my_assignments(request):
 @login_required
 @xframe_options_sameorigin
 def projects_dashboard(request):
-    total_projects = 0
-    completed_projects = 0
-    ongoing_projects = 0
-    total_project_cost_value = Decimal("0")
-    project_rows = []
+    query = request.GET.get("q", "").strip()
+    division_choices = [
+        (Document.DIV_ADMIN, "Admin Division"),
+        (Document.DIV_PLANNING, "Planning Division"),
+        (Document.DIV_CONSTRUCTION, "Construction Division"),
+        (Document.DIV_QUALITY, "Quality Division"),
+        (Document.DIV_MAINTENANCE, "Maintenance Division"),
+    ]
+    valid_divisions = {value for value, _ in division_choices}
+    selected_division = request.GET.get("division", Document.DIV_ADMIN).strip().lower()
+    if selected_division not in valid_divisions:
+        selected_division = Document.DIV_ADMIN
 
-    if _table_exists(PlanningProject):
-        projects_qs = PlanningProject.objects.all()
-        total_projects = projects_qs.count()
-        completed_projects = projects_qs.filter(status=PlanningProject.STATUS_AWARDED).count()
-        ongoing_projects = projects_qs.exclude(
-            status__in=[PlanningProject.STATUS_AWARDED, PlanningProject.STATUS_CANCELLED]
-        ).count()
-        total_project_cost_value = (
-            projects_qs.aggregate(
-                total=Coalesce(
-                    Sum("budget_amount"),
-                    Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
-                    output_field=DecimalField(max_digits=14, decimal_places=2),
-                )
-            )["total"]
-            or Decimal("0")
+    counts_by_division = {value: 0 for value, _ in division_choices}
+    selected_projects = []
+    project_folders = []
+
+    if _table_exists(Document):
+        for div_key, _ in division_choices:
+            counts_by_division[div_key] = Document.objects.filter(division=div_key, project__isnull=False).count()
+
+        documents_qs = (
+            Document.objects.filter(division=selected_division, project__isnull=False)
+            .select_related("project")
+            .prefetch_related("scans")
+            .order_by("-created_at")
         )
-        project_rows = list(projects_qs.order_by("-created_at")[:200])
+        if query:
+            documents_qs = documents_qs.filter(
+                Q(document_name__icontains=query)
+                | Q(description__icontains=query)
+                | Q(project__project_title__icontains=query)
+            )
+
+        folders_map = {}
+        for doc in documents_qs:
+            project = doc.project
+            if not project:
+                continue
+            bucket = folders_map.setdefault(
+                project.id,
+                {
+                    "project_title": project.project_title,
+                    "document_count": 0,
+                    "files": [],
+                },
+            )
+            bucket["document_count"] += 1
+            for scan in doc.scans.all():
+                bucket["files"].append(scan)
+
+        for _, bucket in sorted(folders_map.items(), key=lambda item: item[1]["project_title"].lower()):
+            selected_projects.append(
+                {
+                    "title": bucket["project_title"],
+                    "meta": f"{bucket['document_count']} document(s) | {len(bucket['files'])} scan(s)",
+                }
+            )
+            project_folders.append(bucket)
 
     context = {
-        "project_rows": project_rows,
-        "total_projects": f"{total_projects:,}",
-        "total_projects_count": total_projects,
-        "completed_projects": f"{completed_projects:,}",
-        "ongoing_projects": f"{ongoing_projects:,}",
-        "total_project_cost": f"PHP {total_project_cost_value:,.0f}",
+        "query": query,
+        "selected_division": selected_division,
+        "selected_division_label": dict(division_choices).get(selected_division, "Division"),
+        "counts_by_division": counts_by_division,
+        "selected_projects": selected_projects,
+        "project_folders": project_folders,
     }
     return render(request, "Projects/projects.html", context)
 

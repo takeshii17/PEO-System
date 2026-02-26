@@ -371,6 +371,47 @@
             font-size: 0.86rem;
         }
 
+        .folder-list {
+            margin-top: 12px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .folder-card {
+            border: 1px solid #d8e0ea;
+            border-radius: 12px;
+            background: #fff;
+            padding: 12px;
+        }
+
+        .folder-card h4 {
+            margin: 0;
+            font-size: 0.98rem;
+            color: #163654;
+        }
+
+        .folder-meta {
+            margin: 4px 0 8px;
+            color: var(--muted);
+            font-size: 0.84rem;
+        }
+
+        .scan-files {
+            margin: 0;
+            padding-left: 16px;
+            display: grid;
+            gap: 4px;
+        }
+
+        .scan-files a {
+            color: #0d3d6d;
+            text-decoration: none;
+        }
+
+        .scan-files a:hover {
+            text-decoration: underline;
+        }
+
         .sort-group {
             position: relative;
             display: inline-flex;
@@ -681,6 +722,26 @@
                     </ul>
                     {% else %}
                     <div class="footer-note">No projects found for this division{% if query %} matching "{{ query }}"{% endif %}.</div>
+                    {% endif %}
+
+                    {% if project_folders %}
+                    <div class="folder-list">
+                        {% for folder in project_folders %}
+                        <article class="folder-card">
+                            <h4>{{ folder.project_title }}</h4>
+                            <p class="folder-meta">{{ folder.document_count }} document(s) | {{ folder.files|length }} scanned file(s)</p>
+                            {% if folder.files %}
+                            <ul class="scan-files">
+                                {% for scan in folder.files %}
+                                <li><a href="{{ scan.file.url }}" target="_blank" rel="noopener">{{ scan.file.name|cut:"project_scans/" }}</a></li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <div class="footer-note">No scanned files uploaded yet.</div>
+                            {% endif %}
+                        </article>
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </section>
 

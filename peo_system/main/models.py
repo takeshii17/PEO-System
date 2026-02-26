@@ -1,5 +1,19 @@
 from django.conf import settings
 from django.db import models
+from django.utils.text import slugify
+
+
+def _scan_upload_path(instance, filename):
+    project = instance.project or getattr(instance.document, "project", None)
+    project_slug = "unassigned-project"
+    if project:
+        project_slug = f"{project.id}_{slugify(project.project_title)[:60] or 'project'}"
+
+    document_slug = "document"
+    if instance.document:
+        document_slug = f"doc_{instance.document_id}_{slugify(instance.document.document_name)[:60] or 'document'}"
+
+    return f"project_scans/{project_slug}/{document_slug}/{filename}"
 
 
 class Document(models.Model):
@@ -55,6 +69,13 @@ class Document(models.Model):
     document_name = models.CharField(max_length=255)
     doc_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default=TYPE_OTHER)
     division = models.CharField(max_length=20, choices=DIVISION_CHOICES, default=DIV_ADMIN)
+    project = models.ForeignKey(
+        "PlanningProject",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="documents",
+    )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_DRAFT)
     description = models.TextField(blank=True)
 
@@ -85,6 +106,32 @@ class Document(models.Model):
 
     def __str__(self):
         return self.document_name
+
+
+class DocumentScan(models.Model):
+    document = models.ForeignKey(Document, on_delete=models.CASCADE, related_name="scans")
+    project = models.ForeignKey(
+        "PlanningProject",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="scanned_files",
+    )
+    file = models.FileField(upload_to=_scan_upload_path)
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="uploaded_scans",
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-uploaded_at"]
+
+    def __str__(self):
+        return f"{self.document.document_name} - {self.file.name}"
 
 
 class ConstructionStatusReport(models.Model):
