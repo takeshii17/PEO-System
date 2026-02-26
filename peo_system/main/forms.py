@@ -8,6 +8,7 @@ class DocumentForm(forms.ModelForm):
         model = Document
         fields = [
             "document_name",
+            "location",
             "doc_type",
             "division",
             "project",
@@ -27,6 +28,7 @@ class DocumentForm(forms.ModelForm):
         ]
         widgets = {
             "document_name": forms.TextInput(attrs={"placeholder": "e.g., Site Instruction No. 03"}),
+            "location": forms.TextInput(attrs={"placeholder": "e.g., Brgy. San Isidro, Bayombong"}),
             "doc_type": forms.Select(),
             "division": forms.Select(),
             "project": forms.Select(),

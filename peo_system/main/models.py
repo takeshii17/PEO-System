@@ -67,6 +67,7 @@ class Document(models.Model):
     ]
 
     document_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True)
     doc_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default=TYPE_OTHER)
     division = models.CharField(max_length=20, choices=DIVISION_CHOICES, default=DIV_ADMIN)
     project = models.ForeignKey(
