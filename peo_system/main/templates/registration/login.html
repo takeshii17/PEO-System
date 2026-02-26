@@ -1,21 +1,247 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEO Portal Login</title>
+    <style>
+        :root {
+            --bg: #eef3f8;
+            --ink: #0e2947;
+            --muted: #4f667f;
+            --line: #c8d4e1;
+            --card: #f8fbff;
+            --primary: #133a63;
+            --primary-strong: #0f2f52;
+            --danger-bg: #fee2e2;
+            --danger: #991b1b;
+        }
 
-<h2>Login to Your Account</h2>
+        * { box-sizing: border-box; }
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+        }
 
-    {% if form.non_field_errors %}
-    <div>
-        {{ form.non_field_errors }}
-    </div>
-    {% endif %}
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            background:
+                radial-gradient(900px 500px at 10% 5%, rgba(23, 72, 122, 0.18) 0%, rgba(23, 72, 122, 0) 60%),
+                radial-gradient(700px 420px at 90% 100%, rgba(203, 130, 30, 0.16) 0%, rgba(203, 130, 30, 0) 62%),
+                linear-gradient(140deg, #e8eef5 0%, #f1f5fa 40%, #ecf2f8 100%);
+        }
 
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
+        .login-shell {
+            width: min(980px, 100%);
+            min-height: min(640px, 92vh);
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 14px 32px rgba(10, 30, 54, 0.14);
+            background:
+                linear-gradient(120deg, rgba(7, 31, 57, 0.74) 0%, rgba(7, 31, 57, 0.52) 48%, rgba(7, 31, 57, 0.38) 100%),
+                url("https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1800&q=80") center/cover no-repeat;
+        }
 
-<hr>
-<p>Are you an admin? <a href="/admin/">Go to Admin Panel</a></p>
+        .visual-pane {
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 32px;
+            color: #f4f9ff;
+            background: rgba(6, 30, 54, 0.34);
+        }
+
+        .visual-copy h1 {
+            margin: 0;
+            font-size: clamp(1.9rem, 3vw, 2.6rem);
+            line-height: 1.08;
+        }
+
+        .visual-copy p {
+            margin: 12px 0 0;
+            color: #d5e5f5;
+            font-size: 1.02rem;
+            line-height: 1.45;
+            max-width: 420px;
+        }
+
+        .form-pane {
+            background: rgba(248, 251, 255, 0.93);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .form-wrap {
+            width: min(380px, 100%);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border: 1px solid #b9cae0;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: #1b4a79;
+            background: #e9f2fb;
+            margin-bottom: 12px;
+        }
+
+        .title {
+            margin: 0;
+            font-size: 1.9rem;
+            line-height: 1.12;
+        }
+
+        .subtitle {
+            margin: 8px 0 18px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .error-box {
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: var(--danger-bg);
+            color: var(--danger);
+            font-size: 0.86rem;
+        }
+
+        .field {
+            margin-bottom: 10px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.83rem;
+            color: #364f69;
+            font-weight: 600;
+        }
+
+        .field input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #c6d2df;
+            border-radius: 10px;
+            padding: 0 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #152f4a;
+            background: #ffffff;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #2d6db2;
+            box-shadow: 0 0 0 3px rgba(45, 109, 178, 0.14);
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 44px;
+            margin-top: 8px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.96rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-strong);
+        }
+
+        .meta {
+            margin-top: 14px;
+            font-size: 0.86rem;
+            color: #4f667f;
+        }
+
+        .meta a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .meta a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            .login-shell {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .visual-pane {
+                min-height: 220px;
+                padding: 24px;
+            }
+
+            .form-pane {
+                padding: 22px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="login-shell">
+        <div class="visual-pane">
+            <div class="visual-copy">
+                <h1>PEO Workflow Portal</h1>
+                <p>Manage division operations, documents, construction status, and accountability workflows in one system.</p>
+            </div>
+        </div>
+
+        <div class="form-pane">
+            <div class="form-wrap">
+                <div class="badge">PEO Secure Access</div>
+                <h2 class="title">Login to Your Account</h2>
+                <p class="subtitle">Use your assigned credentials to continue.</p>
+
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                    <div class="error-box">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="field">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        {{ form.username }}
+                    </div>
+
+                    <div class="field">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        {{ form.password }}
+                    </div>
+
+                    <button class="submit-btn" type="submit">Login</button>
+                </form>
+
+                <p class="meta">Are you an admin? <a href="/admin/">Go to Admin Panel</a></p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
 
