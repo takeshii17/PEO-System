@@ -37,7 +37,18 @@
             display: block;
         }
 
+<<<<<<< HEAD
+        .sidebar {
+            width: 340px;
+            background: linear-gradient(180deg, #08294d 0%, #072340 100%);
+            color: #d2deeb;
+            border-right: 1px solid #173a61;
+            display: flex;
+            flex-direction: column;
+        }
+=======
         .sidebar { display: none; }
+>>>>>>> d636d885227702190114362938ab9de4f9007e50
 
         .brand {
             padding: 28px 24px;
@@ -86,7 +97,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 0.9rem;
+            font-size: clamp(0.95rem, 0.9vw, 1.05rem);
         }
 
         .nav a:hover {
@@ -582,9 +593,9 @@
             gap: 8px;
         }
 
-        @media (max-width: 1440px) {
+        @media (max-width: 1200px) {
             .sidebar {
-                width: 282px;
+                width: 280px;
             }
 
             .stats {
@@ -592,7 +603,7 @@
             }
         }
 
-        @media (max-width: 980px) {
+        @media (max-width: 900px) {
             .layout {
                 flex-direction: column;
             }
