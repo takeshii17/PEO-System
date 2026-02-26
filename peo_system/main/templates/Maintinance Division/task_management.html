@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
   <title>Task Management</title>
+<<<<<<< HEAD
  <style>
     :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
     *{box-sizing:border-box}
@@ -208,182 +209,926 @@
               </tbody>
             </table>
           </article>
+=======
+  <style>
+    :root {
+      --bg: #edf1f5;
+      --panel: #f8fafc;
+      --line: #cfd6de;
+      --text: #10253d;
+      --muted: #556c86;
+      --primary: #14375e;
+      --selected: #f7b333;
+      --shadow: 0 1px 6px rgba(8, 34, 61, 0.12);
+    }
+>>>>>>> be2339b9b49006fc40899653ce2f106a54fb23a3
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>SOFRONIO ESPANOLA <span class="tag">2 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>100</td><td>Pulot III-Tabud Road</td><td>7.80</td><td><span class="pill poor">Poor</span></td><td>Gravel: 7.800km</td></tr>
-                <tr><td>116</td><td>Pulot I - Pulot III Road</td><td>13.17</td><td><span class="pill fair">Fair</span></td><td>Concrete: 13.170km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    * {
+      box-sizing: border-box;
+    }
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>QUEZON <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>101</td><td>Magsaysay Road</td><td>0.65</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.649km</td></tr>
-                <tr><td>102</td><td>Tabon - Tagpapasi Road</td><td>1.39</td><td><span class="pill poor">Poor</span></td><td>Concrete: 0.170km  Gravel: 1.220km</td></tr>
-                <tr><td>107</td><td>Tabon - Pinaglabanan Road</td><td>1.31</td><td><span class="pill fair">Fair</span></td><td>Gravel: 1.310km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    body {
+      margin: 0;
+      font-family: "Sora", "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>BROOKE'S POINT <span class="tag">1 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>103</td><td>Barong-Barong Feeder Road</td><td>1.26</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.254km  Gravel: 1.009km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    body.modal-open {
+      overflow: hidden;
+    }
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>NARRA <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>104</td><td>Sandoval - Bagong Sikat Road</td><td>4.35</td><td><span class="pill poor">Poor</span></td><td>Concrete: 4.140km  Gravel: 0.210km</td></tr>
-                <tr><td>105</td><td>Bato-Bato Feeder Road</td><td>3.68</td><td><span class="pill fair">Fair</span></td><td>Gravel: 3.680km</td></tr>
-                <tr><td>106</td><td>Narra Panacan Road</td><td>3.28</td><td><span class="pill good">Good</span></td><td>Concrete: 3.283km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    .task-page {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: clamp(12px, 2vw, 26px);
+      min-height: 100vh;
+    }
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>RIZAL <span class="tag">1 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>108</td><td>Rancho - Puntabaja - Malapandeg Road</td><td>3.33</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.520km  Gravel: 2.810km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    .task-header {
+      border-bottom: 1px solid #ccd5df;
+      padding: 0 4px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
 
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ROXAS <span class="tag">7 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>109</td><td>Highway Junction Caramay Road</td><td>2.66</td><td><span class="pill good">Good</span></td><td>Concrete: 0.760km  Gravel: 1.900km</td></tr>
-                <tr><td>110</td><td>Highway Junction Salvacion Road</td><td>7.50</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.840km  Gravel: 6.660km</td></tr>
-                <tr><td>111</td><td>H-way Jct. Little Caramay-Caruray Rd.-B</td><td>15.49</td><td><span class="pill fair">Fair</span></td><td>Concrete: 6.600km  Gravel: 8.890km</td></tr>
-                <tr><td>112</td><td>Highway Jct. Tagumpay-Maliko Rd.</td><td>8.96</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.214km  Gravel: 8.745km</td></tr>
-                <tr><td>113</td><td>Highway Jct. Talakaigan Road</td><td>1.59</td><td><span class="pill fair">Fair</span></td><td>Concrete: 0.100km  Gravel: 1.490km</td></tr>
-                <tr><td>114</td><td>Highway Jct. New Cuyo - Rizal Road</td><td>9.67</td><td><span class="pill fair">Fair</span></td><td>Concrete: 4.051km  Gravel: 5.622km</td></tr>
-                <tr><td>115</td><td>San Jose Port Barton Road - A</td><td>11.55</td><td><span class="pill good">Good</span></td><td>Concrete: 11.551km</td></tr>
-              </tbody>
-            </table>
-          </article>
+    .task-head-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
 
-          <div class="pagination">
-            <span>Page 1 of 12</span>
-            <div class="pager"><button type="button" aria-label="Previous">&#8249;</button><button type="button" aria-label="Next">&#8250;</button></div>
-          </div>
-        </section>
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #1b2d43;
+      font-size: 1.02rem;
+      border-radius: 10px;
+      padding: 6px 8px;
+      white-space: nowrap;
+    }
 
-        <section class="ctm" id="contractor-management">
-          <h2>Contractor Management</h2>
-          <p class="sub">Track bidders, performance ratings, and contract history</p>
+    .back-link:hover {
+      background: #e9eff5;
+    }
 
-          <section class="ctm-stats">
-            <article class="ctm-card"><div class="ctm-icon ctm-i1"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>134</strong><span>Total Contractors</span></div></article>
-            <article class="ctm-card"><div class="ctm-icon ctm-i2"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>134</strong><span>Active</span></div></article>
-            <article class="ctm-card"><div class="ctm-icon ctm-i3"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.4 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><strong>0.0</strong><span>Avg Rating</span></div></article>
-            <article class="ctm-card"><div class="ctm-icon ctm-i4"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4 3.5 19h17L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Blacklisted</span></div></article>
-          </section>
+    .back-link svg {
+      width: 17px;
+      height: 17px;
+    }
 
-          <section class="ctm-filter">
-            <div class="ctm-row">
-              <label class="ctm-search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#586e86" stroke-width="2"/><path d="M16 16L21 21" stroke="#586e86" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search by name, TIN, PhilGEPS, PCAB..."></label>
-              <label class="ctm-select"><select><option>All Status</option></select></label>
-              <label class="ctm-select"><select><option>All PCAB</option></select></label>
-              <button class="ctm-add" type="button"><span>+</span><span>Add Contractor</span></button>
-            </div>
-          </section>
+    .task-title {
+      margin: 0;
+      font-size: clamp(1.45rem, 1vw + 1rem, 2.1rem);
+      line-height: 1.1;
+      color: #1b242e;
+    }
 
-          <section class="ctm-list">
-            <h3>Contractors</h3>
-            <p class="sub">134 contractors found</p>
+    .task-head-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
 
-            <article class="ctm-item"><div><div class="ctm-title"><h4>ZYK Construction</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>Yurich Builders &amp; Construction Supply</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 258-921-757-001</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>Western Fortune</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>Warlen Industrial and Sales Corporation</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>2 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>VCH Construction and Trading</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 924-818-554</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>UGM Construction</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 102-967-201</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>Triplestone Construction and Development Corporation</h4><span class="badge">Active</span></div><p class="tin">TIN: TIN 009-149-175</p><div class="ctm-meta"><span>1 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>TCC Powerserve Trading and Engineering Services</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>4 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
-            <article class="ctm-item"><div><div class="ctm-title"><h4>St. Gerrard Construction Gen. Contractor &amp; Development Corp.</h4><span class="badge">Active</span></div><div class="ctm-meta"><span>6 contracts</span><span class="muted">Value: <strong>&#8369;0</strong></span></div></div><div class="ctm-actions"><button type="button" aria-label="View"><svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="m4 20 4.5-1 10-10-3.5-3.5-10 10L4 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13.5 6 3.5 3.5" stroke="currentColor" stroke-width="2"/></svg></button><button type="button" aria-label="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14M9 7V5h6v2M8 7v12m8-12v12M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div></article>
+    .btn {
+      border-radius: 12px;
+      min-height: 42px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+    }
 
-            <div class="ctm-paging"><button type="button">Previous</button><span>Page 1 of 7</span><button type="button">Next</button></div>
-          </section>
-        </section>
+    .btn-light {
+      border: 1px solid #c6cfda;
+      background: #f8fafc;
+      color: #273b51;
+    }
 
-        <section class="tms" id="task-management">
-          <div class="tms-head">
-            <div class="tms-left">
-              <a class="tms-back" href="{% url 'home' %}">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Back to Dashboard
-              </a>
-              <h2>Task Management</h2>
-            </div>
-            <div class="tms-actions">
-              <button class="btn-light" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M18 8a3 3 0 1 1 0 6M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add Personnel</button>
-              <button class="btn-dark" type="button"><span>+</span><span>New Task</span></button>
-            </div>
-          </div>
-          <div class="tms-body">
-            <section class="tms-cards">
-              <article class="tms-card"><div><strong>0</strong><span>Total Tasks</span></div></article>
-              <article class="tms-card"><div><strong>0</strong><span>Pending</span></div></article>
-              <article class="tms-card"><div><strong>0</strong><span>In Progress</span></div></article>
-              <article class="tms-card"><div><strong>0</strong><span>Completed</span></div></article>
-              <article class="tms-card"><div class="tms-alert"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4 3.5 19h17L12 4Z" stroke="#ff3b4a" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="#ff3b4a" stroke-width="2" stroke-linecap="round"/></svg><div><strong>0</strong><span>Overdue</span></div></div></article>
-            </section>
+    .btn-dark {
+      border: 0;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 600;
+    }
 
-            <section class="tms-filter">
-              <div class="tms-row">
-                <label class="tms-search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#586e86" stroke-width="2"/><path d="M16 16L21 21" stroke="#586e86" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search tasks..."></label>
-                <label class="tms-select"><select><option>All Divisions</option><option>Admin</option><option>Planning Division</option><option>Construction</option><option>Quality</option><option>Maintenance</option></select></label>
-                <label class="tms-select"><select><option>All Statuses</option><option>Pending</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select></label>
-                <label class="tms-select"><select><option>All Priorities</option><option>Low</option><option>Medium</option><option>High</option><option>Urgent</option></select></label>
-              </div>
-            </section>
+    .btn svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
 
-            <section class="tms-list">
-              <h3>Tasks</h3>
-              <p class="sub">0 tasks found</p>
-              <div class="tms-empty">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M9 6h11M9 12h11M9 18h11M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m2.5 18 1.3 1.3L6.5 16.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                <div>No tasks found</div>
-                <button class="btn-create" type="button"><span>+</span><span>Create First Task</span></button>
-              </div>
-            </section>
-          </div>
-        </section>
+    .stats-grid {
+      margin-top: 16px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
 
-      </main>
-    </section>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var group = document.getElementById("maintenanceMenuGroup");
-      var btn = document.getElementById("maintenanceMenuBtn");
-      var submenu = document.getElementById("maintenanceSubmenu");
-      if (!group || !btn || !submenu) {
-        return;
+    .stat-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      min-height: 116px;
+      padding: clamp(12px, 1.5vw, 16px);
+      display: flex;
+      align-items: center;
+    }
+
+    .stat-value {
+      font-size: clamp(1.9rem, 0.8vw + 1.2rem, 2.2rem);
+      line-height: 1;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #0f2a46;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.2;
+    }
+
+    .stat-alert {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-alert svg {
+      width: 22px;
+      height: 22px;
+      color: #ff3344;
+      flex: 0 0 auto;
+    }
+
+    .filters-panel {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: clamp(12px, 1.5vw, 16px);
+    }
+
+    .filter-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: minmax(260px, 2fr) repeat(3, minmax(0, 1fr));
+      justify-content: end;
+      align-items: center;
+    }
+
+    .search-box {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #c7d0db;
+      border-radius: 12px;
+      background: #f8fafc;
+      padding: 10px 12px;
+    }
+
+    .search-box svg {
+      width: 19px;
+      height: 19px;
+      color: #6b7f94;
+      flex: 0 0 auto;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: #2b435d;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .menu-select {
+      position: relative;
+      min-width: 0;
+    }
+
+    .menu-button {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid #c7d0db;
+      border-radius: 12px;
+      background: #f8fafc;
+      color: #24374f;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: 1.2;
+      cursor: pointer;
+    }
+
+    .button-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .menu-button svg {
+      width: 16px;
+      height: 16px;
+      color: #9aa6b5;
+      flex: 0 0 auto;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-select.open .menu-button svg {
+      transform: rotate(180deg);
+    }
+
+    .menu-list {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      min-width: 182px;
+      border: 1px solid #c7d0db;
+      border-radius: 11px;
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(8, 34, 61, 0.18);
+      padding: 6px;
+      z-index: 30;
+    }
+
+    .menu-select.open .menu-list {
+      display: block;
+    }
+
+    .menu-option {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #1e2f41;
+      min-height: 40px;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: left;
+      font-family: inherit;
+      font-size: 0.98rem;
+      cursor: pointer;
+    }
+
+    .menu-option:hover {
+      background: #ebf0f6;
+    }
+
+    .menu-option.active {
+      background: var(--selected);
+    }
+
+    .option-check {
+      opacity: 0;
+      font-weight: 700;
+    }
+
+    .menu-option.active .option-check {
+      opacity: 1;
+    }
+
+    .tasks-panel {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      min-height: clamp(300px, 50vh, 460px);
+      padding: clamp(16px, 1.6vw, 22px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tasks-panel h3 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .tasks-panel .sub {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .tasks-empty {
+      margin: auto;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      color: #5f7389;
+      text-align: center;
+    }
+
+    .tasks-empty svg {
+      width: 50px;
+      height: 50px;
+      color: #a8b1bc;
+    }
+
+    .btn-create {
+      border: 0;
+      border-radius: 12px;
+      background: var(--primary);
+      color: #ffffff;
+      min-height: 40px;
+      padding: 9px 14px;
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .personnel-modal-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(13, 28, 45, 0.45);
+      z-index: 1200;
+    }
+
+    .personnel-modal-overlay.open {
+      display: flex;
+    }
+
+    .personnel-modal {
+      width: min(100%, 560px);
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      border: 1px solid #c7d1dc;
+      border-radius: 14px;
+      background: #f7f9fc;
+      box-shadow: 0 24px 48px rgba(13, 28, 45, 0.26);
+      padding: 18px 22px 22px;
+    }
+
+    .personnel-modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .personnel-modal-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 1vw + 1rem, 2rem);
+      line-height: 1.2;
+    }
+
+    .personnel-modal-head p {
+      margin: 6px 0 0;
+      color: #607287;
+      font-size: 1rem;
+    }
+
+    .personnel-close {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #6f7f90;
+      font-size: 1.4rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .personnel-close:hover {
+      background: #e9edf3;
+    }
+
+    .personnel-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .personnel-field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .personnel-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .personnel-field > span {
+      color: #23384f;
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .personnel-field input,
+    .personnel-field select {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #c7d0db;
+      border-radius: 11px;
+      background: #f8fafd;
+      color: #334b66;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .personnel-field input::placeholder {
+      color: #7a8da2;
+    }
+
+    .personnel-field input:focus,
+    .personnel-field select:focus {
+      border-color: #5d7692;
+      box-shadow: 0 0 0 2px rgba(20, 55, 94, 0.18);
+    }
+
+    .personnel-check {
+      align-self: end;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1f3248;
+      font-size: 1.02rem;
+      font-weight: 600;
+    }
+
+    .personnel-check input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--primary);
+    }
+
+    .personnel-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .personnel-btn {
+      min-height: 42px;
+      border-radius: 11px;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .personnel-cancel {
+      border: 1px solid #c7d0db;
+      background: #f8fafd;
+      color: #2a3f58;
+    }
+
+    .personnel-submit {
+      border: 0;
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    @media (max-width: 1280px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
-      btn.addEventListener("click", function () {
-        var isOpen = group.classList.toggle("open");
-        btn.setAttribute("aria-expanded", String(isOpen));
-        submenu.setAttribute("aria-hidden", String(!isOpen));
+      .filter-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .search-box {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .task-page {
+        padding: 12px;
+      }
+
+      .task-header {
+        padding: 0 0 12px;
+      }
+
+      .task-head-left,
+      .task-head-right {
+        width: 100%;
+      }
+
+      .task-head-right {
+        justify-content: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .filter-row {
+        grid-template-columns: 1fr;
+      }
+
+      .search-box {
+        grid-column: auto;
+      }
+
+      .stat-card {
+        min-height: 100px;
+      }
+
+      .tasks-panel {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .task-page {
+        padding: 10px;
+      }
+
+      .btn {
+        flex: 1 1 100%;
+        justify-content: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-list {
+        min-width: 100%;
+      }
+
+      .personnel-modal {
+        padding: 16px;
+      }
+
+      .personnel-form {
+        grid-template-columns: 1fr;
+      }
+
+      .personnel-check {
+        align-self: start;
+      }
+
+      .personnel-actions {
+        justify-content: stretch;
+      }
+
+      .personnel-btn {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .task-title {
+        font-size: 1.3rem;
+      }
+
+      .tasks-panel h3 {
+        font-size: 1.55rem;
+      }
+    }
+  </style>
+</head>
+<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
+  <main class="task-page">
+    <header class="task-header">
+      <div class="task-head-left">
+        <h1 class="task-title">Task Management</h1>
+      </div>
+
+      <div class="task-head-right">
+        <button class="btn btn-light" type="button" id="openPersonnelModal">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M18 8a3 3 0 1 1 0 6M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Add Personnel
+        </button>
+        <button class="btn btn-dark" type="button">
+          <span>+</span>
+          <span>New Task</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="stats-grid" aria-label="Task summary cards">
+      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Total Tasks</div></div></article>
+      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Pending</div></div></article>
+      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">In Progress</div></div></article>
+      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Completed</div></div></article>
+      <article class="stat-card">
+        <div class="stat-alert">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4 3.5 19h17L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><div class="stat-value">0</div><div class="stat-label">Overdue</div></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="filters-panel" aria-label="Task filters">
+      <div class="filter-row">
+        <label class="search-box" for="task-search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="task-search" type="search" placeholder="Search tasks..." autocomplete="off">
+        </label>
+
+        <div class="menu-select" data-name="division">
+          <input type="hidden" name="division" value="all">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">Division</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="all" data-label="All Divisions"><span>All Divisions</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="admin" data-label="Admin"><span>Admin</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="planning" data-label="Planning Division"><span>Planning Division</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="construction" data-label="Construction"><span>Construction</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="quality" data-label="Quality"><span>Quality</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="maintenance" data-label="Maintenance"><span>Maintenance</span><span class="option-check">&#10003;</span></button>
+          </div>
+        </div>
+
+        <div class="menu-select" data-name="status">
+          <input type="hidden" name="status" value="all">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">Status</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="all" data-label="All Statuses"><span>All Statuses</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="pending" data-label="Pending"><span>Pending</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="in-progress" data-label="In Progress"><span>In Progress</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="completed" data-label="Completed"><span>Completed</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="cancelled" data-label="Cancelled"><span>Cancelled</span><span class="option-check">&#10003;</span></button>
+          </div>
+        </div>
+
+        <div class="menu-select" data-name="priority">
+          <input type="hidden" name="priority" value="all">
+          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+            <span class="button-label">Priority</span>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="menu-list" role="listbox">
+            <button type="button" class="menu-option active" data-value="all" data-label="All Priorities"><span>All Priorities</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="low" data-label="Low"><span>Low</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="medium" data-label="Medium"><span>Medium</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="high" data-label="High"><span>High</span><span class="option-check">&#10003;</span></button>
+            <button type="button" class="menu-option" data-value="urgent" data-label="Urgent"><span>Urgent</span><span class="option-check">&#10003;</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tasks-panel" aria-label="Tasks list">
+      <h3>Tasks</h3>
+      <p class="sub">0 tasks found</p>
+
+      <div class="tasks-empty">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="2"/><path d="M13 7h8M13 12h8M13 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4.2 16.5 1.6 1.6 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>No tasks found</div>
+        <button class="btn-create" type="button"><span>+</span><span>Create First Task</span></button>
+      </div>
+    </section>
+  </main>
+
+  <div class="personnel-modal-overlay" id="personnelModal" aria-hidden="true">
+    <div class="personnel-modal" role="dialog" aria-modal="true" aria-labelledby="personnelModalTitle">
+      <div class="personnel-modal-head">
+        <div>
+          <h2 id="personnelModalTitle">Add Personnel</h2>
+          <p>Add a new personnel to assign tasks to</p>
+        </div>
+        <button type="button" class="personnel-close" id="closePersonnelModal" aria-label="Close">&#215;</button>
+      </div>
+
+      <form class="personnel-form" id="personnelForm">
+        <label class="personnel-field full">
+          <span>Full Name *</span>
+          <input id="personnelFullName" type="text" placeholder="Enter the name of Personel" required>
+        </label>
+
+        <label class="personnel-field">
+          <span>Employee ID</span>
+          <input type="text" placeholder="e.g., EMP-001">
+        </label>
+
+        <label class="personnel-field">
+          <span>Division *</span>
+          <select required>
+            <option value="" selected disabled>Select division</option>
+            <option value="admin">Admin</option>
+            <option value="planning">Planning Division</option>
+            <option value="construction">Construction</option>
+            <option value="quality">Quality</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+        </label>
+
+        <label class="personnel-field">
+          <span>Position</span>
+          <input type="text" placeholder="e.g., Engineer II">
+        </label>
+
+        <label class="personnel-field">
+          <span>Email</span>
+          <input type="email" placeholder="e.g.,name@peo.gov.ph">
+        </label>
+
+        <label class="personnel-field">
+          <span>Phone</span>
+          <input type="text" placeholder="e.g., 09171234567">
+        </label>
+
+        <label class="personnel-check">
+          <input type="checkbox">
+          <span>Division Head</span>
+        </label>
+
+        <div class="personnel-actions">
+          <button type="button" class="personnel-btn personnel-cancel" id="cancelPersonnelModal">Cancel</button>
+          <button type="submit" class="personnel-btn personnel-submit">Add Personnel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var selects = document.querySelectorAll(".menu-select");
+      var personnelModal = document.getElementById("personnelModal");
+      var openPersonnelModalBtn = document.getElementById("openPersonnelModal");
+      var closePersonnelModalBtn = document.getElementById("closePersonnelModal");
+      var cancelPersonnelModalBtn = document.getElementById("cancelPersonnelModal");
+      var personnelForm = document.getElementById("personnelForm");
+      var personnelFirstField = document.getElementById("personnelFullName");
+
+      function closeAll(exceptNode) {
+        selects.forEach(function (node) {
+          if (node !== exceptNode) {
+            node.classList.remove("open");
+            var nodeBtn = node.querySelector(".menu-button");
+            if (nodeBtn) {
+              nodeBtn.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+      }
+
+      function openPersonnelModal() {
+        if (!personnelModal) {
+          return;
+        }
+        closeAll(null);
+        personnelModal.classList.add("open");
+        personnelModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+        if (personnelFirstField) {
+          window.setTimeout(function () {
+            personnelFirstField.focus();
+          }, 0);
+        }
+      }
+
+      function closePersonnelModal() {
+        if (!personnelModal) {
+          return;
+        }
+        personnelModal.classList.remove("open");
+        personnelModal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+      }
+
+      selects.forEach(function (select) {
+        var button = select.querySelector(".menu-button");
+        var label = select.querySelector(".button-label");
+        var hiddenInput = select.querySelector("input[type='hidden']");
+        var options = select.querySelectorAll(".menu-option");
+
+        if (!button || !label || !options.length) {
+          return;
+        }
+
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          var willOpen = !select.classList.contains("open");
+          closeAll(select);
+          select.classList.toggle("open", willOpen);
+          button.setAttribute("aria-expanded", String(willOpen));
+        });
+
+        options.forEach(function (option) {
+          option.addEventListener("click", function () {
+            options.forEach(function (item) {
+              item.classList.remove("active");
+            });
+
+            option.classList.add("active");
+            var nextLabel = option.getAttribute("data-label") || option.textContent.trim();
+            var nextValue = option.getAttribute("data-value") || nextLabel;
+
+            label.textContent = nextLabel;
+            if (hiddenInput) {
+              hiddenInput.value = nextValue;
+            }
+
+            select.classList.remove("open");
+            button.setAttribute("aria-expanded", "false");
+          });
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".menu-select")) {
+          closeAll(null);
+        }
+      });
+
+      if (openPersonnelModalBtn) {
+        openPersonnelModalBtn.addEventListener("click", openPersonnelModal);
+      }
+
+      if (closePersonnelModalBtn) {
+        closePersonnelModalBtn.addEventListener("click", closePersonnelModal);
+      }
+
+      if (cancelPersonnelModalBtn) {
+        cancelPersonnelModalBtn.addEventListener("click", closePersonnelModal);
+      }
+
+      if (personnelForm) {
+        personnelForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          closePersonnelModal();
+        });
+      }
+
+      if (personnelModal) {
+        personnelModal.addEventListener("click", function (event) {
+          if (event.target === personnelModal) {
+            closePersonnelModal();
+          }
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeAll(null);
+          closePersonnelModal();
+        }
       });
     });
   </script>
 </body>
 </html>
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> be2339b9b49006fc40899653ce2f106a54fb23a3
