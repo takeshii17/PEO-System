@@ -10,13 +10,8 @@
         :root { --bg:#eef1f5; --line:#ced5de; --text:#0c2137; }
         * { box-sizing: border-box; }
         html, body { margin:0; min-height:100%; font-family:"Sora","Segoe UI",sans-serif; color:var(--text); background:var(--bg); }
-<<<<<<< HEAD
         .app-shell { display:flex; min-height:100vh; }
         .sidebar { width:340px; background:linear-gradient(180deg,#08274a 0%,#07203f 100%); color:#d5dfeb; border-right:1px solid #15385f; display:flex; flex-direction:column; }
-=======
-        .app-shell { display:block; min-height:100vh; }
-        .sidebar { display:none; }
->>>>>>> d636d885227702190114362938ab9de4f9007e50
         .brand { display:flex; gap:14px; align-items:center; padding:30px 26px; border-bottom:1px solid rgba(215,229,245,.16); }
         .brand-logo { width:58px; height:58px; border-radius:12px; border:2px solid #f2d65a; background:radial-gradient(circle at 35% 35%,#ffeb84 0%,#f4c418 64%,#daaa08 100%); display:grid; place-items:center; color:#8f0010; font-size:.85rem; font-weight:700; }
         .brand h1 { margin:0; font-size:clamp(1.2rem,1.85vw,2.05rem); color:#f4f7fb; }
@@ -24,16 +19,10 @@
         .nav-menu { padding:20px 16px 24px; display:grid; gap:8px; }
         .nav-item { display:flex; gap:12px; align-items:center; color:#c7d5e5; text-decoration:none; border-radius:14px; padding:14px 16px; font-size:clamp(1.05rem,1.22vw,2rem); line-height:1.15; }
         .nav-item:hover { background:rgba(255,255,255,.08); }
-<<<<<<< HEAD
         .nav-item.active { background:#123760; color:#fff; box-shadow:inset 0 0 0 1px rgba(189,214,238,.08); font-weight:600; }
         .nav-icon { width:22px; height:22px; flex:0 0 auto; opacity:.95; }
         .workspace { flex:1; min-width:0; background:#f2f4f7; }
         .topbar { height:92px; border-bottom:1px solid var(--line); display:flex; justify-content:flex-end; align-items:center; padding:0 28px; background:#f5f7fa; }
-=======
-        .nav-item.active { background:#123760; color:#fff; font-weight:600; }
-        .workspace { min-width:0; width:100%; }
-        .topbar { display:none; }
->>>>>>> d636d885227702190114362938ab9de4f9007e50
         .account { display:flex; align-items:center; gap:14px; }
         .seal { width:52px; height:52px; border-radius:50%; border:2px solid #d2d9e1; background:radial-gradient(circle at 35% 30%,#f2fbff 0%,#dce8f6 45%,#bccce0 100%); display:grid; place-items:center; font-size:.56rem; font-weight:700; color:#0b2a4c; text-align:center; line-height:1.15; }
         .avatar { width:42px; height:42px; border-radius:50%; background:#0f3459; color:#f2f7ff; display:grid; place-items:center; font-size:1.15rem; font-weight:700; text-transform:uppercase; }
@@ -64,14 +53,9 @@
         .field input, .field textarea { width:100%; border:1px solid #bfcbd9; border-radius:8px; padding:8px; font-size:.8rem; font-family:inherit; background:#fff; }
         .field.wide { grid-column:span 4; }
         .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
-<<<<<<< HEAD
         @media (max-width:1200px) { .sidebar { width:280px; } }
         @media (max-width:900px) { .app-shell { flex-direction:column; } .sidebar { width:100%; } .topbar { height:auto; padding:12px 16px; } .form-grid { grid-template-columns:1fr; } .field.wide { grid-column:span 1; } }
     </style>
-=======
-        @media (max-width:980px) { .form-grid { grid-template-columns:1fr; } .field.wide { grid-column:span 1; } }
-    </style> 
->>>>>>> d636d885227702190114362938ab9de4f9007e50
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
 <div class="app-shell">
