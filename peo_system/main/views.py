@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from django.db import connection
 from django.db.models import Q
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from decimal import Decimal
 
@@ -12,7 +13,67 @@ from .models import ConstructionStatusReport, Document, PlanningBudget, Planning
 
 @login_required
 def home(request):
-    return render(request, "home.html")
+    item_type_choices = [
+        ("document", "Document"),
+        ("task", "Task"),
+        ("project", "Project (go to Projects)"),
+    ]
+    division_choices = Document.DIVISION_CHOICES
+    selected_division = Document.DIV_CONSTRUCTION
+    selected_item_type = "document"
+    title = ""
+    description = ""
+    show_new_item_modal = False
+    new_item_error = ""
+
+    if request.method == "POST" and request.POST.get("action") == "create_home_item":
+        selected_item_type = request.POST.get("item_type", "document").strip().lower()
+        selected_division = request.POST.get("division", "").strip()
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+        show_new_item_modal = True
+
+        valid_item_types = {value for value, _ in item_type_choices}
+        valid_divisions = {value for value, _ in division_choices}
+
+        if selected_item_type not in valid_item_types:
+            new_item_error = "Invalid item type."
+        elif not title:
+            new_item_error = "Title is required."
+        elif selected_item_type == "document":
+            if selected_division not in valid_divisions:
+                new_item_error = "Invalid division selected."
+            elif not _table_exists(Document):
+                new_item_error = "Document table is not ready yet. Run migrations first."
+            else:
+                Document.objects.create(
+                    document_name=title,
+                    doc_type=Document.TYPE_OTHER,
+                    division=selected_division,
+                    status=Document.STATUS_DRAFT,
+                    description=description,
+                    created_by=request.user,
+                )
+                return redirect("admin_div_dashboard")
+        elif selected_item_type == "task":
+            return redirect("maintinance_task_management")
+        elif selected_item_type == "project":
+            return redirect(f"{reverse('planning_div_dashboard')}?tab=ppa")
+
+        if selected_item_type != "document" and selected_division not in valid_divisions:
+            new_item_error = "Invalid division selected."
+
+    context = {
+        "item_type_choices": item_type_choices,
+        "division_choices": division_choices,
+        "new_item_selected_type": selected_item_type,
+        "new_item_selected_division": selected_division,
+        "new_item_title": title,
+        "new_item_description": description,
+        "show_new_item_modal": show_new_item_modal,
+        "new_item_error": new_item_error,
+    }
+    return render(request, "home.html", context)
 
 
 @login_required
