@@ -82,10 +82,25 @@
             align-items: center;
             justify-content: center;
             padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-pane::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.56) 0%, rgba(248, 251, 255, 0.78) 58%, rgba(248, 251, 255, 0.92) 100%),
+                url("{% static 'images/peo-logo.png' %}") center/260px 260px no-repeat;
+            opacity: 0.46;
+            pointer-events: none;
         }
 
         .form-wrap {
             width: min(380px, 100%);
+            position: relative;
+            z-index: 1;
         }
 
         .badge {
@@ -244,4 +259,6 @@
     </section>
 </body>
 </html>
+
+
 

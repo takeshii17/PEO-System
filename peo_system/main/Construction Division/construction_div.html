@@ -12,7 +12,7 @@
         .app-shell { display:block; min-height:100vh; }
         .sidebar { display:none; }
         .brand { display:flex; gap:14px; align-items:center; padding:30px 26px; border-bottom:1px solid rgba(215,229,245,.16); }
-        .brand-logo { width:58px; height:58px; border-radius:12px; border:2px solid #f2d65a; background:radial-gradient(circle at 35% 35%,#ffeb84 0%,#f4c418 64%,#daaa08 100%); display:grid; place-items:center; color:#8f0010; font-size:.85rem; font-weight:700; }
+        .brand-logo { width:58px; height:58px; border-radius:12px; border:2px solid #f2d65a; background:#f4f8ff url("{% static 'images/peo-logo.png' %}") center/cover no-repeat; display:grid; place-items:center; color:#8f0010; font-size:.85rem; font-weight:700; }
         .brand h1 { margin:0; font-size:clamp(1.1rem,1.65vw,1.85rem); color:#f4f7fb; }
         .brand p { margin:4px 0 0; font-size:.92rem; color:#bdcada; }
         .nav-menu { padding:20px 16px 24px; display:grid; gap:8px; }
@@ -58,7 +58,7 @@
 <div class="app-shell">
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-logo">PEO</div>
+            <div class="brand-logo" aria-label="PEO Seal"></div>
             <div><h1>PEO Portal</h1><p>Workflow Management</p></div>
         </div>
         <nav class="nav-menu">
@@ -220,4 +220,6 @@
 </script>
 </body>
 </html>
+
+
 

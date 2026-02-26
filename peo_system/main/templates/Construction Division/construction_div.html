@@ -13,7 +13,7 @@
         .app-shell { display:flex; min-height:100vh; }
         .sidebar { width:340px; background:linear-gradient(180deg,#08274a 0%,#07203f 100%); color:#d5dfeb; border-right:1px solid #15385f; display:flex; flex-direction:column; }
         .brand { display:flex; gap:14px; align-items:center; padding:30px 26px; border-bottom:1px solid rgba(215,229,245,.16); }
-        .brand-logo { width:58px; height:58px; border-radius:12px; border:2px solid #f2d65a; background:radial-gradient(circle at 35% 35%,#ffeb84 0%,#f4c418 64%,#daaa08 100%); display:grid; place-items:center; color:#8f0010; font-size:.85rem; font-weight:700; }
+        .brand-logo { width:58px; height:58px; border-radius:12px; border:1px solid rgba(207,220,235,.4); background:transparent url("{% static 'images/peo-logo.png' %}") center/contain no-repeat; display:grid; place-items:center; box-shadow:0 2px 6px rgba(10,33,58,.25); }
         .brand h1 { margin:0; font-size:clamp(1.2rem,1.85vw,2.05rem); color:#f4f7fb; }
         .brand p { margin:4px 0 0; font-size:1rem; color:#bdcada; }
         .nav-menu { padding:20px 16px 24px; display:grid; gap:8px; }
@@ -124,7 +124,7 @@
 <div class="app-shell">
     <aside class="sidebar">
         <div class="brand">
-            <div class="brand-logo">PEO</div>
+            <div class="brand-logo" aria-label="PEO Seal"></div>
             <div><h1>PEO Portal</h1><p>Workflow Management</p></div>
         </div>
         <nav class="nav-menu">
@@ -314,4 +314,7 @@
 </script>
 </body>
 </html>
+
+
+
 

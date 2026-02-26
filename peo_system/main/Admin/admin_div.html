@@ -48,7 +48,7 @@
             height: 58px;
             border-radius: 12px;
             border: 2px solid #f2d65a;
-            background: radial-gradient(circle at 35% 35%, #ffeb84 0%, #f4c418 64%, #daaa08 100%);
+            background: #f4f8ff url("{% static 'images/peo-logo.png' %}") center/cover no-repeat;
             color: #8f0010;
             font-size: 0.85rem;
             font-weight: 700;
@@ -472,7 +472,7 @@
     <div class="app-shell">
         <aside class="sidebar">
             <div class="brand">
-                <div class="brand-logo">PEO</div>
+                <div class="brand-logo" aria-label="PEO Seal"></div>
                 <div>
                     <h1>PEO Portal</h1>
                     <p>Workflow Management</p>
@@ -799,4 +799,6 @@
     {% endif %}
 </body>
 </html>
+
+
 
