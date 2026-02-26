@@ -6,11 +6,318 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
   <title>My Assignments</title>
-  <!--  -->
+  <style>
+    :root {
+      --assign-bg: #f1f3f6;
+      --assign-panel: #f9fbfd;
+      --assign-border: #cdd3db;
+      --assign-text: #0a213e;
+      --assign-muted: #5a6b7f;
+      --assign-warn: #f0ab00;
+      --assign-info: #2a76f8;
+      --assign-ok: #09bf55;
+      --assign-option-active: #f8b32b;
+      --assign-shadow: 0 4px 12px rgba(17, 31, 45, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--assign-bg);
+      color: var(--assign-text);
+      font-family: "Sora", "Segoe UI", sans-serif;
+    }
+
+    .assignments-shell {
+      width: min(1360px, 100%);
+      margin: 0 auto;
+      padding: 24px 20px 28px;
+    }
+
+    .assignments-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .assignments-header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 2.9vw, 2.9rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: #041b38;
+    }
+
+    .assignments-header p {
+      margin: 8px 0 0;
+      color: #4f6278;
+      font-size: 1.03rem;
+    }
+
+    .total-pill {
+      border: 1px solid var(--assign-border);
+      border-radius: 10px;
+      background: #f8f9fb;
+      color: #112744;
+      padding: 5px 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .assignments-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--assign-panel);
+      border: 1px solid var(--assign-border);
+      border-radius: 18px;
+      min-height: 132px;
+      padding: 20px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-title {
+      margin: 0;
+      color: #5d6f85;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    .stat-value {
+      margin: 4px 0 0;
+      font-size: 2.9rem;
+      line-height: 1;
+      font-weight: 700;
+      color: #031f3f;
+    }
+
+    .stat-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .warn {
+      color: var(--assign-warn);
+    }
+
+    .info {
+      color: var(--assign-info);
+    }
+
+    .ok {
+      color: var(--assign-ok);
+    }
+
+    .filters-panel {
+      background: var(--assign-panel);
+      border: 1px solid var(--assign-border);
+      border-radius: 18px;
+      padding: 22px 20px 20px;
+      margin-bottom: 16px;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: end;
+    }
+
+    .filter-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #102946;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-icon {
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      color: #5f7184;
+      margin-top: 2px;
+    }
+
+    .select-wrap {
+      position: relative;
+      display: inline-block;
+      min-width: 190px;
+    }
+
+    .select-trigger {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--assign-border);
+      border-radius: 12px;
+      background: #f8fafc;
+      color: #173455;
+      font: inherit;
+      font-size: 1.04rem;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .select-trigger:hover {
+      border-color: #bdc7d2;
+    }
+
+    .select-trigger:focus-visible {
+      outline: 2px solid #8fb6ff;
+      outline-offset: 1px;
+    }
+
+    .select-chevron {
+      width: 16px;
+      height: 16px;
+      color: #9aa8b8;
+      transition: transform 0.2s ease;
+    }
+
+    .select-wrap.open .select-chevron {
+      transform: rotate(180deg);
+    }
+
+    .select-menu {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 6px);
+      min-width: 100%;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1px solid #d0d6de;
+      background: #f4f5f7;
+      box-shadow: var(--assign-shadow);
+      display: none;
+      z-index: 8;
+    }
+
+    .select-wrap.open .select-menu {
+      display: block;
+    }
+
+    .select-option {
+      border: 0;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      color: #263748;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 1.03rem;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .select-option:hover {
+      background: #eceff4;
+    }
+
+    .select-option.active {
+      background: var(--assign-option-active);
+      color: #1f2630;
+    }
+
+    .option-check {
+      opacity: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .select-option.active .option-check {
+      opacity: 1;
+    }
+
+    .assignments-empty {
+      background: var(--assign-panel);
+      border: 1px solid var(--assign-border);
+      border-radius: 18px;
+      min-height: 318px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .assignments-empty svg {
+      width: 52px;
+      height: 52px;
+      color: #657383;
+      margin-bottom: 12px;
+    }
+
+    .assignments-empty h2 {
+      margin: 0;
+      font-size: 2.35rem;
+      line-height: 1.15;
+      color: #051f3c;
+    }
+
+    .assignments-empty p {
+      margin: 8px 0 0;
+      font-size: 1.12rem;
+      color: #566a80;
+    }
+
+    @media (max-width: 1100px) {
+      .assignments-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .assignments-shell {
+        padding: 18px 14px 20px;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .assignments-header {
+        flex-wrap: wrap;
+      }
+
+      .stat-value {
+        font-size: 2.4rem;
+      }
+
+      .assignments-empty h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="page">
-    <header class="header">
+  <main class="assignments-shell">
+    <header class="assignments-header">
       <div>
         <h1>My Assignments</h1>
         <p>Track and manage your assigned POW tasks</p>
@@ -18,7 +325,7 @@
       <div class="total-pill">0 Total Tasks</div>
     </header>
 
-    <section class="stats">
+    <section class="assignments-stats">
       <article class="stat-card">
         <div>
           <p class="stat-title">Pending</p>
@@ -60,42 +367,78 @@
       </article>
     </section>
 
-    <section class="filters">
-      <div class="filter-grid">
+    <section class="filters-panel">
+      <div class="filters-grid">
         <div class="filter-field">
-          <label for="task-type">Task Type</label>
-          <div class="field-row">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="#65778a" stroke-width="2" stroke-linejoin="round"/>
+          <label id="taskTypeLabel" for="taskTypeTrigger">Task Type</label>
+          <div class="filter-row">
+            <svg class="filter-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5h16l-6 7v6l-4 2v-8L4 5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
             </svg>
-            <div class="filter-box">
-              <select id="task-type">
-                <option selected>All Task Types</option>
-                <option>Plan</option>
-                <option>POW</option>
-                <option>Survey</option>
-              </select>
+            <div class="select-wrap" data-select>
+              <button id="taskTypeTrigger" class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="taskTypeLabel taskTypeValue">
+                <span id="taskTypeValue">All Task Types</span>
+                <svg class="select-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="select-menu" role="listbox" aria-label="Task Type options">
+                <button class="select-option active" type="button" data-value="All Task Types">
+                  <span>All Task Types</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="Plan">
+                  <span>Plan</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="POW">
+                  <span>POW</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="Survey">
+                  <span>Survey</span>
+                  <span class="option-check">✓</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="filter-field">
-          <label for="task-status">Status</label>
-          <div class="field-row">
-            <div class="filter-box">
-              <select id="task-status">
-                <option selected>All Statuses</option>
-                <option>Pending</option>
-                <option>In Progress</option>
-                <option>Completed</option>
-              </select>
+          <label id="taskStatusLabel" for="taskStatusTrigger">Status</label>
+          <div class="filter-row">
+            <div class="select-wrap" data-select>
+              <button id="taskStatusTrigger" class="select-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="taskStatusLabel taskStatusValue">
+                <span id="taskStatusValue">All Statuses</span>
+                <svg class="select-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="select-menu" role="listbox" aria-label="Status options">
+                <button class="select-option active" type="button" data-value="All Statuses">
+                  <span>All Statuses</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="Pending">
+                  <span>Pending</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="In Progress">
+                  <span>In Progress</span>
+                  <span class="option-check">✓</span>
+                </button>
+                <button class="select-option" type="button" data-value="Completed">
+                  <span>Completed</span>
+                  <span class="option-check">✓</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="empty-panel">
+    <section class="assignments-empty">
       <div>
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <rect x="6" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
@@ -106,8 +449,66 @@
       </div>
     </section>
   </main>
+  <script>
+    (function () {
+      var selectWrappers = document.querySelectorAll("[data-select]");
+
+      function closeAll(except) {
+        selectWrappers.forEach(function (wrapper) {
+          if (wrapper !== except) {
+            wrapper.classList.remove("open");
+            var btn = wrapper.querySelector(".select-trigger");
+            if (btn) {
+              btn.setAttribute("aria-expanded", "false");
+            }
+          }
+        });
+      }
+
+      selectWrappers.forEach(function (wrapper) {
+        var trigger = wrapper.querySelector(".select-trigger");
+        var valueLabel = wrapper.querySelector(".select-trigger span");
+        var options = wrapper.querySelectorAll(".select-option");
+
+        if (!trigger || !options.length || !valueLabel) {
+          return;
+        }
+
+        trigger.addEventListener("click", function () {
+          var willOpen = !wrapper.classList.contains("open");
+          closeAll(wrapper);
+          wrapper.classList.toggle("open", willOpen);
+          trigger.setAttribute("aria-expanded", String(willOpen));
+        });
+
+        options.forEach(function (option) {
+          option.addEventListener("click", function () {
+            options.forEach(function (item) {
+              item.classList.remove("active");
+            });
+
+            option.classList.add("active");
+            valueLabel.textContent = option.getAttribute("data-value") || option.textContent.trim();
+            wrapper.classList.remove("open");
+            trigger.setAttribute("aria-expanded", "false");
+          });
+        });
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest("[data-select]")) {
+          closeAll(null);
+        }
+      });
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeAll(null);
+        }
+      });
+    }());
+  </script>
 </body>
 </html>
-
 
 
