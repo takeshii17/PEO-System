@@ -528,6 +528,10 @@
             box-shadow: 0 1px 2px rgba(12, 35, 61, 0.12);
         }
 
+        .data-tabs.hidden {
+            display: none;
+        }
+
         .home-overview.hidden,
         .projects-panel.hidden {
             display: none;
@@ -952,6 +956,16 @@
                         </section>
                     </div>
 
+<<<<<<< HEAD
+=======
+                    <section id="dashboardDataTabs" class="data-tabs" aria-label="Data sections">
+                        <button class="data-tab active" id="tabDivisions" type="button">Divisions</button>
+                        <button class="data-tab" id="tabProjects" type="button" data-title="Projects">Projects</button>
+                        <button class="data-tab" id="tabDocuments" type="button" data-url="{% url 'admin_div_dashboard' %}?tab=documents" data-title="Document Register">Document Register</button>
+                        <button class="data-tab" id="tabTaskMatrix" type="button" data-url="{% url 'maintenance_task_management' %}" data-title="Task Matrix">Task Matrix</button>
+                    </section>
+
+>>>>>>> 7c67b4f9c77e5197149b4d5cc02c294ecdb58be9
                     <section id="projectsPanel" class="projects-panel hidden">
                         <div class="projects-panel-head">
                             <div>
@@ -1090,11 +1104,13 @@
             var myAssignmentsNavLink = document.getElementById("myAssignmentsNavLink");
             var dashboardNavLink = document.getElementById("dashboardNavLink");
             var adminDivisionNavLink = document.getElementById("adminDivisionNavLink");
+            var projectsNavLink = document.getElementById("projectsNavLink");
             var qualityDivisionNavLink = document.getElementById("qualityDivisionNavLink");
             var planningDivisionNavLink = document.getElementById("planningDivisionNavLink");
             var constructionDivisionNavLink = document.getElementById("constructionDivisionNavLink");
             var maintenanceManagementNavLink = document.getElementById("maintenanceManagementNavLink");
             var dataTabs = document.querySelectorAll(".data-tab");
+            var dashboardDataTabs = document.getElementById("dashboardDataTabs");
             var tabDivisions = document.getElementById("tabDivisions");
             var tabProjects = document.getElementById("tabProjects");
             var homeOverviewContent = document.getElementById("homeOverviewContent");
@@ -1108,6 +1124,13 @@
                 dataTabs.forEach(function (tab) {
                     tab.classList.toggle("active", tab === activeTab);
                 });
+            }
+
+            function setDataTabsVisible(isVisible) {
+                if (!dashboardDataTabs) {
+                    return;
+                }
+                dashboardDataTabs.classList.toggle("hidden", !isVisible);
             }
 
             function clearSidebarActiveState() {
@@ -1270,6 +1293,7 @@
 
             function showDivisionsPanel() {
                 closeEmbeddedMaintenance();
+                setDataTabsVisible(true);
 
                 if (homeOverviewContent) {
                     homeOverviewContent.classList.remove("hidden");
@@ -1282,6 +1306,7 @@
 
             function showProjectsPanel() {
                 closeEmbeddedMaintenance();
+                setDataTabsVisible(true);
 
                 if (homeOverviewContent) {
                     homeOverviewContent.classList.add("hidden");
@@ -1324,6 +1349,7 @@
                     event.preventDefault();
                     setActiveTopNavItem(myAssignmentsNavLink);
                     playBlink(myAssignmentsNavLink);
+                    setDataTabsVisible(false);
 
                     var link = myAssignmentsNavLink.getAttribute("href");
                     if (link) {
@@ -1339,6 +1365,7 @@
                     event.preventDefault();
                     setActiveTopNavItem(adminDivisionNavLink);
                     playBlink(adminDivisionNavLink);
+                    setDataTabsVisible(true);
 
                     var link = adminDivisionNavLink.getAttribute("href");
                     if (link) {
@@ -1349,11 +1376,28 @@
                 });
             }
 
+            if (projectsNavLink) {
+                projectsNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    setActiveTopNavItem(projectsNavLink);
+                    playBlink(projectsNavLink);
+                    setDataTabsVisible(true);
+
+                    var link = projectsNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "Projects");
+                        }, 180);
+                    }
+                });
+            }
+
             if (qualityDivisionNavLink) {
                 qualityDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
                     setActiveTopNavItem(qualityDivisionNavLink);
                     playBlink(qualityDivisionNavLink);
+                    setDataTabsVisible(true);
 
                     var link = qualityDivisionNavLink.getAttribute("href");
                     if (link) {
@@ -1369,6 +1413,7 @@
                     event.preventDefault();
                     setActiveTopNavItem(planningDivisionNavLink);
                     playBlink(planningDivisionNavLink);
+                    setDataTabsVisible(true);
 
                     var link = planningDivisionNavLink.getAttribute("href");
                     if (link) {
@@ -1384,6 +1429,7 @@
                     event.preventDefault();
                     setActiveTopNavItem(constructionDivisionNavLink);
                     playBlink(constructionDivisionNavLink);
+                    setDataTabsVisible(true);
 
                     var link = constructionDivisionNavLink.getAttribute("href");
                     if (link) {
@@ -1400,6 +1446,7 @@
                         var link = tab.getAttribute("data-url");
                         var viewTitle = tab.getAttribute("data-title") || tab.textContent.trim();
                         setActiveDataTab(tab);
+                        setDataTabsVisible(true);
 
                         if (tab.id === "tabDivisions") {
                             showDivisionsPanel();

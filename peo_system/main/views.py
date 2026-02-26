@@ -487,6 +487,7 @@ def my_assignments(request):
 @login_required
 @xframe_options_sameorigin
 def projects_dashboard(request):
+<<<<<<< HEAD
     query = request.GET.get("q", "").strip()
     division_choices = [
         (Document.DIV_ADMIN, "Admin Division"),
@@ -562,6 +563,40 @@ def projects_dashboard(request):
         "division_choices": division_choices,
         "counts_by_division": counts_by_division,
         "selected_projects": selected_projects,
+=======
+    total_projects = 0
+    completed_projects = 0
+    ongoing_projects = 0
+    total_project_cost_value = Decimal("0")
+    project_rows = []
+
+    if _table_exists(PlanningProject):
+        projects_qs = PlanningProject.objects.all()
+        total_projects = projects_qs.count()
+        completed_projects = projects_qs.filter(status=PlanningProject.STATUS_AWARDED).count()
+        ongoing_projects = projects_qs.exclude(
+            status__in=[PlanningProject.STATUS_AWARDED, PlanningProject.STATUS_CANCELLED]
+        ).count()
+        total_project_cost_value = (
+            projects_qs.aggregate(
+                total=Coalesce(
+                    Sum("budget_amount"),
+                    Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
+                    output_field=DecimalField(max_digits=14, decimal_places=2),
+                )
+            )["total"]
+            or Decimal("0")
+        )
+        project_rows = list(projects_qs.order_by("-created_at")[:200])
+
+    context = {
+        "project_rows": project_rows,
+        "total_projects": f"{total_projects:,}",
+        "total_projects_count": total_projects,
+        "completed_projects": f"{completed_projects:,}",
+        "ongoing_projects": f"{ongoing_projects:,}",
+        "total_project_cost": f"PHP {total_project_cost_value:,.0f}",
+>>>>>>> 7c67b4f9c77e5197149b4d5cc02c294ecdb58be9
     }
     return render(request, "Projects/projects.html", context)
 

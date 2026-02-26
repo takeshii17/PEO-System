@@ -447,6 +447,97 @@
             color: var(--muted);
         }
 
+        .projects-table-panel {
+            margin-top: 12px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            box-shadow: 0 1px 4px rgba(10, 32, 56, 0.08);
+            overflow: hidden;
+        }
+
+        .projects-table-wrap {
+            overflow-x: auto;
+            background: #ffffff;
+        }
+
+        .projects-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 760px;
+        }
+
+        .projects-table th,
+        .projects-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #d7dee7;
+            text-align: left;
+            font-size: 13px;
+            vertical-align: top;
+        }
+
+        .projects-table th {
+            background: #f3f6fa;
+            color: #17314d;
+            font-size: 12px;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+
+        .projects-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .projects-empty {
+            padding: 18px 12px;
+            text-align: center;
+            color: #60758d;
+            font-size: 14px;
+        }
+
+        .status-pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 3px 9px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-awarded { background: #d9f4e4; color: #0e7e46; }
+        .status-approved { background: #d9e8ff; color: #1e5db8; }
+        .status-bidding { background: #fdeab8; color: #9a6400; }
+        .status-review { background: #eceff4; color: #42576f; }
+        .status-cancelled { background: #ffe0e4; color: #b42339; }
+        .status-draft { background: #edf2f7; color: #4f637a; }
+
+        body.embedded-dashboard-view .app-shell {
+            display: block;
+            min-height: auto;
+        }
+
+        body.embedded-dashboard-view .sidebar,
+        body.embedded-dashboard-view .topbar {
+            display: none;
+        }
+
+        body.embedded-dashboard-view .workspace {
+            width: 100%;
+            background: transparent;
+        }
+
+        body.embedded-dashboard-view .page {
+            padding: 10px;
+        }
+
+        body.embedded-dashboard-view .head {
+            margin-bottom: 8px;
+        }
+
+        body.embedded-dashboard-view .head h1 {
+            font-size: 28px;
+        }
+
         @media (max-width: 1100px) {
             .sidebar { width: 280px; }
             .division-grid { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
@@ -464,7 +555,7 @@
         }
     </style>
 </head>
-<body>
+<body{% if request.GET.embedded %} class="embedded-dashboard-view"{% endif %}>
     <div class="app-shell">
         <aside class="sidebar">
             <div class="brand">
@@ -577,6 +668,7 @@
                     </a>
                 </section>
 
+<<<<<<< HEAD
                 <section class="results">
                     <h3>{{ selected_division_label }} Projects</h3>
                     {% if selected_projects %}
@@ -594,6 +686,54 @@
                 </section>
 
                 <div class="footer-note">Showing {{ selected_projects|length }} project entries</div>
+=======
+                <section class="projects-table-panel" aria-label="Projects table">
+                    <div class="projects-table-wrap">
+                        <table class="projects-table">
+                            <thead>
+                                <tr>
+                                    <th>Project Title</th>
+                                    <th>Fund Source</th>
+                                    <th>Budget Amount</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for project in project_rows %}
+                                <tr>
+                                    <td>{{ project.project_title }}</td>
+                                    <td>{{ project.get_fund_display }}</td>
+                                    <td>PHP {{ project.budget_amount|floatformat:0 }}</td>
+                                    <td>
+                                        {% if project.status == "awarded" %}
+                                        <span class="status-pill status-awarded">{{ project.get_status_display }}</span>
+                                        {% elif project.status == "approved" %}
+                                        <span class="status-pill status-approved">{{ project.get_status_display }}</span>
+                                        {% elif project.status == "for_bidding" %}
+                                        <span class="status-pill status-bidding">{{ project.get_status_display }}</span>
+                                        {% elif project.status == "for_review" %}
+                                        <span class="status-pill status-review">{{ project.get_status_display }}</span>
+                                        {% elif project.status == "cancelled" %}
+                                        <span class="status-pill status-cancelled">{{ project.get_status_display }}</span>
+                                        {% else %}
+                                        <span class="status-pill status-draft">{{ project.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ project.created_at|date:"M d, Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td class="projects-empty" colspan="5">No projects yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="footer-note">Showing {{ project_rows|length }} of {{ total_projects_count }} projects</div>
+>>>>>>> 7c67b4f9c77e5197149b4d5cc02c294ecdb58be9
             </main>
         </div>
     </div>
