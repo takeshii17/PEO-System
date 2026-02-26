@@ -211,26 +211,35 @@
             margin: 8px -16px 16px;
         }
 
-        .stats {
+        .division-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(180px, 1fr));
+            grid-template-columns: repeat(5, minmax(180px, 1fr));
             gap: 12px;
             margin-bottom: 16px;
         }
 
-        .card {
+        .division-card {
             background: var(--panel);
             border: 1px solid var(--line);
             border-radius: 16px;
-            min-height: 120px;
+            min-height: 132px;
             padding: 18px;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             box-shadow: 0 1px 4px rgba(10, 32, 56, 0.08);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
         }
 
-        .icon {
+        .division-card:hover {
+            transform: translateY(-2px);
+            border-color: #b9c8da;
+            box-shadow: 0 6px 14px rgba(10, 32, 56, 0.12);
+        }
+
+        .division-icon {
             width: 40px;
             height: 40px;
             border-radius: 10px;
@@ -241,20 +250,23 @@
             flex: 0 0 auto;
         }
 
-        .icon.green { background: #d9f6ef; color: #0f766e; }
-        .icon.blue { background: #dfe9ff; color: #1d4ed8; }
-        .icon.gold { background: #fef3c7; color: #d97706; }
-        .icon svg { width: 22px; height: 22px; }
+        .division-icon.blue { background: #dfe9ff; color: #1d4ed8; }
+        .division-icon.green { background: #d9f6ef; color: #0f766e; }
+        .division-icon.orange { background: #ffedd5; color: #c2410c; }
+        .division-icon.teal { background: #ccfbf1; color: #0f766e; }
+        .division-icon.gold { background: #fef3c7; color: #b45309; }
+        .division-icon svg { width: 22px; height: 22px; }
 
-        .metric strong {
-            font-size: 38px;
-            line-height: 1;
-            display: block;
+        .division-copy h3 {
+            margin: 0;
+            font-size: 1.02rem;
+            line-height: 1.25;
         }
 
-        .metric span {
+        .division-copy p {
+            margin: 6px 0 0;
             color: var(--muted);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .toolbar {
@@ -264,7 +276,7 @@
             padding: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 12px;
             box-shadow: 0 1px 4px rgba(10, 32, 56, 0.08);
         }
@@ -313,6 +325,50 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
+        }
+
+        .division-card.active {
+            border-color: #7ea0c6;
+            box-shadow: inset 0 0 0 1px #b9cee6, 0 3px 10px rgba(10, 32, 56, 0.12);
+        }
+
+        .results {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 1px 4px rgba(10, 32, 56, 0.08);
+        }
+
+        .results h3 {
+            margin: 0 0 8px;
+            font-size: 1.05rem;
+        }
+
+        .project-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .project-item {
+            border: 1px solid #d8e0ea;
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: #fff;
+        }
+
+        .project-item strong {
+            display: block;
+            font-size: 0.98rem;
+            color: #133553;
+        }
+
+        .project-item span {
+            color: var(--muted);
+            font-size: 0.86rem;
         }
 
         .sort-group {
@@ -393,7 +449,7 @@
 
         @media (max-width: 1100px) {
             .sidebar { width: 280px; }
-            .stats { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
+            .division-grid { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
         }
 
         @media (max-width: 760px) {
@@ -401,7 +457,7 @@
             .sidebar { width: 100%; }
             .topbar { height: auto; padding: 12px 16px; justify-content: flex-end; }
             .head h1 { font-size: 28px; }
-            .stats { grid-template-columns: 1fr; }
+            .division-grid { grid-template-columns: 1fr; }
             .toolbar { flex-wrap: wrap; }
             .search { width: 100%; }
             .sort-dropdown { left: 0; }
@@ -455,120 +511,92 @@
                 <section class="head">
                     <div>
                         <h1>Project Database</h1>
-                        <p>Manage and track all infrastructure projects</p>
+                        <p>Open a division dashboard from the cards below</p>
                     </div>
                 </section>
 
                 <hr class="divider">
 
-                <section class="stats">
-                    <article class="card">
-                        <div class="icon">
-                            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </div>
-                        <div class="metric">
-                            <strong>{{ total_projects|default:"1,626" }}</strong>
-                            <span>Total Projects</span>
-                        </div>
-                    </article>
-                    <article class="card">
-                        <div class="icon green">
-                            <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h12l4 4v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/><path d="M14 6v4h4" stroke="currentColor" stroke-width="2"/></svg>
-                        </div>
-                        <div class="metric">
-                            <strong>{{ completed_projects|default:"1,256" }}</strong>
-                            <span>Completed</span>
-                        </div>
-                    </article>
-                    <article class="card">
-                        <div class="icon blue">
-                            <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </div>
-                        <div class="metric">
-                            <strong>{{ ongoing_projects|default:"49" }}</strong>
-                            <span>Ongoing</span>
-                        </div>
-                    </article>
-                    <article class="card">
-                        <div class="icon gold">
-                            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16 7h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </div>
-                        <div class="metric">
-                            <strong>{{ total_project_cost|default:"PHP 4,175,069,992" }}</strong>
-                            <span>Total Cost</span>
-                        </div>
-                    </article>
-                </section>
-
-                <section class="toolbar">
+                <form class="toolbar" method="get">
                     <label class="search">
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"></circle>
                             <path d="m20 20-4.2-4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
                         </svg>
-                        <input type="text" placeholder="Search projects, locations, contractors...">
+                        <input type="text" name="q" value="{{ query }}" placeholder="Search projects for the selected division...">
                     </label>
-                    <button class="btn" type="button">Filters</button>
-                    <div class="sort-group">
-                        <button class="btn sort-icon-btn" type="button" aria-label="Sort options">&#8645;</button>
-                        <button class="btn sort-field-btn" type="button" id="sortFieldBtn">
-                            <span id="sortFieldLabel">Name</span>
-                            <span aria-hidden="true">&#9662;</span>
-                        </button>
-                        <ul class="sort-dropdown" id="sortDropdown">
-                            <li class="sort-option active" data-value="name">Name <span class="sort-check">&#10003;</span></li>
-                            <li class="sort-option" data-value="amount">Amount <span class="sort-check">&#10003;</span></li>
-                            <li class="sort-option" data-value="category">Category <span class="sort-check">&#10003;</span></li>
-                            <li class="sort-option" data-value="year">Year <span class="sort-check">&#10003;</span></li>
-                            <li class="sort-option" data-value="municipality">Municipality <span class="sort-check">&#10003;</span></li>
-                        </ul>
-                        <button class="btn sort-icon-btn" type="button" id="sortDirectionBtn" aria-label="Toggle sort direction">&#8595;</button>
-                    </div>
+                    <input type="hidden" name="division" value="{{ selected_division }}">
+                    <button class="btn" type="submit">Search</button>
+                </form>
+
+                <section class="division-grid" aria-label="Division cards">
+                    <a class="division-card {% if selected_division == 'admin' %}active{% endif %}" href="?division=admin{% if query %}&q={{ query|urlencode }}{% endif %}">
+                        <div class="division-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg>
+                        </div>
+                        <div class="division-copy">
+                            <h3>Admin Division</h3>
+                            <p>{{ counts_by_division.admin|default:0 }} project entries</p>
+                        </div>
+                    </a>
+                    <a class="division-card {% if selected_division == 'planning' %}active{% endif %}" href="?division=planning{% if query %}&q={{ query|urlencode }}{% endif %}">
+                        <div class="division-icon green">
+                            <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="division-copy">
+                            <h3>Planning Division</h3>
+                            <p>{{ counts_by_division.planning|default:0 }} project entries</p>
+                        </div>
+                    </a>
+                    <a class="division-card {% if selected_division == 'construction' %}active{% endif %}" href="?division=construction{% if query %}&q={{ query|urlencode }}{% endif %}">
+                        <div class="division-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>
+                        </div>
+                        <div class="division-copy">
+                            <h3>Construction Division</h3>
+                            <p>{{ counts_by_division.construction|default:0 }} project entries</p>
+                        </div>
+                    </a>
+                    <a class="division-card {% if selected_division == 'quality' %}active{% endif %}" href="?division=quality{% if query %}&q={{ query|urlencode }}{% endif %}">
+                        <div class="division-icon teal">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="division-copy">
+                            <h3>Quality Division</h3>
+                            <p>{{ counts_by_division.quality|default:0 }} project entries</p>
+                        </div>
+                    </a>
+                    <a class="division-card {% if selected_division == 'maintenance' %}active{% endif %}" href="?division=maintenance{% if query %}&q={{ query|urlencode }}{% endif %}">
+                        <div class="division-icon gold">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
+                        </div>
+                        <div class="division-copy">
+                            <h3>Maintenance Division</h3>
+                            <p>{{ counts_by_division.maintenance|default:0 }} project entries</p>
+                        </div>
+                    </a>
                 </section>
 
-                <div class="footer-note">Showing 1-0 of 0 projects</div>
+                <section class="results">
+                    <h3>{{ selected_division_label }} Projects</h3>
+                    {% if selected_projects %}
+                    <ul class="project-list">
+                        {% for project in selected_projects %}
+                        <li class="project-item">
+                            <strong>{{ project.title }}</strong>
+                            <span>{{ project.meta }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <div class="footer-note">No projects found for this division{% if query %} matching "{{ query }}"{% endif %}.</div>
+                    {% endif %}
+                </section>
+
+                <div class="footer-note">Showing {{ selected_projects|length }} project entries</div>
             </main>
         </div>
     </div>
-    <script>
-        (function () {
-            var sortFieldBtn = document.getElementById("sortFieldBtn");
-            var sortDropdown = document.getElementById("sortDropdown");
-            var sortFieldLabel = document.getElementById("sortFieldLabel");
-            var sortDirectionBtn = document.getElementById("sortDirectionBtn");
-            var isAsc = false;
-
-            if (sortFieldBtn && sortDropdown) {
-                sortFieldBtn.addEventListener("click", function (event) {
-                    event.stopPropagation();
-                    sortDropdown.classList.toggle("open");
-                });
-
-                sortDropdown.querySelectorAll(".sort-option").forEach(function (option) {
-                    option.addEventListener("click", function () {
-                        sortDropdown.querySelectorAll(".sort-option").forEach(function (item) {
-                            item.classList.remove("active");
-                        });
-                        option.classList.add("active");
-                        sortFieldLabel.textContent = option.textContent.replace("✓", "").trim();
-                        sortDropdown.classList.remove("open");
-                    });
-                });
-
-                document.addEventListener("click", function (event) {
-                    if (!sortDropdown.contains(event.target) && event.target !== sortFieldBtn) {
-                        sortDropdown.classList.remove("open");
-                    }
-                });
-            }
-
-            if (sortDirectionBtn) {
-                sortDirectionBtn.addEventListener("click", function () {
-                    isAsc = !isAsc;
-                    sortDirectionBtn.innerHTML = isAsc ? "&#8593;" : "&#8595;";
-                });
-            }
-        })();
-    </script>
-</body>
+    </body>
 </html>
+

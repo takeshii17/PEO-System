@@ -487,34 +487,81 @@ def my_assignments(request):
 @login_required
 @xframe_options_sameorigin
 def projects_dashboard(request):
-    total_projects = 0
-    completed_projects = 0
-    ongoing_projects = 0
-    total_project_cost_value = Decimal("0")
+    query = request.GET.get("q", "").strip()
+    division_choices = [
+        (Document.DIV_ADMIN, "Admin Division"),
+        (Document.DIV_PLANNING, "Planning Division"),
+        (Document.DIV_CONSTRUCTION, "Construction Division"),
+        (Document.DIV_QUALITY, "Quality Division"),
+        (Document.DIV_MAINTENANCE, "Maintenance Division"),
+    ]
+    valid_divisions = {value for value, _ in division_choices}
+    selected_division = request.GET.get("division", Document.DIV_ADMIN).strip().lower()
+    if selected_division not in valid_divisions:
+        selected_division = Document.DIV_ADMIN
+
+    division_projects = {key: [] for key, _ in division_choices}
+
+    if _table_exists(Document):
+        for division_key in [Document.DIV_ADMIN, Document.DIV_QUALITY, Document.DIV_MAINTENANCE]:
+            docs_qs = (
+                Document.objects.filter(division=division_key)
+                .order_by("-created_at")
+                .values("document_name", "status")[:120]
+            )
+            division_projects[division_key] = [
+                {
+                    "title": row["document_name"],
+                    "meta": f"Status: {row['status'].replace('_', ' ').title()}",
+                }
+                for row in docs_qs
+            ]
 
     if _table_exists(PlanningProject):
-        projects_qs = PlanningProject.objects.all()
-        total_projects = projects_qs.count()
-        completed_projects = projects_qs.filter(status=PlanningProject.STATUS_AWARDED).count()
-        ongoing_projects = projects_qs.exclude(
-            status__in=[PlanningProject.STATUS_AWARDED, PlanningProject.STATUS_CANCELLED]
-        ).count()
-        total_project_cost_value = (
-            projects_qs.aggregate(
-                total=Coalesce(
-                    Sum("budget_amount"),
-                    Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
-                    output_field=DecimalField(max_digits=14, decimal_places=2),
-                )
-            )["total"]
-            or Decimal("0")
-        )
+        planning_qs = PlanningProject.objects.order_by("-created_at").values("project_title", "status", "fund")[:120]
+        division_projects[Document.DIV_PLANNING] = [
+            {
+                "title": row["project_title"],
+                "meta": f"{row['status'].replace('_', ' ').title()} | {row['fund'].replace('-', ' ').title()}",
+            }
+            for row in planning_qs
+        ]
+
+    if _table_exists(ConstructionStatusReport):
+        construction_qs = ConstructionStatusReport.objects.order_by("-created_at").values(
+            "project_name",
+            "location",
+            "contractor",
+        )[:120]
+        division_projects[Document.DIV_CONSTRUCTION] = [
+            {
+                "title": row["project_name"],
+                "meta": (
+                    f"Location: {row['location'] or '-'} | Contractor: {row['contractor'] or '-'}"
+                ),
+            }
+            for row in construction_qs
+        ]
+
+    selected_projects = division_projects.get(selected_division, [])
+    if query:
+        query_lower = query.lower()
+        selected_projects = [
+            item
+            for item in selected_projects
+            if query_lower in item["title"].lower() or query_lower in item["meta"].lower()
+        ]
+
+    counts_by_division = {key: len(values) for key, values in division_projects.items()}
+    selected_division_label = dict(division_choices).get(selected_division, "Division")
 
     context = {
-        "total_projects": f"{total_projects:,}",
-        "completed_projects": f"{completed_projects:,}",
-        "ongoing_projects": f"{ongoing_projects:,}",
-        "total_project_cost": f"PHP {total_project_cost_value:,.0f}",
+        "query": query,
+        "selected_division": selected_division,
+        "selected_division_label": selected_division_label,
+        "division_choices": division_choices,
+        "counts_by_division": counts_by_division,
+        "selected_projects": selected_projects,
     }
     return render(request, "Projects/projects.html", context)
 
