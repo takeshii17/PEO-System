@@ -170,7 +170,7 @@
             height: 52px;
             border-radius: 50%;
             border: 2px solid #cfd7e1;
-            background: radial-gradient(circle at 35% 35%, #f1f9ff 0%, #dbe8f7 45%, #b9cade 100%);
+            background: #ffffff url("{% static 'images/prov-logo.png' %}") center/cover no-repeat;
             color: #0f2e53;
             font-size: 0.54rem;
             font-weight: 700;
@@ -732,7 +732,7 @@
         <div class="content">
             <header class="topbar">
                 <div class="profile">
-                    <div class="seal">OFFICE<br>OF PEO</div>
+                    <div class="seal" aria-label="Provincial Logo"></div>
                     <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
                     <form action="{% url 'logout' %}" method="post">
                         {% csrf_token %}
@@ -1071,6 +1071,7 @@
     </script>
 </body>
 </html>
+
 
 
 

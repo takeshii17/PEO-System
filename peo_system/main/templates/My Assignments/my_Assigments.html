@@ -273,7 +273,7 @@
     .assignments-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1200px;
+      min-width: 1080px;
     }
 
     .assignments-table th,
@@ -570,9 +570,8 @@
               <th>ID Track</th>
               <th>Name Project</th>
               <th>Category</th>
-              <th>Location</th>
               <th>Task Types</th>
-              <th>Date Received</th>
+              <th>Date Recieve</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -582,7 +581,6 @@
               <td>TRK-001</td>
               <td>Riverside Bridge Rehabilitation</td>
               <td>Bridge</td>
-              <td>Brgy. Riverside, San Isidro</td>
               <td>Inspection</td>
               <td>2026-02-20</td>
               <td><span class="status-pill status-progress" data-status-pill>In Progress</span></td>
@@ -607,7 +605,6 @@
               <td>TRK-002</td>
               <td>Provincial Road Section 7 Overlay</td>
               <td>Road</td>
-              <td>Section 7, Poblacion</td>
               <td>POW Review</td>
               <td>2026-02-18</td>
               <td><span class="status-pill status-pending" data-status-pill>Pending</span></td>
@@ -632,7 +629,6 @@
               <td>TRK-003</td>
               <td>Barangay Access Road Concreting</td>
               <td>Road</td>
-              <td>Brgy. Mabini Access Road</td>
               <td>Construction Monitoring</td>
               <td>2026-02-15</td>
               <td><span class="status-pill status-complete" data-status-pill>Completed</span></td>
@@ -654,7 +650,7 @@
               </td>
             </tr>
             <tr id="assignmentEmptyRow" class="assignments-empty-row" hidden>
-              <td colspan="8">No assignments match the current filter.</td>
+              <td colspan="7">No assignments match the current filter.</td>
             </tr>
           </tbody>
         </table>
@@ -722,7 +718,7 @@
         var visibleRows = 0;
 
         assignmentRows.forEach(function (row) {
-          var rowTaskType = normalize(row.getAttribute("data-task-type") || (row.cells[4] ? row.cells[4].textContent : ""));
+          var rowTaskType = normalize(row.getAttribute("data-task-type") || (row.cells[3] ? row.cells[3].textContent : ""));
           var rowStatus = normalize(row.getAttribute("data-current-status") || "");
           var matchesTaskType = selectedTaskType === "all task types" || rowTaskType === selectedTaskType;
           var matchesStatus = selectedStatus === "all statuses" || rowStatus === selectedStatus;

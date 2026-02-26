@@ -24,7 +24,7 @@
         .workspace { flex:1; min-width:0; background:#f2f4f7; }
         .topbar { height:92px; border-bottom:1px solid var(--line); display:flex; justify-content:flex-end; align-items:center; padding:0 28px; background:#f5f7fa; }
         .account { display:flex; align-items:center; gap:14px; }
-        .seal { width:52px; height:52px; border-radius:50%; border:2px solid #d2d9e1; background:radial-gradient(circle at 35% 30%,#f2fbff 0%,#dce8f6 45%,#bccce0 100%); display:grid; place-items:center; font-size:.56rem; font-weight:700; color:#0b2a4c; text-align:center; line-height:1.15; }
+        .seal { width:52px; height:52px; border-radius:50%; border:2px solid #d2d9e1; background: #ffffff url("{% static 'images/prov-logo.png' %}") center/cover no-repeat; display:grid; place-items:center; font-size:.56rem; font-weight:700; color:#0b2a4c; text-align:center; line-height:1.15; }
         .avatar { width:42px; height:42px; border-radius:50%; background:#0f3459; color:#f2f7ff; display:grid; place-items:center; font-size:1.15rem; font-weight:700; text-transform:uppercase; }
         .logout-form { margin:0; }
         .logout-btn { border:0; background:transparent; color:#0b213a; font-size:1.05rem; padding:8px 10px; border-radius:10px; cursor:pointer; }
@@ -152,7 +152,7 @@
     <div class="workspace">
         <header class="topbar">
             <div class="account">
-                <div class="seal">OFFICE<br>OF PEO</div>
+                <div class="seal" aria-label="Provincial Logo"></div>
                 <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
                 <form class="logout-form" action="{% url 'logout' %}" method="post">{% csrf_token %}<button class="logout-btn" type="submit">Logout</button></form>
             </div>
@@ -313,6 +313,7 @@
 </script>
 </body>
 </html>
+
 
 
 
