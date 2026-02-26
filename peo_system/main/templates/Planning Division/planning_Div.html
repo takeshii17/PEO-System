@@ -705,6 +705,10 @@
                     Planning Division
                     <span class="caret">&#8250;</span>
                 </a>
+                <a class="{% if current_page == 'projects' %}active{% endif %}" href="{% url 'projects' %}">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M4 6h12l4 4v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/><path d="M14 6v4h4M7 13h6M7 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Projects
+                </a>
                 <a class="{% if current_page == 'construction_div_dashboard' or current_page == 'construction_division' %}active{% endif %}" href="{% url 'construction_div_dashboard' %}">
                     <svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
                     Construction Division
@@ -720,14 +724,6 @@
                 <a class="{% if current_page == 'my_assignments' or current_page == 'my_assignments_template_alias' %}active{% endif %}" href="{% url 'my_assignments' %}">
                     <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                     My Assignments
-                </a>
-                <a class="{% if current_page == 'maintinance_task_management' or current_page == 'maintenance_task_management' or current_page == 'tasks' %}active{% endif %}" href="{% url 'maintinance_task_management' %}">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h7M4 12h12M4 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="7" r="2" stroke="currentColor" stroke-width="2"/></svg>
-                    Tasks
-                </a>
-                <a class="{% if current_page == 'maintinance_contractor_management' or current_page == 'maintenance_contractor_management' or current_page == 'contractors' %}active{% endif %}" href="{% url 'maintinance_contractor_management' %}">
-                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8Z" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>
-                    Contractors
                 </a>
                 {% endwith %}
             </nav>
@@ -814,7 +810,7 @@
                             <h3>Annual Budget Allocations</h3>
                             <p>Budget management</p>
                         </div>
-                        <button class="new-budget" type="button">
+                        <button class="new-budget" type="button" id="openBudgetModal">
                             <span>+</span>
                             <span>New Budget</span>
                         </button>
@@ -1003,13 +999,13 @@
     <div class="modal {% if show_budget_modal %}show{% endif %}" id="budgetModal">
         <div class="modal-card">
             <div class="modal-head">
-                <h3>Edit Budget</h3>
+                <h3>{% if editing_budget %}Edit Budget{% else %}New Budget{% endif %}</h3>
                 <button class="icon-btn" type="button" id="closeBudgetModal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    <input type="hidden" name="action" value="update_budget">
+                    <input type="hidden" name="action" value="{% if editing_budget %}update_budget{% else %}create_budget{% endif %}">
                     {% if editing_budget %}
                     <input type="hidden" name="budget_id" value="{{ editing_budget.id }}">
                     {% endif %}
@@ -1023,7 +1019,7 @@
                     </div>
                     <div class="modal-actions">
                         <a class="icon-btn" href="{% url 'planning_div_dashboard' %}?tab=budget" aria-label="Cancel">Cancel</a>
-                        <button class="new-budget" type="submit">Save</button>
+                        <button class="new-budget" type="submit">{% if editing_budget %}Save{% else %}Create Budget{% endif %}</button>
                     </div>
                 </form>
             </div>
@@ -1035,6 +1031,7 @@
             const openProjectBtn = document.getElementById("openProjectModal");
             const closeProjectBtn = document.getElementById("closeProjectModal");
             const modal = document.getElementById("budgetModal");
+            const openBudgetBtn = document.getElementById("openBudgetModal");
             const closeBtn = document.getElementById("closeBudgetModal");
             if (openProjectBtn && projectModal) {
                 openProjectBtn.addEventListener("click", function () {
@@ -1056,6 +1053,11 @@
             if (closeBtn) {
                 closeBtn.addEventListener("click", function () {
                     window.location.href = "{% url 'planning_div_dashboard' %}?tab=budget";
+                });
+            }
+            if (openBudgetBtn && modal) {
+                openBudgetBtn.addEventListener("click", function () {
+                    modal.classList.add("show");
                 });
             }
             if (modal) {

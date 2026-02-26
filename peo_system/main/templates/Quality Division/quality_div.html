@@ -25,11 +25,18 @@
         }
 
         .app-shell {
-            display: block;
+            display: flex;
             min-height: 100vh;
         }
 
-        .sidebar { display: none; }
+        .sidebar {
+            width: 340px;
+            background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
+            color: #d5dfeb;
+            border-right: 1px solid #15385f;
+            display: flex;
+            flex-direction: column;
+        }
 
         .brand {
             display: flex;
@@ -102,12 +109,21 @@
         }
 
         .workspace {
+            flex: 1;
             min-width: 0;
             width: 100%;
             background: #f2f4f7;
         }
 
-        .topbar { display: none; }
+        .topbar {
+            height: 92px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 28px;
+            background: #f5f7fa;
+        }
 
         .account {
             display: flex;
@@ -157,9 +173,7 @@
 
         .logout-btn:hover { background: #e7edf5; }
 
-        .page {
-            padding: 24px;
-        }
+        .page { padding: 24px 28px; }
 
         .page h2 {
             margin: 0;
@@ -253,6 +267,12 @@
             .page h2 { font-size: 1.45rem; }
             .empty p { font-size: 1.05rem; }
         }
+
+        body.embedded-maintenance-view .app-shell { display: block; min-height: auto; }
+        body.embedded-maintenance-view .sidebar,
+        body.embedded-maintenance-view .topbar { display: none; }
+        body.embedded-maintenance-view .workspace { width: 100%; }
+        body.embedded-maintenance-view .page { padding: 16px; }
     </style> 
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
@@ -327,6 +347,3 @@
     </div>
 </body>
 </html>
-
-
-

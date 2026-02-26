@@ -68,6 +68,7 @@ def home(request):
     completed_documents = 0
     ongoing_documents = 0
     total_cost_value = Decimal("0")
+    recent_projects = []
 
     if _table_exists(Document):
         documents_qs = Document.objects.all()
@@ -96,6 +97,9 @@ def home(request):
             )
         )["total"] or Decimal("0")
 
+    if _table_exists(PlanningProject):
+        recent_projects = list(PlanningProject.objects.order_by("-id")[:6])
+
     def _format_currency_short(amount):
         amount = Decimal(amount or 0)
         absolute = abs(amount)
@@ -118,6 +122,7 @@ def home(request):
         "completed_documents": completed_documents,
         "ongoing_documents": ongoing_documents,
         "total_cost_display": _format_currency_short(total_cost_value),
+        "recent_projects": recent_projects,
     }
     return render(request, "home.html", context)
 
@@ -178,7 +183,14 @@ def planning_div_dashboard(request):
                 PlanningBudget.objects.filter(id=delete_id).delete()
             return redirect(f"{request.path}?tab=budget")
 
-        if action == "update_budget":
+        if action == "create_budget":
+            budget_form = PlanningBudgetForm(request.POST)
+            show_budget_modal = True
+            editing_budget = None
+            if budget_form.is_valid():
+                budget_form.save()
+                return redirect(f"{request.path}?tab=budget")
+        elif action == "update_budget":
             budget_id = request.POST.get("budget_id")
             editing_budget = PlanningBudget.objects.filter(id=budget_id).first()
             budget_form = PlanningBudgetForm(request.POST, instance=editing_budget)
@@ -470,6 +482,41 @@ def quality_div_dashboard(request):
 @xframe_options_sameorigin
 def my_assignments(request):
     return render(request, "My Assignments/my_Assigments.html")
+
+
+@login_required
+@xframe_options_sameorigin
+def projects_dashboard(request):
+    total_projects = 0
+    completed_projects = 0
+    ongoing_projects = 0
+    total_project_cost_value = Decimal("0")
+
+    if _table_exists(PlanningProject):
+        projects_qs = PlanningProject.objects.all()
+        total_projects = projects_qs.count()
+        completed_projects = projects_qs.filter(status=PlanningProject.STATUS_AWARDED).count()
+        ongoing_projects = projects_qs.exclude(
+            status__in=[PlanningProject.STATUS_AWARDED, PlanningProject.STATUS_CANCELLED]
+        ).count()
+        total_project_cost_value = (
+            projects_qs.aggregate(
+                total=Coalesce(
+                    Sum("budget_amount"),
+                    Value(Decimal("0.00"), output_field=DecimalField(max_digits=14, decimal_places=2)),
+                    output_field=DecimalField(max_digits=14, decimal_places=2),
+                )
+            )["total"]
+            or Decimal("0")
+        )
+
+    context = {
+        "total_projects": f"{total_projects:,}",
+        "completed_projects": f"{completed_projects:,}",
+        "ongoing_projects": f"{ongoing_projects:,}",
+        "total_project_cost": f"PHP {total_project_cost_value:,.0f}",
+    }
+    return render(request, "Projects/projects.html", context)
 
 
 @login_required

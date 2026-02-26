@@ -528,6 +528,98 @@
             box-shadow: 0 1px 2px rgba(12, 35, 61, 0.12);
         }
 
+        .home-overview.hidden,
+        .projects-panel.hidden {
+            display: none;
+        }
+
+        .projects-panel {
+            margin-top: 14px;
+            background: #f8fafc;
+            border: 1px solid #ccd4df;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 14px 16px;
+        }
+
+        .projects-panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .projects-panel-head h3 {
+            margin: 0;
+            font-size: 1.08rem;
+        }
+
+        .projects-panel-subtitle {
+            margin: 0;
+            font-size: 0.86rem;
+            color: #5a6f88;
+        }
+
+        .projects-view-all {
+            border: 1px solid #ccd4df;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 0.84rem;
+            color: #0d2f52;
+            text-decoration: none;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .projects-empty {
+            border: 1px solid #d8dfe8;
+            border-radius: 12px;
+            min-height: 120px;
+            display: grid;
+            place-items: center;
+            color: #667c95;
+            text-align: center;
+            padding: 20px 12px;
+            margin-top: 8px;
+        }
+
+        .projects-empty svg {
+            display: block;
+            margin: 0 auto 8px;
+            color: #a8b3c0;
+        }
+
+        .projects-list {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .project-item {
+            border: 1px solid #d4dce6;
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 10px 12px;
+        }
+
+        .project-item-title {
+            margin: 0 0 2px;
+            font-weight: 600;
+            font-size: 0.94rem;
+            color: #0d2743;
+        }
+
+        .project-item-meta {
+            margin: 0;
+            font-size: 0.82rem;
+            color: #5b7088;
+        }
+
         .new-item-modal {
             position: fixed;
             inset: 0;
@@ -740,6 +832,7 @@
                 </a>
                 <a id="adminDivisionNavLink" class="nav-item" href="{% url 'admin_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
                 <a id="planningDivisionNavLink" class="nav-item" href="{% url 'planning_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
+                <a id="projectsNavLink" class="nav-item {% if request.resolver_match.url_name == 'projects' %}active{% endif %}" href="{% url 'projects' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h12l4 4v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/><path d="M14 6v4h4M7 13h6M7 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Projects</a>
                 <a id="constructionDivisionNavLink" class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
                 <a id="qualityDivisionNavLink" class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
                 <div class="nav-group" id="maintenanceNavGroup">
@@ -792,76 +885,114 @@
 
             <main class="page">
                 <div id="homeDashboardSections" class="dashboard-sections">
-                    <section class="hero">
-                        <div class="hero-body">
-                            <h2>Operations Dashboard</h2>
-                            <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
-                            <div class="hero-actions">
-                                <button class="btn-primary" type="button" id="openNewItemModal">
-                                    <span>+</span>
-                                    <span>New item</span>
-                                </button>
-                                <button class="btn-secondary" type="button">Export Report</button>
+                    <div id="homeOverviewContent" class="home-overview">
+                        <section class="hero">
+                            <div class="hero-body">
+                                <h2>Operations Dashboard</h2>
+                                <p>Track division workflows, project stages, documents, and task accountability across the Provincial Engineering Office.</p>
+                                <div class="hero-actions">
+                                    <button class="btn-primary" type="button" id="openNewItemModal">
+                                        <span>+</span>
+                                        <span>New item</span>
+                                    </button>
+                                    <button class="btn-secondary" type="button">Export Report</button>
+                                </div>
                             </div>
-                        </div>
-                    </section>
+                        </section>
 
-                    <section class="metrics">
-                        <article class="metric-card">
-                            <div class="metric-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                    <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <div class="metric-text">
-                                <strong>{{ total_documents }}</strong>
-                                <span>Total Documents</span>
-                            </div>
-                        </article>
-                        <article class="metric-card">
-                            <div class="metric-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                    <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <div class="metric-text">
-                                <strong>{{ completed_documents }}</strong>
-                                <span>Completed</span>
-                            </div>
-                        </article>
-                        <article class="metric-card">
-                            <div class="metric-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <div class="metric-text">
-                                <strong>{{ ongoing_documents }}</strong>
-                                <span>Ongoing</span>
-                            </div>
-                        </article>
-                        <article class="metric-card">
-                            <div class="metric-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                                    <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
-                            </div>
-                            <div class="metric-text">
-                                <strong>{{ total_cost_display }}</strong>
-                                <span>Total Cost</span>
-                            </div>
-                        </article>
-                    </section>
+                        <section class="metrics">
+                            <article class="metric-card">
+                                <div class="metric-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                        <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-text">
+                                    <strong>{{ total_documents }}</strong>
+                                    <span>Total Documents</span>
+                                </div>
+                            </article>
+                            <article class="metric-card">
+                                <div class="metric-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                        <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-text">
+                                    <strong>{{ completed_documents }}</strong>
+                                    <span>Completed</span>
+                                </div>
+                            </article>
+                            <article class="metric-card">
+                                <div class="metric-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-text">
+                                    <strong>{{ ongoing_documents }}</strong>
+                                    <span>Ongoing</span>
+                                </div>
+                            </article>
+                            <article class="metric-card">
+                                <div class="metric-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="metric-text">
+                                    <strong>{{ total_cost_display }}</strong>
+                                    <span>Total Cost</span>
+                                </div>
+                            </article>
+                        </section>
+                    </div>
 
                     <section class="data-tabs" aria-label="Data sections">
                         <button class="data-tab active" id="tabDivisions" type="button">Divisions</button>
-                        <button class="data-tab" id="tabProjects" type="button" data-url="{% url 'planning_div_dashboard' %}?tab=ppa" data-title="Projects">Projects</button>
+                        <button class="data-tab" id="tabProjects" type="button" data-title="Projects">Projects</button>
                         <button class="data-tab" id="tabDocuments" type="button" data-url="{% url 'admin_div_dashboard' %}?tab=documents" data-title="Document Register">Document Register</button>
                         <button class="data-tab" id="tabTaskMatrix" type="button" data-url="{% url 'maintenance_task_management' %}" data-title="Task Matrix">Task Matrix</button>
+                    </section>
+
+                    <section id="projectsPanel" class="projects-panel hidden">
+                        <div class="projects-panel-head">
+                            <div>
+                                <h3>Recent Projects</h3>
+                                <p class="projects-panel-subtitle">Latest projects from the database</p>
+                            </div>
+                            <a class="projects-view-all" href="{% url 'planning_div_dashboard' %}?tab=ppa">
+                                View All
+                                <span aria-hidden="true">&#8594;</span>
+                            </a>
+                        </div>
+
+                        {% if recent_projects %}
+                        <ul class="projects-list">
+                            {% for project in recent_projects %}
+                            <li class="project-item">
+                                <p class="project-item-title">{{ project.project_title }}</p>
+                                <p class="project-item-meta">
+                                    {{ project.get_status_display }} | {{ project.get_fund_display }} | PHP {{ project.budget_amount }}
+                                </p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <div class="projects-empty">
+                            <div>
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <rect x="6" y="3" width="12" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                                    <path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+                                <div>No projects yet. Create your first project!</div>
+                            </div>
+                        </div>
+                        {% endif %}
                     </section>
                 </div>
 
@@ -972,6 +1103,9 @@
             var maintenanceManagementNavLink = document.getElementById("maintenanceManagementNavLink");
             var dataTabs = document.querySelectorAll(".data-tab");
             var tabDivisions = document.getElementById("tabDivisions");
+            var tabProjects = document.getElementById("tabProjects");
+            var homeOverviewContent = document.getElementById("homeOverviewContent");
+            var projectsPanel = document.getElementById("projectsPanel");
             var hasMaintenanceToggle = !!(mainLink && actionBtn && submenu && group);
             var subItems = submenu ? submenu.querySelectorAll(".nav-subitem") : [];
             var topNavItems = document.querySelectorAll(".nav-menu > a.nav-item");
@@ -1110,8 +1244,12 @@
 
                 var embeddedLink = toEmbeddedUrl(link);
 
-                if (dashboardSections) {
-                    dashboardSections.classList.add("hidden");
+                if (homeOverviewContent) {
+                    homeOverviewContent.classList.add("hidden");
+                }
+
+                if (projectsPanel) {
+                    projectsPanel.classList.add("hidden");
                 }
 
                 embeddedPanel.classList.add("visible");
@@ -1135,17 +1273,29 @@
 
                 embeddedPanel.classList.remove("visible");
                 embeddedPanel.setAttribute("aria-hidden", "true");
+            }
 
-                if (dashboardSections) {
-                    dashboardSections.classList.remove("hidden");
+            function showDivisionsPanel() {
+                closeEmbeddedMaintenance();
+
+                if (homeOverviewContent) {
+                    homeOverviewContent.classList.remove("hidden");
                 }
 
-                if (dashboardNavLink) {
-                    setActiveTopNavItem(dashboardNavLink);
+                if (projectsPanel) {
+                    projectsPanel.classList.add("hidden");
+                }
+            }
+
+            function showProjectsPanel() {
+                closeEmbeddedMaintenance();
+
+                if (homeOverviewContent) {
+                    homeOverviewContent.classList.add("hidden");
                 }
 
-                if (tabDivisions) {
-                    setActiveDataTab(tabDivisions);
+                if (projectsPanel) {
+                    projectsPanel.classList.remove("hidden");
                 }
             }
 
@@ -1258,14 +1408,27 @@
                         var viewTitle = tab.getAttribute("data-title") || tab.textContent.trim();
                         setActiveDataTab(tab);
 
-                        if (!link) {
-                            closeEmbeddedMaintenance();
+                        if (tab.id === "tabDivisions") {
+                            showDivisionsPanel();
+                            if (dashboardNavLink) {
+                                setActiveTopNavItem(dashboardNavLink);
+                            }
                             return;
                         }
 
-                        if (tab.id === "tabProjects" && planningDivisionNavLink) {
-                            setActiveTopNavItem(planningDivisionNavLink);
-                        } else if (tab.id === "tabDocuments" && adminDivisionNavLink) {
+                        if (tab.id === "tabProjects") {
+                            showProjectsPanel();
+                            if (planningDivisionNavLink) {
+                                setActiveTopNavItem(planningDivisionNavLink);
+                            }
+                            return;
+                        }
+
+                        if (!link) {
+                            return;
+                        }
+
+                        if (tab.id === "tabDocuments" && adminDivisionNavLink) {
                             setActiveTopNavItem(adminDivisionNavLink);
                         } else if (tab.id === "tabTaskMatrix") {
                             if (maintenanceManagementNavLink) {
@@ -1282,7 +1445,11 @@
                 dashboardNavLink.addEventListener("click", function (event) {
                     if (embeddedPanel && embeddedPanel.classList.contains("visible")) {
                         event.preventDefault();
-                        closeEmbeddedMaintenance();
+                        showDivisionsPanel();
+                        if (tabDivisions) {
+                            setActiveDataTab(tabDivisions);
+                        }
+                        setActiveTopNavItem(dashboardNavLink);
                     } else {
                         setActiveTopNavItem(dashboardNavLink);
                     }
