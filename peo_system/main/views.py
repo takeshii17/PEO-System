@@ -345,6 +345,11 @@ def maintinance_div_dashboard(request):
 @login_required
 @xframe_options_sameorigin
 def construction_div_dashboard(request):
+    embedded_mode = bool(request.GET.get("embedded") or request.POST.get("embedded"))
+    redirect_url = reverse("construction_div_dashboard")
+    if embedded_mode:
+        redirect_url = f"{redirect_url}?embedded=1"
+
     if not _table_exists(ConstructionStatusReport):
         context = {
             "reports": [],
@@ -372,20 +377,25 @@ def construction_div_dashboard(request):
             delete_id = request.POST.get("delete_id")
             if delete_id:
                 ConstructionStatusReport.objects.filter(id=delete_id).delete()
-            return redirect("construction_div_dashboard")
+            return redirect(redirect_url)
 
         if action in {"create", "update"}:
             instance = None
+            update_error = None
             if action == "update":
                 report_id = request.POST.get("report_id")
                 if report_id:
                     instance = ConstructionStatusReport.objects.filter(id=report_id).first()
                     editing_report = instance
+                if instance is None:
+                    update_error = "The selected report no longer exists."
             report_form = ConstructionStatusReportForm(request.POST, instance=instance)
             show_report_modal = True
-            if report_form.is_valid():
+            if update_error:
+                report_form.add_error(None, update_error)
+            elif report_form.is_valid():
                 report_form.save()
-                return redirect("construction_div_dashboard")
+                return redirect(redirect_url)
         else:
             report_form = ConstructionStatusReportForm()
     else:

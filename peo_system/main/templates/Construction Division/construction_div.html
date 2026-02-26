@@ -32,8 +32,9 @@
         .page h2 { margin:0; font-size:1.85rem; color:#1f2937; }
         .subhead { margin-top:10px; display:flex; gap:10px; align-items:center; color:#5b6675; font-size:.95rem; }
         .chip { display:inline-flex; align-items:center; padding:4px 10px; border:1px solid #f2bc94; border-radius:999px; color:#c2410c; background:#fff4ec; font-size:.86rem; }
-        .card { margin-top:20px; background:#f8fafc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 1px 4px rgba(8,34,61,.1); padding:20px; }
+        .card { margin-top:20px; background:#f8fafc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 1px 4px rgba(8,34,61,.1); padding:20px; display:block; }
         .card h3 { margin:0; font-size:1rem; }
+        .report-head { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
         .table-wrap {
             width: 100%;
             overflow-x: auto;
@@ -75,7 +76,7 @@
             z-index: 1;
             background: #ffffff;
         }
-        .toolbar { margin-top:12px; display:flex; justify-content:flex-end; }
+        .toolbar { margin-top:0; display:flex; justify-content:flex-end; }
         .btn { border:1px solid #123760; background:#123760; color:#fff; border-radius:8px; padding:8px 12px; font-size:.82rem; cursor:pointer; }
         .btn.light { background:#fff; color:#123760; }
         .actions { display:flex; gap:6px; justify-content:center; }
@@ -91,19 +92,15 @@
         .field input, .field textarea { width:100%; border:1px solid #bfcbd9; border-radius:8px; padding:8px; font-size:.8rem; font-family:inherit; background:#fff; }
         .field.wide { grid-column:span 4; }
         .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
-<<<<<<< HEAD
-=======
+        .form-errors { margin:0 0 10px; padding:10px 12px; border-radius:8px; background:#fee2e2; color:#991b1b; font-size:.86rem; }
 
-        /* Table-only layout for Construction Division view */
-        .app-shell { display:block; min-height:auto; }
-        .sidebar, .topbar { display:none; }
-        .workspace { width:100%; }
-        .page { padding:16px; }
-        .page > h2, .subhead, .card > h3, .toolbar { display:none; }
-        .card { margin-top:0; padding:0; border:0; border-radius:0; box-shadow:none; background:transparent; }
-        .column-table { background:#fff; }
+        /* When loaded from Home dashboard iframe (?embedded=1), render content-only. */
+        body.embedded-maintenance-view .app-shell { display:block; min-height:auto; }
+        body.embedded-maintenance-view .sidebar,
+        body.embedded-maintenance-view .topbar { display:none; }
+        body.embedded-maintenance-view .workspace { width:100%; }
+        body.embedded-maintenance-view .page { padding:16px; }
 
->>>>>>> 25847da0951670c0040fb075acad140f5dcd2ff1
         @media (max-width:1200px) { .sidebar { width:280px; } }
         @media (max-width:1024px) {
             .page { padding:12px; }
@@ -164,9 +161,11 @@
             <h2>Construction Division</h2>
             <div class="subhead"><span class="chip">Construction Division</span><span>Project Implementation &amp; Supervision</span></div>
             <section class="card">
-                <h3>Physical Accomplishment Status Report</h3>
-                <div class="toolbar">
-                    <button class="btn" type="button" id="openReportModal">+ Add Record</button>
+                <div class="report-head">
+                    <h3>Physical Accomplishment Status Report</h3>
+                    <div class="toolbar">
+                        <button class="btn" type="button" id="openReportModal">+ Add Record</button>
+                    </div>
                 </div>
                 <div class="table-wrap">
                 <table class="column-table">
@@ -220,11 +219,14 @@
                             <td>{{ report.remarks|default:"-" }}</td>
                             <td>
                                 <div class="actions">
-                                    <a class="btn light" href="?edit={{ report.id }}">Edit</a>
+                                    <a class="btn light" href="?edit={{ report.id }}{% if request.GET.embedded %}&embedded=1{% endif %}">Edit</a>
                                     <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="delete_id" value="{{ report.id }}">
+                                        {% if request.GET.embedded %}
+                                        <input type="hidden" name="embedded" value="1">
+                                        {% endif %}
                                         <button class="btn light" type="submit">Delete</button>
                                     </form>
                                 </div>
@@ -246,12 +248,19 @@
     <div class="modal-card">
         <div class="modal-head">
             <h3>{% if editing_report %}Edit Report Record{% else %}Create Report Record{% endif %}</h3>
-            <button class="btn light" type="button" id="closeReportModal">Close</button>
         </div>
         <div class="modal-body">
+            {% if report_form.errors %}
+            <div class="form-errors">
+                Please correct the highlighted fields and submit again.
+            </div>
+            {% endif %}
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="{% if editing_report %}update{% else %}create{% endif %}">
+                {% if request.GET.embedded %}
+                <input type="hidden" name="embedded" value="1">
+                {% endif %}
                 {% if editing_report %}
                 <input type="hidden" name="report_id" value="{{ editing_report.id }}">
                 {% endif %}
@@ -288,8 +297,9 @@
         const openBtn = document.getElementById("openReportModal");
         const closeBtn = document.getElementById("closeReportModal");
         const cancelBtn = document.getElementById("cancelReportModal");
+        const closeUrl = "{% url 'construction_div_dashboard' %}{% if request.GET.embedded %}?embedded=1{% endif %}";
         function openModal() { modal.classList.add("show"); }
-        function closeModal() { modal.classList.remove("show"); }
+        function closeModal() { window.location.href = closeUrl; }
         if (openBtn) openBtn.addEventListener("click", openModal);
         if (closeBtn) closeBtn.addEventListener("click", closeModal);
         if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
