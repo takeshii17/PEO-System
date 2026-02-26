@@ -1097,6 +1097,7 @@
             var myAssignmentsNavLink = document.getElementById("myAssignmentsNavLink");
             var dashboardNavLink = document.getElementById("dashboardNavLink");
             var adminDivisionNavLink = document.getElementById("adminDivisionNavLink");
+            var projectsNavLink = document.getElementById("projectsNavLink");
             var qualityDivisionNavLink = document.getElementById("qualityDivisionNavLink");
             var planningDivisionNavLink = document.getElementById("planningDivisionNavLink");
             var constructionDivisionNavLink = document.getElementById("constructionDivisionNavLink");
@@ -1351,6 +1352,21 @@
                     if (link) {
                         window.setTimeout(function () {
                             openEmbeddedMaintenance(link, "Admin Division");
+                        }, 180);
+                    }
+                });
+            }
+
+            if (projectsNavLink) {
+                projectsNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    setActiveTopNavItem(projectsNavLink);
+                    playBlink(projectsNavLink);
+
+                    var link = projectsNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "Projects");
                         }, 180);
                     }
                 });

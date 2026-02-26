@@ -491,6 +491,7 @@ def projects_dashboard(request):
     completed_projects = 0
     ongoing_projects = 0
     total_project_cost_value = Decimal("0")
+    project_rows = []
 
     if _table_exists(PlanningProject):
         projects_qs = PlanningProject.objects.all()
@@ -509,9 +510,12 @@ def projects_dashboard(request):
             )["total"]
             or Decimal("0")
         )
+        project_rows = list(projects_qs.order_by("-created_at")[:200])
 
     context = {
+        "project_rows": project_rows,
         "total_projects": f"{total_projects:,}",
+        "total_projects_count": total_projects,
         "completed_projects": f"{completed_projects:,}",
         "ongoing_projects": f"{ongoing_projects:,}",
         "total_project_cost": f"PHP {total_project_cost_value:,.0f}",
