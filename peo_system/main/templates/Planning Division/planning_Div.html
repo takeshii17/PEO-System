@@ -606,6 +606,25 @@
             gap: 8px;
         }
 
+        /* Content-only view: hide left sidebar and top bar */
+        .layout {
+            display: block;
+            min-height: auto;
+        }
+
+        .sidebar,
+        .topbar {
+            display: none;
+        }
+
+        .content {
+            width: 100%;
+        }
+
+        .main {
+            padding: 16px;
+        }
+
         @media (max-width: 1200px) {
             .sidebar {
                 width: 280px;
