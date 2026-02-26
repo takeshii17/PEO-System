@@ -6,208 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
   <title>Task Management</title>
- <style>
-    :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Sora","Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
-    .layout{min-height:100vh;display:block}
-    .sidebar{display:none}
-    .brand{display:flex;align-items:center;gap:14px;padding:24px 22px;border-bottom:1px solid rgba(217,229,245,.16)}
-    .logo{width:62px;height:62px;border-radius:10px;border:2px solid #f0d06a;background:transparent url("{% static 'images/peo-logo.png' %}") center/contain no-repeat;color:#8f0618;font-weight:700;font-size:.82rem;display:grid;place-items:center;box-shadow:inset 0 0 0 2px #17395f}
-    .brand h1{margin:0;color:#f1f6fc;font-size:1.8rem;line-height:1.1}
-    .brand p{margin:4px 0 0;color:#b9c8d9;font-size:.98rem}
-    .menu{padding:16px 20px;display:grid;gap:8px}
-    .menu-item{color:#c7d6e6;text-decoration:none;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;font-size:1.9rem;font-size:clamp(1rem,1.2vw,1.85rem)}
-    .menu-item:hover{background:rgba(255,255,255,.08)}
-    .menu-item.active{background:var(--active);color:#fff;font-weight:600}
-    .menu-item svg{width:24px;height:24px;flex:0 0 auto}
-    .menu-group{display:grid;gap:8px}
-    .menu-item-group{width:100%;padding:0;border:0;background:transparent;overflow:hidden;color:#fff;font:inherit;cursor:pointer;justify-content:space-between}
-    .menu-main{display:flex;align-items:center;gap:12px;padding:14px 16px;flex:1;text-align:left}
-    .menu-caret{display:grid;place-items:center;min-width:54px;border-left:1px solid rgba(189,214,238,.14)}
-    .menu-caret svg{width:16px;height:16px;transition:transform .2s ease}
-    .menu-group.open .menu-caret svg{transform:rotate(180deg)}
-    .menu-submenu{display:grid;gap:8px;padding-left:14px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-4px);pointer-events:none;transition:max-height .28s ease,opacity .2s ease,transform .2s ease}
-    .menu-group.open .menu-submenu{max-height:180px;opacity:1;transform:translateY(0);pointer-events:auto}
-    .menu-subitem{color:#c7d6e6;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:1.02rem;background:rgba(9,39,72,.36)}
-    
-    .stats,.tabs,.conditions,.filters,.roads,.ctm{display:none!important}
-    .tms{margin-top:0}
-    .content{min-width:0;width:100%}
-    .topbar{padding:20px 30px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#f6f8fb}
-    .heading h2{margin:0;font-size:3rem;font-size:clamp(2rem,2.5vw,3rem)}
-    .heading p{margin:6px 0 0;color:var(--muted);font-size:1.1rem}
-    .profile{display:flex;align-items:center;gap:14px}
-    .chip{border-radius:999px;background:#efe1ff;color:#7d18e4;border:1px solid #e6d1ff;padding:8px 14px;display:inline-flex;align-items:center;gap:8px;font-size:1.02rem;font-weight:600}
-    .seal{width:52px;height:52px;border-radius:50%;border:2px solid #d3dbe4;background:radial-gradient(circle at 35% 35%,#eff7ff,#dce9f8 46%,#bfcee3);display:grid;place-items:center;font-size:.53rem;font-weight:700;line-height:1.14;color:#0f2c4f;text-align:center}
-    .page{padding:30px}
-    .stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:26px}
-    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);min-height:160px;padding:22px 20px;display:flex;align-items:center;gap:16px}
-    .ibox{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:0 0 auto}
-    .ibox svg{width:27px;height:27px}
-    .i-gray{background:#dfe4ea;color:#1d466e}.i-blue{background:#d6e5f8;color:#2166dc}.i-green{background:#caedd9;color:#0a9a4a}.i-gold{background:#f7e7bc;color:#de7d00}
-    .card strong{display:block;font-size:2.4rem;line-height:1.05}
-    .card span{color:#47607d;font-size:1.06rem}
-    .tabs{display:inline-flex;background:#dfe4ea;border-radius:14px;padding:4px;gap:2px;margin-bottom:12px}
-    .tabs button{border:0;background:transparent;font-family:inherit;font-size:1rem;color:#102741;border-radius:10px;padding:8px 12px;cursor:pointer}
-    .tabs button.active{background:#f8fafd;box-shadow:0 1px 2px rgba(12,33,56,.12);font-weight:600}
-    .conditions{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:18px;margin-bottom:20px}
-    .ccard{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}
-    .chead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
-    .chead h3{margin:0;font-size:1.35rem}
-    .count{border-radius:999px;padding:5px 12px;font-weight:600;font-size:1rem}
-    .good{background:#cdeed9;color:#08923f}.fair{background:#cfe0f4;color:#1755dd}.poor{background:#f6e5b9;color:#d07300}.bad{background:#f03a49;color:#fff}
-    .bar{height:12px;border-radius:999px;background:#cfd6de;overflow:hidden}.bar>span{display:block;height:100%;background:#18395a}
-    .w1{width:22%}.w2{width:49%}.w3{width:22%}.w4{width:6%}
-    .filters{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:18px}
-    .frow{display:grid;grid-template-columns:minmax(250px,1fr) 230px 190px 200px 150px;gap:12px;align-items:center}
-    .search,.sel{border:1px solid #c9d0d9;border-radius:14px;background:#f9fbfd;padding:10px 12px;display:flex;align-items:center;gap:8px}
-    .search input,.sel select{width:100%;border:0;outline:none;background:transparent;color:#2f4a66;font-family:inherit;font-size:1.05rem}
-    .roads{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
-    .roads h2{margin:10px 10px 4px;font-size:2.1rem}
-    .roads .sub{margin:0 10px 12px;color:#4d647e;font-size:1.05rem}
-    .muni{border:1px solid #c8d0d9;border-radius:16px;overflow:hidden;margin:12px 0;background:#f9fbfd}
-    .mhead{background:#d0d6dc;color:#0e3155;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.65rem;font-size:clamp(1.2rem,1.4vw,1.65rem)}
-    .mhead .tag{margin-left:10px;border:1px solid #bcc5d0;border-radius:999px;font-weight:500;padding:3px 10px;font-size:.92rem;color:#0f2945;background:#d8dde3}
-    .mhead svg{width:22px;height:22px}
-    table{width:100%;border-collapse:collapse}
-    th,td{text-align:left;padding:13px 16px;border-bottom:1px solid #c9d0d9;font-size:1.05rem}
-    th{background:#f4f7fa;color:#0f2138;font-size:1.12rem}
-    tr:last-child td{border-bottom:0}
-    .pill{display:inline-block;border-radius:999px;padding:5px 12px;font-size:.96rem;font-weight:600}
-    .pill.good{background:#cdeed9;color:#08923f}.pill.fair{background:#cfe0f4;color:#1755dd}.pill.poor{background:#f6e5b9;color:#d07300}
-    .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:4px 2px 2px;color:#314a65;font-size:1.05rem}
-    .pager{display:inline-flex;gap:8px}.pager button{width:48px;height:40px;border:1px solid #c8d0d9;border-radius:12px;background:#f8fafd;color:#314a65;font-size:1.45rem;cursor:pointer}
-    .ctm{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px}
-    .ctm h2{margin:2px 2px 4px;font-size:2rem}
-    .ctm .sub{margin:0 2px 14px;color:#52657b;font-size:1.05rem}
-    .ctm-stats{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:16px;margin-bottom:16px}
-    .ctm-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:138px;padding:16px;display:flex;align-items:center;gap:14px}
-    .ctm-icon{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;flex:0 0 auto}
-    .ctm-icon svg{width:28px;height:28px}
-    .ctm-i1{background:#dee4ec;color:#183758}.ctm-i2{background:#caeee9;color:#00a69b}.ctm-i3{background:#f5e8cf;color:#f59300}.ctm-i4{background:#f4dce1;color:#ff3b4a}
-    .ctm-card strong{display:block;font-size:2.2rem;line-height:1}
-    .ctm-card span{color:#4a627c;font-size:1.05rem}
-    .ctm-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:20px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px}
-    .ctm-row{display:grid;grid-template-columns:minmax(280px,1fr) 190px 190px 200px;gap:12px;align-items:center}
-    .ctm-search,.ctm-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
-    .ctm-search input,.ctm-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
-    .ctm-add{border:0;border-radius:14px;background:#10385f;color:#fff;font-family:inherit;font-size:1.06rem;font-weight:600;padding:11px 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
-    .ctm-list{margin-top:8px}
-    .ctm-list h3{margin:0 2px 4px;font-size:1.8rem}
-    .ctm-list .sub{margin:0 2px 10px;color:#52657b}
-    .ctm-item{background:#f8fafc;border:1px solid #c8d0da;border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;margin:10px 0;display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-    .ctm-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .ctm-title h4{margin:0;font-size:1.18rem}
-    .badge{display:inline-block;border-radius:999px;background:#bcece4;color:#007f74;padding:5px 12px;font-weight:600;font-size:.96rem}
-    .tin{margin:6px 0 0;color:#546b84}
-    .ctm-meta{margin-top:6px;display:flex;gap:14px;align-items:center;color:#0d2138}
-    .ctm-meta .muted{color:#4f657f}
-    .ctm-actions{display:flex;gap:8px}
-    .ctm-actions button{width:44px;height:40px;border:1px solid #c7ced8;border-radius:12px;background:#f9fbfd;color:#1b2b3c;display:grid;place-items:center;cursor:pointer}
-    .ctm-actions svg{width:20px;height:20px}
-    .ctm-paging{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .ctm-paging button{border:1px solid #c7ced8;background:#f9fbfd;color:#192a3b;border-radius:12px;padding:8px 14px;font-size:1.05rem;cursor:pointer}
-    .tms{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px}
-    .tms-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px 14px;border-bottom:1px solid #ccd4de}
-    .tms-left{display:flex;align-items:center;gap:16px}
-    .tms-back{display:inline-flex;align-items:center;gap:8px;color:#1b2f44;text-decoration:none;font-size:1rem;padding:8px 10px;border-radius:10px}
-    .tms-back:hover{background:#ecf1f6}
-    .tms-head h2{margin:0;font-size:2.2rem;font-size:clamp(1.5rem,2.1vw,2.2rem)}
-    .tms-actions{display:flex;gap:10px;align-items:center}
-    .btn-light,.btn-dark{border-radius:14px;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
-    .btn-light{border:1px solid #cad2dd;background:#f8fafc;color:#1c334b}
-    .btn-dark{border:0;background:#133b64;color:#fff;font-weight:600}
-    .tms-body{padding:16px 8px 8px}
-    .tms-cards{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:14px;margin-bottom:16px}
-    .tms-card{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);min-height:132px;padding:14px 16px;display:flex;align-items:center}
-    .tms-card strong{display:block;font-size:2rem;line-height:1}
-    .tms-card span{color:#4e657f;font-size:1.05rem}
-    .tms-alert{display:flex;align-items:center;gap:10px}
-    .tms-filter{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px;margin-bottom:14px}
-    .tms-row{display:grid;grid-template-columns:minmax(280px,1fr) 170px 170px 170px;gap:12px;align-items:center}
-    .tms-search,.tms-select{border:1px solid #c6ced8;border-radius:14px;background:#fbfdff;padding:10px 12px;display:flex;align-items:center;gap:8px}
-    .tms-search input,.tms-select select{width:100%;border:0;outline:none;background:transparent;color:#324b66;font-family:inherit;font-size:1.02rem}
-    .tms-list{background:#f8fafc;border:1px solid #cfd6df;border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;min-height:260px;display:flex;flex-direction:column}
-    .tms-list h3{margin:4px 0 0;font-size:1.8rem}
-    .tms-list .sub{margin:4px 0 24px;color:#516881}
-    .tms-empty{margin:auto;display:grid;place-items:center;gap:10px;color:#5f7389}
-    .tms-empty svg{width:54px;height:54px;color:#a7b2bf}
-    .btn-create{border:0;border-radius:14px;background:#133b64;color:#fff;font-family:inherit;font-size:1.02rem;padding:10px 16px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
-    @media (max-width:1450px){.sidebar{width:300px}.stats,.conditions,.ctm-stats{grid-template-columns:repeat(2,minmax(220px,1fr))}.frow,.ctm-row{grid-template-columns:repeat(3,minmax(200px,1fr))}.tms-cards{grid-template-columns:repeat(3,minmax(180px,1fr))}.tms-row{grid-template-columns:repeat(2,minmax(180px,1fr))}}
-    @media (max-width:980px){.layout{flex-direction:column}.sidebar{width:100%}.topbar{flex-direction:column}.profile{width:100%;justify-content:flex-end}.stats,.conditions,.frow,.ctm-stats,.ctm-row,.tms-cards,.tms-row{grid-template-columns:1fr}.ctm-item,.tms-head{flex-direction:column;align-items:flex-start}}
-  </style> 
-</head>
-<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="brand"><div class="logo" aria-label="PEO Seal"></div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
-            <nav class="menu">
-        <a class="menu-item" href="{% url 'home' %}"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="3" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="3" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="7" height="7" rx="2" stroke="currentColor" stroke-width="2"/></svg>Dashboard</a>
-        <a class="menu-item" href="{% url 'admin_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M7 20v-2a4 4 0 0 1 4-4h2a4 4 0 0 1 4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 10c0-1.7 1.3-3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Admin Division</a>
-        <a class="menu-item" href="{% url 'planning_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Planning Division</a>
-        <a class="menu-item" href="{% url 'construction_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
-        <a class="menu-item" href="{% url 'quality_div_dashboard' %}"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
-        <div class="menu-group open" id="maintenanceMenuGroup">
-          <button class="menu-item menu-item-group active" id="maintenanceMenuBtn" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu">
-            <span class="menu-main">
-              <svg viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
-              Maintenance Division
-            </span>
-            <span class="menu-caret">
-              <svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </button>
-          <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
-            <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintenance Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
-          </div>
-        </div>
-        <a class="menu-item" href="{% url 'my_assignments' %}"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
-      </nav>
-    </aside>
-    <section class="content">
-      <header class="topbar">
-        <div class="heading"><h2>Maintenance Division</h2><p>Provincial roads, equipment, and maintenance scheduling</p></div>
-        <div class="profile"><div class="chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/></svg>Maintenance</div><div class="seal">OFFICE<br>OF PEO</div></div>
-      </header>
-      <main class="page">
-        <section class="stats">
-          <article class="card"><div class="ibox i-gray"><svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.8 15.5 7.3M8.6 13.2l6.9 3.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>228</strong><span>Provincial Roads</span></div></article>
-          <article class="card"><div class="ibox i-blue"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg></div><div><strong>1265.6 km</strong><span>Total Length</span></div></article>
-          <article class="card"><div class="ibox i-green"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="9" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M13 11h3l4 4v4h-2a2 2 0 0 1-2-2v-1h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Equipment</span></div></article>
-          <article class="card"><div class="ibox i-gold"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 3v5M16 3v5M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><strong>0</strong><span>Scheduled Tasks</span></div></article>
-        </section>
-        <section class="tabs"><button class="active" type="button">Provincial Roads</button><button type="button">Equipment</button><button type="button">Maintenance Schedules</button></section>
-        <section class="conditions">
-          <article class="ccard"><div class="chead"><h3>Good Condition</h3><span class="count good">51</span></div><div class="bar"><span class="w1"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Fair Condition</h3><span class="count fair">111</span></div><div class="bar"><span class="w2"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Poor Condition</h3><span class="count poor">51</span></div><div class="bar"><span class="w3"></span></div></article>
-          <article class="ccard"><div class="chead"><h3>Bad Condition</h3><span class="count bad">14</span></div><div class="bar"><span class="w4"></span></div></article>
-        </section>
-        <section class="filters">
-          <div class="frow">
-            <label class="search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="#556b84" stroke-width="2"/><path d="M16 16L21 21" stroke="#556b84" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search roads..."></label>
-            <label class="sel"><select><option>All Municipalities</option></select></label>
-            <label class="sel"><select><option>All Conditions</option></select></label>
-            <label class="sel"><select><option>Road ID</option></select></label>
-            <label class="sel"><select><option>Ascending</option></select></label>
-          </div>
-        </section>
-        <section class="roads">
-          <h2>Provincial Roads</h2>
-          <p class="sub">228 roads found</p>
-          <article class="muni">
-            <div class="mhead"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>ABORLAN <span class="tag">3 roads</span></div>
-            <table><thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>
-              <tbody>
-                <tr><td>1</td><td>Sagpangan Road</td><td>3.47</td><td><span class="pill good">Good</span></td><td>Gravel: 3.470km</td></tr>
-                <tr><td>10</td><td>Plaridel - Apis Cabigaan Road</td><td>13.90</td><td><span class="pill good">Good</span></td><td>Concrete: 13.190km  Gravel: 0.710km</td></tr>
-                <tr><td>11</td><td>Tagpait Feeder Road</td><td>2.25</td><td><span class="pill fair">Fair</span></td><td>Concrete: 2.250km</td></tr>
-              </tbody>
-            </table>
-          </article>
+  <style>
+    :root {
+      --bg: #edf1f5;
+      --panel: #f8fafc;
+      --line: #cfd6df;
+      --text: #10233a;
+      --muted: #586d84;
+      --brand: #133b64;
+      --shadow: 0 1px 8px rgba(16, 38, 64, 0.08);
+    }
 
     * {
       box-sizing: border-box;
@@ -216,8 +24,8 @@
     body {
       margin: 0;
       font-family: "Sora", "Segoe UI", sans-serif;
-      background: var(--bg);
       color: var(--text);
+      background: var(--bg);
     }
 
     body.modal-open {
@@ -225,347 +33,403 @@
     }
 
     .task-page {
-      width: 100%;
       max-width: 1380px;
       margin: 0 auto;
-      padding: clamp(12px, 2vw, 26px);
       min-height: 100vh;
+      padding: clamp(12px, 2vw, 24px);
     }
 
     .task-header {
-      border-bottom: 1px solid #ccd5df;
-      padding: 0 4px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
-    }
-
-    .task-head-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      min-width: 0;
-      flex-wrap: wrap;
-    }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: #1b2d43;
-      font-size: 1.02rem;
-      border-radius: 10px;
-      padding: 6px 8px;
-      white-space: nowrap;
-    }
-
-    .back-link:hover {
-      background: #e9eff5;
-    }
-
-    .back-link svg {
-      width: 17px;
-      height: 17px;
+      margin-bottom: 12px;
     }
 
     .task-title {
       margin: 0;
-      font-size: clamp(1.45rem, 1vw + 1rem, 2.1rem);
-      line-height: 1.1;
-      color: #1b242e;
+      font-size: clamp(1.45rem, 2vw, 2.1rem);
+      line-height: 1.15;
+      color: #162739;
     }
 
-    .task-head-right {
+    .task-actions {
       display: flex;
-      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
-      justify-content: flex-end;
     }
 
     .btn {
+      border: 1px solid var(--line);
       border-radius: 12px;
-      min-height: 42px;
-      padding: 10px 16px;
-      font-family: inherit;
-      font-size: 1rem;
-      line-height: 1;
+      padding: 10px 14px;
+      font: inherit;
+      font-size: 0.96rem;
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
       cursor: pointer;
-    }
-
-    .btn-light {
-      border: 1px solid #c6cfda;
-      background: #f8fafc;
-      color: #273b51;
-    }
-
-    .btn-dark {
-      border: 0;
-      background: var(--primary);
-      color: #ffffff;
-      font-weight: 600;
+      background: #f7fafd;
+      color: #22374f;
     }
 
     .btn svg {
-      width: 17px;
-      height: 17px;
-      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+    }
+
+    .btn-primary {
+      border-color: #0f375d;
+      background: var(--brand);
+      color: #fff;
+      font-weight: 600;
     }
 
     .stats-grid {
-      margin-top: 16px;
       display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 12px;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-bottom: 12px;
     }
 
     .stat-card {
-      border: 1px solid var(--line);
       background: var(--panel);
-      border-radius: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      min-height: 102px;
+      padding: 14px;
       box-shadow: var(--shadow);
-      min-height: 116px;
-      padding: clamp(12px, 1.5vw, 16px);
-      display: flex;
-      align-items: center;
     }
 
     .stat-value {
-      font-size: clamp(1.9rem, 0.8vw + 1.2rem, 2.2rem);
-      line-height: 1;
+      margin: 0;
+      font-size: 2rem;
       font-weight: 700;
-      margin-bottom: 6px;
+      line-height: 1;
       color: #0f2a46;
     }
 
     .stat-label {
-      color: var(--muted);
-      font-size: 1.02rem;
-      line-height: 1.2;
-    }
-
-    .stat-alert {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .stat-alert svg {
-      width: 22px;
-      height: 22px;
-      color: #ff3344;
-      flex: 0 0 auto;
+      margin: 8px 0 0;
+      color: #576c84;
+      font-size: 0.98rem;
     }
 
     .filters-panel {
-      margin-top: 14px;
-      border: 1px solid var(--line);
       background: var(--panel);
-      border-radius: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       box-shadow: var(--shadow);
-      padding: clamp(12px, 1.5vw, 16px);
+      padding: 12px;
+      margin-bottom: 12px;
     }
 
     .filter-row {
       display: grid;
+      grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(150px, 190px));
       gap: 10px;
-      grid-template-columns: minmax(260px, 2fr) repeat(3, minmax(0, 1fr));
-      justify-content: end;
-      align-items: center;
     }
 
-    .search-box {
-      min-height: 46px;
+    .search-box,
+    .field-select {
+      border: 1px solid #cad2dc;
+      border-radius: 12px;
+      min-height: 44px;
+      background: #fbfdff;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border: 1px solid #c7d0db;
-      border-radius: 12px;
-      background: #f8fafc;
-      padding: 10px 12px;
+      gap: 8px;
+      padding: 0 12px;
     }
 
     .search-box svg {
-      width: 19px;
-      height: 19px;
-      color: #6b7f94;
+      width: 18px;
+      height: 18px;
+      color: #67809c;
       flex: 0 0 auto;
     }
 
-    .search-box input {
-      width: 100%;
+    .search-box input,
+    .field-select select {
       border: 0;
       outline: none;
       background: transparent;
-      color: #2b435d;
-      font-size: 1rem;
-      font-family: inherit;
-    }
-
-    .menu-select {
-      position: relative;
-      min-width: 0;
-    }
-
-    .menu-button {
       width: 100%;
-      min-height: 46px;
-      border: 1px solid #c7d0db;
+      font: inherit;
+      color: #2f4a66;
+      font-size: 0.97rem;
+    }
+
+    .tasks-table-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      position: relative;
+    }
+
+    .table-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .table-head h3 {
+      margin: 0;
+      font-size: clamp(1.2rem, 1.4vw, 1.6rem);
+    }
+
+    .table-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #d2d9e1;
       border-radius: 12px;
-      background: #f8fafc;
-      color: #24374f;
-      padding: 9px 12px;
+      background: #fff;
+    }
+
+    .task-record-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 18, 30, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 980;
+    }
+
+    .task-record-overlay.open {
+      display: flex;
+    }
+
+    .task-float-card {
+      border: 1px solid #b7c5d5;
+      border-radius: 14px;
+      background: #f2f5f8;
+      box-shadow: 0 10px 22px rgba(20, 40, 62, 0.12);
+      width: min(1120px, 96vw);
+      max-height: calc(100vh - 40px);
+      overflow: auto;
+      overflow: hidden;
+    }
+
+    .task-float-head {
+      border-bottom: 1px solid #c7d2df;
+      padding: 14px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      font-family: inherit;
-      font-size: 1rem;
-      line-height: 1.2;
-      cursor: pointer;
+      gap: 10px;
     }
 
-    .button-label {
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .task-float-title {
+      margin: 0;
+      font-size: 1.05rem;
+      color: #23364d;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .task-float-close {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #4f5b69;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .task-float-close:hover {
+      background: rgba(25, 40, 56, 0.08);
+    }
+
+    .task-float-body {
+      padding: 12px 16px 14px;
+    }
+
+    .task-float-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px 12px;
+      align-items: end;
+    }
+
+    .task-float-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .task-float-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .task-float-field > span {
+      color: #344c67;
+      font-size: 0.86rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
       white-space: nowrap;
     }
 
-    .menu-button svg {
-      width: 16px;
-      height: 16px;
-      color: #9aa6b5;
-      flex: 0 0 auto;
-      transition: transform 0.2s ease;
+    .task-float-actions {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 10px;
     }
 
-    .menu-select.open .menu-button svg {
-      transform: rotate(180deg);
-    }
-
-    .menu-list {
-      display: none;
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
+    .tasks-table {
       width: 100%;
-      min-width: 182px;
-      border: 1px solid #c7d0db;
-      border-radius: 11px;
-      background: #f8fafc;
-      box-shadow: 0 10px 24px rgba(8, 34, 61, 0.18);
-      padding: 6px;
-      z-index: 30;
+      border-collapse: collapse;
+      min-width: 860px;
     }
 
-    .menu-select.open .menu-list {
-      display: block;
-    }
-
-    .menu-option {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      color: #1e2f41;
-      min-height: 40px;
-      border-radius: 8px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+    .tasks-table th,
+    .tasks-table td {
       text-align: left;
-      font-family: inherit;
-      font-size: 0.98rem;
+      padding: 11px 12px;
+      border-bottom: 1px solid #e0e5eb;
+      font-size: 0.95rem;
+      vertical-align: top;
+    }
+
+    .tasks-table th {
+      background: #f4f7fa;
+      color: #1a324c;
+      font-size: 0.9rem;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .tasks-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .task-cell-input,
+    .task-cell-select,
+    .task-cell-date {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid #b8c8d9;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 0 10px;
+      font: inherit;
+      font-size: 0.96rem;
+      color: #2a445f;
+      outline: none;
+    }
+
+    #nextTaskId {
+      font-weight: 700;
+      color: #1f3f60;
+      background: #edf3f9;
+    }
+
+    .task-cell-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%23798ba0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 30px;
+    }
+
+    .task-cell-textarea {
+      width: 100%;
+      min-height: 82px;
+      border: 1px solid #b8c8d9;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 10px;
+      font: inherit;
+      font-size: 0.95rem;
+      color: #2a445f;
+      resize: vertical;
+      outline: none;
+    }
+
+    .task-cell-input:focus,
+    .task-cell-select:focus,
+    .task-cell-date:focus,
+    .task-cell-textarea:focus {
+      border-color: #4f6b88;
+      box-shadow: 0 0 0 2px rgba(53, 86, 120, 0.2);
+    }
+
+    .task-inline-btn {
+      border: 1px solid #153a5f;
+      border-radius: 11px;
+      min-height: 46px;
+      padding: 0 12px;
+      background: #f2f5f8;
+      color: #153a5f;
+      font: inherit;
+      font-size: 1.02rem;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .menu-option:hover {
-      background: #ebf0f6;
+    .task-inline-btn.save {
+      border-color: #153a5f;
+      background: #153a5f;
+      color: #fff;
     }
 
-    .menu-option.active {
-      background: var(--selected);
-    }
-
-    .option-check {
-      opacity: 0;
-      font-weight: 700;
-    }
-
-    .menu-option.active .option-check {
-      opacity: 1;
-    }
-
-    .tasks-panel {
-      margin-top: 14px;
-      border: 1px solid var(--line);
-      background: var(--panel);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      min-height: clamp(300px, 50vh, 460px);
-      padding: clamp(16px, 1.6vw, 22px);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .tasks-panel h3 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .tasks-panel .sub {
-      margin: 4px 0 0;
-      color: var(--muted);
+    .empty-row td {
+      text-align: center;
+      color: #637a92;
+      padding: 28px 16px;
       font-size: 1rem;
     }
 
-    .tasks-empty {
-      margin: auto;
-      display: grid;
-      justify-items: center;
-      gap: 10px;
-      color: #5f7389;
-      text-align: center;
-    }
-
-    .tasks-empty svg {
-      width: 50px;
-      height: 50px;
-      color: #a8b1bc;
-    }
-
-    .btn-create {
-      border: 0;
-      border-radius: 12px;
-      background: var(--primary);
-      color: #ffffff;
-      min-height: 40px;
-      padding: 9px 14px;
-      font-family: inherit;
-      font-size: 0.98rem;
+    .status-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
       font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .status-pending {
+      background: #fdecc5;
+      color: #9a5b00;
+    }
+
+    .status-progress {
+      background: #d8e9ff;
+      color: #1458c5;
+    }
+
+    .status-complete {
+      background: #d4f1df;
+      color: #0a8744;
     }
 
     .personnel-modal-overlay {
       position: fixed;
       inset: 0;
+      background: rgba(7, 18, 30, 0.45);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 18px;
-      background: rgba(13, 28, 45, 0.45);
-      z-index: 1200;
+      z-index: 1000;
     }
 
     .personnel-modal-overlay.open {
@@ -573,33 +437,32 @@
     }
 
     .personnel-modal {
-      width: min(100%, 560px);
-      max-height: calc(100vh - 36px);
-      overflow: auto;
-      border: 1px solid #c7d1dc;
+      width: min(580px, 100%);
+      background: #f3f5f7;
       border-radius: 14px;
-      background: #f7f9fc;
-      box-shadow: 0 24px 48px rgba(13, 28, 45, 0.26);
-      padding: 18px 22px 22px;
+      border: 1px solid #d7dde5;
+      box-shadow: 0 12px 30px rgba(15, 31, 49, 0.2);
+      padding: 20px 22px;
     }
 
     .personnel-modal-head {
       display: flex;
-      align-items: flex-start;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .personnel-modal-head h2 {
       margin: 0;
-      font-size: clamp(1.5rem, 1vw + 1rem, 2rem);
-      line-height: 1.2;
+      font-size: 2rem;
+      line-height: 1.1;
+      color: #252f3a;
     }
 
     .personnel-modal-head p {
       margin: 6px 0 0;
-      color: #607287;
+      color: #5d6d7f;
       font-size: 1rem;
     }
 
@@ -609,190 +472,147 @@
       border: 0;
       border-radius: 8px;
       background: transparent;
-      color: #6f7f90;
-      font-size: 1.4rem;
+      color: #4f5b69;
+      font-size: 1.5rem;
       line-height: 1;
-      display: grid;
-      place-items: center;
       cursor: pointer;
-      flex: 0 0 auto;
     }
 
     .personnel-close:hover {
-      background: #e9edf3;
+      background: rgba(25, 40, 56, 0.08);
     }
 
     .personnel-form {
       display: grid;
+      gap: 12px 14px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
     }
 
-    .personnel-field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+    .personnel-field,
+    .personnel-field.full {
+      display: grid;
+      gap: 6px;
     }
 
     .personnel-field.full {
       grid-column: 1 / -1;
     }
 
-    .personnel-field > span {
-      color: #23384f;
-      font-size: 0.98rem;
+    .personnel-field span {
+      color: #24374b;
+      font-size: 0.92rem;
       font-weight: 600;
-      line-height: 1.2;
     }
 
     .personnel-field input,
     .personnel-field select {
-      width: 100%;
-      min-height: 42px;
-      border: 1px solid #c7d0db;
+      min-height: 44px;
+      border: 1px solid #ccd3dc;
       border-radius: 11px;
-      background: #f8fafd;
-      color: #334b66;
+      background: #f8fafc;
       padding: 0 12px;
-      font-family: inherit;
-      font-size: 1rem;
+      font: inherit;
+      color: #34495f;
+      font-size: 0.97rem;
       outline: none;
     }
 
     .personnel-field input::placeholder {
-      color: #7a8da2;
+      color: #697b8f;
+    }
+
+    .personnel-field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%238293a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 34px;
     }
 
     .personnel-field input:focus,
     .personnel-field select:focus {
-      border-color: #5d7692;
-      box-shadow: 0 0 0 2px rgba(20, 55, 94, 0.18);
+      border-color: #4f667f;
+      box-shadow: 0 0 0 2px rgba(47, 84, 120, 0.25);
     }
 
     .personnel-check {
-      align-self: end;
-      min-height: 42px;
       display: inline-flex;
       align-items: center;
+      align-self: end;
       gap: 8px;
-      color: #1f3248;
-      font-size: 1.02rem;
+      min-height: 44px;
+      color: #24384f;
       font-weight: 600;
+      font-size: 0.95rem;
     }
 
     .personnel-check input {
       width: 18px;
       height: 18px;
       margin: 0;
-      accent-color: var(--primary);
+      accent-color: #264f75;
     }
 
     .personnel-actions {
       grid-column: 1 / -1;
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 8px;
+      margin-top: 8px;
     }
 
     .personnel-btn {
-      min-height: 42px;
       border-radius: 11px;
+      border: 1px solid #ccd3dc;
+      background: #f6f8fb;
+      color: #24384f;
       padding: 10px 16px;
-      font-family: inherit;
-      font-size: 1rem;
+      min-height: 42px;
+      font: inherit;
       font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
     }
 
-    .personnel-cancel {
-      border: 1px solid #c7d0db;
-      background: #f8fafd;
-      color: #2a3f58;
-    }
-
     .personnel-submit {
-      border: 0;
-      background: var(--primary);
-      color: #ffffff;
+      border-color: #153a5f;
+      background: #153a5f;
+      color: #fff;
     }
 
-    @media (max-width: 1280px) {
-      .stats-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .filter-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .search-box {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .task-page {
-        padding: 12px;
-      }
-
-      .task-header {
-        padding: 0 0 12px;
-      }
-
-      .task-head-left,
-      .task-head-right {
-        width: 100%;
-      }
-
-      .task-head-right {
-        justify-content: flex-start;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
+    @media (max-width: 980px) {
       .filter-row {
         grid-template-columns: 1fr;
       }
 
-      .search-box {
-        grid-column: auto;
+      .task-actions {
+        width: 100%;
       }
 
-      .stat-card {
-        min-height: 100px;
+      .btn {
+        flex: 1 1 180px;
+        justify-content: center;
       }
 
-      .tasks-panel {
-        min-height: 280px;
+      .task-float-grid {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+      }
+
+      .task-float-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .task-inline-btn {
+        width: 100%;
       }
     }
 
     @media (max-width: 640px) {
-      .task-page {
-        padding: 10px;
-      }
-
-      .btn {
-        flex: 1 1 100%;
-        justify-content: center;
-      }
-
       .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .task-float-grid {
         grid-template-columns: 1fr;
-      }
-
-      .menu-list {
-        min-width: 100%;
-      }
-
-      .personnel-modal {
-        padding: 16px;
       }
 
       .personnel-form {
@@ -811,31 +631,18 @@
         flex: 1;
       }
     }
-
-    @media (max-width: 420px) {
-      .task-title {
-        font-size: 1.3rem;
-      }
-
-      .tasks-panel h3 {
-        font-size: 1.55rem;
-      }
-    }
   </style>
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
   <main class="task-page">
     <header class="task-header">
-      <div class="task-head-left">
-        <h1 class="task-title">Task Management</h1>
-      </div>
-
-      <div class="task-head-right">
-        <button class="btn btn-light" type="button" id="openPersonnelModal">
+      <h1 class="task-title">Task Management</h1>
+      <div class="task-actions">
+        <button class="btn" type="button" id="openPersonnelModal">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1M18 8a3 3 0 1 1 0 6M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           Add Personnel
         </button>
-        <button class="btn btn-dark" type="button">
+        <button class="btn btn-primary" type="button" id="openTaskFormBtn">
           <span>+</span>
           <span>New Task</span>
         </button>
@@ -843,84 +650,157 @@
     </header>
 
     <section class="stats-grid" aria-label="Task summary cards">
-      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Total Tasks</div></div></article>
-      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Pending</div></div></article>
-      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">In Progress</div></div></article>
-      <article class="stat-card"><div><div class="stat-value">0</div><div class="stat-label">Completed</div></div></article>
-      <article class="stat-card">
-        <div class="stat-alert">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 4 3.5 19h17L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <div><div class="stat-value">0</div><div class="stat-label">Overdue</div></div>
-        </div>
-      </article>
+      <article class="stat-card"><p class="stat-value">0</p><p class="stat-label">Total Tasks</p></article>
+      <article class="stat-card"><p class="stat-value">0</p><p class="stat-label">Pending</p></article>
+      <article class="stat-card"><p class="stat-value">0</p><p class="stat-label">In Progress</p></article>
+      <article class="stat-card"><p class="stat-value">0</p><p class="stat-label">Completed</p></article>
+      <article class="stat-card"><p class="stat-value">0</p><p class="stat-label">Overdue</p></article>
     </section>
 
     <section class="filters-panel" aria-label="Task filters">
       <div class="filter-row">
-        <label class="search-box" for="task-search">
+        <label class="search-box" for="taskSearch">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input id="task-search" type="search" placeholder="Search tasks..." autocomplete="off">
+          <input id="taskSearch" type="search" placeholder="Search tasks..." autocomplete="off">
         </label>
 
-        <div class="menu-select" data-name="division">
-          <input type="hidden" name="division" value="all">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">Division</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="all" data-label="All Divisions"><span>All Divisions</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="admin" data-label="Admin"><span>Admin</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="planning" data-label="Planning Division"><span>Planning Division</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="construction" data-label="Construction"><span>Construction</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="quality" data-label="Quality"><span>Quality</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="maintenance" data-label="Maintenance"><span>Maintenance</span><span class="option-check">&#10003;</span></button>
-          </div>
-        </div>
+        <label class="field-select">
+          <select>
+            <option>All Divisions</option>
+            <option>Admin</option>
+            <option>Planning Division</option>
+            <option>Construction</option>
+            <option>Quality</option>
+            <option>Maintenance</option>
+          </select>
+        </label>
 
-        <div class="menu-select" data-name="status">
-          <input type="hidden" name="status" value="all">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">Status</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="all" data-label="All Statuses"><span>All Statuses</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="pending" data-label="Pending"><span>Pending</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="in-progress" data-label="In Progress"><span>In Progress</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="completed" data-label="Completed"><span>Completed</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="cancelled" data-label="Cancelled"><span>Cancelled</span><span class="option-check">&#10003;</span></button>
-          </div>
-        </div>
+        <label class="field-select">
+          <select>
+            <option>All Statuses</option>
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>Cancelled</option>
+          </select>
+        </label>
 
-        <div class="menu-select" data-name="priority">
-          <input type="hidden" name="priority" value="all">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">Priority</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="all" data-label="All Priorities"><span>All Priorities</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="low" data-label="Low"><span>Low</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="medium" data-label="Medium"><span>Medium</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="high" data-label="High"><span>High</span><span class="option-check">&#10003;</span></button>
-            <button type="button" class="menu-option" data-value="urgent" data-label="Urgent"><span>Urgent</span><span class="option-check">&#10003;</span></button>
-          </div>
-        </div>
+        <label class="field-select">
+          <select>
+            <option>All Priorities</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Urgent</option>
+          </select>
+        </label>
       </div>
     </section>
 
-    <section class="tasks-panel" aria-label="Tasks list">
-      <h3>Tasks</h3>
-      <p class="sub">0 tasks found</p>
+    <section class="tasks-table-panel" aria-label="Tasks table">
+      <div class="table-head">
+        <h3>Task List</h3>
+        <p id="taskCountText">0 tasks found</p>
+      </div>
 
-      <div class="tasks-empty">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="6" height="6" rx="1.2" stroke="currentColor" stroke-width="2"/><path d="M13 7h8M13 12h8M13 17h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="m4.2 16.5 1.6 1.6 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <div>No tasks found</div>
-        <button class="btn-create" type="button"><span>+</span><span>Create First Task</span></button>
+      <div class="table-wrap">
+        <table class="tasks-table">
+          <thead>
+            <tr>
+              <th>Task ID</th>
+              <th>Title</th>
+              <th>Division</th>
+              <th>Assigned To</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Due Date</th>
+            </tr>
+          </thead>
+          <tbody id="tasksTableBody">
+            <tr id="tasksEmptyRow" class="empty-row">
+              <td colspan="7">No tasks found</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
+
+  <div class="task-record-overlay" id="taskRecordOverlay" aria-hidden="true">
+    <form id="newTaskFormCard" class="task-float-card">
+      <div class="task-float-head">
+        <h4 class="task-float-title">Create Task Record</h4>
+      </div>
+      <div class="task-float-body">
+        <div class="task-float-grid">
+          <label class="task-float-field">
+            <span>Task ID</span>
+            <input id="nextTaskId" class="task-cell-input" type="text" readonly>
+          </label>
+
+          <label class="task-float-field">
+            <span>Task Name *</span>
+            <input id="taskTitleInput" class="task-cell-input" type="text" placeholder="e.g., Bridge Rehabilitation Project" required>
+          </label>
+
+          <label class="task-float-field">
+            <span>Division</span>
+            <select id="taskDivisionInput" class="task-cell-select">
+              <option value="Maintenance">Maintenance</option>
+              <option value="Admin">Admin</option>
+              <option value="Planning Division">Planning Division</option>
+              <option value="Construction">Construction</option>
+              <option value="Quality">Quality</option>
+            </select>
+          </label>
+
+          <label class="task-float-field">
+            <span>Assigned To</span>
+            <input id="taskAssignedInput" class="task-cell-input" type="text" placeholder="Personnel name">
+          </label>
+
+          <label class="task-float-field">
+            <span>Priority</span>
+            <select id="taskPriorityInput" class="task-cell-select">
+              <option value="Low">Low</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </label>
+
+          <label class="task-float-field">
+            <span>Status</span>
+            <select id="taskStatusInput" class="task-cell-select">
+              <option value="Pending" selected>Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </label>
+
+          <label class="task-float-field">
+            <span>Due Date</span>
+            <input id="taskDueDateInput" class="task-cell-date" type="date">
+          </label>
+
+          <label class="task-float-field">
+            <span>Task Owner</span>
+            <input class="task-cell-input" type="text" placeholder="e.g., Project Engineer">
+          </label>
+
+          <label class="task-float-field full">
+            <span>Remarks</span>
+            <textarea id="taskRemarksInput" class="task-cell-textarea" placeholder="Additional details"></textarea>
+          </label>
+        </div>
+
+        <div class="task-float-actions">
+          <button id="cancelTaskBtn" class="task-inline-btn" type="button">Cancel</button>
+          <button id="saveTaskBtn" class="task-inline-btn save" type="submit">Create</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
   <div class="personnel-modal-overlay" id="personnelModal" aria-hidden="true">
     <div class="personnel-modal" role="dialog" aria-modal="true" aria-labelledby="personnelModalTitle">
@@ -929,13 +809,13 @@
           <h2 id="personnelModalTitle">Add Personnel</h2>
           <p>Add a new personnel to assign tasks to</p>
         </div>
-        <button type="button" class="personnel-close" id="closePersonnelModal" aria-label="Close">&#215;</button>
+        <button type="button" class="personnel-close" id="closePersonnelModal" aria-label="Close">&times;</button>
       </div>
 
       <form class="personnel-form" id="personnelForm">
         <label class="personnel-field full">
           <span>Full Name *</span>
-          <input id="personnelFullName" type="text" placeholder="Enter the name of Personel" required>
+          <input id="personnelFullName" type="text" placeholder="Enter the Name of Personel" required>
         </label>
 
         <label class="personnel-field">
@@ -962,7 +842,7 @@
 
         <label class="personnel-field">
           <span>Email</span>
-          <input type="email" placeholder="e.g.,name@peo.gov.ph">
+          <input type="email" placeholder="e.g., jdelacruz@peo.gov.ph">
         </label>
 
         <label class="personnel-field">
@@ -976,7 +856,7 @@
         </label>
 
         <div class="personnel-actions">
-          <button type="button" class="personnel-btn personnel-cancel" id="cancelPersonnelModal">Cancel</button>
+          <button type="button" class="personnel-btn" id="cancelPersonnelModal">Cancel</button>
           <button type="submit" class="personnel-btn personnel-submit">Add Personnel</button>
         </div>
       </form>
@@ -985,7 +865,22 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      var selects = document.querySelectorAll(".menu-select");
+      var openTaskFormBtn = document.getElementById("openTaskFormBtn");
+      var taskRecordOverlay = document.getElementById("taskRecordOverlay");
+      var newTaskFormCard = document.getElementById("newTaskFormCard");
+      var tasksTableBody = document.getElementById("tasksTableBody");
+      var tasksEmptyRow = document.getElementById("tasksEmptyRow");
+      var taskCountText = document.getElementById("taskCountText");
+      var nextTaskId = document.getElementById("nextTaskId");
+      var taskTitleInput = document.getElementById("taskTitleInput");
+      var taskDivisionInput = document.getElementById("taskDivisionInput");
+      var taskAssignedInput = document.getElementById("taskAssignedInput");
+      var taskPriorityInput = document.getElementById("taskPriorityInput");
+      var taskStatusInput = document.getElementById("taskStatusInput");
+      var taskDueDateInput = document.getElementById("taskDueDateInput");
+      var taskRemarksInput = document.getElementById("taskRemarksInput");
+      var saveTaskBtn = document.getElementById("saveTaskBtn");
+      var cancelTaskBtn = document.getElementById("cancelTaskBtn");
       var personnelModal = document.getElementById("personnelModal");
       var openPersonnelModalBtn = document.getElementById("openPersonnelModal");
       var closePersonnelModalBtn = document.getElementById("closePersonnelModal");
@@ -993,26 +888,150 @@
       var personnelForm = document.getElementById("personnelForm");
       var personnelFirstField = document.getElementById("personnelFullName");
 
-      function closeAll(exceptNode) {
-        selects.forEach(function (node) {
-          if (node !== exceptNode) {
-            node.classList.remove("open");
-            var nodeBtn = node.querySelector(".menu-button");
-            if (nodeBtn) {
-              nodeBtn.setAttribute("aria-expanded", "false");
-            }
+      function syncBodyModalLock() {
+        var taskModalOpen = taskRecordOverlay && taskRecordOverlay.classList.contains("open");
+        var personnelModalOpen = personnelModal && personnelModal.classList.contains("open");
+        document.body.classList.toggle("modal-open", Boolean(taskModalOpen || personnelModalOpen));
+      }
+
+      function statusClass(status) {
+        if (status === "Completed") {
+          return "status-complete";
+        }
+        if (status === "In Progress") {
+          return "status-progress";
+        }
+        return "status-pending";
+      }
+
+      function refreshTaskCount() {
+        if (!tasksTableBody || !taskCountText) {
+          return;
+        }
+
+        var count = tasksTableBody.querySelectorAll("tr[data-task-row='1']").length;
+        taskCountText.textContent = String(count) + (count === 1 ? " task found" : " tasks found");
+
+        if (tasksEmptyRow) {
+          tasksEmptyRow.hidden = count > 0;
+        }
+      }
+
+      function resetTaskForm() {
+        if (taskTitleInput) {
+          taskTitleInput.value = "";
+        }
+        if (taskDivisionInput) {
+          taskDivisionInput.value = "Maintenance";
+        }
+        if (taskAssignedInput) {
+          taskAssignedInput.value = "";
+        }
+        if (taskPriorityInput) {
+          taskPriorityInput.value = "Medium";
+        }
+        if (taskStatusInput) {
+          taskStatusInput.value = "Pending";
+        }
+        if (taskDueDateInput) {
+          taskDueDateInput.value = "";
+        }
+        if (taskRemarksInput) {
+          taskRemarksInput.value = "";
+        }
+      }
+
+      function openTaskForm() {
+        if (!newTaskFormCard || !taskRecordOverlay) {
+          return;
+        }
+
+        var nextNumber = tasksTableBody ? tasksTableBody.querySelectorAll("tr[data-task-row='1']").length + 1 : 1;
+        if (nextTaskId) {
+          nextTaskId.value = "TSK-" + String(nextNumber).padStart(3, "0");
+        }
+
+        taskRecordOverlay.classList.add("open");
+        taskRecordOverlay.setAttribute("aria-hidden", "false");
+        syncBodyModalLock();
+        if (tasksEmptyRow) {
+          tasksEmptyRow.hidden = true;
+        }
+        if (taskTitleInput) {
+          taskTitleInput.focus();
+        }
+      }
+
+      function closeTaskForm() {
+        if (!taskRecordOverlay) {
+          return;
+        }
+
+        taskRecordOverlay.classList.remove("open");
+        taskRecordOverlay.setAttribute("aria-hidden", "true");
+        syncBodyModalLock();
+        resetTaskForm();
+        refreshTaskCount();
+      }
+
+      function formatDueDate(value) {
+        if (!value) {
+          return "-";
+        }
+        return value;
+      }
+
+      function saveTaskRow() {
+        if (!tasksTableBody || !taskTitleInput || !taskStatusInput) {
+          return;
+        }
+
+        var title = taskTitleInput.value.trim();
+        if (!title) {
+          taskTitleInput.focus();
+          return;
+        }
+
+        var assigned = taskAssignedInput && taskAssignedInput.value.trim() ? taskAssignedInput.value.trim() : "-";
+        var division = taskDivisionInput ? taskDivisionInput.value : "Maintenance";
+        var priority = taskPriorityInput ? taskPriorityInput.value : "Medium";
+        var status = taskStatusInput.value;
+        var dueDate = formatDueDate(taskDueDateInput ? taskDueDateInput.value : "");
+        var taskId = nextTaskId ? nextTaskId.value : "TSK-000";
+
+        var row = document.createElement("tr");
+        row.setAttribute("data-task-row", "1");
+        var cells = [taskId, title, division, assigned, priority, status, dueDate];
+
+        cells.forEach(function (value, index) {
+          var cell = document.createElement("td");
+
+          if (index === 5) {
+            var badge = document.createElement("span");
+            badge.className = "status-pill " + statusClass(String(value));
+            badge.textContent = String(value);
+            cell.appendChild(badge);
+          } else {
+            cell.textContent = String(value);
           }
+
+          row.appendChild(cell);
         });
+
+        tasksTableBody.appendChild(row);
+        closeTaskForm();
+        refreshTaskCount();
       }
 
       function openPersonnelModal() {
         if (!personnelModal) {
           return;
         }
-        closeAll(null);
+
         personnelModal.classList.add("open");
         personnelModal.setAttribute("aria-hidden", "false");
-        document.body.classList.add("modal-open");
+        syncBodyModalLock();
+
         if (personnelFirstField) {
           window.setTimeout(function () {
             personnelFirstField.focus();
@@ -1024,55 +1043,47 @@
         if (!personnelModal) {
           return;
         }
+
         personnelModal.classList.remove("open");
         personnelModal.setAttribute("aria-hidden", "true");
-        document.body.classList.remove("modal-open");
+        syncBodyModalLock();
       }
 
-      selects.forEach(function (select) {
-        var button = select.querySelector(".menu-button");
-        var label = select.querySelector(".button-label");
-        var hiddenInput = select.querySelector("input[type='hidden']");
-        var options = select.querySelectorAll(".menu-option");
+      if (openTaskFormBtn) {
+        openTaskFormBtn.addEventListener("click", function () {
+          if (taskRecordOverlay && taskRecordOverlay.classList.contains("open")) {
+            closeTaskForm();
+          } else {
+            openTaskForm();
+          }
+        });
+      }
 
-        if (!button || !label || !options.length) {
-          return;
-        }
-
-        button.addEventListener("click", function (event) {
+      if (newTaskFormCard) {
+        newTaskFormCard.addEventListener("submit", function (event) {
           event.preventDefault();
-          var willOpen = !select.classList.contains("open");
-          closeAll(select);
-          select.classList.toggle("open", willOpen);
-          button.setAttribute("aria-expanded", String(willOpen));
+          saveTaskRow();
         });
+      }
 
-        options.forEach(function (option) {
-          option.addEventListener("click", function () {
-            options.forEach(function (item) {
-              item.classList.remove("active");
-            });
-
-            option.classList.add("active");
-            var nextLabel = option.getAttribute("data-label") || option.textContent.trim();
-            var nextValue = option.getAttribute("data-value") || nextLabel;
-
-            label.textContent = nextLabel;
-            if (hiddenInput) {
-              hiddenInput.value = nextValue;
-            }
-
-            select.classList.remove("open");
-            button.setAttribute("aria-expanded", "false");
-          });
+      if (taskRecordOverlay) {
+        taskRecordOverlay.addEventListener("click", function (event) {
+          if (event.target === taskRecordOverlay) {
+            closeTaskForm();
+          }
         });
-      });
+      }
 
-      document.addEventListener("click", function (event) {
-        if (!event.target.closest(".menu-select")) {
-          closeAll(null);
-        }
-      });
+      if (saveTaskBtn) {
+        saveTaskBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          saveTaskRow();
+        });
+      }
+
+      if (cancelTaskBtn) {
+        cancelTaskBtn.addEventListener("click", closeTaskForm);
+      }
 
       if (openPersonnelModalBtn) {
         openPersonnelModalBtn.addEventListener("click", openPersonnelModal);
@@ -1103,18 +1114,13 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
-          closeAll(null);
+          closeTaskForm();
           closePersonnelModal();
         }
       });
+
+      refreshTaskCount();
     });
   </script>
 </body>
 </html>
-<<<<<<< HEAD
-
-
-
-
-=======
->>>>>>> be2339b9b49006fc40899653ce2f106a54fb23a3

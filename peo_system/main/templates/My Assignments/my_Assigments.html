@@ -32,31 +32,31 @@
     }
 
     .assignments-shell {
-      width: min(1360px, 100%);
+      width: min(1220px, 100%);
       margin: 0 auto;
-      padding: 24px 20px 28px;
+      padding: clamp(14px, 2vw, 24px) clamp(12px, 2vw, 20px) clamp(18px, 2.4vw, 28px);
     }
 
     .assignments-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 16px;
-      margin-bottom: 18px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
     .assignments-header h1 {
       margin: 0;
-      font-size: clamp(2rem, 2.9vw, 2.9rem);
+      font-size: clamp(1.7rem, 2.5vw, 2.35rem);
       line-height: 1.1;
       letter-spacing: -0.03em;
       color: #041b38;
     }
 
     .assignments-header p {
-      margin: 8px 0 0;
+      margin: 6px 0 0;
       color: #4f6278;
-      font-size: 1.03rem;
+      font-size: 0.98rem;
     }
 
     .total-pill {
@@ -64,8 +64,8 @@
       border-radius: 10px;
       background: #f8f9fb;
       color: #112744;
-      padding: 5px 12px;
-      font-size: 1rem;
+      padding: 6px 12px;
+      font-size: 0.94rem;
       font-weight: 600;
       white-space: nowrap;
       margin-top: 2px;
@@ -73,17 +73,17 @@
 
     .assignments-stats {
       display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(10px, 1.3vw, 14px);
+      margin-bottom: 14px;
     }
 
     .stat-card {
       background: var(--assign-panel);
       border: 1px solid var(--assign-border);
-      border-radius: 18px;
-      min-height: 132px;
-      padding: 20px 22px;
+      border-radius: 16px;
+      min-height: 116px;
+      padding: clamp(14px, 1.8vw, 20px) clamp(14px, 1.8vw, 22px);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -92,21 +92,21 @@
     .stat-title {
       margin: 0;
       color: #5d6f85;
-      font-size: 1.05rem;
+      font-size: 0.98rem;
       font-weight: 500;
     }
 
     .stat-value {
       margin: 4px 0 0;
-      font-size: 2.9rem;
+      font-size: clamp(2rem, 3.1vw, 2.5rem);
       line-height: 1;
       font-weight: 700;
       color: #031f3f;
     }
 
     .stat-icon svg {
-      width: 34px;
-      height: 34px;
+      width: clamp(28px, 2.1vw, 34px);
+      height: clamp(28px, 2.1vw, 34px);
     }
 
     .warn {
@@ -124,55 +124,57 @@
     .filters-panel {
       background: var(--assign-panel);
       border: 1px solid var(--assign-border);
-      border-radius: 18px;
-      padding: 22px 20px 20px;
-      margin-bottom: 16px;
+      border-radius: 16px;
+      padding: clamp(14px, 1.8vw, 22px) clamp(12px, 1.6vw, 20px) clamp(12px, 1.6vw, 20px);
+      margin-bottom: 14px;
     }
 
     .filters-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 14px;
       align-items: end;
     }
 
     .filter-field label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #102946;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 600;
     }
 
     .filter-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .filter-icon {
       flex: 0 0 auto;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
       color: #5f7184;
       margin-top: 2px;
     }
 
     .select-wrap {
       position: relative;
-      display: inline-block;
-      min-width: 190px;
+      display: block;
+      min-width: 0;
+      width: 100%;
+      max-width: 340px;
     }
 
     .select-trigger {
       width: 100%;
-      min-height: 44px;
+      min-height: 42px;
       border: 1px solid var(--assign-border);
       border-radius: 12px;
       background: #f8fafc;
       color: #173455;
       font: inherit;
-      font-size: 1.04rem;
+      font-size: 0.97rem;
       padding: 8px 12px;
       display: flex;
       align-items: center;
@@ -228,7 +230,7 @@
       border-radius: 8px;
       padding: 8px 10px;
       font: inherit;
-      font-size: 1.03rem;
+      font-size: 0.95rem;
       line-height: 1.2;
       display: flex;
       align-items: center;
@@ -258,59 +260,74 @@
     .assignments-empty {
       background: var(--assign-panel);
       border: 1px solid var(--assign-border);
-      border-radius: 18px;
-      min-height: 318px;
+      border-radius: 16px;
+      min-height: clamp(220px, 36vh, 300px);
       display: grid;
       place-items: center;
       text-align: center;
-      padding: 24px;
+      padding: clamp(18px, 2.4vw, 24px);
     }
 
     .assignments-empty svg {
-      width: 52px;
-      height: 52px;
+      width: clamp(42px, 4vw, 52px);
+      height: clamp(42px, 4vw, 52px);
       color: #657383;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .assignments-empty h2 {
       margin: 0;
-      font-size: 2.35rem;
+      font-size: clamp(1.45rem, 2.8vw, 2.05rem);
       line-height: 1.15;
       color: #051f3c;
     }
 
     .assignments-empty p {
-      margin: 8px 0 0;
-      font-size: 1.12rem;
+      margin: 6px 0 0;
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
       color: #566a80;
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1080px) {
       .assignments-stats {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 780px) {
-      .assignments-shell {
-        padding: 18px 14px 20px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .filters-grid {
         grid-template-columns: 1fr;
       }
+    }
 
+    @media (max-width: 700px) {
       .assignments-header {
         flex-wrap: wrap;
       }
 
-      .stat-value {
-        font-size: 2.4rem;
+      .total-pill {
+        width: 100%;
+        text-align: center;
       }
 
-      .assignments-empty h2 {
-        font-size: 1.8rem;
+      .assignments-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-value {
+        font-size: 2.1rem;
+      }
+
+      .select-wrap {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .assignments-shell {
+        padding: 14px 10px 18px;
+      }
+
+      .stat-card {
+        padding: 14px;
       }
     }
   </style>
