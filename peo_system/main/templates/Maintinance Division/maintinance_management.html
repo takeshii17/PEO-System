@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
   <title>Maintenance Management</title>
   <style>
     :root{--bg:#edf1f5;--panel:#f7f9fb;--line:#cfd6de;--text:#0d2138;--muted:#52657b;--nav:#08284b;--active:#143a62;--shadow:0 1px 6px rgba(9,35,60,.12)}
@@ -80,7 +80,7 @@
     @media (max-width:980px){.layout{flex-direction:column}.sidebar{width:100%}.topbar{flex-direction:column}.profile{width:100%;justify-content:flex-end}.stats,.conditions,.frow{grid-template-columns:1fr}}
   </style>
 </head>
-<body>
+<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
   <div class="layout">
     <aside class="sidebar">
       <div class="brand"><div class="logo">PEO</div><div><h1>PEO Portal</h1><p>Workflow Management</p></div></div>
@@ -243,4 +243,5 @@
   </script>
 </body>
 </html>
+
 

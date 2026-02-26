@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
     <title>PEO Portal Dashboard</title>
    <style>
         :root {
@@ -736,6 +736,47 @@
 
             var subItems = submenu.querySelectorAll(".nav-subitem");
 
+            function setActiveMaintenanceItem(activeItem) {
+                subItems.forEach(function (item) {
+                    item.classList.toggle("active", item === activeItem);
+                });
+            }
+
+            function toEmbeddedUrl(link) {
+                try {
+                    var url = new URL(link, window.location.origin);
+                    url.searchParams.set("embedded", "1");
+                    return url.pathname + url.search + url.hash;
+                } catch (error) {
+                    var joiner = link.indexOf("?") === -1 ? "?" : "&";
+                    return link + joiner + "embedded=1";
+                }
+            }
+
+            function resizeEmbeddedFrame() {
+                if (!embeddedFrame) {
+                    return;
+                }
+
+                try {
+                    var frameDoc = embeddedFrame.contentDocument || (embeddedFrame.contentWindow && embeddedFrame.contentWindow.document);
+                    if (!frameDoc) {
+                        return;
+                    }
+
+                    var bodyHeight = frameDoc.body ? frameDoc.body.scrollHeight : 0;
+                    var rootHeight = frameDoc.documentElement ? frameDoc.documentElement.scrollHeight : 0;
+                    var nextHeight = Math.max(bodyHeight, rootHeight, 760);
+                    embeddedFrame.style.height = String(nextHeight + 12) + "px";
+                } catch (error) {
+                    // Ignore cross-document access errors.
+                }
+            }
+
+            if (embeddedFrame) {
+                embeddedFrame.addEventListener("load", resizeEmbeddedFrame);
+            }
+
             function playBlink(target) {
                 if (target) {
                     target.classList.remove("blink");
@@ -774,15 +815,20 @@
                     return;
                 }
 
+                var embeddedLink = toEmbeddedUrl(link);
+
                 if (dashboardSections) {
                     dashboardSections.classList.add("hidden");
                 }
 
                 embeddedPanel.classList.add("visible");
                 embeddedPanel.setAttribute("aria-hidden", "false");
+                embeddedFrame.setAttribute("title", (title || "Embedded View") + " View");
 
-                if (embeddedFrame.getAttribute("src") !== link) {
-                    embeddedFrame.setAttribute("src", link);
+                if (embeddedFrame.getAttribute("src") !== embeddedLink) {
+                    embeddedFrame.setAttribute("src", embeddedLink);
+                } else {
+                    resizeEmbeddedFrame();
                 }
 
                 var targetTop = embeddedPanel.getBoundingClientRect().top + window.scrollY - 88;
@@ -807,6 +853,7 @@
             subItems.forEach(function (item) {
                 item.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveMaintenanceItem(item);
                     playBlink(item);
 
                     var link = item.getAttribute("href");
@@ -883,35 +930,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
     <title>PEO Portal</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            background: #eef1f5;
-            font-family: "Sora", "Segoe UI", sans-serif;
-            color: #0f2f54;
-        }
-
-        .guest-card {
-            background: #ffffff;
-            border: 1px solid #d6dde6;
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(10, 37, 65, 0.1);
-            padding: 28px;
-            text-align: center;
-        }
-
-        .guest-card a {
-            color: #0f3a67;
-            font-weight: 600;
-            text-decoration: none;
-        }
-    </style>
 </head>
-<body>
+<body class="guest-home">
     <div class="guest-card">
         <h2>You are not logged in.</h2>
         <p><a href="{% url 'login' %}">Click here to login</a></p>
@@ -919,3 +941,5 @@
 </body>
 </html>
 {% endif %}
+
+

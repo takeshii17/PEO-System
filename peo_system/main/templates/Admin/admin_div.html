@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
     <title>PEO Portal - Admin Division</title>
     <style>
         :root {
@@ -620,7 +620,7 @@
                                 </td>
                                 <td>{% if doc.date_received_by_peo %}{{ doc.date_received_by_peo|date:"M d, Y" }}{% else %}-{% endif %}</td>
                                 <td><span class="badge">{{ doc.get_status_display }}</span></td>
-                                <td>✎ 🗑</td>
+                                <td>âœŽ ðŸ—‘</td>
                             </tr>
                             {% empty %}
                             <tr>
@@ -799,3 +799,4 @@
     {% endif %}
 </body>
 </html>
+
