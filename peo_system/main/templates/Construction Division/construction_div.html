@@ -34,9 +34,47 @@
         .chip { display:inline-flex; align-items:center; padding:4px 10px; border:1px solid #f2bc94; border-radius:999px; color:#c2410c; background:#fff4ec; font-size:.86rem; }
         .card { margin-top:20px; background:#f8fafc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 1px 4px rgba(8,34,61,.1); padding:20px; }
         .card h3 { margin:0; font-size:1rem; }
-        .column-table { width:100%; border-collapse:collapse; margin-top:12px; font-size:.82rem; }
-        .column-table th, .column-table td { border:1px solid #cfd8e4; padding:8px; text-align:center; }
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #cfd8e4;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+        .column-table {
+            width: max-content;
+            min-width: 1800px;
+            border-collapse: collapse;
+            margin-top: 0;
+            font-size: .82rem;
+        }
+        .column-table th, .column-table td {
+            border: 1px solid #cfd8e4;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .column-table th {
+            position: sticky;
+            top: 0;
+            background: #f4f7fa;
+            z-index: 2;
+        }
         .column-table td { background:#fff; }
+        .column-table th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 3;
+            background: #f4f7fa;
+        }
+        .column-table td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            background: #ffffff;
+        }
         .toolbar { margin-top:12px; display:flex; justify-content:flex-end; }
         .btn { border:1px solid #123760; background:#123760; color:#fff; border-radius:8px; padding:8px 12px; font-size:.82rem; cursor:pointer; }
         .btn.light { background:#fff; color:#123760; }
@@ -63,11 +101,26 @@
         .page { padding:16px; }
         .page > h2, .subhead, .card > h3, .toolbar { display:none; }
         .card { margin-top:0; padding:0; border:0; border-radius:0; box-shadow:none; background:transparent; }
-        .column-table { margin-top:0; background:#fff; }
+        .column-table { background:#fff; }
 
 >>>>>>> 25847da0951670c0040fb075acad140f5dcd2ff1
         @media (max-width:1200px) { .sidebar { width:280px; } }
-        @media (max-width:900px) { .app-shell { flex-direction:column; } .sidebar { width:100%; } .topbar { height:auto; padding:12px 16px; } .form-grid { grid-template-columns:1fr; } .field.wide { grid-column:span 1; } }
+        @media (max-width:1024px) {
+            .page { padding:12px; }
+            .column-table { min-width:1450px; font-size:.76rem; }
+            .column-table th, .column-table td { padding:6px; }
+            .btn { font-size:.76rem; padding:6px 8px; }
+        }
+        @media (max-width:900px) {
+            .app-shell { flex-direction:column; }
+            .sidebar { width:100%; }
+            .topbar { height:auto; padding:12px 16px; }
+            .form-grid { grid-template-columns:1fr; }
+            .field.wide { grid-column:span 1; }
+            .column-table { min-width:1250px; font-size:.72rem; }
+            .actions { flex-direction:column; align-items:stretch; }
+            .actions .btn { width:100%; }
+        }
     </style>
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
@@ -115,6 +168,7 @@
                 <div class="toolbar">
                     <button class="btn" type="button" id="openReportModal">+ Add Record</button>
                 </div>
+                <div class="table-wrap">
                 <table class="column-table">
                     <thead>
                         <tr>
@@ -183,6 +237,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                </div>
             </section>
         </main>
     </div>

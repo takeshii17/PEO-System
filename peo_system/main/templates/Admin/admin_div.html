@@ -443,6 +443,33 @@
             gap: 8px;
         }
 
+        /* Content-only admin layout */
+        .app-shell {
+            display: block;
+            min-height: auto;
+        }
+
+        .sidebar,
+        .topbar {
+            display: none;
+        }
+
+        .workspace {
+            width: 100%;
+        }
+
+        .page {
+            padding: 16px;
+        }
+
+        .register {
+            overflow-x: auto;
+        }
+
+        .register table {
+            min-width: 860px;
+        }
+
         .error-list {
             margin: 0 0 10px;
             padding: 10px 12px;
@@ -468,7 +495,7 @@
         }
     </style> 
 </head>
-<body>
+<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
     <div class="app-shell">
         <aside class="sidebar">
             <div class="brand">
@@ -620,7 +647,9 @@
                                 </td>
                                 <td>{% if doc.date_received_by_peo %}{{ doc.date_received_by_peo|date:"M d, Y" }}{% else %}-{% endif %}</td>
                                 <td><span class="badge">{{ doc.get_status_display }}</span></td>
-                                <td>âœŽ ðŸ—‘</td>
+                                <td>
+                                    <a class="action-link" href="{% url 'admin_div_dashboard' %}?tab=documents&edit_document={{ doc.id }}">Open</a>
+                                </td>
                             </tr>
                             {% empty %}
                             <tr>
