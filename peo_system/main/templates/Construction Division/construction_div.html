@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
     <title>PEO Portal - Construction Division</title>
      <style>
         :root { --bg:#eef1f5; --line:#ced5de; --text:#0c2137; }
@@ -53,11 +53,24 @@
         .field input, .field textarea { width:100%; border:1px solid #bfcbd9; border-radius:8px; padding:8px; font-size:.8rem; font-family:inherit; background:#fff; }
         .field.wide { grid-column:span 4; }
         .modal-actions { margin-top:12px; display:flex; justify-content:flex-end; gap:8px; }
+<<<<<<< HEAD
+=======
+
+        /* Table-only layout for Construction Division view */
+        .app-shell { display:block; min-height:auto; }
+        .sidebar, .topbar { display:none; }
+        .workspace { width:100%; }
+        .page { padding:16px; }
+        .page > h2, .subhead, .card > h3, .toolbar { display:none; }
+        .card { margin-top:0; padding:0; border:0; border-radius:0; box-shadow:none; background:transparent; }
+        .column-table { margin-top:0; background:#fff; }
+
+>>>>>>> 25847da0951670c0040fb075acad140f5dcd2ff1
         @media (max-width:1200px) { .sidebar { width:280px; } }
         @media (max-width:900px) { .app-shell { flex-direction:column; } .sidebar { width:100%; } .topbar { height:auto; padding:12px 16px; } .form-grid { grid-template-columns:1fr; } .field.wide { grid-column:span 1; } }
     </style>
 </head>
-<body>
+<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
 <div class="app-shell">
     <aside class="sidebar">
         <div class="brand">
@@ -234,3 +247,4 @@
 </script>
 </body>
 </html>
+

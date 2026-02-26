@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/styles.css' %}">
     <title>Planning Division Dashboard</title>
      <style>
         :root {
@@ -662,7 +662,7 @@
         }
     </style>
 </head>
-<body>
+<body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
@@ -1050,3 +1050,4 @@
     </script>
 </body>
 </html>
+
