@@ -1084,6 +1084,17 @@
                 group.classList.toggle("open", !isOpen);
             }
 
+            function setMaintenanceMenuState(isOpen) {
+                if (!hasMaintenanceToggle) {
+                    return;
+                }
+
+                actionBtn.setAttribute("aria-expanded", String(isOpen));
+                mainLink.setAttribute("aria-expanded", String(isOpen));
+                submenu.setAttribute("aria-hidden", String(!isOpen));
+                group.classList.toggle("open", isOpen);
+            }
+
             function openEmbeddedMaintenance(link, title) {
                 if (!embeddedPanel || !embeddedFrame) {
                     window.location.href = link;
@@ -1115,12 +1126,7 @@
                     event.preventDefault();
                 }
 
-                if (hasMaintenanceToggle) {
-                    actionBtn.setAttribute("aria-expanded", "true");
-                    mainLink.setAttribute("aria-expanded", "true");
-                    submenu.setAttribute("aria-hidden", "false");
-                    group.classList.add("open");
-                }
+                setMaintenanceMenuState(true);
 
                 if (!maintenanceManagementNavLink) {
                     return;
@@ -1160,6 +1166,7 @@
             }
 
             if (hasMaintenanceToggle) {
+                setMaintenanceMenuState(true);
                 actionBtn.addEventListener("click", toggleMaintenanceMenu);
             }
 
