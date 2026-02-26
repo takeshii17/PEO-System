@@ -195,6 +195,12 @@
             color: #ffffff;
         }
 
+        .nav-subitem.active {
+            background: rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
         
         .nav-subitem.blink,
         .nav-item.blink {
@@ -715,7 +721,7 @@
             </div>
 
             <nav class="nav-menu">
-                <a class="nav-item active" href="{% url 'home' %}">
+                <a id="dashboardNavLink" class="nav-item {% if request.resolver_match.url_name == 'home' or request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'home' %}">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <rect x="3" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
                         <rect x="14" y="3" width="7" height="7" rx="1.8" stroke="currentColor" stroke-width="2"/>
@@ -730,7 +736,7 @@
                 <a id="constructionDivisionNavLink" class="nav-item" href="{% url 'construction_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M14 5 5 14l-1 5 5-1 9-9-4-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m13 6 4 4" stroke="currentColor" stroke-width="2"/></svg>Construction Division</a>
                 <a id="qualityDivisionNavLink" class="nav-item" href="{% url 'quality_div_dashboard' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Quality Division</a>
                 <div class="nav-group open" id="maintenanceNavGroup">
-                    <div class="nav-item nav-item-group active">
+                    <div class="nav-item nav-item-group">
                         <button class="nav-main-link" id="maintenanceMainLink" type="button" aria-expanded="true" aria-controls="maintenanceSubmenu">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="m14 6-8 8 4 4 8-8-4-4Z" stroke="currentColor" stroke-width="2"/><path d="M6 14 4 20l6-2" stroke="currentColor" stroke-width="2"/></svg>
                             Maintenance Division
@@ -740,7 +746,7 @@
                         </button>
                     </div>
                     <div class="nav-submenu" id="maintenanceSubmenu" aria-hidden="false">
-                        <a id="maintenanceManagementNavLink" class="nav-subitem" data-view-title="Maintenance Management" href="{% url 'maintenance_div_dashboard' %}">Maintinance Management</a>
+                        <a id="maintenanceManagementNavLink" class="nav-subitem" data-view-title="Maintenance Management" href="{% url 'maintenance_div_dashboard' %}">Maintenance Management</a>
                         <a id="maintenanceTaskNavLink" class="nav-subitem" data-view-title="Task Management" href="{% url 'maintenance_task_management' %}">Task Management</a>
                         <a id="maintenanceContractorNavLink" class="nav-subitem" data-view-title="Contractor Management" href="{% url 'maintenance_contractor_management' %}">Contractor Management</a>
                     </div>
@@ -951,6 +957,7 @@
             var embeddedPanel = document.getElementById("embeddedMaintenancePanel");
             var embeddedFrame = document.getElementById("embeddedMaintenanceFrame");
             var myAssignmentsNavLink = document.getElementById("myAssignmentsNavLink");
+            var dashboardNavLink = document.getElementById("dashboardNavLink");
             var adminDivisionNavLink = document.getElementById("adminDivisionNavLink");
             var qualityDivisionNavLink = document.getElementById("qualityDivisionNavLink");
             var planningDivisionNavLink = document.getElementById("planningDivisionNavLink");
@@ -958,6 +965,39 @@
             var maintenanceManagementNavLink = document.getElementById("maintenanceManagementNavLink");
             var hasMaintenanceToggle = !!(mainLink && actionBtn && submenu && group);
             var subItems = submenu ? submenu.querySelectorAll(".nav-subitem") : [];
+            var topNavItems = document.querySelectorAll(".nav-menu > a.nav-item");
+            var maintenanceGroupItem = group ? group.querySelector(".nav-item-group") : null;
+
+            function clearSidebarActiveState() {
+                topNavItems.forEach(function (item) {
+                    item.classList.remove("active");
+                });
+
+                if (maintenanceGroupItem) {
+                    maintenanceGroupItem.classList.remove("active");
+                }
+
+                subItems.forEach(function (item) {
+                    item.classList.remove("active");
+                });
+            }
+
+            function setActiveTopNavItem(item) {
+                clearSidebarActiveState();
+                if (item) {
+                    item.classList.add("active");
+                }
+            }
+
+            function setActiveMaintenanceGroup(item) {
+                clearSidebarActiveState();
+                if (maintenanceGroupItem) {
+                    maintenanceGroupItem.classList.add("active");
+                }
+                if (item) {
+                    item.classList.add("active");
+                }
+            }
 
             function setActiveMaintenanceItem(activeItem) {
                 subItems.forEach(function (item) {
@@ -1078,7 +1118,7 @@
                     return;
                 }
 
-                setActiveMaintenanceItem(maintenanceManagementNavLink);
+                setActiveMaintenanceGroup(maintenanceManagementNavLink);
                 playBlink(maintenanceManagementNavLink);
 
                 var link = maintenanceManagementNavLink.getAttribute("href");
@@ -1101,6 +1141,10 @@
                 if (dashboardSections) {
                     dashboardSections.classList.remove("hidden");
                 }
+
+                if (dashboardNavLink) {
+                    setActiveTopNavItem(dashboardNavLink);
+                }
             }
 
             if (hasMaintenanceToggle) {
@@ -1115,7 +1159,7 @@
                 subItems.forEach(function (item) {
                     item.addEventListener("click", function (event) {
                         event.preventDefault();
-                        setActiveMaintenanceItem(item);
+                        setActiveMaintenanceGroup(item);
                         playBlink(item);
 
                         var link = item.getAttribute("href");
@@ -1132,6 +1176,7 @@
             if (myAssignmentsNavLink) {
                 myAssignmentsNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveTopNavItem(myAssignmentsNavLink);
                     playBlink(myAssignmentsNavLink);
 
                     var link = myAssignmentsNavLink.getAttribute("href");
@@ -1146,6 +1191,7 @@
             if (adminDivisionNavLink) {
                 adminDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveTopNavItem(adminDivisionNavLink);
                     playBlink(adminDivisionNavLink);
 
                     var link = adminDivisionNavLink.getAttribute("href");
@@ -1160,6 +1206,7 @@
             if (qualityDivisionNavLink) {
                 qualityDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveTopNavItem(qualityDivisionNavLink);
                     playBlink(qualityDivisionNavLink);
 
                     var link = qualityDivisionNavLink.getAttribute("href");
@@ -1174,6 +1221,7 @@
             if (planningDivisionNavLink) {
                 planningDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveTopNavItem(planningDivisionNavLink);
                     playBlink(planningDivisionNavLink);
 
                     var link = planningDivisionNavLink.getAttribute("href");
@@ -1188,6 +1236,7 @@
             if (constructionDivisionNavLink) {
                 constructionDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
+                    setActiveTopNavItem(constructionDivisionNavLink);
                     playBlink(constructionDivisionNavLink);
 
                     var link = constructionDivisionNavLink.getAttribute("href");
@@ -1195,6 +1244,17 @@
                         window.setTimeout(function () {
                             openEmbeddedMaintenance(link, "Construction Division");
                         }, 180);
+                    }
+                });
+            }
+
+            if (dashboardNavLink) {
+                dashboardNavLink.addEventListener("click", function (event) {
+                    if (embeddedPanel && embeddedPanel.classList.contains("visible")) {
+                        event.preventDefault();
+                        closeEmbeddedMaintenance();
+                    } else {
+                        setActiveTopNavItem(dashboardNavLink);
                     }
                 });
             }
