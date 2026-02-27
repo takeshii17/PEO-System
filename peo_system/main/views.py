@@ -270,6 +270,7 @@ def planning_div_dashboard(request):
 @xframe_options_sameorigin
 def admin_div_dashboard(request):
     active_tab = request.GET.get("tab", "documents")
+    open_create_modal = request.GET.get("new_document") == "1"
     if active_tab not in {"documents", "billing"}:
         active_tab = "documents"
     if not _table_exists(Document):
@@ -286,40 +287,100 @@ def admin_div_dashboard(request):
         if editing_document:
             form = DocumentForm(instance=editing_document)
             show_modal = True
+    elif active_tab == "documents" and open_create_modal:
+        show_modal = True
 
-    if request.method == "POST" and active_tab == "documents":
+    if request.method == "POST":
         action = request.POST.get("action", "create").strip()
 
-        if action == "delete_document":
-            delete_id = request.POST.get("delete_id")
-            if delete_id:
-                Document.objects.filter(id=delete_id).delete()
-            return redirect("admin_div_dashboard")
+        if action == "update_status":
+            document_id = request.POST.get("document_id")
+            new_status = request.POST.get("status", "").strip()
+            valid_statuses = {value for value, _ in Document.STATUS_CHOICES}
+            if document_id and new_status in valid_statuses:
+                document = Document.objects.select_related("project").filter(id=document_id).first()
+                if document:
+                    document.status = new_status
+                    is_billing_record = bool(document.billing_type) or document.doc_type == Document.TYPE_BILLING_PACKET
 
-        if action in {"create", "update"}:
-            instance = None
-            if action == "update":
-                document_id = request.POST.get("document_id")
-                if document_id:
-                    instance = Document.objects.filter(id=document_id).first()
-                    editing_document = instance
+                    if (
+                        is_billing_record
+                        and new_status == Document.STATUS_APPROVED
+                        and _table_exists(PlanningProject)
+                        and _table_exists(PlanningBudget)
+                    ):
+                        mapped_fund = _map_billing_type_to_fund(document.billing_type)
+                        if mapped_fund:
+                            allocation_amount = (
+                                document.revised_contract_amount
+                                or document.contract_amount
+                                or Decimal("0")
+                            )
 
-            form = DocumentForm(request.POST, instance=instance)
-            show_modal = True
-            if form.is_valid():
-                document = form.save(commit=False)
-                if instance is None:
-                    document.created_by = request.user
-                document.save()
-                for uploaded_file in request.FILES.getlist("scanned_files"):
-                    if uploaded_file:
-                        DocumentScan.objects.create(
-                            document=document,
-                            project=document.project,
-                            file=uploaded_file,
-                            uploaded_by=request.user,
-                        )
+                            planning_project = document.project
+                            if planning_project:
+                                planning_project.fund = mapped_fund
+                                planning_project.budget_amount = allocation_amount
+                                planning_project.status = PlanningProject.STATUS_APPROVED
+                                planning_project.save(update_fields=["fund", "budget_amount", "status"])
+                            else:
+                                planning_project = PlanningProject.objects.filter(
+                                    project_title=document.document_name,
+                                    fund=mapped_fund,
+                                ).order_by("-id").first()
+                                if planning_project:
+                                    planning_project.budget_amount = allocation_amount
+                                    planning_project.status = PlanningProject.STATUS_APPROVED
+                                    planning_project.save(update_fields=["budget_amount", "status"])
+                                else:
+                                    planning_project = PlanningProject.objects.create(
+                                        project_title=document.document_name,
+                                        fund=mapped_fund,
+                                        budget_amount=allocation_amount,
+                                        status=PlanningProject.STATUS_APPROVED,
+                                    )
+
+                            document.project = planning_project
+                            document.division = Document.DIV_PLANNING
+
+                    document.save(update_fields=["status", "project", "division"])
+
+            next_url = request.POST.get("next", "").strip()
+            if next_url:
+                return redirect(next_url)
+            return redirect(f"{reverse('admin_div_dashboard')}?tab={active_tab}")
+
+        if active_tab == "documents":
+            if action == "delete_document":
+                delete_id = request.POST.get("delete_id")
+                if delete_id:
+                    Document.objects.filter(id=delete_id).delete()
                 return redirect("admin_div_dashboard")
+
+            if action in {"create", "update"}:
+                instance = None
+                if action == "update":
+                    document_id = request.POST.get("document_id")
+                    if document_id:
+                        instance = Document.objects.filter(id=document_id).first()
+                        editing_document = instance
+
+                form = DocumentForm(request.POST, instance=instance)
+                show_modal = True
+                if form.is_valid():
+                    document = form.save(commit=False)
+                    if instance is None:
+                        document.created_by = request.user
+                    document.save()
+                    for uploaded_file in request.FILES.getlist("scanned_files"):
+                        if uploaded_file:
+                            DocumentScan.objects.create(
+                                document=document,
+                                project=document.project,
+                                file=uploaded_file,
+                                uploaded_by=request.user,
+                            )
+                    return redirect("admin_div_dashboard")
 
     search = request.GET.get("q", "").strip()
     division = request.GET.get("division", "").strip()
@@ -641,6 +702,15 @@ def _planning_fallback_context(active_tab="budget", selected_fund=""):
         "total_remaining": Decimal("0"),
         "db_not_ready": True,
     }
+
+
+def _map_billing_type_to_fund(billing_type):
+    normalized = (billing_type or "").strip().lower()
+    if normalized == "20% development fund":
+        return PlanningBudget.FUND_20_DEV
+    if normalized == "sef":
+        return PlanningBudget.FUND_SEF
+    return ""
 
 
 def _admin_fallback_context(active_tab="documents"):

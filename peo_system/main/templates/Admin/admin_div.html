@@ -332,6 +332,31 @@
             color: #1e3a5f;
         }
 
+        .status-inline-form {
+            margin: 0;
+            display: inline-block;
+        }
+
+        .status-inline-select {
+            border: 1px solid #c7d2df;
+            border-radius: 999px;
+            background: #e7edf7;
+            color: #1e3a5f;
+            font-family: inherit;
+            font-size: 0.78rem;
+            font-weight: 600;
+            line-height: 1;
+            padding: 6px 24px 6px 10px;
+            cursor: pointer;
+            min-width: 118px;
+        }
+
+        .status-inline-select:focus {
+            outline: none;
+            border-color: #315f91;
+            box-shadow: 0 0 0 2px rgba(49, 95, 145, 0.15);
+        }
+
         .row-actions {
             display: inline-flex;
             align-items: center;
@@ -650,7 +675,7 @@
                             {% endfor %}
                         </select>
                         {% if active_tab == 'documents' %}
-                        <button class="btn" type="button" id="openCreateModal">+ New Document</button>
+                        <a class="btn action-link" id="openCreateModal" href="{% url 'admin_div_dashboard' %}?tab=documents&new_document=1">+ New Document</a>
                         {% endif %}
                     </form>
                 </section>
@@ -692,7 +717,19 @@
                                     {% endif %}
                                 </td>
                                 <td>{% if doc.date_received_by_peo %}{{ doc.date_received_by_peo|date:"M d, Y" }}{% else %}-{% endif %}</td>
-                                <td><span class="badge">{{ doc.get_status_display }}</span></td>
+                                <td>
+                                    <form method="post" class="status-inline-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="update_status">
+                                        <input type="hidden" name="document_id" value="{{ doc.id }}">
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                        <select name="status" class="status-inline-select" aria-label="Change status for {{ doc.document_name }}" onchange="this.form.submit()">
+                                            {% for value, label in status_choices %}
+                                            <option value="{{ value }}" {% if doc.status == value %}selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </td>
                                 <td>
                                     <a class="action-link" href="{% url 'admin_div_dashboard' %}?tab=documents&edit_document={{ doc.id }}">Open</a>
                                 </td>
@@ -722,7 +759,19 @@
                                 <td>{{ doc.document_name }}</td>
                                 <td>{{ doc.get_doc_type_display }}</td>
                                 <td>{{ doc.get_division_display }}</td>
-                                <td><span class="badge">{{ doc.get_status_display }}</span></td>
+                                <td>
+                                    <form method="post" class="status-inline-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="update_status">
+                                        <input type="hidden" name="document_id" value="{{ doc.id }}">
+                                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                        <select name="status" class="status-inline-select" aria-label="Change status for {{ doc.document_name }}" onchange="this.form.submit()">
+                                            {% for value, label in status_choices %}
+                                            <option value="{{ value }}" {% if doc.status == value %}selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </td>
                                 <td>{{ doc.created_at|date:"M d, Y" }}</td>
                                 <td>
                                     <div class="row-actions">
