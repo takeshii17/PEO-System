@@ -389,13 +389,24 @@ def admin_div_dashboard(request):
 
             if action in {"create", "update"}:
                 instance = None
+                form_payload = request.POST
                 if action == "update":
                     document_id = request.POST.get("document_id")
                     if document_id:
                         instance = Document.objects.filter(id=document_id).first()
                         editing_document = instance
+                    if instance:
+                        # Prevent accidental clearing of key fields during partial edits.
+                        form_payload = request.POST.copy()
+                        # Keep routing keys stable when editing metadata like contractor name.
+                        form_payload["project"] = str(instance.project_id) if instance.project_id else ""
+                        form_payload["division"] = instance.division
+                        if not form_payload.get("status"):
+                            form_payload["status"] = instance.status
+                        if not form_payload.get("doc_type"):
+                            form_payload["doc_type"] = instance.doc_type
 
-                form = DocumentForm(request.POST, instance=instance)
+                form = DocumentForm(form_payload, instance=instance)
                 show_modal = True
                 if form.is_valid():
                     document = form.save(commit=False)
@@ -462,6 +473,36 @@ def admin_div_dashboard(request):
     else:
         paginator = Paginator(documents_filtered, 8)
     page_obj = paginator.get_page(request.GET.get("page"))
+
+    # Show contractor in admin document register for contract-type documents.
+    # Contractor data is sourced from construction reports by matching project title.
+    reports_map = {}
+    if _table_exists(ConstructionStatusReport):
+        project_names = {
+            ((doc.project.project_title if doc.project else doc.document_name) or "").strip()
+            for doc in page_obj.object_list
+            if doc.doc_type == Document.TYPE_CONTRACT
+        }
+        project_names = {name for name in project_names if name}
+        if project_names:
+            reports = ConstructionStatusReport.objects.filter(project_name__in=project_names).values(
+                "project_name", "contractor"
+            )
+            for report in reports:
+                key = (report.get("project_name") or "").strip().lower()
+                contractor = (report.get("contractor") or "").strip()
+                if key and contractor:
+                    reports_map[key] = contractor
+
+    for doc in page_obj.object_list:
+        doc.contractor_display = "-"
+        if doc.doc_type == Document.TYPE_CONTRACT:
+            if (doc.contractor_name or "").strip():
+                doc.contractor_display = doc.contractor_name.strip()
+                continue
+            lookup_title = ((doc.project.project_title if doc.project else doc.document_name) or "").strip().lower()
+            if lookup_title:
+                doc.contractor_display = reports_map.get(lookup_title, "-")
 
     billing_base = Document.objects.filter(
         Q(billing_type__isnull=False) & ~Q(billing_type="")

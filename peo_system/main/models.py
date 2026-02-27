@@ -86,6 +86,7 @@ class Document(models.Model):
     date_released_to_accounting = models.DateField(null=True, blank=True)
 
     billing_type = models.CharField(max_length=120, blank=True)
+    contractor_name = models.CharField(max_length=255, blank=True)
     percentage = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     contract_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     revised_contract_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)

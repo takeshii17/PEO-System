@@ -19,6 +19,7 @@ class DocumentForm(forms.ModelForm):
             "date_received_from_admin",
             "date_released_to_accounting",
             "billing_type",
+            "contractor_name",
             "percentage",
             "contract_amount",
             "revised_contract_amount",
@@ -39,6 +40,7 @@ class DocumentForm(forms.ModelForm):
             "date_received_from_admin": forms.DateInput(attrs={"type": "date"}),
             "date_released_to_accounting": forms.DateInput(attrs={"type": "date"}),
             "billing_type": forms.Select(),
+            "contractor_name": forms.TextInput(attrs={"placeholder": "Enter contractor name"}),
             "percentage": forms.NumberInput(attrs={"placeholder": "e.g., 30%", "step": "0.01"}),
             "contract_amount": forms.NumberInput(attrs={"placeholder": "e.g., 50,000.00", "step": "0.01"}),
             "revised_contract_amount": forms.NumberInput(attrs={"placeholder": "e.g., 55,200.00", "step": "0.01"}),
@@ -56,6 +58,14 @@ class DocumentForm(forms.ModelForm):
                 ("SEF", "SEF"),
             ]
         )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        doc_type = cleaned_data.get("doc_type")
+        contractor_name = (cleaned_data.get("contractor_name") or "").strip()
+        if doc_type == Document.TYPE_CONTRACT and not contractor_name:
+            self.add_error("contractor_name", "Contractor name is required for contract documents.")
+        return cleaned_data
 
 
 class PlanningBudgetForm(forms.ModelForm):
