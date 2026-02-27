@@ -357,6 +357,36 @@ def admin_div_dashboard(request):
                     Document.objects.filter(id=delete_id).delete()
                 return redirect("admin_div_dashboard")
 
+            if action == "delete_scan":
+                document_id = request.POST.get("document_id")
+                scan_id = request.POST.get("scan_id")
+                if document_id and scan_id:
+                    scan = DocumentScan.objects.filter(id=scan_id, document_id=document_id).first()
+                    if scan:
+                        if scan.file:
+                            scan.file.delete(save=False)
+                        scan.delete()
+                if document_id:
+                    return redirect(f"{reverse('admin_div_dashboard')}?tab=documents&edit_document={document_id}")
+                return redirect("admin_div_dashboard")
+
+            if action == "replace_scan":
+                document_id = request.POST.get("document_id")
+                scan_id = request.POST.get("scan_id")
+                replacement_file = request.FILES.get("replacement_scan_file")
+                if document_id and scan_id and replacement_file:
+                    scan = DocumentScan.objects.select_related("document").filter(id=scan_id, document_id=document_id).first()
+                    if scan:
+                        if scan.file:
+                            scan.file.delete(save=False)
+                        scan.file = replacement_file
+                        scan.project = scan.document.project
+                        scan.uploaded_by = request.user
+                        scan.save(update_fields=["file", "project", "uploaded_by"])
+                if document_id:
+                    return redirect(f"{reverse('admin_div_dashboard')}?tab=documents&edit_document={document_id}")
+                return redirect("admin_div_dashboard")
+
             if action in {"create", "update"}:
                 instance = None
                 if action == "update":
@@ -574,11 +604,24 @@ def projects_dashboard(request):
     project_folders = []
 
     if _table_exists(Document):
+        def _entry_title_and_key(document):
+            title = ""
+            if document.project_id and document.project:
+                title = (document.project.project_title or "").strip()
+            if not title:
+                title = (document.document_name or f"Document #{document.id}").strip()
+            return title, title.lower()
+
         for div_key, _ in division_choices:
-            counts_by_division[div_key] = Document.objects.filter(division=div_key, project__isnull=False).count()
+            division_docs = Document.objects.filter(division=div_key).select_related("project")
+            division_entries = set()
+            for doc in division_docs:
+                _, entry_key = _entry_title_and_key(doc)
+                division_entries.add(entry_key)
+            counts_by_division[div_key] = len(division_entries)
 
         documents_qs = (
-            Document.objects.filter(division=selected_division, project__isnull=False)
+            Document.objects.filter(division=selected_division)
             .select_related("project")
             .prefetch_related("scans")
             .order_by("-created_at")
@@ -592,18 +635,25 @@ def projects_dashboard(request):
 
         folders_map = {}
         for doc in documents_qs:
-            project = doc.project
-            if not project:
-                continue
+            entry_title, entry_key = _entry_title_and_key(doc)
             bucket = folders_map.setdefault(
-                project.id,
+                entry_key,
                 {
-                    "project_title": project.project_title,
+                    "project_title": entry_title,
                     "document_count": 0,
                     "files": [],
+                    "documents": [],
                 },
             )
             bucket["document_count"] += 1
+            bucket["documents"].append(
+                {
+                    "name": doc.document_name,
+                    "status": doc.get_status_display(),
+                    "division": doc.get_division_display(),
+                    "created_at": doc.created_at,
+                }
+            )
             for scan in doc.scans.all():
                 bucket["files"].append(scan)
 

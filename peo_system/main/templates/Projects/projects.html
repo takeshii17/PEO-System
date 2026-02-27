@@ -385,16 +385,51 @@
             padding: 12px;
         }
 
-        .folder-card h4 {
+        .project-toggle {
+            border: 0;
+        }
+
+        .project-toggle summary {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .project-toggle summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .project-toggle h4 {
             margin: 0;
             font-size: 0.98rem;
             color: #163654;
+            text-decoration: underline;
+            text-underline-offset: 2px;
         }
 
         .folder-meta {
             margin: 4px 0 8px;
             color: var(--muted);
             font-size: 0.84rem;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 4px 0 10px;
+        }
+
+        .history-table th,
+        .history-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 7px 6px;
+            text-align: left;
+            font-size: 0.82rem;
+        }
+
+        .history-table th {
+            color: #37516b;
+            font-weight: 600;
+            background: #f8fafc;
         }
 
         .scan-files {
@@ -712,41 +747,54 @@
 
                 <section class="results">
                     <h3>{{ selected_division_label }} Projects</h3>
-                    {% if selected_projects %}
-                    <ul class="project-list">
-                        {% for project in selected_projects %}
-                        <li class="project-item">
-                            <strong>{{ project.title }}</strong>
-                            <span>{{ project.meta }}</span>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <div class="footer-note">No projects found for this division{% if query %} matching "{{ query }}"{% endif %}.</div>
-                    {% endif %}
-
                     {% if project_folders %}
                     <div class="folder-list">
                         {% for folder in project_folders %}
                         <article class="folder-card">
-                            <h4>{{ folder.project_title }}</h4>
-                            <p class="folder-meta">{{ folder.document_count }} document(s) | {{ folder.files|length }} scanned file(s)</p>
-                            {% if folder.files %}
-                            <ul class="scan-files">
-                                {% for scan in folder.files %}
-                                <li><a href="{{ scan.file.url }}" target="_blank" rel="noopener">{{ scan.file.name|cut:"project_scans/" }}</a></li>
-                                {% endfor %}
-                            </ul>
-                            {% else %}
-                            <div class="footer-note">No scanned files uploaded yet.</div>
-                            {% endif %}
+                            <details class="project-toggle">
+                                <summary>
+                                    <h4>{{ folder.project_title }}</h4>
+                                    <p class="folder-meta">{{ folder.document_count }} document(s) | {{ folder.files|length }} scanned file(s)</p>
+                                </summary>
+                                <table class="history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Document</th>
+                                            <th>Status</th>
+                                            <th>Division</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for doc in folder.documents %}
+                                        <tr>
+                                            <td>{{ doc.name }}</td>
+                                            <td>{{ doc.status }}</td>
+                                            <td>{{ doc.division }}</td>
+                                            <td>{{ doc.created_at|date:"M d, Y" }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if folder.files %}
+                                <ul class="scan-files">
+                                    {% for scan in folder.files %}
+                                    <li><a href="{{ scan.file.url }}" target="_blank" rel="noopener">{{ scan.file.name|cut:"project_scans/" }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                <div class="footer-note">No scanned files uploaded yet.</div>
+                                {% endif %}
+                            </details>
                         </article>
                         {% endfor %}
                     </div>
+                    {% else %}
+                    <div class="footer-note">No projects found for this division{% if query %} matching "{{ query }}"{% endif %}.</div>
                     {% endif %}
                 </section>
 
-                <div class="footer-note">Showing {{ selected_projects|length }} project entries</div>
+                <div class="footer-note">Showing {{ project_folders|length }} project entries</div>
             </main>
         </div>
     </div>

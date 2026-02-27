@@ -492,6 +492,52 @@
             gap: 8px;
         }
 
+        .existing-scans {
+            margin-top: 8px;
+            border-top: 1px solid #dce3ec;
+            padding-top: 8px;
+        }
+
+        .scan-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border: 1px solid #d8e0ea;
+            border-radius: 8px;
+            background: #fff;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+        }
+
+        .scan-name {
+            min-width: 0;
+            font-size: 0.84rem;
+            color: #1e3a5f;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .scan-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .scan-actions form {
+            margin: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scan-actions input[type="file"] {
+            width: 190px;
+            font-size: 0.78rem;
+        }
+
         /* Content-only admin layout */
         .app-shell {
             display: block;
@@ -858,6 +904,35 @@
                             <small>Upload files from scanner output. Files will be stored under the selected project folder.</small>
                         </div>
                     </div>
+                    {% if editing_document %}
+                    <div class="existing-scans">
+                        <label>Existing Scanned Files</label>
+                        {% for scan in editing_document.scans.all %}
+                        <div class="scan-row">
+                            <a class="scan-name" href="{{ scan.file.url }}" target="_blank" rel="noopener">{{ scan.file.name|cut:"project_scans/" }}</a>
+                            <div class="scan-actions">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="replace_scan">
+                                    <input type="hidden" name="document_id" value="{{ editing_document.id }}">
+                                    <input type="hidden" name="scan_id" value="{{ scan.id }}">
+                                    <input type="file" name="replacement_scan_file" accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff" required>
+                                    <button class="action-btn" type="submit">Replace</button>
+                                </form>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete_scan">
+                                    <input type="hidden" name="document_id" value="{{ editing_document.id }}">
+                                    <input type="hidden" name="scan_id" value="{{ scan.id }}">
+                                    <button class="action-btn" type="submit">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="footer-note">No scanned files uploaded yet.</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
                     <div class="field-grid one">
                         <div class="field"><label>Description</label>{{ form.description }}</div>
@@ -887,6 +962,14 @@
                     </div>
 
                     <div class="modal-actions">
+                        {% if editing_document %}
+                        <form method="post" onsubmit="return confirm('Delete this document?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete_document">
+                            <input type="hidden" name="delete_id" value="{{ editing_document.id }}">
+                            <button class="btn alt" type="submit">Delete Document</button>
+                        </form>
+                        {% endif %}
                         <button class="btn alt" type="button" id="cancelCreateModal">Cancel</button>
                         <button class="btn" type="submit">{% if editing_document %}Update{% else %}Create{% endif %}</button>
                     </div>
