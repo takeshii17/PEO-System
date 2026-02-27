@@ -269,6 +269,45 @@
       color: #bc2238;
     }
 
+    .badge-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .contractor-row-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .contractor-row-btn {
+      border: 1px solid #c5d1de;
+      border-radius: 8px;
+      min-height: 30px;
+      padding: 0 10px;
+      background: #f6f9fc;
+      color: #1f3e5c;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .contractor-row-btn:hover {
+      background: #ecf2f8;
+    }
+
+    .contractor-row-btn.delete {
+      border-color: #edc5cd;
+      background: #fff5f7;
+      color: #b4233f;
+    }
+
+    .contractor-row-btn.delete:hover {
+      background: #ffecef;
+    }
+
     .contractor-modal-overlay {
       position: fixed;
       inset: 0;
@@ -472,7 +511,7 @@
     <section class="contractor-table-panel" aria-label="Contractors table">
       <div class="table-head">
         <h3>Contractors List</h3>
-        <p>0 contractors found</p>
+        <p id="contractorCountText">0 contractors found</p>
       </div>
 
       <div class="table-wrap">
@@ -487,11 +526,12 @@
               <th>Contact Person</th>
               <th>Mobile</th>
               <th>Rating</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="empty-row">
-              <td colspan="8">No contractors found</td>
+          <tbody id="contractorsTableBody">
+            <tr id="contractorsEmptyRow" class="empty-row">
+              <td colspan="9">No contractors found</td>
             </tr>
           </tbody>
         </table>
@@ -517,17 +557,17 @@
 
         <label class="form-field">
           <span>TIN</span>
-          <input type="text" placeholder="Tax ID Number">
+          <input id="contractorTin" type="text" placeholder="Tax ID Number">
         </label>
 
         <label class="form-field">
           <span>PhilGEPS Number</span>
-          <input type="text" placeholder="PhilGEPS registration">
+          <input id="contractorPhilgeps" type="text" placeholder="PhilGEPS registration">
         </label>
 
         <label class="form-field">
           <span>PCAB Category</span>
-          <select>
+          <select id="contractorPcab">
             <option value="" selected>Select category</option>
             <option value="aaa">Category AAA</option>
             <option value="aa">Category AA</option>
@@ -540,27 +580,42 @@
 
         <label class="form-field">
           <span>Contact Person</span>
-          <input type="text" placeholder="Contact person name">
+          <input id="contractorContactPerson" type="text" placeholder="Contact person name">
         </label>
 
         <label class="form-field">
           <span>Email</span>
-          <input type="email" placeholder="name@company.com">
+          <input id="contractorEmail" type="email" placeholder="name@company.com">
         </label>
 
         <label class="form-field">
           <span>Mobile</span>
-          <input type="text" placeholder="e.g., 09171234567">
+          <input id="contractorMobile" type="text" placeholder="e.g., 09171234567">
+        </label>
+
+        <label class="form-field">
+          <span>Status</span>
+          <select id="contractorStatus">
+            <option value="Active" selected>Active</option>
+            <option value="Blacklisted">Blacklisted</option>
+            <option value="Suspended">Suspended</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </label>
+
+        <label class="form-field">
+          <span>Rating</span>
+          <input id="contractorRating" type="number" min="0" max="5" step="0.1" placeholder="0.0 to 5.0">
         </label>
 
         <label class="form-field full">
           <span>Remarks</span>
-          <textarea></textarea>
+          <textarea id="contractorRemarks"></textarea>
         </label>
 
         <div class="form-actions">
           <button type="button" class="form-btn" id="cancelContractorModal">Cancel</button>
-          <button type="submit" class="form-btn form-submit">Create</button>
+          <button type="submit" class="form-btn form-submit" id="contractorSubmitBtn">Create</button>
         </div>
       </form>
     </div>
@@ -574,10 +629,240 @@
       var cancelModalBtn = document.getElementById("cancelContractorModal");
       var contractorForm = document.getElementById("contractorForm");
       var firstInput = document.getElementById("contractorCompanyName");
+      var contractorTinInput = document.getElementById("contractorTin");
+      var contractorPhilgepsInput = document.getElementById("contractorPhilgeps");
+      var contractorPcabInput = document.getElementById("contractorPcab");
+      var contractorContactInput = document.getElementById("contractorContactPerson");
+      var contractorMobileInput = document.getElementById("contractorMobile");
+      var contractorStatusInput = document.getElementById("contractorStatus");
+      var contractorRatingInput = document.getElementById("contractorRating");
+      var contractorCountText = document.getElementById("contractorCountText");
+      var contractorsTableBody = document.getElementById("contractorsTableBody");
+      var contractorsEmptyRow = document.getElementById("contractorsEmptyRow");
+      var contractorModalTitle = document.getElementById("contractorModalTitle");
+      var contractorSubmitBtn = document.getElementById("contractorSubmitBtn");
+      var isEditingContractor = false;
+      var editingContractorRow = null;
 
-      function openContractorModal() {
+      function statusBadgeClass(status) {
+        if (status === "Active") {
+          return "badge-active";
+        }
+        if (status === "Blacklisted") {
+          return "badge-blacklisted";
+        }
+        return "badge-neutral";
+      }
+
+      function refreshContractorCount() {
+        if (!contractorsTableBody || !contractorCountText) {
+          return;
+        }
+
+        var count = contractorsTableBody.querySelectorAll("tr[data-contractor-row='1']").length;
+        contractorCountText.textContent = String(count) + (count === 1 ? " contractor found" : " contractors found");
+        if (contractorsEmptyRow) {
+          contractorsEmptyRow.hidden = count > 0;
+        }
+      }
+
+      function resetContractorForm() {
+        if (firstInput) {
+          firstInput.value = "";
+        }
+        if (contractorTinInput) {
+          contractorTinInput.value = "";
+        }
+        if (contractorPhilgepsInput) {
+          contractorPhilgepsInput.value = "";
+        }
+        if (contractorPcabInput) {
+          contractorPcabInput.value = "";
+        }
+        if (contractorContactInput) {
+          contractorContactInput.value = "";
+        }
+        if (contractorMobileInput) {
+          contractorMobileInput.value = "";
+        }
+        if (contractorStatusInput) {
+          contractorStatusInput.value = "Active";
+        }
+        if (contractorRatingInput) {
+          contractorRatingInput.value = "";
+        }
+      }
+
+      function getContractorPayloadFromForm() {
+        var pcabValue = contractorPcabInput ? contractorPcabInput.value : "";
+        var pcabLabel = "-";
+        if (contractorPcabInput && contractorPcabInput.selectedIndex >= 0) {
+          var selectedOption = contractorPcabInput.options[contractorPcabInput.selectedIndex];
+          if (pcabValue && selectedOption) {
+            pcabLabel = selectedOption.textContent.trim();
+          }
+        }
+
+        return {
+          company: firstInput ? firstInput.value.trim() : "",
+          tin: contractorTinInput && contractorTinInput.value.trim() ? contractorTinInput.value.trim() : "-",
+          philgeps: contractorPhilgepsInput && contractorPhilgepsInput.value.trim() ? contractorPhilgepsInput.value.trim() : "-",
+          pcab: pcabLabel,
+          pcabValue: pcabValue,
+          status: contractorStatusInput && contractorStatusInput.value ? contractorStatusInput.value : "Active",
+          contact: contractorContactInput && contractorContactInput.value.trim() ? contractorContactInput.value.trim() : "-",
+          mobile: contractorMobileInput && contractorMobileInput.value.trim() ? contractorMobileInput.value.trim() : "-",
+          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-"
+        };
+      }
+
+      function rowPayload(row) {
+        if (!row) {
+          return null;
+        }
+
+        var statusBadge = row.querySelector(".badge");
+        return {
+          company: row.getAttribute("data-contractor-company") || (row.cells[0] ? row.cells[0].textContent.trim() : ""),
+          tin: row.getAttribute("data-contractor-tin") || (row.cells[1] ? row.cells[1].textContent.trim() : "-"),
+          philgeps: row.getAttribute("data-contractor-philgeps") || (row.cells[2] ? row.cells[2].textContent.trim() : "-"),
+          pcab: row.getAttribute("data-contractor-pcab") || (row.cells[3] ? row.cells[3].textContent.trim() : "-"),
+          pcabValue: row.getAttribute("data-contractor-pcab-value") || "",
+          status: row.getAttribute("data-contractor-status") || (statusBadge ? statusBadge.textContent.trim() : "Active"),
+          contact: row.getAttribute("data-contractor-contact") || (row.cells[5] ? row.cells[5].textContent.trim() : "-"),
+          mobile: row.getAttribute("data-contractor-mobile") || (row.cells[6] ? row.cells[6].textContent.trim() : "-"),
+          rating: row.getAttribute("data-contractor-rating") || (row.cells[7] ? row.cells[7].textContent.trim() : "-")
+        };
+      }
+
+      function applyRowPayload(row, payload) {
+        if (!row || !payload) {
+          return;
+        }
+
+        row.setAttribute("data-contractor-row", "1");
+        row.setAttribute("data-contractor-company", payload.company);
+        row.setAttribute("data-contractor-tin", payload.tin);
+        row.setAttribute("data-contractor-philgeps", payload.philgeps);
+        row.setAttribute("data-contractor-pcab", payload.pcab);
+        row.setAttribute("data-contractor-pcab-value", payload.pcabValue || "");
+        row.setAttribute("data-contractor-status", payload.status);
+        row.setAttribute("data-contractor-contact", payload.contact);
+        row.setAttribute("data-contractor-mobile", payload.mobile);
+        row.setAttribute("data-contractor-rating", payload.rating);
+
+        row.innerHTML = "";
+
+        function appendTextCell(value) {
+          var cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        }
+
+        appendTextCell(payload.company);
+        appendTextCell(payload.tin);
+        appendTextCell(payload.philgeps);
+        appendTextCell(payload.pcab);
+
+        var statusCell = document.createElement("td");
+        var badge = document.createElement("span");
+        badge.className = "badge " + statusBadgeClass(payload.status);
+        badge.textContent = payload.status;
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        appendTextCell(payload.contact);
+        appendTextCell(payload.mobile);
+        appendTextCell(payload.rating);
+
+        var actionsCell = document.createElement("td");
+        var actionsWrap = document.createElement("div");
+        actionsWrap.className = "contractor-row-actions";
+
+        var editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "contractor-row-btn";
+        editBtn.setAttribute("data-contractor-action", "edit");
+        editBtn.textContent = "Edit";
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "contractor-row-btn delete";
+        deleteBtn.setAttribute("data-contractor-action", "delete");
+        deleteBtn.textContent = "Delete";
+
+        actionsWrap.appendChild(editBtn);
+        actionsWrap.appendChild(deleteBtn);
+        actionsCell.appendChild(actionsWrap);
+        row.appendChild(actionsCell);
+      }
+
+      function hydrateExistingContractorRows() {
+        if (!contractorsTableBody) {
+          return;
+        }
+
+        var rows = contractorsTableBody.querySelectorAll("tr");
+        rows.forEach(function (row) {
+          if (contractorsEmptyRow && row === contractorsEmptyRow) {
+            return;
+          }
+
+          var payload = rowPayload(row);
+          if (payload) {
+            applyRowPayload(row, payload);
+          }
+        });
+      }
+
+      function openContractorModal(targetRow) {
         if (!modal) {
           return;
+        }
+
+        isEditingContractor = Boolean(targetRow);
+        editingContractorRow = targetRow || null;
+
+        if (isEditingContractor) {
+          var payload = rowPayload(targetRow);
+          if (firstInput) {
+            firstInput.value = payload.company;
+          }
+          if (contractorTinInput) {
+            contractorTinInput.value = payload.tin === "-" ? "" : payload.tin;
+          }
+          if (contractorPhilgepsInput) {
+            contractorPhilgepsInput.value = payload.philgeps === "-" ? "" : payload.philgeps;
+          }
+          if (contractorPcabInput) {
+            contractorPcabInput.value = payload.pcabValue || "";
+          }
+          if (contractorContactInput) {
+            contractorContactInput.value = payload.contact === "-" ? "" : payload.contact;
+          }
+          if (contractorMobileInput) {
+            contractorMobileInput.value = payload.mobile === "-" ? "" : payload.mobile;
+          }
+          if (contractorStatusInput) {
+            contractorStatusInput.value = payload.status || "Active";
+          }
+          if (contractorRatingInput) {
+            contractorRatingInput.value = payload.rating === "-" ? "" : payload.rating;
+          }
+          if (contractorModalTitle) {
+            contractorModalTitle.textContent = "Edit Contractor";
+          }
+          if (contractorSubmitBtn) {
+            contractorSubmitBtn.textContent = "Update";
+          }
+        } else {
+          resetContractorForm();
+          if (contractorModalTitle) {
+            contractorModalTitle.textContent = "Add New Contractor";
+          }
+          if (contractorSubmitBtn) {
+            contractorSubmitBtn.textContent = "Create";
+          }
         }
 
         modal.classList.add("open");
@@ -599,10 +884,72 @@
         modal.classList.remove("open");
         modal.setAttribute("aria-hidden", "true");
         document.body.classList.remove("modal-open");
+        isEditingContractor = false;
+        editingContractorRow = null;
+        resetContractorForm();
+        if (contractorModalTitle) {
+          contractorModalTitle.textContent = "Add New Contractor";
+        }
+        if (contractorSubmitBtn) {
+          contractorSubmitBtn.textContent = "Create";
+        }
+        refreshContractorCount();
+      }
+
+      function saveContractorRow() {
+        if (!contractorsTableBody || !firstInput) {
+          return;
+        }
+
+        var payload = getContractorPayloadFromForm();
+        if (!payload.company) {
+          firstInput.focus();
+          return;
+        }
+
+        if (isEditingContractor && editingContractorRow) {
+          applyRowPayload(editingContractorRow, payload);
+        } else {
+          var row = document.createElement("tr");
+          applyRowPayload(row, payload);
+          contractorsTableBody.appendChild(row);
+        }
+
+        closeContractorModal();
+      }
+
+      if (contractorsTableBody) {
+        contractorsTableBody.addEventListener("click", function (event) {
+          var actionBtn = event.target.closest("button[data-contractor-action]");
+          if (!actionBtn) {
+            return;
+          }
+
+          var row = actionBtn.closest("tr[data-contractor-row='1']");
+          if (!row) {
+            return;
+          }
+
+          var action = actionBtn.getAttribute("data-contractor-action");
+          if (action === "edit") {
+            openContractorModal(row);
+            return;
+          }
+
+          if (action === "delete") {
+            if (editingContractorRow === row) {
+              closeContractorModal();
+            }
+            row.remove();
+            refreshContractorCount();
+          }
+        });
       }
 
       if (openModalBtn) {
-        openModalBtn.addEventListener("click", openContractorModal);
+        openModalBtn.addEventListener("click", function () {
+          openContractorModal(null);
+        });
       }
 
       if (closeModalBtn) {
@@ -616,7 +963,7 @@
       if (contractorForm) {
         contractorForm.addEventListener("submit", function (event) {
           event.preventDefault();
-          closeContractorModal();
+          saveContractorRow();
         });
       }
 
@@ -633,6 +980,9 @@
           closeContractorModal();
         }
       });
+
+      hydrateExistingContractorRows();
+      refreshContractorCount();
     });
   </script>
 </body>

@@ -33,6 +33,7 @@ urlpatterns = [
 
     # My Assignments
     path("my-assignments/", views.my_assignments, name="my_assignments"),
+    path("history/", views.history_page, name="history"),
     path("projects/", views.projects_dashboard, name="projects"),
 
     # Tasks

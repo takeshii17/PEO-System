@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <style>
+        :root {
+            --bg: #eef1f5;
+            --panel: #f8fafc;
+            --line: #ccd4df;
+            --text: #12263d;
+            --muted: #5e728a;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 20px;
+        }
+
+        .history-panel {
+            max-width: 1080px;
+            margin: 0 auto;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(8, 34, 61, 0.08);
+            padding: 18px;
+        }
+
+        .history-title {
+            margin: 0;
+            font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+            line-height: 1.1;
+        }
+
+        .history-subtitle {
+            margin: 8px 0 16px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .history-empty {
+            margin: 0;
+            padding: 12px;
+            border: 1px solid #dae1ea;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #4e637d;
+        }
+    </style>
+</head>
+<body>
+    <section class="history-panel">
+        <h1 class="history-title">History</h1>
+        <p class="history-subtitle">Timeline of recent activity will appear here.</p>
+        <p class="history-empty">No history records yet.</p>
+    </section>
+</body>
+</html>
