@@ -54,6 +54,8 @@ class DocumentForm(forms.ModelForm):
         self.fields["billing_type"].widget = forms.Select(
             choices=[
                 ("", "Select billing type"),
+                ("20% Development Fund FY 2026", "20% Development Fund FY 2026"),
+                ("SEF FY 2026", "SEF FY 2026"),
                 ("20% Development Fund", "20% Development Fund"),
                 ("SEF", "SEF"),
             ]

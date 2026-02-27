@@ -396,11 +396,12 @@ def admin_div_dashboard(request):
                         instance = Document.objects.filter(id=document_id).first()
                         editing_document = instance
                     if instance:
-                        # Prevent accidental clearing of key fields during partial edits.
+                        # Keep the payload mutable so we can only backfill missing fields.
                         form_payload = request.POST.copy()
-                        # Keep routing keys stable when editing metadata like contractor name.
-                        form_payload["project"] = str(instance.project_id) if instance.project_id else ""
-                        form_payload["division"] = instance.division
+                        if "project" not in form_payload:
+                            form_payload["project"] = str(instance.project_id) if instance.project_id else ""
+                        if not form_payload.get("division"):
+                            form_payload["division"] = instance.division
                         if not form_payload.get("status"):
                             form_payload["status"] = instance.status
                         if not form_payload.get("doc_type"):
@@ -461,10 +462,9 @@ def admin_div_dashboard(request):
     if status:
         documents_filtered = documents_filtered.filter(status=status)
 
-    billing_qs = documents_qs.filter(
-        Q(billing_type__isnull=False) & ~Q(billing_type="")
-        | Q(doc_type=Document.TYPE_BILLING_PACKET)
-    )
+    # Billing tab mirrors document records so any status update in
+    # Document Register is immediately reflected in Billing.
+    billing_qs = documents_qs
     if status:
         billing_qs = billing_qs.filter(status=status)
 
@@ -504,10 +504,7 @@ def admin_div_dashboard(request):
             if lookup_title:
                 doc.contractor_display = reports_map.get(lookup_title, "-")
 
-    billing_base = Document.objects.filter(
-        Q(billing_type__isnull=False) & ~Q(billing_type="")
-        | Q(doc_type=Document.TYPE_BILLING_PACKET)
-    )
+    billing_base = Document.objects.all()
 
     context = {
         "active_tab": active_tab,
@@ -803,9 +800,9 @@ def _planning_fallback_context(active_tab="budget", selected_fund=""):
 
 def _map_billing_type_to_fund(billing_type):
     normalized = (billing_type or "").strip().lower()
-    if normalized == "20% development fund":
+    if "20" in normalized and "development" in normalized:
         return PlanningBudget.FUND_20_DEV
-    if normalized == "sef":
+    if "sef" in normalized:
         return PlanningBudget.FUND_SEF
     return ""
 
