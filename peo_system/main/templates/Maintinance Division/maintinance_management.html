@@ -33,6 +33,10 @@
       background: var(--bg);
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     .app-shell {
       display: flex;
       min-height: 100vh;
@@ -188,6 +192,22 @@
       padding: 0;
     }
 
+    .maintenance-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 0 12px;
+    }
+
+    .maintenance-title {
+      margin: 0;
+      font-size: clamp(1.45rem, 2vw, 2.1rem);
+      line-height: 1.15;
+      color: #162739;
+    }
+
     .kpi-grid {
       display: grid;
       gap: 16px;
@@ -240,32 +260,41 @@
       line-height: 1.2;
     }
 
-    .tabs {
+    .maintenance-tabs {
       display: inline-flex;
       gap: 2px;
       border-radius: 12px;
       background: #dfe4ea;
-      padding: 4px;
+      padding: 3px;
       margin-bottom: 10px;
     }
 
-    .tab {
+    .maintenance-tab {
       border: 0;
       background: transparent;
       color: #0d233a;
       font-family: inherit;
-      font-size: clamp(0.9rem, 0.42vw + 0.75rem, 1.02rem);
+      font-size: clamp(0.84rem, 0.36vw + 0.72rem, 0.96rem);
       line-height: 1;
-      border-radius: 9px;
-      padding: 10px 14px;
+      border-radius: 8px;
+      padding: 8px 12px;
       cursor: pointer;
       white-space: nowrap;
     }
 
-    .tab.active {
+    .maintenance-tab.active {
       background: #f8fafc;
+      border: 2px solid #163a60;
       box-shadow: 0 1px 2px rgba(8, 34, 61, 0.12);
       font-weight: 600;
+    }
+
+    .maintenance-panel {
+      display: none;
+    }
+
+    .maintenance-panel.active {
+      display: block;
     }
 
     .condition-grid {
@@ -340,6 +369,418 @@
       border-radius: 16px;
       box-shadow: var(--shadow);
       padding: 18px 14px;
+    }
+
+    .equipment-status-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .equipment-status-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      min-height: 102px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 12px;
+    }
+
+    .equipment-status-value {
+      font-size: clamp(1.45rem, 0.95vw + 0.95rem, 2.05rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .equipment-status-label {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(0.88rem, 0.38vw + 0.75rem, 1rem);
+      line-height: 1.2;
+    }
+
+    .i-available { background: #cff0dc; color: #0c9a4a; }
+    .i-inuse { background: #d6e4fb; color: #1f5ce0; }
+    .i-maintenance { background: #fae8c5; color: #d97c00; }
+    .i-outservice { background: #fad0d5; color: #df2d3d; }
+    .i-scheduled { background: #d6e4fb; color: #1f5ce0; }
+    .i-progress { background: #fde7c5; color: #dc7a00; }
+    .i-completed { background: #cff0dc; color: #0c9a4a; }
+    .i-urgent { background: #fad0d5; color: #df2d3d; }
+
+    .equipment-filter-row {
+      display: grid;
+      grid-template-columns: minmax(320px, 2fr) repeat(2, minmax(140px, 1fr)) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .add-equipment-btn {
+      border: 0;
+      border-radius: 12px;
+      background: #123760;
+      color: #ffffff;
+      min-height: 52px;
+      padding: 12px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .add-equipment-btn:hover {
+      background: #0f3154;
+    }
+
+    .equipment-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 22, 38, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 1000;
+    }
+
+    .equipment-modal-overlay.open {
+      display: flex;
+    }
+
+    .equipment-modal-card {
+      width: min(860px, 96vw);
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+      background: #f5f8fb;
+      border: 1px solid #c6d0db;
+      border-radius: 14px;
+      box-shadow: 0 14px 30px rgba(8, 24, 41, 0.2);
+      padding: 16px 16px 14px;
+    }
+
+    .equipment-modal-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .equipment-modal-head h3 {
+      margin: 0;
+      font-size: 1.9rem;
+      line-height: 1.1;
+      color: #1d2e42;
+    }
+
+    .equipment-modal-head p {
+      margin: 6px 0 0;
+      font-size: 1.15rem;
+      color: #556b84;
+    }
+
+    .equipment-modal-close {
+      border: 0;
+      background: transparent;
+      color: #5a6f86;
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 8px;
+    }
+
+    .equipment-modal-close:hover {
+      background: rgba(86, 106, 129, 0.12);
+    }
+
+    .equipment-modal-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .equipment-modal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 12px 14px;
+    }
+
+    .equipment-modal-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .equipment-modal-field.full {
+      grid-column: 1 / -1;
+    }
+
+    .equipment-modal-field label {
+      font-size: 1.05rem;
+      color: #1c3046;
+      font-weight: 600;
+    }
+
+    .equipment-modal-field input,
+    .equipment-modal-field select,
+    .equipment-modal-field textarea {
+      width: 100%;
+      border: 1px solid #c7d0da;
+      border-radius: 12px;
+      min-height: 52px;
+      padding: 10px 12px;
+      font: inherit;
+      font-size: 1rem;
+      color: #253c55;
+      background: #f8fbfe;
+      outline: none;
+    }
+
+    .equipment-modal-field textarea {
+      min-height: 88px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+
+    .equipment-modal-field input:focus,
+    .equipment-modal-field select:focus,
+    .equipment-modal-field textarea:focus {
+      border-color: #133b64;
+      box-shadow: 0 0 0 2px rgba(19, 59, 100, 0.22);
+    }
+
+    .equipment-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .equipment-modal-btn {
+      border-radius: 12px;
+      min-height: 46px;
+      padding: 10px 16px;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #c7d0da;
+      background: #f4f7fa;
+      color: #2d435b;
+    }
+
+    .equipment-modal-btn.primary {
+      border-color: #123760;
+      background: #123760;
+      color: #ffffff;
+    }
+
+    .equipment-modal-btn.primary:hover {
+      background: #0f3154;
+    }
+
+    .equipment-table-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px 14px;
+    }
+
+    .equipment-table-head h3 {
+      margin: 0;
+      font-size: clamp(1.05rem, 0.55vw + 0.86rem, 1.3rem);
+    }
+
+    .equipment-table-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .equipment-table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 1px solid #cfd6de;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .equipment-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    .equipment-table th,
+    .equipment-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #d9dfe6;
+      font-size: 0.98rem;
+      color: #1f3348;
+    }
+
+    .equipment-table th {
+      font-weight: 600;
+      color: #102741;
+      background: #f8fafc;
+    }
+
+    .equipment-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-action-btn {
+      border: 1px solid #c4cfda;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #f7f9fc;
+      color: #1f3550;
+      line-height: 1;
+    }
+
+    .table-action-btn:hover {
+      background: #eef3f8;
+    }
+
+    .table-action-btn.danger {
+      border-color: #efb4bc;
+      background: #fff5f6;
+      color: #ba2236;
+    }
+
+    .schedule-status-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(4, minmax(200px, 1fr));
+      margin-bottom: 16px;
+    }
+
+    .schedule-status-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      min-height: 112px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 14px;
+    }
+
+    .schedule-status-value {
+      font-size: clamp(1.6rem, 1.1vw + 1rem, 2.25rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .schedule-status-label {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: clamp(0.88rem, 0.38vw + 0.75rem, 1rem);
+      line-height: 1.2;
+    }
+
+    .schedule-filter-row {
+      display: grid;
+      grid-template-columns: minmax(320px, 2fr) repeat(2, minmax(140px, 1fr)) auto;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .add-schedule-btn {
+      border: 0;
+      border-radius: 12px;
+      background: #123760;
+      color: #ffffff;
+      min-height: 52px;
+      padding: 12px 18px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .add-schedule-btn:hover {
+      background: #0f3154;
+    }
+
+    .schedule-table-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px 14px;
+    }
+
+    .schedule-table-head h3 {
+      margin: 0;
+      font-size: clamp(1.05rem, 0.55vw + 0.86rem, 1.3rem);
+    }
+
+    .schedule-table-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .schedule-table-wrap {
+      overflow-x: auto;
+      margin-top: 14px;
+      border: 1px solid #cfd6de;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .schedule-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #d9dfe6;
+      font-size: 0.98rem;
+      color: #1f3348;
+    }
+
+    .schedule-table th {
+      font-weight: 600;
+      color: #102741;
+      background: #f8fafc;
+    }
+
+    .schedule-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .schedule-placeholder {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
     }
 
     .filter-row {
@@ -475,11 +916,21 @@
       .sidebar { width: 280px; }
 
       .kpi-grid,
-      .condition-grid {
+      .condition-grid,
+      .equipment-status-grid,
+      .schedule-status-grid {
         grid-template-columns: repeat(2, minmax(220px, 1fr));
       }
 
       .filter-row {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+      }
+
+      .equipment-filter-row {
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+      }
+
+      .schedule-filter-row {
         grid-template-columns: repeat(2, minmax(180px, 1fr));
       }
 
@@ -499,7 +950,11 @@
 
       .kpi-grid,
       .condition-grid,
-      .filter-row {
+      .equipment-status-grid,
+      .filter-row,
+      .equipment-filter-row,
+      .schedule-status-grid,
+      .schedule-filter-row {
         grid-template-columns: 1fr;
       }
 
@@ -516,10 +971,14 @@
         padding: 12px;
       }
 
-      .tabs {
+      .maintenance-tabs {
         width: 100%;
         display: flex;
         overflow-x: auto;
+      }
+
+      .equipment-modal-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -587,6 +1046,9 @@
       </header>
       <main class="page">
         <div class="maintenance-dashboard">
+    <header class="maintenance-header">
+      <h1 class="maintenance-title">Maintinance Management</h1>
+    </header>
     <section class="kpi-grid" aria-label="Maintenance summary cards">
       <article class="kpi-card">
         <div class="kpi-icon i-road" aria-hidden="true">
@@ -629,12 +1091,6 @@
       </article>
     </section>
 
-    <section class="tabs" aria-label="Maintenance dashboard tabs">
-      <button type="button" class="tab active">Provincial Roads</button>
-      <button type="button" class="tab">Equipment</button>
-      <button type="button" class="tab">Maintenance Schedules</button>
-    </section>
-
     <section class="condition-grid" aria-label="Road condition summary">
       <article class="condition-card">
         <div class="condition-head">
@@ -669,69 +1125,440 @@
       </article>
     </section>
 
-    <section class="filter-card" aria-label="Road filters">
-      <div class="filter-row">
-        <label class="search-field" for="road-search">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input id="road-search" type="search" placeholder="Search roads..." autocomplete="off">
-        </label>
-
-        <div class="menu-select" data-name="municipality">
-          <input type="hidden" name="municipality" value="all">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">All Municipalities</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
-            <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintenance Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
-            <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
-          </div>
-        </div>
-
-        <div class="menu-select" data-name="condition">
-          <input type="hidden" name="condition" value="all">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">All Conditions</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="all" data-label="All Conditions"><span>All Conditions</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="good" data-label="Good"><span>Good</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="fair" data-label="Fair"><span>Fair</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="poor" data-label="Poor"><span>Poor</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="bad" data-label="Bad"><span>Bad</span><span class="option-check">✓</span></button>
-          </div>
-        </div>
-
-        <div class="menu-select" data-name="sort_by">
-          <input type="hidden" name="sort_by" value="road_id">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">Road ID</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="road_id" data-label="Road ID"><span>Road ID</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="road_name" data-label="Road Name"><span>Road Name</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="municipality" data-label="Municipality"><span>Municipality</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="length" data-label="Length"><span>Length</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="condition" data-label="Condition"><span>Condition</span><span class="option-check">✓</span></button>
-          </div>
-        </div>
-
-        <div class="menu-select" data-name="sort_order">
-          <input type="hidden" name="sort_order" value="asc">
-          <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
-            <span class="button-label">Ascending</span>
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="menu-list" role="listbox">
-            <button type="button" class="menu-option active" data-value="asc" data-label="Ascending"><span>Ascending</span><span class="option-check">✓</span></button>
-            <button type="button" class="menu-option" data-value="desc" data-label="Descending"><span>Descending</span><span class="option-check">✓</span></button>
-          </div>
-        </div>
-      </div>
+        <section class="maintenance-tabs" aria-label="Maintenance dashboard tabs">
+      <button type="button" class="maintenance-tab active" data-tab-target="roads">Provincial Roads</button>
+      <button type="button" class="maintenance-tab" data-tab-target="equipment">Equipment</button>
+      <button type="button" class="maintenance-tab" data-tab-target="schedules">Maintenance Schedules</button>
     </section>
+
+    <section class="maintenance-panel active" data-panel="roads">
+      <section class="filter-card" aria-label="Road filters">
+        <div class="filter-row">
+          <label class="search-field" for="road-search">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="road-search" type="search" placeholder="Search roads..." autocomplete="off">
+          </label>
+
+          <div class="menu-select" data-name="municipality">
+            <input type="hidden" name="municipality" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Municipalities</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
+              <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintenance Management</a>
+              <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
+              <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+            </div>
+          </div>
+
+          <div class="menu-select" data-name="condition">
+            <input type="hidden" name="condition" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Conditions</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Conditions"><span>All Conditions</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="good" data-label="Good"><span>Good</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="fair" data-label="Fair"><span>Fair</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="poor" data-label="Poor"><span>Poor</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="bad" data-label="Bad"><span>Bad</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+
+          <div class="menu-select" data-name="sort_by">
+            <input type="hidden" name="sort_by" value="road_id">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">Road ID</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="road_id" data-label="Road ID"><span>Road ID</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="road_name" data-label="Road Name"><span>Road Name</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="municipality" data-label="Municipality"><span>Municipality</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="length" data-label="Length"><span>Length</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="condition" data-label="Condition"><span>Condition</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+
+          <div class="menu-select" data-name="sort_order">
+            <input type="hidden" name="sort_order" value="asc">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">Ascending</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="asc" data-label="Ascending"><span>Ascending</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="desc" data-label="Descending"><span>Descending</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="maintenance-panel" data-panel="equipment">
+      <section class="equipment-status-grid" aria-label="Equipment status summary">
+        <article class="equipment-status-card">
+          <div class="kpi-icon i-available" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.8 1.8L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="equipment-status-value" id="equipmentAvailableValue">0</div>
+            <div class="equipment-status-label">Available</div>
+          </div>
+        </article>
+        <article class="equipment-status-card">
+          <div class="kpi-icon i-inuse" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="equipment-status-value" id="equipmentInUseValue">0</div>
+            <div class="equipment-status-label">In Use</div>
+          </div>
+        </article>
+        <article class="equipment-status-card">
+          <div class="kpi-icon i-maintenance" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="m4 20 5.5-5.5M14 6l4 4M13 3a3 3 0 0 1 4.2 0l.8.8a3 3 0 0 1 0 4.2L10 16l-4 1 1-4 6-6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="equipment-status-value" id="equipmentMaintenanceValue">0</div>
+            <div class="equipment-status-label">Under Maintenance</div>
+          </div>
+        </article>
+        <article class="equipment-status-card">
+          <div class="kpi-icon i-outservice" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="equipment-status-value" id="equipmentOutServiceValue">0</div>
+            <div class="equipment-status-label">Out of Service</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="filter-card" aria-label="Equipment filters">
+        <div class="equipment-filter-row">
+          <label class="search-field" for="equipment-search">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="equipment-search" type="search" placeholder="Search equipment..." autocomplete="off">
+          </label>
+          <div class="menu-select" data-name="equipment_type">
+            <input type="hidden" name="equipment_type" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Types</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Types"><span>All Types</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="heavy" data-label="Heavy Equipment"><span>Heavy Equipment</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="light" data-label="Light Equipment"><span>Light Equipment</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="vehicle" data-label="Vehicles"><span>Vehicles</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+          <div class="menu-select" data-name="equipment_status">
+            <input type="hidden" name="equipment_status" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Status</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Status"><span>All Status</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="available" data-label="Available"><span>Available</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="in_use" data-label="In Use"><span>In Use</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="maintenance" data-label="Under Maintenance"><span>Under Maintenance</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="out_service" data-label="Out of Service"><span>Out of Service</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+          <button type="button" class="add-equipment-btn">+ Add Equipment</button>
+        </div>
+      </section>
+
+      <section class="equipment-table-card" aria-label="Equipment inventory">
+        <div class="equipment-table-head">
+          <h3>Equipment Inventory</h3>
+          <p id="equipmentCountText">0 equipment found</p>
+        </div>
+        <div class="equipment-table-wrap">
+          <table class="equipment-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Model</th>
+                <th>Plate No.</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Operator</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="equipmentTableBody">
+              <tr>
+                <td colspan="9">No equipment found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <div class="equipment-modal-overlay" id="addEquipmentModal" aria-hidden="true">
+      <div class="equipment-modal-card" role="dialog" aria-modal="true" aria-labelledby="addEquipmentModalTitle">
+        <div class="equipment-modal-head">
+          <div>
+            <h3 id="addEquipmentModalTitle">Add Equipment</h3>
+            <p>Add new equipment to the inventory</p>
+          </div>
+          <button type="button" class="equipment-modal-close" data-close-equipment-modal aria-label="Close">x</button>
+        </div>
+
+        <form id="addEquipmentForm" class="equipment-modal-form">
+          <div class="equipment-modal-grid">
+            <div class="equipment-modal-field">
+              <label for="equipmentName">Name *</label>
+              <input id="equipmentName" name="name" type="text" placeholder="Equipment name" required>
+            </div>
+            <div class="equipment-modal-field">
+              <label for="equipmentCode">Code</label>
+              <input id="equipmentCode" name="code" type="text" placeholder="EQ-001">
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="equipmentType">Type</label>
+              <select id="equipmentType" name="type">
+                <option value="">Select type</option>
+                <option value="heavy">Heavy Equipment</option>
+                <option value="light">Light Equipment</option>
+                <option value="vehicle">Vehicle</option>
+                <option value="tools">Tools</option>
+              </select>
+            </div>
+            <div class="equipment-modal-field">
+              <label for="equipmentStatus">Status</label>
+              <select id="equipmentStatus" name="status">
+                <option value="available">Available</option>
+                <option value="in_use">In Use</option>
+                <option value="maintenance">Under Maintenance</option>
+                <option value="out_service">Out of Service</option>
+              </select>
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="equipmentModel">Model</label>
+              <input id="equipmentModel" name="model" type="text" placeholder="Model name">
+            </div>
+            <div class="equipment-modal-field">
+              <label for="equipmentPlate">Plate Number</label>
+              <input id="equipmentPlate" name="plate_number" type="text" placeholder="ABC-1234">
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="equipmentLocation">Current Location</label>
+              <input id="equipmentLocation" name="location" type="text" placeholder="Location">
+            </div>
+            <div class="equipment-modal-field">
+              <label for="equipmentOperator">Operator</label>
+              <input id="equipmentOperator" name="operator" type="text" placeholder="Operator name">
+            </div>
+
+            <div class="equipment-modal-field full">
+              <label for="equipmentNotes">Notes</label>
+              <textarea id="equipmentNotes" name="notes" placeholder="Additional notes..."></textarea>
+            </div>
+          </div>
+
+          <div class="equipment-modal-actions">
+            <button type="button" class="equipment-modal-btn" data-close-equipment-modal>Cancel</button>
+            <button id="equipmentSubmitBtn" type="submit" class="equipment-modal-btn primary">Add Equipment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <section class="maintenance-panel" data-panel="schedules">
+      <section class="schedule-status-grid" aria-label="Maintenance schedules status summary">
+        <article class="schedule-status-card">
+          <div class="kpi-icon i-scheduled" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="14" rx="2" stroke="currentColor" stroke-width="2"/><path d="M8 3v5M16 3v5M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="schedule-status-value" id="scheduleScheduledValue">0</div>
+            <div class="schedule-status-label">Scheduled</div>
+          </div>
+        </article>
+        <article class="schedule-status-card">
+          <div class="kpi-icon i-progress" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="schedule-status-value" id="scheduleInProgressValue">0</div>
+            <div class="schedule-status-label">In Progress</div>
+          </div>
+        </article>
+        <article class="schedule-status-card">
+          <div class="kpi-icon i-completed" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.8 1.8L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="schedule-status-value" id="scheduleCompletedValue">0</div>
+            <div class="schedule-status-label">Completed</div>
+          </div>
+        </article>
+        <article class="schedule-status-card">
+          <div class="kpi-icon i-urgent" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 4 3 20h18L12 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <div class="schedule-status-value" id="scheduleUrgentValue">0</div>
+            <div class="schedule-status-label">Urgent</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="filter-card" aria-label="Schedule filters">
+        <div class="schedule-filter-row">
+          <label class="search-field" for="schedule-search">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/><path d="M16 16L21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="schedule-search" type="search" placeholder="Search schedules..." autocomplete="off">
+          </label>
+          <div class="menu-select" data-name="schedule_status">
+            <input type="hidden" name="schedule_status" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Status</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Status"><span>All Status</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="scheduled" data-label="Scheduled"><span>Scheduled</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="progress" data-label="In Progress"><span>In Progress</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="completed" data-label="Completed"><span>Completed</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+          <div class="menu-select" data-name="schedule_priority">
+            <input type="hidden" name="schedule_priority" value="all">
+            <button type="button" class="menu-button" aria-expanded="false" aria-haspopup="listbox">
+              <span class="button-label">All Priority</span>
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Priority"><span>All Priority</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="low" data-label="Low"><span>Low</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="medium" data-label="Medium"><span>Medium</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="high" data-label="High"><span>High</span><span class="option-check">&#10003;</span></button>
+              <button type="button" class="menu-option" data-value="urgent" data-label="Urgent"><span>Urgent</span><span class="option-check">&#10003;</span></button>
+            </div>
+          </div>
+          <button type="button" class="add-schedule-btn">+ New Schedule</button>
+        </div>
+      </section>
+
+      <section class="schedule-table-card" aria-label="Maintenance schedules">
+        <div class="schedule-table-head">
+          <h3>Maintenance Schedules</h3>
+          <p id="scheduleCountText">0 schedules found</p>
+        </div>
+        <div class="schedule-table-wrap">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Road</th>
+                <th>Type</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>Team</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="scheduleTableBody">
+              <tr>
+                <td colspan="8">No schedules found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <div class="equipment-modal-overlay" id="addScheduleModal" aria-hidden="true">
+      <div class="equipment-modal-card" role="dialog" aria-modal="true" aria-labelledby="addScheduleModalTitle">
+        <div class="equipment-modal-head">
+          <div>
+            <h3 id="addScheduleModalTitle">New Maintenance Schedule</h3>
+            <p>Schedule a maintenance task</p>
+          </div>
+          <button type="button" class="equipment-modal-close" data-close-schedule-modal aria-label="Close">x</button>
+        </div>
+
+        <form id="addScheduleForm" class="equipment-modal-form">
+          <div class="equipment-modal-grid">
+            <div class="equipment-modal-field full">
+              <label for="scheduleTitle">Title *</label>
+              <input id="scheduleTitle" name="title" type="text" placeholder="Maintenance task title" required>
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="scheduleRoad">Road</label>
+              <select id="scheduleRoad" name="road">
+                <option value="">No specific road</option>
+                <option value="road_1">Road 1</option>
+                <option value="road_2">Road 2</option>
+              </select>
+            </div>
+            <div class="equipment-modal-field">
+              <label for="scheduleType">Type</label>
+              <select id="scheduleType" name="type">
+                <option value="">Select type</option>
+                <option value="inspection">Inspection</option>
+                <option value="repair">Repair</option>
+                <option value="rehabilitation">Rehabilitation</option>
+              </select>
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="schedulePriority">Priority</label>
+              <select id="schedulePriority" name="priority">
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="equipment-modal-field">
+              <label for="scheduleTeam">Assigned Team</label>
+              <input id="scheduleTeam" name="team" type="text" placeholder="Team name">
+            </div>
+
+            <div class="equipment-modal-field">
+              <label for="scheduleStartDate">Start Date</label>
+              <input id="scheduleStartDate" name="start_date" type="text" placeholder="dd/mm/yyyy">
+            </div>
+            <div class="equipment-modal-field">
+              <label for="scheduleEndDate">End Date</label>
+              <input id="scheduleEndDate" name="end_date" type="text" placeholder="dd/mm/yyyy">
+            </div>
+
+            <div class="equipment-modal-field full">
+              <label for="scheduleEstimatedCost">Estimated Cost (P)</label>
+              <input id="scheduleEstimatedCost" name="estimated_cost" type="text" placeholder="0.00">
+            </div>
+
+            <div class="equipment-modal-field full">
+              <label for="scheduleNotes">Notes</label>
+              <textarea id="scheduleNotes" name="notes" placeholder="Additional notes..."></textarea>
+            </div>
+          </div>
+
+          <div class="equipment-modal-actions">
+            <button type="button" class="equipment-modal-btn" data-close-schedule-modal>Cancel</button>
+            <button id="scheduleSubmitBtn" type="submit" class="equipment-modal-btn primary">Create Schedule</button>
+          </div>
+        </form>
+      </div>
+    </div>
         </div>
       </main>
     </div>
@@ -740,6 +1567,650 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var selects = document.querySelectorAll(".menu-select");
+      var tabs = document.querySelectorAll(".maintenance-tab[data-tab-target]");
+      var panels = document.querySelectorAll(".maintenance-panel[data-panel]");
+      var addEquipmentBtn = document.querySelector(".add-equipment-btn");
+      var addEquipmentModal = document.getElementById("addEquipmentModal");
+      var addEquipmentModalTitle = document.getElementById("addEquipmentModalTitle");
+      var addEquipmentForm = document.getElementById("addEquipmentForm");
+      var equipmentSubmitBtn = document.getElementById("equipmentSubmitBtn");
+      var closeEquipmentModalButtons = document.querySelectorAll("[data-close-equipment-modal]");
+      var addScheduleBtn = document.querySelector(".add-schedule-btn");
+      var addScheduleModal = document.getElementById("addScheduleModal");
+      var addScheduleModalTitle = document.getElementById("addScheduleModalTitle");
+      var addScheduleForm = document.getElementById("addScheduleForm");
+      var scheduleSubmitBtn = document.getElementById("scheduleSubmitBtn");
+      var closeScheduleModalButtons = document.querySelectorAll("[data-close-schedule-modal]");
+      var equipmentTableBody = document.getElementById("equipmentTableBody");
+      var equipmentCountText = document.getElementById("equipmentCountText");
+      var equipmentAvailableValue = document.getElementById("equipmentAvailableValue");
+      var equipmentInUseValue = document.getElementById("equipmentInUseValue");
+      var equipmentMaintenanceValue = document.getElementById("equipmentMaintenanceValue");
+      var equipmentOutServiceValue = document.getElementById("equipmentOutServiceValue");
+      var scheduleTableBody = document.getElementById("scheduleTableBody");
+      var scheduleCountText = document.getElementById("scheduleCountText");
+      var scheduleScheduledValue = document.getElementById("scheduleScheduledValue");
+      var scheduleInProgressValue = document.getElementById("scheduleInProgressValue");
+      var scheduleCompletedValue = document.getElementById("scheduleCompletedValue");
+      var scheduleUrgentValue = document.getElementById("scheduleUrgentValue");
+      var equipmentEntries = [];
+      var scheduleEntries = [];
+      var editingEquipmentIndex = null;
+      var editingScheduleIndex = null;
+
+      function setActiveDashboardTab(targetName) {
+        tabs.forEach(function (tab) {
+          tab.classList.toggle("active", tab.getAttribute("data-tab-target") === targetName);
+        });
+
+        panels.forEach(function (panel) {
+          panel.classList.toggle("active", panel.getAttribute("data-panel") === targetName);
+        });
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          var targetName = tab.getAttribute("data-tab-target");
+          if (targetName) {
+            setActiveDashboardTab(targetName);
+          }
+        });
+      });
+
+      var initiallyActiveTab = document.querySelector(".maintenance-tab.active[data-tab-target]");
+      if (initiallyActiveTab) {
+        setActiveDashboardTab(initiallyActiveTab.getAttribute("data-tab-target"));
+      }
+
+      function getSelectedOptionLabel(selectElement) {
+        if (!selectElement) {
+          return "";
+        }
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        return selectedOption ? selectedOption.textContent.trim() : "";
+      }
+
+      function makeCell(text) {
+        var td = document.createElement("td");
+        td.textContent = text;
+        return td;
+      }
+
+      function renderEquipmentTable() {
+        if (!equipmentTableBody) {
+          return;
+        }
+
+        equipmentTableBody.innerHTML = "";
+
+        if (!equipmentEntries.length) {
+          var emptyRow = document.createElement("tr");
+          var emptyCell = document.createElement("td");
+          emptyCell.colSpan = 9;
+          emptyCell.textContent = "No equipment found";
+          emptyRow.appendChild(emptyCell);
+          equipmentTableBody.appendChild(emptyRow);
+          return;
+        }
+
+        equipmentEntries.forEach(function (entry, index) {
+          var row = document.createElement("tr");
+          row.appendChild(makeCell(entry.code));
+          row.appendChild(makeCell(entry.name));
+          row.appendChild(makeCell(entry.type));
+          row.appendChild(makeCell(entry.model));
+          row.appendChild(makeCell(entry.plateNumber));
+          row.appendChild(makeCell(entry.status));
+          row.appendChild(makeCell(entry.location));
+          row.appendChild(makeCell(entry.operator));
+          var actionsCell = document.createElement("td");
+          var actionsWrap = document.createElement("div");
+          actionsWrap.className = "table-actions";
+
+          var editBtn = document.createElement("button");
+          editBtn.type = "button";
+          editBtn.className = "table-action-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", function () {
+            startEditEquipment(index);
+          });
+
+          var deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "table-action-btn danger";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.addEventListener("click", function () {
+            removeEquipment(index);
+          });
+
+          actionsWrap.appendChild(editBtn);
+          actionsWrap.appendChild(deleteBtn);
+          actionsCell.appendChild(actionsWrap);
+          row.appendChild(actionsCell);
+          equipmentTableBody.appendChild(row);
+        });
+      }
+
+      function updateEquipmentSummary() {
+        var total = equipmentEntries.length;
+        var available = 0;
+        var inUse = 0;
+        var maintenance = 0;
+        var outService = 0;
+
+        equipmentEntries.forEach(function (entry) {
+          if (entry.statusKey === "available") {
+            available += 1;
+          } else if (entry.statusKey === "in_use") {
+            inUse += 1;
+          } else if (entry.statusKey === "maintenance") {
+            maintenance += 1;
+          } else if (entry.statusKey === "out_service") {
+            outService += 1;
+          }
+        });
+
+        if (equipmentCountText) {
+          equipmentCountText.textContent = total + " equipment found";
+        }
+        if (equipmentAvailableValue) {
+          equipmentAvailableValue.textContent = String(available);
+        }
+        if (equipmentInUseValue) {
+          equipmentInUseValue.textContent = String(inUse);
+        }
+        if (equipmentMaintenanceValue) {
+          equipmentMaintenanceValue.textContent = String(maintenance);
+        }
+        if (equipmentOutServiceValue) {
+          equipmentOutServiceValue.textContent = String(outService);
+        }
+      }
+
+      function renderScheduleTable() {
+        if (!scheduleTableBody) {
+          return;
+        }
+
+        scheduleTableBody.innerHTML = "";
+
+        if (!scheduleEntries.length) {
+          var emptyRow = document.createElement("tr");
+          var emptyCell = document.createElement("td");
+          emptyCell.colSpan = 8;
+          emptyCell.textContent = "No schedules found";
+          emptyRow.appendChild(emptyCell);
+          scheduleTableBody.appendChild(emptyRow);
+          return;
+        }
+
+        scheduleEntries.forEach(function (entry, index) {
+          var row = document.createElement("tr");
+          row.appendChild(makeCell(entry.title));
+          row.appendChild(makeCell(entry.road));
+          row.appendChild(makeCell(entry.type));
+          row.appendChild(makeCell(entry.priority));
+          row.appendChild(makeCell(entry.status));
+          row.appendChild(makeCell(entry.startDate));
+          row.appendChild(makeCell(entry.team));
+          var actionsCell = document.createElement("td");
+          var actionsWrap = document.createElement("div");
+          actionsWrap.className = "table-actions";
+
+          var editBtn = document.createElement("button");
+          editBtn.type = "button";
+          editBtn.className = "table-action-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", function () {
+            startEditSchedule(index);
+          });
+
+          var deleteBtn = document.createElement("button");
+          deleteBtn.type = "button";
+          deleteBtn.className = "table-action-btn danger";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.addEventListener("click", function () {
+            removeSchedule(index);
+          });
+
+          actionsWrap.appendChild(editBtn);
+          actionsWrap.appendChild(deleteBtn);
+          actionsCell.appendChild(actionsWrap);
+          row.appendChild(actionsCell);
+          scheduleTableBody.appendChild(row);
+        });
+      }
+
+      function updateScheduleSummary() {
+        var total = scheduleEntries.length;
+        var scheduled = 0;
+        var inProgress = 0;
+        var completed = 0;
+        var urgent = 0;
+
+        scheduleEntries.forEach(function (entry) {
+          if (entry.statusKey === "scheduled") {
+            scheduled += 1;
+          } else if (entry.statusKey === "progress") {
+            inProgress += 1;
+          } else if (entry.statusKey === "completed") {
+            completed += 1;
+          }
+
+          if (entry.priorityKey === "urgent") {
+            urgent += 1;
+          }
+        });
+
+        if (scheduleCountText) {
+          scheduleCountText.textContent = total + " schedules found";
+        }
+        if (scheduleScheduledValue) {
+          scheduleScheduledValue.textContent = String(scheduled);
+        }
+        if (scheduleInProgressValue) {
+          scheduleInProgressValue.textContent = String(inProgress);
+        }
+        if (scheduleCompletedValue) {
+          scheduleCompletedValue.textContent = String(completed);
+        }
+        if (scheduleUrgentValue) {
+          scheduleUrgentValue.textContent = String(urgent);
+        }
+      }
+
+      function scheduleStatusLabelFromKey(statusKey) {
+        if (statusKey === "progress") {
+          return "In Progress";
+        }
+        if (statusKey === "completed") {
+          return "Completed";
+        }
+        return "Scheduled";
+      }
+
+      function resetEquipmentFormState() {
+        editingEquipmentIndex = null;
+        if (addEquipmentModalTitle) {
+          addEquipmentModalTitle.textContent = "Add Equipment";
+        }
+        if (equipmentSubmitBtn) {
+          equipmentSubmitBtn.textContent = "Add Equipment";
+        }
+      }
+
+      function resetScheduleFormState() {
+        editingScheduleIndex = null;
+        if (addScheduleModalTitle) {
+          addScheduleModalTitle.textContent = "New Maintenance Schedule";
+        }
+        if (scheduleSubmitBtn) {
+          scheduleSubmitBtn.textContent = "Create Schedule";
+        }
+      }
+
+      function startEditEquipment(index) {
+        var entry = equipmentEntries[index];
+        if (!entry) {
+          return;
+        }
+
+        editingEquipmentIndex = index;
+        if (addEquipmentModalTitle) {
+          addEquipmentModalTitle.textContent = "Edit Equipment";
+        }
+        if (equipmentSubmitBtn) {
+          equipmentSubmitBtn.textContent = "Save Changes";
+        }
+
+        var nameField = document.getElementById("equipmentName");
+        var codeField = document.getElementById("equipmentCode");
+        var typeField = document.getElementById("equipmentType");
+        var statusField = document.getElementById("equipmentStatus");
+        var modelField = document.getElementById("equipmentModel");
+        var plateField = document.getElementById("equipmentPlate");
+        var locationField = document.getElementById("equipmentLocation");
+        var operatorField = document.getElementById("equipmentOperator");
+        var notesField = document.getElementById("equipmentNotes");
+
+        if (nameField) {
+          nameField.value = entry.name || "";
+        }
+        if (codeField) {
+          codeField.value = entry.code || "";
+        }
+        if (typeField) {
+          typeField.value = entry.typeKey || "";
+        }
+        if (statusField) {
+          statusField.value = entry.statusKey || "available";
+        }
+        if (modelField) {
+          modelField.value = entry.model && entry.model !== "-" ? entry.model : "";
+        }
+        if (plateField) {
+          plateField.value = entry.plateNumber && entry.plateNumber !== "-" ? entry.plateNumber : "";
+        }
+        if (locationField) {
+          locationField.value = entry.location && entry.location !== "-" ? entry.location : "";
+        }
+        if (operatorField) {
+          operatorField.value = entry.operator && entry.operator !== "-" ? entry.operator : "";
+        }
+        if (notesField) {
+          notesField.value = entry.notes || "";
+        }
+
+        openEquipmentModal();
+      }
+
+      function removeEquipment(index) {
+        if (index < 0 || index >= equipmentEntries.length) {
+          return;
+        }
+
+        equipmentEntries.splice(index, 1);
+        updateEquipmentSummary();
+        renderEquipmentTable();
+
+        if (editingEquipmentIndex === index) {
+          closeEquipmentModal();
+        } else if (editingEquipmentIndex !== null && editingEquipmentIndex > index) {
+          editingEquipmentIndex -= 1;
+        }
+      }
+
+      function startEditSchedule(index) {
+        var entry = scheduleEntries[index];
+        if (!entry) {
+          return;
+        }
+
+        editingScheduleIndex = index;
+        if (addScheduleModalTitle) {
+          addScheduleModalTitle.textContent = "Edit Maintenance Schedule";
+        }
+        if (scheduleSubmitBtn) {
+          scheduleSubmitBtn.textContent = "Save Changes";
+        }
+
+        var titleField = document.getElementById("scheduleTitle");
+        var roadField = document.getElementById("scheduleRoad");
+        var typeField = document.getElementById("scheduleType");
+        var priorityField = document.getElementById("schedulePriority");
+        var teamField = document.getElementById("scheduleTeam");
+        var startDateField = document.getElementById("scheduleStartDate");
+        var endDateField = document.getElementById("scheduleEndDate");
+        var estimatedCostField = document.getElementById("scheduleEstimatedCost");
+        var notesField = document.getElementById("scheduleNotes");
+
+        if (titleField) {
+          titleField.value = entry.title || "";
+        }
+        if (roadField) {
+          roadField.value = entry.roadKey || "";
+        }
+        if (typeField) {
+          typeField.value = entry.typeKey || "";
+        }
+        if (priorityField) {
+          priorityField.value = entry.priorityKey || "medium";
+        }
+        if (teamField) {
+          teamField.value = entry.team && entry.team !== "-" ? entry.team : "";
+        }
+        if (startDateField) {
+          startDateField.value = entry.startDate && entry.startDate !== "-" ? entry.startDate : "";
+        }
+        if (endDateField) {
+          endDateField.value = entry.endDate || "";
+        }
+        if (estimatedCostField) {
+          estimatedCostField.value = entry.estimatedCost || "";
+        }
+        if (notesField) {
+          notesField.value = entry.notes || "";
+        }
+
+        openScheduleModal();
+      }
+
+      function removeSchedule(index) {
+        if (index < 0 || index >= scheduleEntries.length) {
+          return;
+        }
+
+        scheduleEntries.splice(index, 1);
+        updateScheduleSummary();
+        renderScheduleTable();
+
+        if (editingScheduleIndex === index) {
+          closeScheduleModal();
+        } else if (editingScheduleIndex !== null && editingScheduleIndex > index) {
+          editingScheduleIndex -= 1;
+        }
+      }
+
+      updateEquipmentSummary();
+      renderEquipmentTable();
+      updateScheduleSummary();
+      renderScheduleTable();
+
+      function syncModalBodyState() {
+        var hasOpenModal = (addEquipmentModal && addEquipmentModal.classList.contains("open"))
+          || (addScheduleModal && addScheduleModal.classList.contains("open"));
+        document.body.classList.toggle("modal-open", !!hasOpenModal);
+      }
+
+      function openEquipmentModal() {
+        if (!addEquipmentModal) {
+          return;
+        }
+        addEquipmentModal.classList.add("open");
+        addEquipmentModal.setAttribute("aria-hidden", "false");
+        syncModalBodyState();
+
+        var firstField = addEquipmentModal.querySelector("input, select, textarea");
+        if (firstField) {
+          firstField.focus();
+        }
+      }
+
+      function closeEquipmentModal() {
+        if (!addEquipmentModal) {
+          return;
+        }
+        addEquipmentModal.classList.remove("open");
+        addEquipmentModal.setAttribute("aria-hidden", "true");
+        if (addEquipmentForm) {
+          addEquipmentForm.reset();
+        }
+        resetEquipmentFormState();
+        syncModalBodyState();
+      }
+
+      function openScheduleModal() {
+        if (!addScheduleModal) {
+          return;
+        }
+        addScheduleModal.classList.add("open");
+        addScheduleModal.setAttribute("aria-hidden", "false");
+        syncModalBodyState();
+
+        var firstField = addScheduleModal.querySelector("input, select, textarea");
+        if (firstField) {
+          firstField.focus();
+        }
+      }
+
+      function closeScheduleModal() {
+        if (!addScheduleModal) {
+          return;
+        }
+        addScheduleModal.classList.remove("open");
+        addScheduleModal.setAttribute("aria-hidden", "true");
+        if (addScheduleForm) {
+          addScheduleForm.reset();
+        }
+        resetScheduleFormState();
+        syncModalBodyState();
+      }
+
+      if (addEquipmentBtn) {
+        addEquipmentBtn.addEventListener("click", function () {
+          if (addEquipmentForm) {
+            addEquipmentForm.reset();
+          }
+          resetEquipmentFormState();
+          openEquipmentModal();
+        });
+      }
+
+      if (addScheduleBtn) {
+        addScheduleBtn.addEventListener("click", function () {
+          if (addScheduleForm) {
+            addScheduleForm.reset();
+          }
+          resetScheduleFormState();
+          openScheduleModal();
+        });
+      }
+
+      closeEquipmentModalButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          closeEquipmentModal();
+        });
+      });
+
+      closeScheduleModalButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          closeScheduleModal();
+        });
+      });
+
+      if (addEquipmentModal) {
+        addEquipmentModal.addEventListener("click", function (event) {
+          if (event.target === addEquipmentModal) {
+            closeEquipmentModal();
+          }
+        });
+      }
+
+      if (addScheduleModal) {
+        addScheduleModal.addEventListener("click", function (event) {
+          if (event.target === addScheduleModal) {
+            closeScheduleModal();
+          }
+        });
+      }
+
+      if (addEquipmentForm) {
+        addEquipmentForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var nameField = document.getElementById("equipmentName");
+          var codeField = document.getElementById("equipmentCode");
+          var typeField = document.getElementById("equipmentType");
+          var statusField = document.getElementById("equipmentStatus");
+          var modelField = document.getElementById("equipmentModel");
+          var plateField = document.getElementById("equipmentPlate");
+          var locationField = document.getElementById("equipmentLocation");
+          var operatorField = document.getElementById("equipmentOperator");
+          var notesField = document.getElementById("equipmentNotes");
+
+          var name = nameField ? nameField.value.trim() : "";
+          if (!name) {
+            return;
+          }
+
+          var code = codeField ? codeField.value.trim() : "";
+          if (!code) {
+            code = "EQ-" + String(equipmentEntries.length + 1).padStart(3, "0");
+          }
+
+          var statusKey = statusField && statusField.value ? statusField.value : "available";
+          var statusLabel = getSelectedOptionLabel(statusField) || "Available";
+          var typeKey = typeField && typeField.value ? typeField.value : "";
+          var typeLabel = typeKey ? getSelectedOptionLabel(typeField) : "-";
+          var nextEntry = {
+            code: code,
+            name: name,
+            type: typeLabel,
+            typeKey: typeKey,
+            model: modelField && modelField.value.trim() ? modelField.value.trim() : "-",
+            plateNumber: plateField && plateField.value.trim() ? plateField.value.trim() : "-",
+            status: statusLabel,
+            statusKey: statusKey,
+            location: locationField && locationField.value.trim() ? locationField.value.trim() : "-",
+            operator: operatorField && operatorField.value.trim() ? operatorField.value.trim() : "-",
+            notes: notesField && notesField.value.trim() ? notesField.value.trim() : ""
+          };
+
+          if (editingEquipmentIndex !== null && editingEquipmentIndex > -1) {
+            equipmentEntries[editingEquipmentIndex] = nextEntry;
+          } else {
+            equipmentEntries.push(nextEntry);
+          }
+
+          updateEquipmentSummary();
+          renderEquipmentTable();
+          closeEquipmentModal();
+        });
+      }
+
+      if (addScheduleForm) {
+        addScheduleForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          var titleField = document.getElementById("scheduleTitle");
+          var roadField = document.getElementById("scheduleRoad");
+          var typeField = document.getElementById("scheduleType");
+          var priorityField = document.getElementById("schedulePriority");
+          var teamField = document.getElementById("scheduleTeam");
+          var startDateField = document.getElementById("scheduleStartDate");
+          var endDateField = document.getElementById("scheduleEndDate");
+          var estimatedCostField = document.getElementById("scheduleEstimatedCost");
+          var notesField = document.getElementById("scheduleNotes");
+
+          var title = titleField ? titleField.value.trim() : "";
+          if (!title) {
+            return;
+          }
+
+          var roadKey = roadField && roadField.value ? roadField.value : "";
+          var typeKey = typeField && typeField.value ? typeField.value : "";
+          var roadLabel = roadKey ? getSelectedOptionLabel(roadField) : "No specific road";
+          var typeLabel = typeKey ? getSelectedOptionLabel(typeField) : "-";
+          var priorityKey = priorityField && priorityField.value ? priorityField.value : "medium";
+          var priorityLabel = getSelectedOptionLabel(priorityField) || "Medium";
+          var currentSchedule = editingScheduleIndex !== null ? scheduleEntries[editingScheduleIndex] : null;
+          var statusKey = currentSchedule && currentSchedule.statusKey ? currentSchedule.statusKey : "scheduled";
+          var nextSchedule = {
+            title: title,
+            road: roadLabel,
+            roadKey: roadKey,
+            type: typeLabel,
+            typeKey: typeKey,
+            priority: priorityLabel,
+            priorityKey: priorityKey,
+            status: scheduleStatusLabelFromKey(statusKey),
+            statusKey: statusKey,
+            startDate: startDateField && startDateField.value.trim() ? startDateField.value.trim() : "-",
+            endDate: endDateField && endDateField.value.trim() ? endDateField.value.trim() : "",
+            estimatedCost: estimatedCostField && estimatedCostField.value.trim() ? estimatedCostField.value.trim() : "",
+            notes: notesField && notesField.value.trim() ? notesField.value.trim() : "",
+            team: teamField && teamField.value.trim() ? teamField.value.trim() : "-"
+          };
+
+          if (editingScheduleIndex !== null && editingScheduleIndex > -1) {
+            scheduleEntries[editingScheduleIndex] = nextSchedule;
+          } else {
+            scheduleEntries.push(nextSchedule);
+          }
+
+          updateScheduleSummary();
+          renderScheduleTable();
+          closeScheduleModal();
+        });
+      }
 
       function closeAll(exceptNode) {
         selects.forEach(function (node) {
@@ -801,6 +2272,8 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
+          closeEquipmentModal();
+          closeScheduleModal();
           closeAll(null);
         }
       });
@@ -808,5 +2281,6 @@
   </script>
 </body>
 </html>
+
 
 

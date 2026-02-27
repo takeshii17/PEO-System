@@ -626,6 +626,12 @@ def my_assignments(request):
 
 @login_required
 @xframe_options_sameorigin
+def history_page(request):
+    return render(request, "History/history.html")
+
+
+@login_required
+@xframe_options_sameorigin
 def projects_dashboard(request):
     query = request.GET.get("q", "").strip()
     division_choices = [

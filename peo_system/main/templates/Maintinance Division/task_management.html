@@ -402,6 +402,40 @@
       color: #0a8744;
     }
 
+    .task-row-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .task-row-btn {
+      border: 1px solid #c5d1de;
+      border-radius: 8px;
+      min-height: 30px;
+      padding: 0 10px;
+      background: #f6f9fc;
+      color: #1f3e5c;
+      font: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .task-row-btn:hover {
+      background: #ecf2f8;
+    }
+
+    .task-row-btn.delete {
+      border-color: #edc5cd;
+      background: #fff5f7;
+      color: #b4233f;
+    }
+
+    .task-row-btn.delete:hover {
+      background: #ffecef;
+    }
+
     .personnel-modal-overlay {
       position: fixed;
       inset: 0;
@@ -678,6 +712,35 @@
       </div>
     </section>
 
+    <section class="tasks-table-panel" aria-label="Personnel table">
+      <div class="table-head">
+        <h3>Personnel List</h3>
+        <p id="personnelCountText">0 personnel found</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="tasks-table">
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Employee ID</th>
+              <th>Division</th>
+              <th>Position</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="personnelTableBody">
+            <tr id="personnelEmptyRow" class="empty-row">
+              <td colspan="8">No personnel found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <section class="tasks-table-panel" aria-label="Tasks table">
       <div class="table-head">
         <h3>Task List</h3>
@@ -695,11 +758,12 @@
               <th>Priority</th>
               <th>Status</th>
               <th>Due Date</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="tasksTableBody">
             <tr id="tasksEmptyRow" class="empty-row">
-              <td colspan="7">No tasks found</td>
+              <td colspan="8">No tasks found</td>
             </tr>
           </tbody>
         </table>
@@ -801,44 +865,44 @@
 
         <label class="personnel-field">
           <span>Employee ID</span>
-          <input type="text" placeholder="e.g., EMP-001">
+          <input id="personnelEmployeeId" type="text" placeholder="e.g., EMP-001">
         </label>
 
         <label class="personnel-field">
           <span>Division *</span>
-          <select required>
+          <select id="personnelDivision" required>
             <option value="" selected disabled>Select division</option>
-            <option value="admin">Admin</option>
-            <option value="planning">Planning Division</option>
-            <option value="construction">Construction</option>
-            <option value="quality">Quality</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="Admin">Admin</option>
+            <option value="Planning Division">Planning Division</option>
+            <option value="Construction">Construction</option>
+            <option value="Quality">Quality</option>
+            <option value="Maintenance">Maintenance</option>
           </select>
         </label>
 
         <label class="personnel-field">
           <span>Position</span>
-          <input type="text" placeholder="e.g., Engineer II">
+          <input id="personnelPosition" type="text" placeholder="e.g., Engineer II">
         </label>
 
         <label class="personnel-field">
           <span>Email</span>
-          <input type="email" placeholder="e.g., (emailname)@peo.gov.ph">
+          <input id="personnelEmail" type="email" placeholder="e.g., (emailname)@peo.gov.ph">
         </label>
 
         <label class="personnel-field">
           <span>Phone</span>
-          <input type="text" placeholder="e.g., 09171234567">
+          <input id="personnelPhone" type="text" placeholder="e.g., 09171234567">
         </label>
 
         <label class="personnel-check">
-          <input type="checkbox">
+          <input id="personnelIsHead" type="checkbox">
           <span>Division Head</span>
         </label>
 
         <div class="personnel-actions">
           <button type="button" class="personnel-btn" id="cancelPersonnelModal">Cancel</button>
-          <button type="submit" class="personnel-btn personnel-submit">Add Personnel</button>
+          <button type="submit" class="personnel-btn personnel-submit" id="personnelSubmitBtn">Add Personnel</button>
         </div>
       </form>
     </div>
@@ -868,6 +932,21 @@
       var cancelPersonnelModalBtn = document.getElementById("cancelPersonnelModal");
       var personnelForm = document.getElementById("personnelForm");
       var personnelFirstField = document.getElementById("personnelFullName");
+      var personnelEmployeeId = document.getElementById("personnelEmployeeId");
+      var personnelDivision = document.getElementById("personnelDivision");
+      var personnelPosition = document.getElementById("personnelPosition");
+      var personnelEmail = document.getElementById("personnelEmail");
+      var personnelPhone = document.getElementById("personnelPhone");
+      var personnelIsHead = document.getElementById("personnelIsHead");
+      var personnelTableBody = document.getElementById("personnelTableBody");
+      var personnelEmptyRow = document.getElementById("personnelEmptyRow");
+      var personnelCountText = document.getElementById("personnelCountText");
+      var personnelModalTitle = document.getElementById("personnelModalTitle");
+      var personnelSubmitBtn = document.getElementById("personnelSubmitBtn");
+      var taskFormTitle = document.querySelector(".task-float-title");
+      var isEditingTask = false;
+      var editingTaskRow = null;
+      var editingPersonnelRow = null;
 
       function syncBodyModalLock() {
         var taskModalOpen = taskRecordOverlay && taskRecordOverlay.classList.contains("open");
@@ -898,6 +977,136 @@
         }
       }
 
+      function refreshPersonnelCount() {
+        if (!personnelTableBody || !personnelCountText) {
+          return;
+        }
+
+        var count = personnelTableBody.querySelectorAll("tr[data-personnel-row='1']").length;
+        personnelCountText.textContent = String(count) + (count === 1 ? " personnel found" : " personnel found");
+
+        if (personnelEmptyRow) {
+          personnelEmptyRow.hidden = count > 0;
+        }
+      }
+
+      function setPersonnelModalMode(isEditMode) {
+        if (personnelModalTitle) {
+          personnelModalTitle.textContent = isEditMode ? "Edit Personnel" : "Add Personnel";
+        }
+        if (personnelSubmitBtn) {
+          personnelSubmitBtn.textContent = isEditMode ? "Update Personnel" : "Add Personnel";
+        }
+      }
+
+      function resetPersonnelFormState() {
+        if (personnelForm) {
+          personnelForm.reset();
+        }
+        editingPersonnelRow = null;
+        setPersonnelModalMode(false);
+      }
+
+      function personnelPayloadFromRow(row) {
+        if (!row) {
+          return null;
+        }
+
+        return {
+          fullName: row.getAttribute("data-personnel-full-name") || (row.cells[0] ? row.cells[0].textContent.trim() : ""),
+          employeeId: row.getAttribute("data-personnel-id") || (row.cells[1] ? row.cells[1].textContent.trim() : "-"),
+          division: row.getAttribute("data-personnel-division") || (row.cells[2] ? row.cells[2].textContent.trim() : ""),
+          position: row.getAttribute("data-personnel-position") || (row.cells[3] ? row.cells[3].textContent.trim() : "-"),
+          email: row.getAttribute("data-personnel-email") || (row.cells[4] ? row.cells[4].textContent.trim() : "-"),
+          phone: row.getAttribute("data-personnel-phone") || (row.cells[5] ? row.cells[5].textContent.trim() : "-"),
+          role: row.getAttribute("data-personnel-role") || (row.cells[6] ? row.cells[6].textContent.trim() : "Personnel")
+        };
+      }
+
+      function applyPersonnelRowPayload(row, payload) {
+        if (!row || !payload) {
+          return;
+        }
+
+        row.setAttribute("data-personnel-row", "1");
+        row.setAttribute("data-personnel-full-name", payload.fullName);
+        row.setAttribute("data-personnel-id", payload.employeeId);
+        row.setAttribute("data-personnel-division", payload.division);
+        row.setAttribute("data-personnel-position", payload.position);
+        row.setAttribute("data-personnel-email", payload.email);
+        row.setAttribute("data-personnel-phone", payload.phone);
+        row.setAttribute("data-personnel-role", payload.role);
+
+        row.innerHTML = "";
+
+        function appendCell(value) {
+          var cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        }
+
+        appendCell(payload.fullName);
+        appendCell(payload.employeeId);
+        appendCell(payload.division);
+        appendCell(payload.position);
+        appendCell(payload.email);
+        appendCell(payload.phone);
+        appendCell(payload.role);
+
+        var actionsCell = document.createElement("td");
+        var actionsWrap = document.createElement("div");
+        actionsWrap.className = "task-row-actions";
+
+        var editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "task-row-btn";
+        editBtn.setAttribute("data-personnel-action", "edit");
+        editBtn.textContent = "Edit";
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "task-row-btn delete";
+        deleteBtn.setAttribute("data-personnel-action", "delete");
+        deleteBtn.textContent = "Delete";
+
+        actionsWrap.appendChild(editBtn);
+        actionsWrap.appendChild(deleteBtn);
+        actionsCell.appendChild(actionsWrap);
+        row.appendChild(actionsCell);
+      }
+
+      function createPersonnelRow(payload) {
+        var row = document.createElement("tr");
+        applyPersonnelRowPayload(row, payload);
+        return row;
+      }
+
+      function getNextTaskId() {
+        if (!tasksTableBody) {
+          return "TSK-001";
+        }
+
+        var maxNumber = 0;
+        var rows = tasksTableBody.querySelectorAll("tr[data-task-row='1']");
+        rows.forEach(function (row) {
+          var taskIdValue = row.getAttribute("data-task-id");
+          if (!taskIdValue) {
+            var firstCell = row.querySelector("td");
+            taskIdValue = firstCell ? firstCell.textContent.trim() : "";
+          }
+
+          var match = String(taskIdValue || "").match(/^TSK-(\d+)$/i);
+          if (match) {
+            var parsed = Number(match[1]);
+            if (!Number.isNaN(parsed) && parsed > maxNumber) {
+              maxNumber = parsed;
+            }
+          }
+        });
+
+        return "TSK-" + String(maxNumber + 1).padStart(3, "0");
+      }
+
       function resetTaskForm() {
         if (taskTitleInput) {
           taskTitleInput.value = "";
@@ -922,14 +1131,161 @@
         }
       }
 
-      function openTaskForm() {
+      function getTaskPayloadFromForm() {
+        var title = taskTitleInput ? taskTitleInput.value.trim() : "";
+        return {
+          id: nextTaskId ? nextTaskId.value : "TSK-000",
+          title: title,
+          division: taskDivisionInput ? taskDivisionInput.value : "Maintenance",
+          assigned: taskAssignedInput && taskAssignedInput.value.trim() ? taskAssignedInput.value.trim() : "-",
+          priority: taskPriorityInput ? taskPriorityInput.value : "Medium",
+          status: taskStatusInput ? taskStatusInput.value : "Pending",
+          dueDate: formatDueDate(taskDueDateInput ? taskDueDateInput.value : "")
+        };
+      }
+
+      function rowPayload(row) {
+        if (!row) {
+          return null;
+        }
+
+        var statusBadge = row.querySelector(".status-pill");
+        return {
+          id: row.getAttribute("data-task-id") || (row.cells[0] ? row.cells[0].textContent.trim() : "TSK-000"),
+          title: row.getAttribute("data-task-title") || (row.cells[1] ? row.cells[1].textContent.trim() : ""),
+          division: row.getAttribute("data-task-division") || (row.cells[2] ? row.cells[2].textContent.trim() : "Maintenance"),
+          assigned: row.getAttribute("data-task-assigned") || (row.cells[3] ? row.cells[3].textContent.trim() : "-"),
+          priority: row.getAttribute("data-task-priority") || (row.cells[4] ? row.cells[4].textContent.trim() : "Medium"),
+          status: row.getAttribute("data-task-status") || (statusBadge ? statusBadge.textContent.trim() : "Pending"),
+          dueDate: row.getAttribute("data-task-due-date") || (row.cells[6] ? row.cells[6].textContent.trim() : "-")
+        };
+      }
+
+      function applyRowPayload(row, payload) {
+        if (!row || !payload) {
+          return;
+        }
+
+        row.setAttribute("data-task-row", "1");
+        row.setAttribute("data-task-id", payload.id);
+        row.setAttribute("data-task-title", payload.title);
+        row.setAttribute("data-task-division", payload.division);
+        row.setAttribute("data-task-assigned", payload.assigned);
+        row.setAttribute("data-task-priority", payload.priority);
+        row.setAttribute("data-task-status", payload.status);
+        row.setAttribute("data-task-due-date", payload.dueDate);
+
+        row.innerHTML = "";
+
+        function appendTextCell(value) {
+          var cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        }
+
+        appendTextCell(payload.id);
+        appendTextCell(payload.title);
+        appendTextCell(payload.division);
+        appendTextCell(payload.assigned);
+        appendTextCell(payload.priority);
+
+        var statusCell = document.createElement("td");
+        var badge = document.createElement("span");
+        badge.className = "status-pill " + statusClass(payload.status);
+        badge.textContent = payload.status;
+        statusCell.appendChild(badge);
+        row.appendChild(statusCell);
+
+        appendTextCell(payload.dueDate);
+
+        var actionsCell = document.createElement("td");
+        var actionsWrap = document.createElement("div");
+        actionsWrap.className = "task-row-actions";
+
+        var editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "task-row-btn";
+        editBtn.setAttribute("data-task-action", "edit");
+        editBtn.textContent = "Edit";
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "task-row-btn delete";
+        deleteBtn.setAttribute("data-task-action", "delete");
+        deleteBtn.textContent = "Delete";
+
+        actionsWrap.appendChild(editBtn);
+        actionsWrap.appendChild(deleteBtn);
+        actionsCell.appendChild(actionsWrap);
+        row.appendChild(actionsCell);
+      }
+
+      function hydrateExistingTaskRows() {
+        if (!tasksTableBody) {
+          return;
+        }
+
+        var rows = tasksTableBody.querySelectorAll("tr");
+        rows.forEach(function (row) {
+          if (tasksEmptyRow && row === tasksEmptyRow) {
+            return;
+          }
+
+          var payload = rowPayload(row);
+          if (payload) {
+            applyRowPayload(row, payload);
+          }
+        });
+      }
+
+      function openTaskForm(taskRow) {
         if (!newTaskFormCard || !taskRecordOverlay) {
           return;
         }
 
-        var nextNumber = tasksTableBody ? tasksTableBody.querySelectorAll("tr[data-task-row='1']").length + 1 : 1;
-        if (nextTaskId) {
-          nextTaskId.value = "TSK-" + String(nextNumber).padStart(3, "0");
+        isEditingTask = Boolean(taskRow);
+        editingTaskRow = taskRow || null;
+
+        if (isEditingTask) {
+          var payload = rowPayload(taskRow);
+          if (nextTaskId) {
+            nextTaskId.value = payload.id;
+          }
+          if (taskTitleInput) {
+            taskTitleInput.value = payload.title;
+          }
+          if (taskDivisionInput) {
+            taskDivisionInput.value = payload.division;
+          }
+          if (taskAssignedInput) {
+            taskAssignedInput.value = payload.assigned === "-" ? "" : payload.assigned;
+          }
+          if (taskPriorityInput) {
+            taskPriorityInput.value = payload.priority;
+          }
+          if (taskStatusInput) {
+            taskStatusInput.value = payload.status;
+          }
+          if (taskDueDateInput) {
+            taskDueDateInput.value = payload.dueDate === "-" ? "" : payload.dueDate;
+          }
+          if (taskFormTitle) {
+            taskFormTitle.textContent = "Edit Task Record";
+          }
+          if (saveTaskBtn) {
+            saveTaskBtn.textContent = "Update";
+          }
+        } else {
+          resetTaskForm();
+          if (nextTaskId) {
+            nextTaskId.value = getNextTaskId();
+          }
+          if (taskFormTitle) {
+            taskFormTitle.textContent = "Create Task Record";
+          }
+          if (saveTaskBtn) {
+            saveTaskBtn.textContent = "Create";
+          }
         }
 
         taskRecordOverlay.classList.add("open");
@@ -952,6 +1308,14 @@
         taskRecordOverlay.setAttribute("aria-hidden", "true");
         syncBodyModalLock();
         resetTaskForm();
+        isEditingTask = false;
+        editingTaskRow = null;
+        if (taskFormTitle) {
+          taskFormTitle.textContent = "Create Task Record";
+        }
+        if (saveTaskBtn) {
+          saveTaskBtn.textContent = "Create";
+        }
         refreshTaskCount();
       }
 
@@ -967,46 +1331,57 @@
           return;
         }
 
-        var title = taskTitleInput.value.trim();
-        if (!title) {
+        var payload = getTaskPayloadFromForm();
+        if (!payload.title) {
           taskTitleInput.focus();
           return;
         }
 
-        var assigned = taskAssignedInput && taskAssignedInput.value.trim() ? taskAssignedInput.value.trim() : "-";
-        var division = taskDivisionInput ? taskDivisionInput.value : "Maintenance";
-        var priority = taskPriorityInput ? taskPriorityInput.value : "Medium";
-        var status = taskStatusInput.value;
-        var dueDate = formatDueDate(taskDueDateInput ? taskDueDateInput.value : "");
-        var taskId = nextTaskId ? nextTaskId.value : "TSK-000";
+        if (isEditingTask && editingTaskRow) {
+          applyRowPayload(editingTaskRow, payload);
+        } else {
+          var row = document.createElement("tr");
+          applyRowPayload(row, payload);
+          tasksTableBody.appendChild(row);
+        }
 
-        var row = document.createElement("tr");
-        row.setAttribute("data-task-row", "1");
-        var cells = [taskId, title, division, assigned, priority, status, dueDate];
-
-        cells.forEach(function (value, index) {
-          var cell = document.createElement("td");
-
-          if (index === 5) {
-            var badge = document.createElement("span");
-            badge.className = "status-pill " + statusClass(String(value));
-            badge.textContent = String(value);
-            cell.appendChild(badge);
-          } else {
-            cell.textContent = String(value);
-          }
-
-          row.appendChild(cell);
-        });
-
-        tasksTableBody.appendChild(row);
         closeTaskForm();
         refreshTaskCount();
       }
 
-      function openPersonnelModal() {
+      function openPersonnelModal(personnelRow) {
         if (!personnelModal) {
           return;
+        }
+
+        if (personnelRow) {
+          var payload = personnelPayloadFromRow(personnelRow);
+          editingPersonnelRow = personnelRow;
+          setPersonnelModalMode(true);
+
+          if (personnelFirstField) {
+            personnelFirstField.value = payload.fullName || "";
+          }
+          if (personnelEmployeeId) {
+            personnelEmployeeId.value = payload.employeeId === "-" ? "" : payload.employeeId;
+          }
+          if (personnelDivision) {
+            personnelDivision.value = payload.division || "";
+          }
+          if (personnelPosition) {
+            personnelPosition.value = payload.position === "-" ? "" : payload.position;
+          }
+          if (personnelEmail) {
+            personnelEmail.value = payload.email === "-" ? "" : payload.email;
+          }
+          if (personnelPhone) {
+            personnelPhone.value = payload.phone === "-" ? "" : payload.phone;
+          }
+          if (personnelIsHead) {
+            personnelIsHead.checked = payload.role === "Division Head";
+          }
+        } else {
+          resetPersonnelFormState();
         }
 
         personnelModal.classList.add("open");
@@ -1027,6 +1402,7 @@
 
         personnelModal.classList.remove("open");
         personnelModal.setAttribute("aria-hidden", "true");
+        resetPersonnelFormState();
         syncBodyModalLock();
       }
 
@@ -1035,7 +1411,7 @@
           if (taskRecordOverlay && taskRecordOverlay.classList.contains("open")) {
             closeTaskForm();
           } else {
-            openTaskForm();
+            openTaskForm(null);
           }
         });
       }
@@ -1055,6 +1431,34 @@
         });
       }
 
+      if (tasksTableBody) {
+        tasksTableBody.addEventListener("click", function (event) {
+          var actionBtn = event.target.closest("button[data-task-action]");
+          if (!actionBtn) {
+            return;
+          }
+
+          var row = actionBtn.closest("tr[data-task-row='1']");
+          if (!row) {
+            return;
+          }
+
+          var action = actionBtn.getAttribute("data-task-action");
+          if (action === "edit") {
+            openTaskForm(row);
+            return;
+          }
+
+          if (action === "delete") {
+            if (editingTaskRow === row) {
+              closeTaskForm();
+            }
+            row.remove();
+            refreshTaskCount();
+          }
+        });
+      }
+
       if (saveTaskBtn) {
         saveTaskBtn.addEventListener("click", function (event) {
           event.preventDefault();
@@ -1067,7 +1471,9 @@
       }
 
       if (openPersonnelModalBtn) {
-        openPersonnelModalBtn.addEventListener("click", openPersonnelModal);
+        openPersonnelModalBtn.addEventListener("click", function () {
+          openPersonnelModal(null);
+        });
       }
 
       if (closePersonnelModalBtn) {
@@ -1081,7 +1487,62 @@
       if (personnelForm) {
         personnelForm.addEventListener("submit", function (event) {
           event.preventDefault();
+          if (!personnelTableBody) {
+            closePersonnelModal();
+            return;
+          }
+
+          var fullName = personnelFirstField ? personnelFirstField.value.trim() : "";
+          var division = personnelDivision ? personnelDivision.value : "";
+          if (!fullName || !division) {
+            return;
+          }
+
+          var payload = {
+            fullName: fullName,
+            employeeId: personnelEmployeeId && personnelEmployeeId.value.trim() ? personnelEmployeeId.value.trim() : "-",
+            division: division,
+            position: personnelPosition && personnelPosition.value.trim() ? personnelPosition.value.trim() : "-",
+            email: personnelEmail && personnelEmail.value.trim() ? personnelEmail.value.trim() : "-",
+            phone: personnelPhone && personnelPhone.value.trim() ? personnelPhone.value.trim() : "-",
+            role: personnelIsHead && personnelIsHead.checked ? "Division Head" : "Personnel"
+          };
+
+          if (editingPersonnelRow) {
+            applyPersonnelRowPayload(editingPersonnelRow, payload);
+          } else {
+            personnelTableBody.appendChild(createPersonnelRow(payload));
+          }
+          refreshPersonnelCount();
           closePersonnelModal();
+        });
+      }
+
+      if (personnelTableBody) {
+        personnelTableBody.addEventListener("click", function (event) {
+          var actionBtn = event.target.closest("button[data-personnel-action]");
+          if (!actionBtn) {
+            return;
+          }
+
+          var row = actionBtn.closest("tr[data-personnel-row='1']");
+          if (!row) {
+            return;
+          }
+
+          var action = actionBtn.getAttribute("data-personnel-action");
+          if (action === "edit") {
+            openPersonnelModal(row);
+            return;
+          }
+
+          if (action === "delete") {
+            if (editingPersonnelRow === row) {
+              closePersonnelModal();
+            }
+            row.remove();
+            refreshPersonnelCount();
+          }
         });
       }
 
@@ -1100,7 +1561,9 @@
         }
       });
 
+      hydrateExistingTaskRows();
       refreshTaskCount();
+      refreshPersonnelCount();
     });
   </script>
 </body>

@@ -857,6 +857,7 @@
                     </div>
 </div>
                 <a id="myAssignmentsNavLink" class="nav-item" href="{% url 'my_assignments' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>My Assignments</a>
+                <a id="historyNavLink" class="nav-item {% if request.resolver_match.url_name == 'history' %}active{% endif %}" href="{% url 'history' %}"><svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l2.5 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>History</a>
             </nav>
         </aside>
 
@@ -1093,6 +1094,7 @@
             var embeddedPanel = document.getElementById("embeddedMaintenancePanel");
             var embeddedFrame = document.getElementById("embeddedMaintenanceFrame");
             var myAssignmentsNavLink = document.getElementById("myAssignmentsNavLink");
+            var historyNavLink = document.getElementById("historyNavLink");
             var dashboardNavLink = document.getElementById("dashboardNavLink");
             var adminDivisionNavLink = document.getElementById("adminDivisionNavLink");
             var projectsNavLink = document.getElementById("projectsNavLink");
@@ -1346,6 +1348,22 @@
                     if (link) {
                         window.setTimeout(function () {
                             openEmbeddedMaintenance(link, "My Assignments");
+                        }, 180);
+                    }
+                });
+            }
+
+            if (historyNavLink) {
+                historyNavLink.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    setActiveTopNavItem(historyNavLink);
+                    playBlink(historyNavLink);
+                    setDataTabsVisible(false);
+
+                    var link = historyNavLink.getAttribute("href");
+                    if (link) {
+                        window.setTimeout(function () {
+                            openEmbeddedMaintenance(link, "History");
                         }, 180);
                     }
                 });
