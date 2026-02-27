@@ -38,7 +38,7 @@ class DocumentForm(forms.ModelForm):
             "date_released_to_admin": forms.DateInput(attrs={"type": "date"}),
             "date_received_from_admin": forms.DateInput(attrs={"type": "date"}),
             "date_released_to_accounting": forms.DateInput(attrs={"type": "date"}),
-            "billing_type": forms.TextInput(attrs={"placeholder": "e.g., Progress Billing #2"}),
+            "billing_type": forms.Select(),
             "percentage": forms.NumberInput(attrs={"placeholder": "e.g., 30%", "step": "0.01"}),
             "contract_amount": forms.NumberInput(attrs={"placeholder": "e.g., 50,000.00", "step": "0.01"}),
             "revised_contract_amount": forms.NumberInput(attrs={"placeholder": "e.g., 55,200.00", "step": "0.01"}),
@@ -46,6 +46,16 @@ class DocumentForm(forms.ModelForm):
             "date_started": forms.DateInput(attrs={"type": "date"}),
             "completion_date": forms.DateInput(attrs={"type": "date"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["billing_type"].widget = forms.Select(
+            choices=[
+                ("", "Select billing type"),
+                ("20% Development Fund", "20% Development Fund"),
+                ("SEF", "SEF"),
+            ]
+        )
 
 
 class PlanningBudgetForm(forms.ModelForm):

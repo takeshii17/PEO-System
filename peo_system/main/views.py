@@ -270,6 +270,7 @@ def planning_div_dashboard(request):
 @xframe_options_sameorigin
 def admin_div_dashboard(request):
     active_tab = request.GET.get("tab", "documents")
+    open_create_modal = request.GET.get("new_document") == "1"
     if active_tab not in {"documents", "billing"}:
         active_tab = "documents"
     if not _table_exists(Document):
@@ -286,40 +287,130 @@ def admin_div_dashboard(request):
         if editing_document:
             form = DocumentForm(instance=editing_document)
             show_modal = True
+    elif active_tab == "documents" and open_create_modal:
+        show_modal = True
 
-    if request.method == "POST" and active_tab == "documents":
+    if request.method == "POST":
         action = request.POST.get("action", "create").strip()
 
-        if action == "delete_document":
-            delete_id = request.POST.get("delete_id")
-            if delete_id:
-                Document.objects.filter(id=delete_id).delete()
-            return redirect("admin_div_dashboard")
+        if action == "update_status":
+            document_id = request.POST.get("document_id")
+            new_status = request.POST.get("status", "").strip()
+            valid_statuses = {value for value, _ in Document.STATUS_CHOICES}
+            if document_id and new_status in valid_statuses:
+                document = Document.objects.select_related("project").filter(id=document_id).first()
+                if document:
+                    document.status = new_status
+                    is_billing_record = bool(document.billing_type) or document.doc_type == Document.TYPE_BILLING_PACKET
 
-        if action in {"create", "update"}:
-            instance = None
-            if action == "update":
-                document_id = request.POST.get("document_id")
-                if document_id:
-                    instance = Document.objects.filter(id=document_id).first()
-                    editing_document = instance
+                    if (
+                        is_billing_record
+                        and new_status == Document.STATUS_APPROVED
+                        and _table_exists(PlanningProject)
+                        and _table_exists(PlanningBudget)
+                    ):
+                        mapped_fund = _map_billing_type_to_fund(document.billing_type)
+                        if mapped_fund:
+                            allocation_amount = (
+                                document.revised_contract_amount
+                                or document.contract_amount
+                                or Decimal("0")
+                            )
 
-            form = DocumentForm(request.POST, instance=instance)
-            show_modal = True
-            if form.is_valid():
-                document = form.save(commit=False)
-                if instance is None:
-                    document.created_by = request.user
-                document.save()
-                for uploaded_file in request.FILES.getlist("scanned_files"):
-                    if uploaded_file:
-                        DocumentScan.objects.create(
-                            document=document,
-                            project=document.project,
-                            file=uploaded_file,
-                            uploaded_by=request.user,
-                        )
+                            planning_project = document.project
+                            if planning_project:
+                                planning_project.fund = mapped_fund
+                                planning_project.budget_amount = allocation_amount
+                                planning_project.status = PlanningProject.STATUS_APPROVED
+                                planning_project.save(update_fields=["fund", "budget_amount", "status"])
+                            else:
+                                planning_project = PlanningProject.objects.filter(
+                                    project_title=document.document_name,
+                                    fund=mapped_fund,
+                                ).order_by("-id").first()
+                                if planning_project:
+                                    planning_project.budget_amount = allocation_amount
+                                    planning_project.status = PlanningProject.STATUS_APPROVED
+                                    planning_project.save(update_fields=["budget_amount", "status"])
+                                else:
+                                    planning_project = PlanningProject.objects.create(
+                                        project_title=document.document_name,
+                                        fund=mapped_fund,
+                                        budget_amount=allocation_amount,
+                                        status=PlanningProject.STATUS_APPROVED,
+                                    )
+
+                            document.project = planning_project
+                            document.division = Document.DIV_PLANNING
+
+                    document.save(update_fields=["status", "project", "division"])
+
+            next_url = request.POST.get("next", "").strip()
+            if next_url:
+                return redirect(next_url)
+            return redirect(f"{reverse('admin_div_dashboard')}?tab={active_tab}")
+
+        if active_tab == "documents":
+            if action == "delete_document":
+                delete_id = request.POST.get("delete_id")
+                if delete_id:
+                    Document.objects.filter(id=delete_id).delete()
                 return redirect("admin_div_dashboard")
+
+            if action == "delete_scan":
+                document_id = request.POST.get("document_id")
+                scan_id = request.POST.get("scan_id")
+                if document_id and scan_id:
+                    scan = DocumentScan.objects.filter(id=scan_id, document_id=document_id).first()
+                    if scan:
+                        if scan.file:
+                            scan.file.delete(save=False)
+                        scan.delete()
+                if document_id:
+                    return redirect(f"{reverse('admin_div_dashboard')}?tab=documents&edit_document={document_id}")
+                return redirect("admin_div_dashboard")
+
+            if action == "replace_scan":
+                document_id = request.POST.get("document_id")
+                scan_id = request.POST.get("scan_id")
+                replacement_file = request.FILES.get("replacement_scan_file")
+                if document_id and scan_id and replacement_file:
+                    scan = DocumentScan.objects.select_related("document").filter(id=scan_id, document_id=document_id).first()
+                    if scan:
+                        if scan.file:
+                            scan.file.delete(save=False)
+                        scan.file = replacement_file
+                        scan.project = scan.document.project
+                        scan.uploaded_by = request.user
+                        scan.save(update_fields=["file", "project", "uploaded_by"])
+                if document_id:
+                    return redirect(f"{reverse('admin_div_dashboard')}?tab=documents&edit_document={document_id}")
+                return redirect("admin_div_dashboard")
+
+            if action in {"create", "update"}:
+                instance = None
+                if action == "update":
+                    document_id = request.POST.get("document_id")
+                    if document_id:
+                        instance = Document.objects.filter(id=document_id).first()
+                        editing_document = instance
+
+                form = DocumentForm(request.POST, instance=instance)
+                show_modal = True
+                if form.is_valid():
+                    document = form.save(commit=False)
+                    if instance is None:
+                        document.created_by = request.user
+                    document.save()
+                    for uploaded_file in request.FILES.getlist("scanned_files"):
+                        if uploaded_file:
+                            DocumentScan.objects.create(
+                                document=document,
+                                project=document.project,
+                                file=uploaded_file,
+                                uploaded_by=request.user,
+                            )
+                    return redirect("admin_div_dashboard")
 
     search = request.GET.get("q", "").strip()
     division = request.GET.get("division", "").strip()
@@ -519,11 +610,24 @@ def projects_dashboard(request):
     project_folders = []
 
     if _table_exists(Document):
+        def _entry_title_and_key(document):
+            title = ""
+            if document.project_id and document.project:
+                title = (document.project.project_title or "").strip()
+            if not title:
+                title = (document.document_name or f"Document #{document.id}").strip()
+            return title, title.lower()
+
         for div_key, _ in division_choices:
-            counts_by_division[div_key] = Document.objects.filter(division=div_key, project__isnull=False).count()
+            division_docs = Document.objects.filter(division=div_key).select_related("project")
+            division_entries = set()
+            for doc in division_docs:
+                _, entry_key = _entry_title_and_key(doc)
+                division_entries.add(entry_key)
+            counts_by_division[div_key] = len(division_entries)
 
         documents_qs = (
-            Document.objects.filter(division=selected_division, project__isnull=False)
+            Document.objects.filter(division=selected_division)
             .select_related("project")
             .prefetch_related("scans")
             .order_by("-created_at")
@@ -537,18 +641,25 @@ def projects_dashboard(request):
 
         folders_map = {}
         for doc in documents_qs:
-            project = doc.project
-            if not project:
-                continue
+            entry_title, entry_key = _entry_title_and_key(doc)
             bucket = folders_map.setdefault(
-                project.id,
+                entry_key,
                 {
-                    "project_title": project.project_title,
+                    "project_title": entry_title,
                     "document_count": 0,
                     "files": [],
+                    "documents": [],
                 },
             )
             bucket["document_count"] += 1
+            bucket["documents"].append(
+                {
+                    "name": doc.document_name,
+                    "status": doc.get_status_display(),
+                    "division": doc.get_division_display(),
+                    "created_at": doc.created_at,
+                }
+            )
             for scan in doc.scans.all():
                 bucket["files"].append(scan)
 
@@ -647,6 +758,15 @@ def _planning_fallback_context(active_tab="budget", selected_fund=""):
         "total_remaining": Decimal("0"),
         "db_not_ready": True,
     }
+
+
+def _map_billing_type_to_fund(billing_type):
+    normalized = (billing_type or "").strip().lower()
+    if normalized == "20% development fund":
+        return PlanningBudget.FUND_20_DEV
+    if normalized == "sef":
+        return PlanningBudget.FUND_SEF
+    return ""
 
 
 def _admin_fallback_context(active_tab="documents"):
