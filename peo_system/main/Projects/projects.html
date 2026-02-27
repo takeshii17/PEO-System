@@ -29,7 +29,7 @@
         }
 
         .app-shell {
-            display: flex;
+            display: block;
             min-height: 100vh;
         }
 
@@ -38,7 +38,7 @@
             background: linear-gradient(180deg, #08274a 0%, #07203f 100%);
             color: #d5dfeb;
             border-right: 1px solid #15385f;
-            display: flex;
+            display: none;
             flex-direction: column;
         }
 
@@ -117,13 +117,14 @@
         .workspace {
             flex: 1;
             min-width: 0;
+            width: 100%;
             background: #f2f4f7;
         }
 
         .topbar {
             height: 80px;
             border-bottom: 1px solid var(--line);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: flex-end;
             padding: 0 22px;
