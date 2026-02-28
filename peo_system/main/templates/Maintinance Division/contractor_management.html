@@ -213,22 +213,84 @@
       overflow-x: auto;
       border: 1px solid #d2d9e1;
       border-radius: 12px;
-      background: #fff;
+      background: #f4f7fb;
+      padding: 10px;
     }
 
     .contractor-table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 980px;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 0;
     }
 
-    .contractor-table th,
-    .contractor-table td {
-      text-align: left;
-      padding: 11px 12px;
-      border-bottom: 1px solid #e0e5eb;
+    .contractor-table thead {
+      display: none;
+    }
+
+    .contractor-table tbody {
+      display: block;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 10px 14px;
+      border: 1px solid #d8e0ea;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td {
+      border: 0;
+      padding: 0;
       font-size: 0.95rem;
-      vertical-align: top;
+      min-height: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+      color: #233d58;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td::before {
+      content: attr(data-label);
+      font-size: 0.75rem;
+      color: #637a92;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.company-cell {
+      grid-column: 1 / -1;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #0f2a46;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.company-cell .company-subline {
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: #5f748b;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell {
+      grid-column: 1 / -1;
+      align-items: flex-end;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell::before {
+      content: "";
+    }
+
+    .contractor-table .empty-row {
+      display: table-row;
     }
 
     .contractor-table th {
@@ -243,11 +305,596 @@
       border-bottom: 0;
     }
 
-    .empty-row td {
+    .empty-row {
       text-align: center;
       color: #637a92;
       padding: 28px 16px;
       font-size: 1rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .company-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .company-card {
+      border: 1px solid #d3ddea;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      box-shadow: var(--shadow);
+      min-height: 102px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    }
+
+    .company-card:hover {
+      transform: translateY(-1px);
+      border-color: #a8bed9;
+      box-shadow: 0 4px 16px rgba(17, 47, 79, 0.12);
+    }
+
+    .company-card:focus-visible {
+      outline: 2px solid #0f4b89;
+      outline-offset: 2px;
+    }
+
+    .company-name {
+      color: #16304a;
+      font-size: 1.06rem;
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+      flex: 1 1 auto;
+    }
+
+    .company-card-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .company-card-btn {
+      width: 40px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid #c8d2de;
+      background: #f4f7fb;
+      color: #2a3f56;
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.14s ease, border-color 0.14s ease;
+    }
+
+    .company-card-btn:hover {
+      background: #ecf2f9;
+      border-color: #b3c3d6;
+    }
+
+    .company-card-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .details-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #d5dfea;
+      border-radius: 12px;
+      background: #ecf2f8;
+      padding: 4px;
+    }
+
+    .details-tab {
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #24384f;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 7px 11px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .details-tab.is-active {
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(14, 34, 54, 0.14);
+    }
+
+    .details-status-row {
+      margin-top: 12px;
+    }
+
+    .details-status-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .details-status-chip-active {
+      background: #beeedb;
+      color: #0a7e4c;
+    }
+
+    .details-status-chip-blacklisted {
+      background: #f7dbe0;
+      color: #b4233f;
+    }
+
+    .details-status-chip-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .details-panel {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .details-panel.is-active {
+      display: block;
+    }
+
+    .details-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .details-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .details-card h3 {
+      margin: 0;
+      font-size: 1.04rem;
+      color: #4f5e6f;
+      font-weight: 700;
+    }
+
+    .details-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .details-list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .details-list-row span {
+      color: #5f748b;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .details-list-row strong {
+      color: #1a2f46;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .details-contact-row {
+      justify-content: flex-start;
+      gap: 10px;
+    }
+
+    .details-contact-icon {
+      width: 18px;
+      min-width: 18px;
+      height: 18px;
+      color: #596f86;
+      display: inline-grid;
+      place-items: center;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .details-summary {
+      margin-top: 14px;
+    }
+
+    .details-contract-layout {
+      align-items: start;
+    }
+
+    .details-project-card h3 {
+      color: #1b2f46;
+      font-size: 1.15rem;
+    }
+
+    .project-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(260px, 1fr);
+      gap: 14px;
+    }
+
+    .project-main {
+      display: grid;
+      gap: 14px;
+    }
+
+    .project-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .project-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-card-head h3 {
+      margin: 0;
+      color: #0f2a46;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .project-subline {
+      margin: 6px 0 0;
+      color: #4f647c;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .project-gallery {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(130px, 0.65fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .project-gallery-main,
+    .project-gallery-thumb {
+      border-radius: 10px;
+      border: 1px solid #d2dbe6;
+      background: #eef3f9;
+      overflow: hidden;
+      min-height: 150px;
+      display: block;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .project-gallery-thumbs {
+      display: grid;
+      gap: 10px;
+    }
+
+    .project-overview {
+      margin: 10px 0 0;
+      color: #1f3750;
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .project-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .project-side-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .project-side-card h4 {
+      margin: 0;
+      color: #4f5e6f;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .project-doc-list {
+      margin: 10px 0 0;
+      padding-left: 16px;
+      display: grid;
+      gap: 6px;
+      color: #1e3550;
+      font-size: 0.9rem;
+    }
+
+    .project-location {
+      margin-top: 10px;
+      border: 1px solid #d8e1ec;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .project-location strong {
+      color: #0f2a46;
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .project-location span {
+      color: #5d7188;
+      font-size: 0.84rem;
+      font-weight: 600;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .summary-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .summary-metric {
+      border: 1px solid #dbe4ee;
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .summary-metric strong {
+      display: block;
+      color: #111f2e;
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .summary-metric span {
+      display: block;
+      margin-top: 6px;
+      color: #566a80;
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .details-empty {
+      margin: 12px 0 0;
+      color: #5f748b;
+      font-size: 0.95rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      padding: 12px;
+    }
+
+    .contract-history-card {
+      margin-top: 14px;
+    }
+
+    .contract-history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .contract-history-header h3 {
+      margin: 0;
+      color: #0f2a46;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .contract-history-total {
+      color: #3d556f;
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .contract-history-total strong {
+      color: #102a43;
+      font-weight: 800;
+    }
+
+    .contract-history-cards {
+      margin-top: 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .contract-history-item {
+      border: 1px solid #d7e0ea;
+      border-radius: 16px;
+      background: #ffffff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .contract-history-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .contract-history-title {
+      margin: 0;
+      color: #102a43;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      max-width: 90%;
+      white-space: pre-line;
+    }
+
+    .contract-history-status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .contract-history-status-completed {
+      background: #0f3a66;
+      color: #ffffff;
+    }
+
+    .contract-history-status-ongoing {
+      background: #f1f6fb;
+      border: 1px solid #cfd9e5;
+      color: #0f2a46;
+    }
+
+    .contract-history-status-pending {
+      background: #ffefd2;
+      color: #9a5a00;
+    }
+
+    .contract-history-status-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .contract-history-code {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #ced8e4;
+      border-radius: 999px;
+      background: #f7faff;
+      color: #1a3149;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+    }
+
+    .contract-history-location {
+      margin-top: 10px;
+      color: #516881;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .contract-history-meta {
+      margin-top: 10px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: #102a43;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .contract-history-empty {
+      margin: 0;
+      color: #5f748b;
+      font-size: 0.95rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 12px;
+      background: #f7fbff;
+      padding: 12px;
+    }
+
+    .project-status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .project-status-ongoing {
+      background: #d7e9ff;
+      color: #0d4a92;
+    }
+
+    .project-status-completed {
+      background: #d7f3e1;
+      color: #0f7c3a;
+    }
+
+    .project-status-pending {
+      background: #ffefd2;
+      color: #9a5a00;
+    }
+
+    .project-status-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .details-image-wrap {
+      margin-top: 10px;
+      border: 1px solid #d8e1ec;
+      border-radius: 10px;
+      background: #f8fbff;
+      padding: 10px;
+    }
+
+    .details-image-wrap img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #d2dbe6;
+      display: block;
+    }
+
+    .details-no-image {
+      margin: 0;
+      color: #5f748b;
+      font-size: 0.9rem;
     }
 
     .badge {
@@ -324,7 +971,9 @@
     }
 
     .contractor-modal {
-      width: min(760px, 100%);
+      width: min(860px, 100%);
+      max-height: min(92vh, 920px);
+      overflow-y: auto;
       background: #fff;
       border-radius: 16px;
       border: 1px solid #d7dde5;
@@ -354,19 +1003,29 @@
     .contractor-close {
       width: 34px;
       height: 34px;
-      border: 1px solid #cdd5de;
+      border: 0;
       border-radius: 10px;
-      background: #f8fafc;
-      color: #24364d;
-      font-size: 1.4rem;
+      background: transparent;
+      color: #4b5f76;
+      font-size: 1.6rem;
       line-height: 1;
       cursor: pointer;
     }
 
     .contractor-form {
       display: grid;
-      gap: 10px;
+      gap: 12px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-section-title {
+      grid-column: 1 / -1;
+      margin: 6px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid #dce4ee;
+      color: #162d47;
+      font-size: 1.04rem;
+      font-weight: 700;
     }
 
     .form-field {
@@ -379,8 +1038,8 @@
     }
 
     .form-field span {
-      color: #304862;
-      font-size: 0.9rem;
+      color: #1d3550;
+      font-size: 0.95rem;
       font-weight: 600;
     }
 
@@ -397,9 +1056,17 @@
     }
 
     .form-field textarea {
-      min-height: 90px;
+      min-height: 88px;
       padding: 10px;
       resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: #0f375d;
+      box-shadow: 0 0 0 2px rgba(15, 55, 93, 0.12);
     }
 
     .form-actions {
@@ -407,7 +1074,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 2px;
     }
 
     .form-btn {
@@ -441,12 +1108,60 @@
         grid-template-columns: 1fr;
       }
 
+      .company-cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .company-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .company-card-actions {
+        justify-content: flex-start;
+      }
+
+      .details-two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .project-board {
+        grid-template-columns: 1fr;
+      }
+
+      .project-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .project-gallery-thumbs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contractor-table tbody tr[data-contractor-row="1"] {
+        grid-template-columns: 1fr;
+      }
+
+      .contractor-table tbody tr[data-contractor-row="1"] td.company-cell,
+      .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell {
+        grid-column: auto;
+      }
+
       .form-actions {
         justify-content: stretch;
       }
 
       .form-btn {
         flex: 1;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -515,26 +1230,8 @@
       </div>
 
       <div class="table-wrap">
-        <table class="contractor-table">
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>TIN</th>
-              <th>PhilGEPS</th>
-              <th>PCAB Category</th>
-              <th>Status</th>
-              <th>Contact Person</th>
-              <th>Mobile</th>
-              <th>Rating</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="contractorsTableBody">
-            <tr id="contractorsEmptyRow" class="empty-row">
-              <td colspan="9">No contractors found</td>
-            </tr>
-          </tbody>
-        </table>
+        <div id="contractorsTableBody" class="company-cards-grid">
+        </div>
       </div>
     </section>
   </main>
@@ -550,10 +1247,17 @@
       </div>
 
       <form class="contractor-form" id="contractorForm">
-        <label class="form-field full">
+        <label class="form-field">
           <span>Company Name *</span>
           <input id="contractorCompanyName" type="text" placeholder="Full company name" required>
         </label>
+
+        <label class="form-field">
+          <span>Trade Name</span>
+          <input id="contractorTradeName" type="text" placeholder="DBA / Trade name">
+        </label>
+
+        <h3 class="form-section-title">Registration Details</h3>
 
         <label class="form-field">
           <span>TIN</span>
@@ -563,6 +1267,11 @@
         <label class="form-field">
           <span>PhilGEPS Number</span>
           <input id="contractorPhilgeps" type="text" placeholder="PhilGEPS registration">
+        </label>
+
+        <label class="form-field">
+          <span>PCAB License</span>
+          <input id="contractorPcabLicense" type="text" placeholder="License number">
         </label>
 
         <label class="form-field">
@@ -579,6 +1288,33 @@
         </label>
 
         <label class="form-field">
+          <span>License Expiry</span>
+          <input id="contractorLicenseExpiry" type="date">
+        </label>
+
+        <label class="form-field full">
+          <span>PCAB Classification</span>
+          <input id="contractorPcabClassification" type="text" placeholder="e.g., General Engineering, General Building">
+        </label>
+
+        <h3 class="form-section-title">Contact Information</h3>
+
+        <label class="form-field full">
+          <span>Address</span>
+          <input id="contractorAddress" type="text" placeholder="Street address">
+        </label>
+
+        <label class="form-field">
+          <span>City/Municipality</span>
+          <input id="contractorCity" type="text">
+        </label>
+
+        <label class="form-field">
+          <span>Province</span>
+          <input id="contractorProvince" type="text">
+        </label>
+
+        <label class="form-field">
           <span>Contact Person</span>
           <input id="contractorContactPerson" type="text" placeholder="Contact person name">
         </label>
@@ -589,23 +1325,13 @@
         </label>
 
         <label class="form-field">
+          <span>Phone</span>
+          <input id="contractorPhone" type="text" placeholder="Landline number">
+        </label>
+
+        <label class="form-field">
           <span>Mobile</span>
           <input id="contractorMobile" type="text" placeholder="e.g., 09171234567">
-        </label>
-
-        <label class="form-field">
-          <span>Status</span>
-          <select id="contractorStatus">
-            <option value="Active" selected>Active</option>
-            <option value="Blacklisted">Blacklisted</option>
-            <option value="Suspended">Suspended</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </label>
-
-        <label class="form-field">
-          <span>Rating</span>
-          <input id="contractorRating" type="number" min="0" max="5" step="0.1" placeholder="0.0 to 5.0">
         </label>
 
         <label class="form-field full">
@@ -613,11 +1339,169 @@
           <textarea id="contractorRemarks"></textarea>
         </label>
 
+        <input id="contractorStatus" type="hidden" value="Active">
+        <input id="contractorRating" type="hidden" value="">
+
         <div class="form-actions">
           <button type="button" class="form-btn" id="cancelContractorModal">Cancel</button>
           <button type="submit" class="form-btn form-submit" id="contractorSubmitBtn">Create</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div class="contractor-modal-overlay" id="contractorDetailsModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="contractorDetailsTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="contractorDetailsTitle">Contractor Details</h2>
+          <p>Click a company in the list to view complete information.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeContractorDetails" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="details-tabs" role="tablist" aria-label="Contractor details sections">
+          <button type="button" class="details-tab is-active" data-details-tab="information" aria-selected="true">Information</button>
+          <button type="button" class="details-tab" data-details-tab="contract" aria-selected="false" id="detailsContractTab">Contract (0)</button>
+          <button type="button" class="details-tab" data-details-tab="project" aria-selected="false">Project</button>
+          <button type="button" class="details-tab" data-details-tab="ratings" aria-selected="false" id="detailsRatingsTab">Ratings (0)</button>
+        </div>
+
+        <div class="details-status-row">
+          <span id="detailStatusChip" class="details-status-chip details-status-chip-active">Active</span>
+        </div>
+
+        <section class="details-panel is-active" data-details-panel="information">
+          <div class="details-two-col">
+            <article class="details-card">
+              <h3>Registration</h3>
+              <div class="details-list">
+                <div class="details-list-row"><span>TIN:</span><strong id="detailTin">-</strong></div>
+                <div class="details-list-row"><span>PhilGEPS:</span><strong id="detailPhilgeps">-</strong></div>
+                <div class="details-list-row"><span>PCAB License:</span><strong id="detailPcabLicense">-</strong></div>
+                <div class="details-list-row"><span>Classification:</span><strong id="detailPcabClassification">-</strong></div>
+                <div class="details-list-row"><span>License Expiry:</span><strong id="detailLicenseExpiry">-</strong></div>
+              </div>
+            </article>
+
+            <article class="details-card">
+              <h3>Contact</h3>
+              <div class="details-list">
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128100;</span><strong id="detailContact">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#9993;</span><strong id="detailEmail">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#9742;</span><strong id="detailPhone">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128241;</span><strong id="detailMobile">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128205;</span><strong id="detailLocation">-</strong></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="details-card details-summary">
+            <h3>Contract Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-metric"><strong id="detailSummaryTotalContracts">0</strong><span>Total Contracts</span></div>
+              <div class="summary-metric"><strong id="detailSummaryCompleted">0</strong><span>Completed</span></div>
+              <div class="summary-metric"><strong id="detailSummaryOngoing">0</strong><span>Ongoing</span></div>
+              <div class="summary-metric"><strong id="detailSummaryTotalValue">₱0</strong><span>Total Value</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="details-panel" data-details-panel="contract">
+          <div class="details-two-col details-contract-layout">
+            <article class="details-card">
+              <h3>Contract Record</h3>
+              <div class="details-list">
+                <div class="details-list-row"><span>Company:</span><strong id="detailCompanyName">-</strong></div>
+                <div class="details-list-row"><span>Trade Name:</span><strong id="detailTradeName">-</strong></div>
+                <div class="details-list-row"><span>Status:</span><strong><span id="detailProjectStatus" class="project-status-pill project-status-neutral">-</span></strong></div>
+                <div class="details-list-row"><span>PCAB Category:</span><strong id="detailPcab">-</strong></div>
+                <div class="details-list-row"><span>Remarks:</span><strong id="detailRemarks">-</strong></div>
+              </div>
+            </article>
+
+            <article class="details-card">
+              <h3>Contract Summary</h3>
+              <div class="summary-grid">
+                <div class="summary-metric"><strong id="detailContractTotal">0</strong><span>Total Contracts</span></div>
+                <div class="summary-metric"><strong id="detailContractCompleted">0</strong><span>Completed</span></div>
+                <div class="summary-metric"><strong id="detailContractOngoing">0</strong><span>Ongoing</span></div>
+                <div class="summary-metric"><strong id="detailContractValue">P0</strong><span>Total Value</span></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="details-card contract-history-card">
+            <div class="contract-history-header">
+              <h3>Contract History</h3>
+              <p class="contract-history-total">Total Cost: <strong id="detailHistoryTotalCost">P0</strong></p>
+            </div>
+            <div class="contract-history-cards" id="detailHistoryCards">
+              <p class="contract-history-empty" id="detailHistoryEmpty">No contract history records yet.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="details-panel" data-details-panel="project">
+          <div class="project-board">
+            <div class="project-main">
+              <article class="project-card">
+                <div class="project-card-head">
+                  <h3 id="detailProjectName">-</h3>
+                  <span id="detailProjectStatusBadge" class="project-status-pill project-status-neutral">-</span>
+                </div>
+                <p class="project-subline" id="detailProjectPanelLocation">-</p>
+                <div class="project-gallery">
+                  <img id="detailProjectImage" class="project-gallery-main" src="" alt="Project image" hidden>
+                  <div class="project-gallery-thumbs">
+                    <img id="detailProjectImageThumbOne" class="project-gallery-thumb" src="" alt="Project thumbnail" hidden>
+                    <img id="detailProjectImageThumbTwo" class="project-gallery-thumb" src="" alt="Project thumbnail" hidden>
+                  </div>
+                </div>
+                <p class="details-no-image" id="detailProjectNoImage">No project image provided.</p>
+              </article>
+
+              <article class="project-card">
+                <h3>Detailed Overview</h3>
+                <p class="project-overview" id="detailProjectOverview">No project overview available.</p>
+              </article>
+            </div>
+
+            <aside class="project-side">
+              <article class="project-side-card">
+                <h4>Project Documents</h4>
+                <ul class="project-doc-list">
+                  <li id="detailDocPrimary">Project document not available</li>
+                  <li id="detailDocSecondary">No additional file</li>
+                </ul>
+              </article>
+
+              <article class="project-side-card">
+                <h4>Site Location</h4>
+                <div class="project-location">
+                  <strong id="detailProjectAddress">-</strong>
+                  <span id="detailProjectCityProvince">-</span>
+                </div>
+              </article>
+            </aside>
+          </div>
+        </section>
+
+        <section class="details-panel" data-details-panel="ratings">
+          <article class="details-card">
+            <h3>Ratings</h3>
+            <div class="details-list">
+              <div class="details-list-row"><span>Current Rating:</span><strong id="detailRatingValue">-</strong></div>
+            </div>
+            <p class="details-empty" id="detailRatingsEmpty">No ratings yet.</p>
+          </article>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="closeContractorDetailsFooter">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -629,11 +1513,24 @@
       var cancelModalBtn = document.getElementById("cancelContractorModal");
       var contractorForm = document.getElementById("contractorForm");
       var firstInput = document.getElementById("contractorCompanyName");
+      var contractorTradeNameInput = document.getElementById("contractorTradeName");
       var contractorTinInput = document.getElementById("contractorTin");
       var contractorPhilgepsInput = document.getElementById("contractorPhilgeps");
+      var contractorPcabLicenseInput = document.getElementById("contractorPcabLicense");
       var contractorPcabInput = document.getElementById("contractorPcab");
+      var contractorLicenseExpiryInput = document.getElementById("contractorLicenseExpiry");
+      var contractorPcabClassificationInput = document.getElementById("contractorPcabClassification");
+      var contractorAddressInput = document.getElementById("contractorAddress");
+      var contractorCityInput = document.getElementById("contractorCity");
+      var contractorProvinceInput = document.getElementById("contractorProvince");
       var contractorContactInput = document.getElementById("contractorContactPerson");
+      var contractorEmailInput = document.getElementById("contractorEmail");
+      var contractorPhoneInput = document.getElementById("contractorPhone");
       var contractorMobileInput = document.getElementById("contractorMobile");
+      var contractorRemarksInput = document.getElementById("contractorRemarks");
+      var contractorProjectNameInput = document.getElementById("contractorProjectName");
+      var contractorProjectStatusInput = document.getElementById("contractorProjectStatus");
+      var contractorProjectImageInput = document.getElementById("contractorProjectImage");
       var contractorStatusInput = document.getElementById("contractorStatus");
       var contractorRatingInput = document.getElementById("contractorRating");
       var contractorCountText = document.getElementById("contractorCountText");
@@ -641,6 +1538,55 @@
       var contractorsEmptyRow = document.getElementById("contractorsEmptyRow");
       var contractorModalTitle = document.getElementById("contractorModalTitle");
       var contractorSubmitBtn = document.getElementById("contractorSubmitBtn");
+      var detailsModal = document.getElementById("contractorDetailsModal");
+      var closeDetailsBtn = document.getElementById("closeContractorDetails");
+      var closeDetailsFooterBtn = document.getElementById("closeContractorDetailsFooter");
+      var detailTabButtons = detailsModal ? detailsModal.querySelectorAll("[data-details-tab]") : [];
+      var detailPanels = detailsModal ? detailsModal.querySelectorAll("[data-details-panel]") : [];
+      var detailsContractTab = document.getElementById("detailsContractTab");
+      var detailsRatingsTab = document.getElementById("detailsRatingsTab");
+      var detailStatusChip = document.getElementById("detailStatusChip");
+      var detailCompanyName = document.getElementById("detailCompanyName");
+      var detailTradeName = document.getElementById("detailTradeName");
+      var detailTin = document.getElementById("detailTin");
+      var detailPhilgeps = document.getElementById("detailPhilgeps");
+      var detailPcabLicense = document.getElementById("detailPcabLicense");
+      var detailPcab = document.getElementById("detailPcab");
+      var detailLicenseExpiry = document.getElementById("detailLicenseExpiry");
+      var detailPcabClassification = document.getElementById("detailPcabClassification");
+      var detailLocation = document.getElementById("detailLocation");
+      var detailContact = document.getElementById("detailContact");
+      var detailEmail = document.getElementById("detailEmail");
+      var detailPhone = document.getElementById("detailPhone");
+      var detailMobile = document.getElementById("detailMobile");
+      var detailRemarks = document.getElementById("detailRemarks");
+      var detailProjectName = document.getElementById("detailProjectName");
+      var detailProjectStatus = document.getElementById("detailProjectStatus");
+      var detailProjectStatusBadge = document.getElementById("detailProjectStatusBadge");
+      var detailProjectAddress = document.getElementById("detailProjectAddress");
+      var detailProjectCityProvince = document.getElementById("detailProjectCityProvince");
+      var detailProjectPanelLocation = document.getElementById("detailProjectPanelLocation");
+      var detailProjectOverview = document.getElementById("detailProjectOverview");
+      var detailProjectImage = document.getElementById("detailProjectImage");
+      var detailProjectImageThumbOne = document.getElementById("detailProjectImageThumbOne");
+      var detailProjectImageThumbTwo = document.getElementById("detailProjectImageThumbTwo");
+      var detailProjectNoImage = document.getElementById("detailProjectNoImage");
+      var detailDocPrimary = document.getElementById("detailDocPrimary");
+      var detailDocSecondary = document.getElementById("detailDocSecondary");
+      var detailContractTotal = document.getElementById("detailContractTotal");
+      var detailContractCompleted = document.getElementById("detailContractCompleted");
+      var detailContractOngoing = document.getElementById("detailContractOngoing");
+      var detailContractValue = document.getElementById("detailContractValue");
+      var detailHistoryTotalCost = document.getElementById("detailHistoryTotalCost");
+      var detailHistoryCards = document.getElementById("detailHistoryCards");
+      var detailHistoryEmpty = document.getElementById("detailHistoryEmpty");
+      var detailSummaryTotalContracts = document.getElementById("detailSummaryTotalContracts");
+      var detailSummaryCompleted = document.getElementById("detailSummaryCompleted");
+      var detailSummaryOngoing = document.getElementById("detailSummaryOngoing");
+      var detailSummaryTotalValue = document.getElementById("detailSummaryTotalValue");
+      var detailRatingValue = document.getElementById("detailRatingValue");
+      var detailRatingsEmpty = document.getElementById("detailRatingsEmpty");
+      var CONTRACTORS_STORAGE_KEY = "peo_contractors_v1";
       var isEditingContractor = false;
       var editingContractorRow = null;
 
@@ -659,7 +1605,7 @@
           return;
         }
 
-        var count = contractorsTableBody.querySelectorAll("tr[data-contractor-row='1']").length;
+        var count = contractorsTableBody.querySelectorAll("[data-contractor-row='1']").length;
         contractorCountText.textContent = String(count) + (count === 1 ? " contractor found" : " contractors found");
         if (contractorsEmptyRow) {
           contractorsEmptyRow.hidden = count > 0;
@@ -670,20 +1616,59 @@
         if (firstInput) {
           firstInput.value = "";
         }
+        if (contractorTradeNameInput) {
+          contractorTradeNameInput.value = "";
+        }
         if (contractorTinInput) {
           contractorTinInput.value = "";
         }
         if (contractorPhilgepsInput) {
           contractorPhilgepsInput.value = "";
         }
+        if (contractorPcabLicenseInput) {
+          contractorPcabLicenseInput.value = "";
+        }
         if (contractorPcabInput) {
           contractorPcabInput.value = "";
+        }
+        if (contractorLicenseExpiryInput) {
+          contractorLicenseExpiryInput.value = "";
+        }
+        if (contractorPcabClassificationInput) {
+          contractorPcabClassificationInput.value = "";
+        }
+        if (contractorAddressInput) {
+          contractorAddressInput.value = "";
+        }
+        if (contractorCityInput) {
+          contractorCityInput.value = "";
+        }
+        if (contractorProvinceInput) {
+          contractorProvinceInput.value = "";
         }
         if (contractorContactInput) {
           contractorContactInput.value = "";
         }
+        if (contractorEmailInput) {
+          contractorEmailInput.value = "";
+        }
+        if (contractorPhoneInput) {
+          contractorPhoneInput.value = "";
+        }
         if (contractorMobileInput) {
           contractorMobileInput.value = "";
+        }
+        if (contractorRemarksInput) {
+          contractorRemarksInput.value = "";
+        }
+        if (contractorProjectNameInput) {
+          contractorProjectNameInput.value = "";
+        }
+        if (contractorProjectStatusInput) {
+          contractorProjectStatusInput.value = "Ongoing";
+        }
+        if (contractorProjectImageInput) {
+          contractorProjectImageInput.value = "";
         }
         if (contractorStatusInput) {
           contractorStatusInput.value = "Active";
@@ -705,13 +1690,26 @@
 
         return {
           company: firstInput ? firstInput.value.trim() : "",
+          tradeName: contractorTradeNameInput && contractorTradeNameInput.value.trim() ? contractorTradeNameInput.value.trim() : "",
           tin: contractorTinInput && contractorTinInput.value.trim() ? contractorTinInput.value.trim() : "-",
           philgeps: contractorPhilgepsInput && contractorPhilgepsInput.value.trim() ? contractorPhilgepsInput.value.trim() : "-",
+          pcabLicense: contractorPcabLicenseInput && contractorPcabLicenseInput.value.trim() ? contractorPcabLicenseInput.value.trim() : "",
           pcab: pcabLabel,
           pcabValue: pcabValue,
+          licenseExpiry: contractorLicenseExpiryInput && contractorLicenseExpiryInput.value ? contractorLicenseExpiryInput.value : "",
+          pcabClassification: contractorPcabClassificationInput && contractorPcabClassificationInput.value.trim() ? contractorPcabClassificationInput.value.trim() : "",
+          address: contractorAddressInput && contractorAddressInput.value.trim() ? contractorAddressInput.value.trim() : "",
+          city: contractorCityInput && contractorCityInput.value.trim() ? contractorCityInput.value.trim() : "",
+          province: contractorProvinceInput && contractorProvinceInput.value.trim() ? contractorProvinceInput.value.trim() : "",
           status: contractorStatusInput && contractorStatusInput.value ? contractorStatusInput.value : "Active",
           contact: contractorContactInput && contractorContactInput.value.trim() ? contractorContactInput.value.trim() : "-",
+          email: contractorEmailInput && contractorEmailInput.value.trim() ? contractorEmailInput.value.trim() : "",
+          phone: contractorPhoneInput && contractorPhoneInput.value.trim() ? contractorPhoneInput.value.trim() : "",
           mobile: contractorMobileInput && contractorMobileInput.value.trim() ? contractorMobileInput.value.trim() : "-",
+          remarks: contractorRemarksInput && contractorRemarksInput.value.trim() ? contractorRemarksInput.value.trim() : "",
+          projectName: contractorProjectNameInput && contractorProjectNameInput.value.trim() ? contractorProjectNameInput.value.trim() : "-",
+          projectStatus: contractorProjectStatusInput && contractorProjectStatusInput.value ? contractorProjectStatusInput.value : "Ongoing",
+          projectImage: contractorProjectImageInput && contractorProjectImageInput.value.trim() ? contractorProjectImageInput.value.trim() : "",
           rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-"
         };
       }
@@ -721,18 +1719,97 @@
           return null;
         }
 
-        var statusBadge = row.querySelector(".badge");
         return {
-          company: row.getAttribute("data-contractor-company") || (row.cells[0] ? row.cells[0].textContent.trim() : ""),
-          tin: row.getAttribute("data-contractor-tin") || (row.cells[1] ? row.cells[1].textContent.trim() : "-"),
-          philgeps: row.getAttribute("data-contractor-philgeps") || (row.cells[2] ? row.cells[2].textContent.trim() : "-"),
-          pcab: row.getAttribute("data-contractor-pcab") || (row.cells[3] ? row.cells[3].textContent.trim() : "-"),
+          company: row.getAttribute("data-contractor-company") || (row.querySelector(".company-name") ? row.querySelector(".company-name").textContent.trim() : ""),
+          tradeName: row.getAttribute("data-contractor-trade-name") || "",
+          tin: row.getAttribute("data-contractor-tin") || "-",
+          philgeps: row.getAttribute("data-contractor-philgeps") || "-",
+          pcabLicense: row.getAttribute("data-contractor-pcab-license") || "",
+          pcab: row.getAttribute("data-contractor-pcab") || "-",
           pcabValue: row.getAttribute("data-contractor-pcab-value") || "",
-          status: row.getAttribute("data-contractor-status") || (statusBadge ? statusBadge.textContent.trim() : "Active"),
-          contact: row.getAttribute("data-contractor-contact") || (row.cells[5] ? row.cells[5].textContent.trim() : "-"),
-          mobile: row.getAttribute("data-contractor-mobile") || (row.cells[6] ? row.cells[6].textContent.trim() : "-"),
-          rating: row.getAttribute("data-contractor-rating") || (row.cells[7] ? row.cells[7].textContent.trim() : "-")
+          licenseExpiry: row.getAttribute("data-contractor-license-expiry") || "",
+          pcabClassification: row.getAttribute("data-contractor-pcab-classification") || "",
+          address: row.getAttribute("data-contractor-address") || "",
+          city: row.getAttribute("data-contractor-city") || "",
+          province: row.getAttribute("data-contractor-province") || "",
+          status: row.getAttribute("data-contractor-status") || "Active",
+          contact: row.getAttribute("data-contractor-contact") || "-",
+          email: row.getAttribute("data-contractor-email") || "",
+          phone: row.getAttribute("data-contractor-phone") || "",
+          mobile: row.getAttribute("data-contractor-mobile") || "-",
+          remarks: row.getAttribute("data-contractor-remarks") || "",
+          projectName: row.getAttribute("data-contractor-project-name") || "-",
+          projectStatus: row.getAttribute("data-contractor-project-status") || "Ongoing",
+          projectImage: row.getAttribute("data-contractor-project-image") || "",
+          createdAt: row.getAttribute("data-contractor-created-at") || "",
+          updatedAt: row.getAttribute("data-contractor-updated-at") || "",
+          rating: row.getAttribute("data-contractor-rating") || "-"
         };
+      }
+
+      function collectContractorPayloads() {
+        if (!contractorsTableBody) {
+          return [];
+        }
+
+        var payloads = [];
+        var rows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
+        rows.forEach(function (row) {
+          var payload = rowPayload(row);
+          if (payload && payload.company) {
+            payloads.push(payload);
+          }
+        });
+
+        return payloads;
+      }
+
+      function persistContractorsToStorage() {
+        if (!contractorsTableBody || !window.localStorage) {
+          return;
+        }
+
+        try {
+          var payloads = collectContractorPayloads();
+          window.localStorage.setItem(CONTRACTORS_STORAGE_KEY, JSON.stringify(payloads));
+        } catch (error) {
+          // Ignore storage errors (quota or private mode restrictions).
+        }
+      }
+
+      function loadContractorsFromStorage() {
+        if (!contractorsTableBody || !window.localStorage) {
+          return;
+        }
+
+        var existingRows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
+        if (existingRows.length > 0) {
+          return;
+        }
+
+        try {
+          var raw = window.localStorage.getItem(CONTRACTORS_STORAGE_KEY);
+          if (!raw) {
+            return;
+          }
+
+          var payloads = JSON.parse(raw);
+          if (!Array.isArray(payloads)) {
+            return;
+          }
+
+          payloads.forEach(function (payload) {
+            if (!payload || !payload.company) {
+              return;
+            }
+
+            var row = document.createElement("div");
+            applyRowPayload(row, payload);
+            contractorsTableBody.appendChild(row);
+          });
+        } catch (error) {
+          // Ignore malformed JSON or blocked storage access.
+        }
       }
 
       function applyRowPayload(row, payload) {
@@ -740,61 +1817,70 @@
           return;
         }
 
+        row.className = "company-card";
+        row.setAttribute("role", "button");
+        row.setAttribute("tabindex", "0");
         row.setAttribute("data-contractor-row", "1");
         row.setAttribute("data-contractor-company", payload.company);
+        row.setAttribute("data-contractor-trade-name", payload.tradeName || "");
         row.setAttribute("data-contractor-tin", payload.tin);
         row.setAttribute("data-contractor-philgeps", payload.philgeps);
+        row.setAttribute("data-contractor-pcab-license", payload.pcabLicense || "");
         row.setAttribute("data-contractor-pcab", payload.pcab);
         row.setAttribute("data-contractor-pcab-value", payload.pcabValue || "");
+        row.setAttribute("data-contractor-license-expiry", payload.licenseExpiry || "");
+        row.setAttribute("data-contractor-pcab-classification", payload.pcabClassification || "");
+        row.setAttribute("data-contractor-address", payload.address || "");
+        row.setAttribute("data-contractor-city", payload.city || "");
+        row.setAttribute("data-contractor-province", payload.province || "");
         row.setAttribute("data-contractor-status", payload.status);
         row.setAttribute("data-contractor-contact", payload.contact);
+        row.setAttribute("data-contractor-email", payload.email || "");
+        row.setAttribute("data-contractor-phone", payload.phone || "");
         row.setAttribute("data-contractor-mobile", payload.mobile);
+        row.setAttribute("data-contractor-remarks", payload.remarks || "");
+        row.setAttribute("data-contractor-project-name", payload.projectName || "-");
+        row.setAttribute("data-contractor-project-status", payload.projectStatus || "Ongoing");
+        row.setAttribute("data-contractor-project-image", payload.projectImage || "");
+        row.setAttribute("data-contractor-created-at", payload.createdAt || "");
+        row.setAttribute("data-contractor-updated-at", payload.updatedAt || "");
         row.setAttribute("data-contractor-rating", payload.rating);
 
         row.innerHTML = "";
 
-        function appendTextCell(value) {
-          var cell = document.createElement("td");
-          cell.textContent = value;
-          row.appendChild(cell);
-        }
+        var companyName = document.createElement("div");
+        companyName.className = "company-name";
+        companyName.textContent = payload.company;
+        row.appendChild(companyName);
 
-        appendTextCell(payload.company);
-        appendTextCell(payload.tin);
-        appendTextCell(payload.philgeps);
-        appendTextCell(payload.pcab);
-
-        var statusCell = document.createElement("td");
-        var badge = document.createElement("span");
-        badge.className = "badge " + statusBadgeClass(payload.status);
-        badge.textContent = payload.status;
-        statusCell.appendChild(badge);
-        row.appendChild(statusCell);
-
-        appendTextCell(payload.contact);
-        appendTextCell(payload.mobile);
-        appendTextCell(payload.rating);
-
-        var actionsCell = document.createElement("td");
         var actionsWrap = document.createElement("div");
-        actionsWrap.className = "contractor-row-actions";
+        actionsWrap.className = "company-card-actions";
+
+        var viewBtn = document.createElement("button");
+        viewBtn.type = "button";
+        viewBtn.className = "company-card-btn";
+        viewBtn.setAttribute("data-card-action", "view");
+        viewBtn.setAttribute("aria-label", "View contractor details");
+        viewBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
 
         var editBtn = document.createElement("button");
         editBtn.type = "button";
-        editBtn.className = "contractor-row-btn";
-        editBtn.setAttribute("data-contractor-action", "edit");
-        editBtn.textContent = "Edit";
+        editBtn.className = "company-card-btn";
+        editBtn.setAttribute("data-card-action", "edit");
+        editBtn.setAttribute("aria-label", "Edit contractor");
+        editBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"/></svg>';
 
         var deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
-        deleteBtn.className = "contractor-row-btn delete";
-        deleteBtn.setAttribute("data-contractor-action", "delete");
-        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "company-card-btn";
+        deleteBtn.setAttribute("data-card-action", "delete");
+        deleteBtn.setAttribute("aria-label", "Delete contractor");
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
 
+        actionsWrap.appendChild(viewBtn);
         actionsWrap.appendChild(editBtn);
         actionsWrap.appendChild(deleteBtn);
-        actionsCell.appendChild(actionsWrap);
-        row.appendChild(actionsCell);
+        row.appendChild(actionsWrap);
       }
 
       function hydrateExistingContractorRows() {
@@ -802,7 +1888,7 @@
           return;
         }
 
-        var rows = contractorsTableBody.querySelectorAll("tr");
+        var rows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
         rows.forEach(function (row) {
           if (contractorsEmptyRow && row === contractorsEmptyRow) {
             return;
@@ -828,20 +1914,59 @@
           if (firstInput) {
             firstInput.value = payload.company;
           }
+          if (contractorTradeNameInput) {
+            contractorTradeNameInput.value = payload.tradeName || "";
+          }
           if (contractorTinInput) {
             contractorTinInput.value = payload.tin === "-" ? "" : payload.tin;
           }
           if (contractorPhilgepsInput) {
             contractorPhilgepsInput.value = payload.philgeps === "-" ? "" : payload.philgeps;
           }
+          if (contractorPcabLicenseInput) {
+            contractorPcabLicenseInput.value = payload.pcabLicense || "";
+          }
           if (contractorPcabInput) {
             contractorPcabInput.value = payload.pcabValue || "";
+          }
+          if (contractorLicenseExpiryInput) {
+            contractorLicenseExpiryInput.value = payload.licenseExpiry || "";
+          }
+          if (contractorPcabClassificationInput) {
+            contractorPcabClassificationInput.value = payload.pcabClassification || "";
+          }
+          if (contractorAddressInput) {
+            contractorAddressInput.value = payload.address || "";
+          }
+          if (contractorCityInput) {
+            contractorCityInput.value = payload.city || "";
+          }
+          if (contractorProvinceInput) {
+            contractorProvinceInput.value = payload.province || "";
           }
           if (contractorContactInput) {
             contractorContactInput.value = payload.contact === "-" ? "" : payload.contact;
           }
+          if (contractorEmailInput) {
+            contractorEmailInput.value = payload.email || "";
+          }
+          if (contractorPhoneInput) {
+            contractorPhoneInput.value = payload.phone || "";
+          }
           if (contractorMobileInput) {
             contractorMobileInput.value = payload.mobile === "-" ? "" : payload.mobile;
+          }
+          if (contractorRemarksInput) {
+            contractorRemarksInput.value = payload.remarks || "";
+          }
+          if (contractorProjectNameInput) {
+            contractorProjectNameInput.value = payload.projectName && payload.projectName !== "-" ? payload.projectName : "";
+          }
+          if (contractorProjectStatusInput) {
+            contractorProjectStatusInput.value = payload.projectStatus || "Ongoing";
+          }
+          if (contractorProjectImageInput) {
+            contractorProjectImageInput.value = payload.projectImage || "";
           }
           if (contractorStatusInput) {
             contractorStatusInput.value = payload.status || "Active";
@@ -896,6 +2021,276 @@
         refreshContractorCount();
       }
 
+      function valueOrDash(value) {
+        if (!value) {
+          return "-";
+        }
+        return String(value).trim() ? String(value).trim() : "-";
+      }
+
+      function formatHistoryDate(value) {
+        if (!value) {
+          return "-";
+        }
+
+        var parsed = new Date(value);
+        if (isNaN(parsed.getTime())) {
+          return valueOrDash(value);
+        }
+
+        return parsed.toLocaleString();
+      }
+
+      function contractHistoryStatusClass(status) {
+        if (status === "Completed") {
+          return "contract-history-status contract-history-status-completed";
+        }
+        if (status === "Ongoing") {
+          return "contract-history-status contract-history-status-ongoing";
+        }
+        if (status === "Pending") {
+          return "contract-history-status contract-history-status-pending";
+        }
+        return "contract-history-status contract-history-status-neutral";
+      }
+
+      function contractProgressByStatus(status) {
+        if (status === "Completed") {
+          return "1.00%";
+        }
+        if (status === "Ongoing") {
+          return "0.43%";
+        }
+        if (status === "Pending") {
+          return "0.00%";
+        }
+        return "0.00%";
+      }
+
+      function buildContractHistoryCards(payload, locationText) {
+        if (!detailHistoryCards) {
+          return;
+        }
+
+        detailHistoryCards.innerHTML = "";
+        if (detailHistoryTotalCost) {
+          detailHistoryTotalCost.textContent = "P0";
+        }
+
+        var hasProject = payload && payload.projectName && payload.projectName !== "-";
+        if (!hasProject) {
+          if (detailHistoryEmpty) {
+            detailHistoryEmpty.hidden = false;
+            detailHistoryCards.appendChild(detailHistoryEmpty);
+          }
+          return;
+        }
+
+        var historyCard = document.createElement("article");
+        historyCard.className = "contract-history-item";
+
+        var topRow = document.createElement("div");
+        topRow.className = "contract-history-top";
+
+        var titleEl = document.createElement("h4");
+        titleEl.className = "contract-history-title";
+        titleEl.textContent = valueOrDash(payload.projectName);
+
+        var statusEl = document.createElement("span");
+        statusEl.className = contractHistoryStatusClass(payload.projectStatus);
+        statusEl.textContent = payload.projectStatus === "Ongoing" ? "On going" : valueOrDash(payload.projectStatus);
+
+        topRow.appendChild(titleEl);
+        topRow.appendChild(statusEl);
+        historyCard.appendChild(topRow);
+
+        var codeEl = document.createElement("span");
+        codeEl.className = "contract-history-code";
+        codeEl.textContent = valueOrDash(payload.tin) === "-" ? "NO CODE" : valueOrDash(payload.tin);
+        historyCard.appendChild(codeEl);
+
+        var locationEl = document.createElement("p");
+        locationEl.className = "contract-history-location";
+        locationEl.textContent = "⊙ " + valueOrDash(locationText);
+        historyCard.appendChild(locationEl);
+
+        var metaEl = document.createElement("p");
+        metaEl.className = "contract-history-meta";
+
+        var fyValue = "-";
+        var fySource = payload.updatedAt || payload.createdAt;
+        if (fySource) {
+          var fyDate = new Date(fySource);
+          if (!isNaN(fyDate.getTime())) {
+            fyValue = String(fyDate.getFullYear());
+          }
+        }
+
+        metaEl.textContent = "Cost: P0    FY " + fyValue + "    Progress: " + contractProgressByStatus(payload.projectStatus);
+        historyCard.appendChild(metaEl);
+
+        detailHistoryCards.appendChild(historyCard);
+      }
+
+      function projectStatusClass(status) {
+        if (status === "Ongoing") {
+          return "project-status-pill project-status-ongoing";
+        }
+        if (status === "Completed") {
+          return "project-status-pill project-status-completed";
+        }
+        if (status === "Pending") {
+          return "project-status-pill project-status-pending";
+        }
+        return "project-status-pill project-status-neutral";
+      }
+
+      function statusChipClass(status) {
+        if (status === "Active") {
+          return "details-status-chip details-status-chip-active";
+        }
+        if (status === "Blacklisted") {
+          return "details-status-chip details-status-chip-blacklisted";
+        }
+        return "details-status-chip details-status-chip-neutral";
+      }
+
+      function setActiveDetailsTab(tabName) {
+        if (!detailTabButtons || !detailPanels) {
+          return;
+        }
+
+        detailTabButtons.forEach(function (btn) {
+          var isActive = btn.getAttribute("data-details-tab") === tabName;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        detailPanels.forEach(function (panel) {
+          var isPanelActive = panel.getAttribute("data-details-panel") === tabName;
+          panel.classList.toggle("is-active", isPanelActive);
+        });
+      }
+
+      function openContractorDetails(row) {
+        if (!row || !detailsModal) {
+          return;
+        }
+
+        var payload = rowPayload(row);
+        if (!payload) {
+          return;
+        }
+
+        var locationParts = [payload.address, payload.city, payload.province].filter(function (value) {
+          return value && value !== "-";
+        });
+        var locationText = locationParts.length ? locationParts.join(", ") : "-";
+        var hasContract = Boolean(payload.projectName && payload.projectName !== "-");
+        var totalContracts = hasContract ? 1 : 0;
+        var completedContracts = hasContract && payload.projectStatus === "Completed" ? 1 : 0;
+        var ongoingContracts = hasContract && payload.projectStatus === "Ongoing" ? 1 : 0;
+        var hasRating = Boolean(payload.rating && payload.rating !== "-" && payload.rating !== "0" && payload.rating !== "0.0");
+        var ratingsCount = hasRating ? 1 : 0;
+
+        if (detailCompanyName) detailCompanyName.textContent = valueOrDash(payload.company);
+        if (detailTradeName) detailTradeName.textContent = valueOrDash(payload.tradeName);
+        if (detailTin) detailTin.textContent = valueOrDash(payload.tin);
+        if (detailPhilgeps) detailPhilgeps.textContent = valueOrDash(payload.philgeps);
+        if (detailPcabLicense) detailPcabLicense.textContent = valueOrDash(payload.pcabLicense);
+        if (detailPcab) detailPcab.textContent = valueOrDash(payload.pcab);
+        if (detailLicenseExpiry) detailLicenseExpiry.textContent = valueOrDash(payload.licenseExpiry);
+        if (detailPcabClassification) detailPcabClassification.textContent = valueOrDash(payload.pcabClassification);
+        if (detailLocation) detailLocation.textContent = valueOrDash(locationText);
+        if (detailContact) detailContact.textContent = valueOrDash(payload.contact);
+        if (detailEmail) detailEmail.textContent = valueOrDash(payload.email);
+        if (detailPhone) detailPhone.textContent = valueOrDash(payload.phone);
+        if (detailMobile) detailMobile.textContent = valueOrDash(payload.mobile);
+        if (detailRemarks) detailRemarks.textContent = valueOrDash(payload.remarks);
+        if (detailProjectName) detailProjectName.textContent = valueOrDash(payload.projectName || (payload.company ? payload.company + " Project" : "-"));
+        if (detailProjectAddress) detailProjectAddress.textContent = valueOrDash(payload.address);
+        if (detailProjectCityProvince) {
+          var cityProvinceText = [payload.city, payload.province].filter(function (part) {
+            return part && part !== "-";
+          }).join(", ");
+          detailProjectCityProvince.textContent = valueOrDash(cityProvinceText || "-");
+        }
+        if (detailProjectPanelLocation) detailProjectPanelLocation.textContent = valueOrDash(locationText);
+        if (detailProjectOverview) detailProjectOverview.textContent = valueOrDash(payload.remarks || "No project overview available.");
+        if (detailProjectStatus) {
+          detailProjectStatus.textContent = valueOrDash(payload.projectStatus);
+          detailProjectStatus.className = projectStatusClass(payload.projectStatus);
+        }
+        if (detailProjectStatusBadge) {
+          detailProjectStatusBadge.textContent = valueOrDash(payload.projectStatus);
+          detailProjectStatusBadge.className = projectStatusClass(payload.projectStatus);
+        }
+        if (detailStatusChip) {
+          detailStatusChip.textContent = valueOrDash(payload.status);
+          detailStatusChip.className = statusChipClass(payload.status);
+        }
+        if (detailContractTotal) detailContractTotal.textContent = String(totalContracts);
+        if (detailContractCompleted) detailContractCompleted.textContent = String(completedContracts);
+        if (detailContractOngoing) detailContractOngoing.textContent = String(ongoingContracts);
+        if (detailContractValue) detailContractValue.textContent = "P0";
+        if (detailSummaryTotalContracts) detailSummaryTotalContracts.textContent = String(totalContracts);
+        if (detailSummaryCompleted) detailSummaryCompleted.textContent = String(completedContracts);
+        if (detailSummaryOngoing) detailSummaryOngoing.textContent = String(ongoingContracts);
+        if (detailSummaryTotalValue) detailSummaryTotalValue.textContent = "P0";
+        if (detailRatingValue) detailRatingValue.textContent = valueOrDash(payload.rating);
+        if (detailRatingsEmpty) detailRatingsEmpty.hidden = hasRating;
+        if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(totalContracts) + ")";
+        if (detailsRatingsTab) detailsRatingsTab.textContent = "Ratings (" + String(ratingsCount) + ")";
+        if (detailDocPrimary) detailDocPrimary.textContent = valueOrDash(payload.projectName || payload.company) + " specification file";
+        if (detailDocSecondary) detailDocSecondary.textContent = valueOrDash(payload.company) + " supporting document";
+        buildContractHistoryCards(payload, locationText);
+
+        if (detailProjectImage && detailProjectNoImage) {
+          if (payload.projectImage) {
+            detailProjectImage.src = payload.projectImage;
+            detailProjectImage.hidden = false;
+            if (detailProjectImageThumbOne) {
+              detailProjectImageThumbOne.src = payload.projectImage;
+              detailProjectImageThumbOne.hidden = false;
+            }
+            if (detailProjectImageThumbTwo) {
+              detailProjectImageThumbTwo.src = payload.projectImage;
+              detailProjectImageThumbTwo.hidden = false;
+            }
+            detailProjectNoImage.hidden = true;
+          } else {
+            detailProjectImage.src = "";
+            detailProjectImage.hidden = true;
+            if (detailProjectImageThumbOne) {
+              detailProjectImageThumbOne.src = "";
+              detailProjectImageThumbOne.hidden = true;
+            }
+            if (detailProjectImageThumbTwo) {
+              detailProjectImageThumbTwo.src = "";
+              detailProjectImageThumbTwo.hidden = true;
+            }
+            detailProjectNoImage.hidden = false;
+          }
+        }
+
+        setActiveDetailsTab("information");
+        detailsModal.classList.add("open");
+        detailsModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+      }
+
+      function closeContractorDetails() {
+        if (!detailsModal) {
+          return;
+        }
+
+        detailsModal.classList.remove("open");
+        detailsModal.setAttribute("aria-hidden", "true");
+        if (!modal || !modal.classList.contains("open")) {
+          document.body.classList.remove("modal-open");
+        }
+      }
+
       function saveContractorRow() {
         if (!contractorsTableBody || !firstInput) {
           return;
@@ -907,42 +2302,73 @@
           return;
         }
 
+        var nowIso = new Date().toISOString();
+
         if (isEditingContractor && editingContractorRow) {
+          var existingPayload = rowPayload(editingContractorRow);
+          payload.createdAt = existingPayload && existingPayload.createdAt ? existingPayload.createdAt : nowIso;
+          payload.updatedAt = nowIso;
           applyRowPayload(editingContractorRow, payload);
         } else {
-          var row = document.createElement("tr");
+          payload.createdAt = nowIso;
+          payload.updatedAt = nowIso;
+          var row = document.createElement("div");
           applyRowPayload(row, payload);
           contractorsTableBody.appendChild(row);
         }
 
+        persistContractorsToStorage();
         closeContractorModal();
       }
 
       if (contractorsTableBody) {
         contractorsTableBody.addEventListener("click", function (event) {
-          var actionBtn = event.target.closest("button[data-contractor-action]");
-          if (!actionBtn) {
-            return;
-          }
-
-          var row = actionBtn.closest("tr[data-contractor-row='1']");
+          var row = event.target.closest("[data-contractor-row='1']");
           if (!row) {
             return;
           }
 
-          var action = actionBtn.getAttribute("data-contractor-action");
-          if (action === "edit") {
-            openContractorModal(row);
+          var actionBtn = event.target.closest("button[data-card-action]");
+          if (actionBtn) {
+            var action = actionBtn.getAttribute("data-card-action");
+            if (action === "view") {
+              openContractorDetails(row);
+              return;
+            }
+            if (action === "edit") {
+              openContractorModal(row);
+              return;
+            }
+            if (action === "delete") {
+              if (editingContractorRow === row) {
+                closeContractorModal();
+              }
+              row.remove();
+              refreshContractorCount();
+              persistContractorsToStorage();
+              return;
+            }
+          }
+
+          openContractorDetails(row);
+        });
+
+        contractorsTableBody.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") {
             return;
           }
 
-          if (action === "delete") {
-            if (editingContractorRow === row) {
-              closeContractorModal();
-            }
-            row.remove();
-            refreshContractorCount();
+          if (event.target.closest("button[data-card-action]")) {
+            return;
           }
+
+          var row = event.target.closest("[data-contractor-row='1']");
+          if (!row) {
+            return;
+          }
+
+          event.preventDefault();
+          openContractorDetails(row);
         });
       }
 
@@ -975,12 +2401,42 @@
         });
       }
 
+      if (detailsModal) {
+        detailsModal.addEventListener("click", function (event) {
+          if (event.target === detailsModal) {
+            closeContractorDetails();
+          }
+        });
+      }
+
+      if (closeDetailsBtn) {
+        closeDetailsBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (closeDetailsFooterBtn) {
+        closeDetailsFooterBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (detailTabButtons) {
+        detailTabButtons.forEach(function (tabBtn) {
+          tabBtn.addEventListener("click", function () {
+            var targetTab = tabBtn.getAttribute("data-details-tab");
+            if (!targetTab) {
+              return;
+            }
+            setActiveDetailsTab(targetTab);
+          });
+        });
+      }
+
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
+          closeContractorDetails();
           closeContractorModal();
         }
       });
 
+      loadContractorsFromStorage();
       hydrateExistingContractorRows();
       refreshContractorCount();
     });
