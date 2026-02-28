@@ -55,6 +55,13 @@
       color: #162739;
     }
 
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
     .btn-add {
       border: 1px solid #0f375d;
       border-radius: 12px;
@@ -67,6 +74,77 @@
       align-items: center;
       gap: 8px;
       cursor: pointer;
+    }
+
+    .btn-upload {
+      border: 1px solid #0f375d;
+      border-radius: 12px;
+      background: #f2f7fc;
+      color: #0f375d;
+      padding: 9px 14px;
+      font: inherit;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-upload:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    .upload-selection-text {
+      margin: 0;
+      font-size: 0.83rem;
+      color: #5e748d;
+      max-width: 260px;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    .scan-results {
+      display: grid;
+      gap: 10px;
+      max-height: 44vh;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .scan-result-card {
+      border: 1px solid #d5deea;
+      border-radius: 11px;
+      background: #f9fcff;
+      padding: 10px 12px;
+    }
+
+    .scan-result-card h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: #113253;
+    }
+
+    .scan-result-meta {
+      margin: 0 0 6px;
+      font-size: 0.86rem;
+      color: #4f6680;
+    }
+
+    .scan-result-files {
+      margin: 0;
+      padding-left: 18px;
+      color: #24425f;
+      font-size: 0.88rem;
+      display: grid;
+      gap: 2px;
+    }
+
+    .scan-result-empty {
+      margin: 0;
+      color: #5e748d;
+      font-size: 0.9rem;
     }
 
     .stats-grid {
@@ -641,6 +719,167 @@
       font-size: 0.9rem;
     }
 
+    .project-doc-list a {
+      color: #0f4a8a;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      font-weight: 700;
+    }
+
+    .project-doc-list a:hover {
+      color: #0b3c71;
+    }
+
+    .report-details-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .report-details-item {
+      border: 1px solid #d6dfea;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px 10px;
+      display: grid;
+      gap: 3px;
+    }
+
+    .report-details-item strong {
+      color: #102a43;
+      font-size: 0.89rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .report-details-item span {
+      color: #4d6480;
+      font-size: 0.8rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .report-doc-link {
+      color: #0f4a8a;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-top: 2px;
+      width: fit-content;
+      cursor: pointer;
+    }
+
+    .report-doc-link:hover {
+      color: #0b3c71;
+    }
+
+    .report-preview-shell {
+      border: 1px solid #d6deea;
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 10px;
+      min-height: 300px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .report-preview-frame {
+      width: 100%;
+      min-height: 62vh;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .report-preview-image {
+      width: 100%;
+      max-height: 65vh;
+      object-fit: contain;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+    }
+
+    .report-preview-text {
+      margin: 0;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      max-height: 62vh;
+      overflow: auto;
+      color: #1b344e;
+      font-size: 0.86rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .report-preview-fallback {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      color: #5f748b;
+      font-size: 0.9rem;
+      padding: 12px;
+    }
+
+    .report-preview-excel {
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px;
+      max-height: 65vh;
+      overflow: auto;
+    }
+
+    .report-preview-excel table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      color: #15324e;
+    }
+
+    .report-preview-excel td,
+    .report-preview-excel th {
+      border: 1px solid #d9e2ec;
+      padding: 6px 8px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .report-preview-excel th {
+      background: #f2f7fc;
+      font-weight: 700;
+      color: #0f2a46;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .report-preview-excel-meta {
+      margin: 0 0 8px;
+      color: #4d6480;
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .report-details-empty {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      color: #5f748b;
+      font-size: 0.88rem;
+      padding: 10px;
+    }
+
     .project-location {
       margin-top: 10px;
       border: 1px solid #d8e1ec;
@@ -1069,6 +1308,44 @@
       box-shadow: 0 0 0 2px rgba(15, 55, 93, 0.12);
     }
 
+    .scan-upload-field {
+      border: 1px solid #d5deea;
+      border-radius: 12px;
+      background: #f7fbff;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .scan-upload-list {
+      display: grid;
+      gap: 6px;
+      max-height: 170px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .scan-upload-item {
+      border: 1px solid #d8e1ec;
+      border-radius: 9px;
+      background: #fff;
+      padding: 7px 9px;
+      color: #1e3752;
+      font-size: 0.86rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .scan-upload-empty {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 9px;
+      background: #fbfdff;
+      color: #5f748b;
+      font-size: 0.86rem;
+      padding: 9px;
+    }
+
     .form-actions {
       grid-column: 1 / -1;
       display: flex;
@@ -1102,6 +1379,15 @@
       .btn-add {
         width: 100%;
         justify-content: center;
+      }
+
+      .btn-upload {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header-actions {
+        width: 100%;
       }
 
       .contractor-form {
@@ -1170,7 +1456,13 @@
   <main class="contractor-page">
     <header class="contractor-header">
       <h1 class="contractor-title">Contractor Management</h1>
-      <button type="button" class="btn-add" id="openContractorModal"><span>+</span><span>Add Contractor</span></button>
+      <div class="header-actions">
+        <button type="button" class="btn-add" id="openContractorModal"><span>+</span><span>Add Contractor</span></button>
+        <label class="btn-upload" for="contractorUploadInput"><span>&#8682;</span><span>Upload Files</span></label>
+        <input id="contractorUploadInput" type="file" multiple hidden accept="*/*">
+        <button type="button" class="btn-upload" id="scanUploadBtn" disabled><span>&#128269;</span><span>Scan Folder</span></button>
+        <p class="upload-selection-text" id="uploadSelectionText">No files selected.</p>
+      </div>
     </header>
 
     <section class="stats-grid" aria-label="Contractor summary cards">
@@ -1339,6 +1631,18 @@
           <textarea id="contractorRemarks"></textarea>
         </label>
 
+        <h3 class="form-section-title">Document Scan</h3>
+
+        <label class="form-field full">
+          <span>Attach Scanned Documents (Any file type)</span>
+          <div class="scan-upload-field">
+            <input id="contractorDocumentScanInput" type="file" multiple accept="*/*">
+            <div class="scan-upload-list" id="contractorDocumentScanList">
+              <p class="scan-upload-empty" id="contractorDocumentScanEmpty">No document scan selected yet.</p>
+            </div>
+          </div>
+        </label>
+
         <input id="contractorStatus" type="hidden" value="Active">
         <input id="contractorRating" type="hidden" value="">
 
@@ -1475,6 +1779,9 @@
                   <li id="detailDocPrimary">Project document not available</li>
                   <li id="detailDocSecondary">No additional file</li>
                 </ul>
+                <div class="report-details-list" id="detailReportDetails">
+                  <p class="report-details-empty" id="detailReportDetailsEmpty">No scanned report details yet.</p>
+                </div>
               </article>
 
               <article class="project-side-card">
@@ -1505,6 +1812,50 @@
     </div>
   </div>
 
+  <div class="contractor-modal-overlay" id="uploadScanModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="uploadScanTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="uploadScanTitle">Scan Results</h2>
+          <p>Review matched files per company, then confirm to upload into contractor reports.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeUploadScanModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="scan-results" id="uploadScanResults"></div>
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="cancelUploadScanBtn">Cancel</button>
+          <button type="button" class="form-btn form-submit" id="confirmUploadScanBtn">Confirm Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contractor-modal-overlay" id="reportPreviewModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="reportPreviewTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="reportPreviewTitle">Document Preview</h2>
+          <p>Preview scanned document without automatic download.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeReportPreviewModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="report-preview-shell">
+          <iframe id="reportPreviewFrame" class="report-preview-frame" src="about:blank" title="Document preview" hidden></iframe>
+          <img id="reportPreviewImage" class="report-preview-image" alt="Document preview" hidden>
+          <pre id="reportPreviewText" class="report-preview-text" hidden></pre>
+          <div id="reportPreviewExcel" class="report-preview-excel" hidden></div>
+          <p id="reportPreviewFallback" class="report-preview-fallback" hidden>Preview is not available for this file type.</p>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="closeReportPreviewFooter">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var modal = document.getElementById("contractorModal");
@@ -1533,6 +1884,12 @@
       var contractorProjectImageInput = document.getElementById("contractorProjectImage");
       var contractorStatusInput = document.getElementById("contractorStatus");
       var contractorRatingInput = document.getElementById("contractorRating");
+      var contractorDocumentScanInput = document.getElementById("contractorDocumentScanInput");
+      var contractorDocumentScanList = document.getElementById("contractorDocumentScanList");
+      var contractorDocumentScanEmpty = document.getElementById("contractorDocumentScanEmpty");
+      var contractorUploadInput = document.getElementById("contractorUploadInput");
+      var scanUploadBtn = document.getElementById("scanUploadBtn");
+      var uploadSelectionText = document.getElementById("uploadSelectionText");
       var contractorCountText = document.getElementById("contractorCountText");
       var contractorsTableBody = document.getElementById("contractorsTableBody");
       var contractorsEmptyRow = document.getElementById("contractorsEmptyRow");
@@ -1573,6 +1930,8 @@
       var detailProjectNoImage = document.getElementById("detailProjectNoImage");
       var detailDocPrimary = document.getElementById("detailDocPrimary");
       var detailDocSecondary = document.getElementById("detailDocSecondary");
+      var detailReportDetails = document.getElementById("detailReportDetails");
+      var detailReportDetailsEmpty = document.getElementById("detailReportDetailsEmpty");
       var detailContractTotal = document.getElementById("detailContractTotal");
       var detailContractCompleted = document.getElementById("detailContractCompleted");
       var detailContractOngoing = document.getElementById("detailContractOngoing");
@@ -1586,9 +1945,50 @@
       var detailSummaryTotalValue = document.getElementById("detailSummaryTotalValue");
       var detailRatingValue = document.getElementById("detailRatingValue");
       var detailRatingsEmpty = document.getElementById("detailRatingsEmpty");
+      var uploadScanModal = document.getElementById("uploadScanModal");
+      var uploadScanResults = document.getElementById("uploadScanResults");
+      var closeUploadScanModalBtn = document.getElementById("closeUploadScanModal");
+      var cancelUploadScanBtn = document.getElementById("cancelUploadScanBtn");
+      var confirmUploadScanBtn = document.getElementById("confirmUploadScanBtn");
+      var reportPreviewModal = document.getElementById("reportPreviewModal");
+      var reportPreviewTitle = document.getElementById("reportPreviewTitle");
+      var closeReportPreviewModalBtn = document.getElementById("closeReportPreviewModal");
+      var closeReportPreviewFooterBtn = document.getElementById("closeReportPreviewFooter");
+      var reportPreviewFrame = document.getElementById("reportPreviewFrame");
+      var reportPreviewImage = document.getElementById("reportPreviewImage");
+      var reportPreviewText = document.getElementById("reportPreviewText");
+      var reportPreviewExcel = document.getElementById("reportPreviewExcel");
+      var reportPreviewFallback = document.getElementById("reportPreviewFallback");
+      var PREVIEW_PROV_LOGO_URL = "{% static 'images/prov-logo.png' %}";
+      var PREVIEW_PEO_LOGO_URL = "{% static 'images/peo-logo.png' %}";
       var CONTRACTORS_STORAGE_KEY = "peo_contractors_v1";
+      var REPORT_BLOB_DB_NAME = "peo_contractor_report_blobs_v1";
+      var REPORT_BLOB_STORE_NAME = "reports";
       var isEditingContractor = false;
       var editingContractorRow = null;
+      var contractorFormReports = [];
+      var runtimeReportUrlMap = {};
+      var runtimeReportFileMap = {};
+      var reportBlobDbPromise = null;
+      var pendingUploadFiles = [];
+      var rejectedUploadFiles = [];
+      var pendingScanMatches = null;
+      var ALLOWED_UPLOAD_EXTENSIONS = {
+        pdf: true,
+        xls: true,
+        xlsx: true,
+        csv: true,
+        doc: true,
+        docx: true,
+        ppt: true,
+        pptx: true,
+        txt: true,
+        rtf: true,
+        jpg: true,
+        jpeg: true,
+        png: true,
+        zip: true
+      };
 
       function statusBadgeClass(status) {
         if (status === "Active") {
@@ -1676,6 +2076,10 @@
         if (contractorRatingInput) {
           contractorRatingInput.value = "";
         }
+        if (contractorDocumentScanInput) {
+          contractorDocumentScanInput.value = "";
+        }
+        setContractorFormReports([]);
       }
 
       function getContractorPayloadFromForm() {
@@ -1710,8 +2114,1186 @@
           projectName: contractorProjectNameInput && contractorProjectNameInput.value.trim() ? contractorProjectNameInput.value.trim() : "-",
           projectStatus: contractorProjectStatusInput && contractorProjectStatusInput.value ? contractorProjectStatusInput.value : "Ongoing",
           projectImage: contractorProjectImageInput && contractorProjectImageInput.value.trim() ? contractorProjectImageInput.value.trim() : "",
-          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-"
+          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-",
+          reports: Array.isArray(contractorFormReports) ? contractorFormReports.slice() : []
         };
+      }
+
+      function parseReports(value) {
+        if (!value) {
+          return [];
+        }
+
+        try {
+          var parsed = JSON.parse(value);
+          if (!Array.isArray(parsed)) {
+            return [];
+          }
+          return parsed
+            .filter(function (item) {
+              return item && typeof item === "object";
+            })
+            .map(function (item) {
+              return {
+                name: item.name ? String(item.name) : "Unnamed file",
+                relativePath: item.relativePath ? String(item.relativePath) : "",
+                type: item.type ? String(item.type) : "",
+                size: Number(item.size) > 0 ? Number(item.size) : 0,
+                uploadedAt: item.uploadedAt ? String(item.uploadedAt) : "",
+                url: item.url ? String(item.url) : ""
+              };
+            });
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function supportsIndexedDb() {
+        return typeof window.indexedDB !== "undefined";
+      }
+
+      function openReportBlobDb() {
+        if (!supportsIndexedDb()) {
+          return Promise.resolve(null);
+        }
+        if (reportBlobDbPromise) {
+          return reportBlobDbPromise;
+        }
+
+        reportBlobDbPromise = new Promise(function (resolve) {
+          try {
+            var request = window.indexedDB.open(REPORT_BLOB_DB_NAME, 1);
+            request.onupgradeneeded = function (event) {
+              var db = event.target && event.target.result;
+              if (db && !db.objectStoreNames.contains(REPORT_BLOB_STORE_NAME)) {
+                db.createObjectStore(REPORT_BLOB_STORE_NAME);
+              }
+            };
+            request.onsuccess = function (event) {
+              resolve(event.target ? event.target.result : null);
+            };
+            request.onerror = function () {
+              resolve(null);
+            };
+          } catch (error) {
+            resolve(null);
+          }
+        });
+
+        return reportBlobDbPromise;
+      }
+
+      function saveReportBlob(key, blob) {
+        if (!key || !blob) {
+          return;
+        }
+
+        openReportBlobDb().then(function (db) {
+          if (!db) {
+            return;
+          }
+          try {
+            var tx = db.transaction(REPORT_BLOB_STORE_NAME, "readwrite");
+            tx.objectStore(REPORT_BLOB_STORE_NAME).put(blob, key);
+          } catch (error) {
+            // Ignore IndexedDB write errors.
+          }
+        });
+      }
+
+      function loadReportBlob(key) {
+        if (!key) {
+          return Promise.resolve(null);
+        }
+
+        return openReportBlobDb().then(function (db) {
+          if (!db) {
+            return null;
+          }
+
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction(REPORT_BLOB_STORE_NAME, "readonly");
+              var request = tx.objectStore(REPORT_BLOB_STORE_NAME).get(key);
+              request.onsuccess = function (event) {
+                resolve(event && event.target ? event.target.result || null : null);
+              };
+              request.onerror = function () {
+                resolve(null);
+              };
+            } catch (error) {
+              resolve(null);
+            }
+          });
+        });
+      }
+
+      function reportRuntimeKey(report) {
+        if (!report) {
+          return "";
+        }
+        return (report.relativePath || report.name || "") + "|" + String(report.size || 0) + "|" + (report.uploadedAt || "");
+      }
+
+      function registerRuntimeReportUrl(report, sourceFile) {
+        if (!report || !sourceFile || !window.URL || typeof window.URL.createObjectURL !== "function") {
+          return;
+        }
+
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return;
+        }
+
+        try {
+          if (!runtimeReportUrlMap[key]) {
+            runtimeReportUrlMap[key] = window.URL.createObjectURL(sourceFile);
+          }
+          runtimeReportFileMap[key] = sourceFile;
+          saveReportBlob(key, sourceFile);
+        } catch (error) {
+          // Ignore blob URL creation errors.
+        }
+      }
+
+      function ensureRuntimeReportUrl(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return Promise.resolve("");
+        }
+        if (runtimeReportUrlMap[key]) {
+          return Promise.resolve(runtimeReportUrlMap[key]);
+        }
+
+        return loadReportBlob(key).then(function (blob) {
+          if (!blob || !window.URL || typeof window.URL.createObjectURL !== "function") {
+            return "";
+          }
+          try {
+            runtimeReportFileMap[key] = blob;
+            runtimeReportUrlMap[key] = window.URL.createObjectURL(blob);
+            return runtimeReportUrlMap[key];
+          } catch (error) {
+            return "";
+          }
+        });
+      }
+
+      function getRuntimeReportUrl(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return "";
+        }
+        return runtimeReportUrlMap[key] || "";
+      }
+
+      function getRuntimeReportFile(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return null;
+        }
+        return runtimeReportFileMap[key] || null;
+      }
+
+      function normalizeText(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim();
+      }
+
+      function normalizeCompact(value) {
+        return normalizeText(value).replace(/\s+/g, "");
+      }
+
+      function extractCompanyTokens(companyName) {
+        return normalizeText(companyName)
+          .split(/\s+/)
+          .filter(function (token) {
+            return token.length >= 3;
+          });
+      }
+
+      function scoreFileForCompany(fileIndexText, companyName, tradeName) {
+        var compactFileText = normalizeCompact(fileIndexText);
+        var topScore = 0;
+
+        [companyName, tradeName].forEach(function (name) {
+          var base = normalizeText(name);
+          if (!base) {
+            return;
+          }
+
+          var compact = base.replace(/\s+/g, "");
+          var score = 0;
+
+          if (compact && compactFileText.indexOf(compact) !== -1) {
+            score += 100;
+          }
+
+          var tokens = extractCompanyTokens(base);
+          var matched = 0;
+          tokens.forEach(function (token) {
+            if (fileIndexText.indexOf(token) !== -1) {
+              matched += 1;
+            }
+          });
+
+          score += matched * 12;
+          if (tokens.length > 0 && matched === tokens.length) {
+            score += 20;
+          }
+
+          if (score > topScore) {
+            topScore = score;
+          }
+        });
+
+        return topScore;
+      }
+
+      function fileMeta(file) {
+        var relativePath = file.webkitRelativePath || file.name || "";
+        return {
+          name: file.name || "Unnamed file",
+          relativePath: relativePath,
+          type: file.type || "",
+          size: file.size || 0,
+          fileObject: file
+        };
+      }
+
+      function isTextLikeFile(file) {
+        if (!file) {
+          return false;
+        }
+
+        var mime = file.type ? String(file.type).toLowerCase() : "";
+        var ext = fileExtension(file.name || "");
+        var textExtensions = {
+          txt: true,
+          csv: true,
+          rtf: true,
+          md: true,
+          log: true,
+          json: true,
+          xml: true,
+          html: true,
+          htm: true,
+          css: true,
+          js: true,
+          ts: true,
+          jsx: true,
+          tsx: true,
+          py: true,
+          java: true,
+          c: true,
+          cpp: true,
+          cs: true,
+          php: true,
+          rb: true,
+          go: true,
+          rs: true,
+          sh: true,
+          yml: true,
+          yaml: true,
+          ini: true,
+          conf: true,
+          sql: true
+        };
+
+        if (mime.indexOf("text/") === 0) {
+          return true;
+        }
+        if (mime.indexOf("json") !== -1 || mime.indexOf("xml") !== -1 || mime.indexOf("javascript") !== -1) {
+          return true;
+        }
+        return Boolean(textExtensions[ext]);
+      }
+
+      function readFileTextSafe(file) {
+        if (!file) {
+          return Promise.resolve("");
+        }
+        if (typeof file.text === "function") {
+          return file.text().catch(function () {
+            return "";
+          });
+        }
+
+        return new Promise(function (resolve) {
+          try {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+              resolve(event && event.target && typeof event.target.result === "string" ? event.target.result : "");
+            };
+            reader.onerror = function () {
+              resolve("");
+            };
+            reader.readAsText(file);
+          } catch (error) {
+            resolve("");
+          }
+        });
+      }
+
+      function fallbackCopyToClipboard(text) {
+        try {
+          var helper = document.createElement("textarea");
+          helper.value = text;
+          helper.setAttribute("readonly", "true");
+          helper.style.position = "fixed";
+          helper.style.left = "-9999px";
+          document.body.appendChild(helper);
+          helper.focus();
+          helper.select();
+          var copied = document.execCommand("copy");
+          document.body.removeChild(helper);
+          return copied;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function copyTextToClipboard(text) {
+        if (!text) {
+          return Promise.resolve(false);
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          return navigator.clipboard.writeText(text).then(function () {
+            return true;
+          }).catch(function () {
+            return fallbackCopyToClipboard(text);
+          });
+        }
+
+        return Promise.resolve(fallbackCopyToClipboard(text));
+      }
+
+      function copyUploadedFilesContent(files) {
+        var sourceFiles = Array.isArray(files) ? files : [];
+        if (sourceFiles.length === 0) {
+          return Promise.resolve({ copied: false, message: "No files selected for scan." });
+        }
+
+        var perFileCharLimit = 120000;
+        var totalCharLimit = 500000;
+        var totalChars = 0;
+
+        var chunks = [];
+        var chain = Promise.resolve();
+
+        sourceFiles.forEach(function (file, index) {
+          chain = chain.then(function () {
+            if (!isTextLikeFile(file)) {
+              chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[Binary/unsupported for text extraction]\n");
+              return;
+            }
+
+            return readFileTextSafe(file).then(function (rawText) {
+              var textValue = typeof rawText === "string" ? rawText : "";
+              if (!textValue) {
+                chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[No readable text found]\n");
+                return;
+              }
+
+              var remaining = totalCharLimit - totalChars;
+              if (remaining <= 0) {
+                chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[Scan text limit reached]\n");
+                return;
+              }
+
+              var trimmed = textValue.length > perFileCharLimit ? textValue.slice(0, perFileCharLimit) + "\n\n...truncated..." : textValue;
+              if (trimmed.length > remaining) {
+                trimmed = trimmed.slice(0, remaining) + "\n\n...truncated...";
+              }
+              totalChars += trimmed.length;
+
+              chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n" + trimmed + "\n");
+            });
+          });
+        });
+
+        return chain.then(function () {
+          var joined = chunks.join("\n");
+          if (!joined.trim()) {
+            return { copied: false, message: "No readable text could be copied from the selected files." };
+          }
+
+          return copyTextToClipboard(joined).then(function (copied) {
+            if (copied) {
+              return { copied: true, message: "Scanned file content was copied to clipboard." };
+            }
+            return { copied: false, message: "Scan completed, but clipboard permission blocked copying content." };
+          });
+        });
+      }
+
+      function formatFileSize(size) {
+        if (!size || size <= 0) {
+          return "0 B";
+        }
+        if (size < 1024) {
+          return String(size) + " B";
+        }
+        if (size < 1024 * 1024) {
+          return (size / 1024).toFixed(1) + " KB";
+        }
+        return (size / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      function normalizeReportMeta(report) {
+        if (!report) {
+          return null;
+        }
+        return {
+          name: report.name ? String(report.name) : "Unnamed file",
+          relativePath: report.relativePath ? String(report.relativePath) : "",
+          type: report.type ? String(report.type) : "",
+          size: Number(report.size) > 0 ? Number(report.size) : 0,
+          uploadedAt: report.uploadedAt ? String(report.uploadedAt) : "",
+          url: report.url ? String(report.url) : ""
+        };
+      }
+
+      function renderContractorFormReports() {
+        if (!contractorDocumentScanList) {
+          return;
+        }
+
+        contractorDocumentScanList.innerHTML = "";
+
+        if (!Array.isArray(contractorFormReports) || contractorFormReports.length === 0) {
+          if (contractorDocumentScanEmpty) {
+            contractorDocumentScanEmpty.hidden = false;
+            contractorDocumentScanList.appendChild(contractorDocumentScanEmpty);
+          }
+          return;
+        }
+
+        contractorFormReports.forEach(function (report) {
+          var item = document.createElement("div");
+          item.className = "scan-upload-item";
+          var typeText = report.type ? report.type : "Unknown type";
+          item.textContent = report.name + " | " + typeText + " | " + formatFileSize(report.size || 0);
+          var spacer = document.createTextNode(" ");
+          item.appendChild(spacer);
+          item.appendChild(createReportDocumentLink(report, "View Scan Document"));
+          contractorDocumentScanList.appendChild(item);
+        });
+      }
+
+      function setContractorFormReports(reports) {
+        contractorFormReports = Array.isArray(reports)
+          ? reports.map(function (report) {
+              var normalized = normalizeReportMeta(report);
+              if (!normalized) {
+                return null;
+              }
+              if (report && report.fileObject) {
+                registerRuntimeReportUrl(normalized, report.fileObject);
+              }
+              return normalized;
+            }).filter(function (report) { return !!report; })
+          : [];
+        renderContractorFormReports();
+      }
+
+      function fileExtension(name) {
+        if (!name) {
+          return "";
+        }
+        var dotIndex = name.lastIndexOf(".");
+        if (dotIndex === -1 || dotIndex === name.length - 1) {
+          return "";
+        }
+        return name.slice(dotIndex + 1).toLowerCase();
+      }
+
+      function isAllowedUploadFile(file) {
+        return Boolean(file && file.name);
+      }
+
+      function previewMode(report) {
+        var ext = fileExtension(report && report.name ? report.name : "");
+        var mime = report && report.type ? String(report.type).toLowerCase() : "";
+
+        if (ext === "pdf" || mime.indexOf("pdf") !== -1) {
+          return "pdf";
+        }
+        if (
+          ext === "xlsx" ||
+          ext === "xls" ||
+          mime.indexOf("spreadsheet") !== -1 ||
+          mime.indexOf("excel") !== -1 ||
+          mime.indexOf("officedocument.spreadsheetml") !== -1
+        ) {
+          return "excel";
+        }
+        if (mime.indexOf("image/") === 0 || ext === "jpg" || ext === "jpeg" || ext === "png") {
+          return "image";
+        }
+        if (mime.indexOf("text/") === 0 || ext === "txt" || ext === "csv" || ext === "rtf") {
+          return "text";
+        }
+        return "unsupported";
+      }
+
+      function resetReportPreviewContent() {
+        if (reportPreviewFrame) {
+          reportPreviewFrame.removeAttribute("srcdoc");
+          reportPreviewFrame.src = "about:blank";
+          reportPreviewFrame.hidden = true;
+        }
+        if (reportPreviewImage) {
+          reportPreviewImage.src = "";
+          reportPreviewImage.hidden = true;
+        }
+        if (reportPreviewText) {
+          reportPreviewText.textContent = "";
+          reportPreviewText.hidden = true;
+        }
+        if (reportPreviewExcel) {
+          reportPreviewExcel.innerHTML = "";
+          reportPreviewExcel.hidden = true;
+        }
+        if (reportPreviewFallback) {
+          reportPreviewFallback.textContent = "Preview is not available for this file type.";
+          reportPreviewFallback.hidden = true;
+        }
+      }
+
+      function buildExcelPreviewPayload(data, rowLimit, colLimit) {
+        if (!window.XLSX) {
+          throw new Error("XLSX unavailable");
+        }
+
+        var workbook = window.XLSX.read(data, {
+          type: "array",
+          cellStyles: true,
+          cellNF: true,
+          cellText: true,
+          cellDates: true
+        });
+        var firstSheetName = workbook.SheetNames && workbook.SheetNames.length ? workbook.SheetNames[0] : null;
+        if (!firstSheetName) {
+          throw new Error("No worksheet found");
+        }
+
+        var worksheet = workbook.Sheets[firstSheetName];
+        if (!worksheet || !worksheet["!ref"]) {
+          throw new Error("Empty worksheet");
+        }
+
+        var sourceRange = window.XLSX.utils.decode_range(worksheet["!ref"]);
+        var maxRow = Math.max(sourceRange.s.r, sourceRange.s.r + Math.max(1, rowLimit || 300) - 1);
+        var maxCol = Math.max(sourceRange.s.c, sourceRange.s.c + Math.max(1, colLimit || 80) - 1);
+        var limitedEndRow = Math.min(sourceRange.e.r, maxRow);
+        var limitedEndCol = Math.min(sourceRange.e.c, maxCol);
+        var trimmed = limitedEndRow < sourceRange.e.r || limitedEndCol < sourceRange.e.c;
+
+        var workingSheet = worksheet;
+        if (trimmed) {
+          var limitedRange = {
+            s: { r: sourceRange.s.r, c: sourceRange.s.c },
+            e: { r: limitedEndRow, c: limitedEndCol }
+          };
+
+          workingSheet = { "!ref": window.XLSX.utils.encode_range(limitedRange) };
+          Object.keys(worksheet).forEach(function (key) {
+            if (!key || key.charAt(0) === "!") {
+              return;
+            }
+            var cell = window.XLSX.utils.decode_cell(key);
+            if (
+              cell.r >= limitedRange.s.r &&
+              cell.r <= limitedRange.e.r &&
+              cell.c >= limitedRange.s.c &&
+              cell.c <= limitedRange.e.c
+            ) {
+              workingSheet[key] = worksheet[key];
+            }
+          });
+
+          if (Array.isArray(worksheet["!merges"])) {
+            workingSheet["!merges"] = worksheet["!merges"].filter(function (merge) {
+              return (
+                merge.s.r >= limitedRange.s.r &&
+                merge.e.r <= limitedRange.e.r &&
+                merge.s.c >= limitedRange.s.c &&
+                merge.e.c <= limitedRange.e.c
+              );
+            });
+          }
+        }
+
+        var previewWorkbook = {
+          SheetNames: [firstSheetName],
+          Sheets: {}
+        };
+        previewWorkbook.Sheets[firstSheetName] = workingSheet;
+        var html = window.XLSX.write(previewWorkbook, {
+          bookType: "html",
+          type: "string"
+        });
+
+        return {
+          sheetName: firstSheetName,
+          html: html,
+          trimmed: trimmed,
+          rows: limitedEndRow - sourceRange.s.r + 1,
+          cols: limitedEndCol - sourceRange.s.c + 1
+        };
+      }
+
+      function decorateWorkbookHtml(rawHtml, titleText) {
+        var html = String(rawHtml || "");
+        if (!html) {
+          return "";
+        }
+
+        var safeTitle = escapeHtml(titleText || "Document Preview");
+        var hasImage = /<img[\s>]/i.test(html);
+        var headerHtml = "";
+        if (!hasImage) {
+          headerHtml =
+            "<section class=\"sheet-letterhead\">" +
+            "<img class=\"sheet-logo\" src=\"" + escapeHtml(PREVIEW_PROV_LOGO_URL) + "\" alt=\"Province of Palawan logo\">" +
+            "<div class=\"sheet-letterhead-text\">" +
+            "<p>Republic of the Philippines</p>" +
+            "<p>PROVINCIAL GOVERNMENT OF PALAWAN</p>" +
+            "<p><strong>OFFICE OF THE PROVINCIAL ENGINEER</strong></p>" +
+            "<p>Capitol Building, Puerto Princesa City</p>" +
+            "</div>" +
+            "<img class=\"sheet-logo\" src=\"" + escapeHtml(PREVIEW_PEO_LOGO_URL) + "\" alt=\"PEO logo\">" +
+            "</section>";
+        }
+
+        var styleBlock =
+          "<style id=\"peo-professional-workbook-style\">" +
+          "html,body{margin:0;padding:0;background:#2e3137;color:#1b2f45;font-family:\"Calibri\",\"Segoe UI\",Arial,sans-serif;}" +
+          ".excel-appbar{height:52px;background:#1f2328;color:#d9dde4;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:1px solid #3a3f47;}" +
+          ".excel-dot{width:16px;height:16px;border-radius:3px;background:#1f9d55;display:inline-block;}" +
+          ".excel-title{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
+          ".doc-shell{padding:14px 0 22px;display:flex;justify-content:center;}" +
+          ".doc-page{width:min(99vw,1880px);background:#f7f8fa;border:1px solid #343941;box-shadow:0 8px 22px rgba(0,0,0,.28);overflow:auto;}" +
+          ".sheet-letterhead{display:flex;align-items:center;justify-content:center;gap:24px;padding:14px 12px 10px;background:#f3f4f6;}" +
+          ".sheet-logo{width:88px;height:88px;object-fit:contain;}" +
+          ".sheet-letterhead-text{text-align:center;color:#111;line-height:1.2;font-size:14px;}" +
+          ".sheet-letterhead-text p{margin:0 0 4px;}" +
+          ".sheet-grid{padding:0;}" +
+          "table{border-collapse:collapse;font-size:12px;line-height:1.3;color:#101820;min-width:100%;background:#f7f8fa;}" +
+          "th,td{border:1.2px solid #2f3338 !important;padding:5px 6px !important;vertical-align:middle;background:#f6f7f9;}" +
+          ".sheet-grid table tr:nth-child(8)>th,.sheet-grid table tr:nth-child(8)>td,.sheet-grid table tr:nth-child(9)>th,.sheet-grid table tr:nth-child(9)>td{background:#8ecb4f !important;font-weight:700;color:#111;}" +
+          ".sheet-grid table tr:nth-child(10)>th,.sheet-grid table tr:nth-child(10)>td{background:#b9c9a2 !important;font-weight:700;color:#111;}" +
+          "</style>";
+
+        if (/<head[\s>]/i.test(html)) {
+          html = html.replace(/<\/head>/i, "<title>" + safeTitle + "</title>" + styleBlock + "</head>");
+        } else {
+          html = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>" + safeTitle + "</title>" + styleBlock + "</head><body>" + html + "</body></html>";
+        }
+
+        if (/<body[^>]*>/i.test(html)) {
+          html = html.replace(/<body[^>]*>/i, function (match) {
+            return match +
+              "<div class=\"excel-appbar\"><span class=\"excel-dot\" aria-hidden=\"true\"></span><span class=\"excel-title\">" + safeTitle + "</span></div>" +
+              "<div class=\"doc-shell\"><div class=\"doc-page\">" + headerHtml + "<div class=\"sheet-grid\">";
+          });
+          html = html.replace(/<\/body>/i, "</div></div></div></body>");
+        }
+
+        return html;
+      }
+
+      function renderExcelPreviewFromData(data, titleText) {
+        if (!reportPreviewFrame) {
+          return;
+        }
+        var payload = buildExcelPreviewPayload(data, 1200, 200);
+        var htmlDoc = decorateWorkbookHtml(payload.html, titleText);
+        if (reportPreviewExcel) {
+          reportPreviewExcel.hidden = true;
+          reportPreviewExcel.innerHTML = "";
+        }
+        reportPreviewFrame.removeAttribute("src");
+        reportPreviewFrame.srcdoc = htmlDoc;
+        reportPreviewFrame.hidden = false;
+      }
+
+      function renderExcelPreviewFromFile(fileObject, viewUrl, titleText) {
+        if (!reportPreviewFrame) {
+          return;
+        }
+        if (!window.XLSX) {
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Excel preview engine not loaded. Please check your internet and reload.";
+            reportPreviewFallback.hidden = false;
+          }
+          return;
+        }
+
+        reportPreviewFrame.hidden = false;
+        reportPreviewFrame.removeAttribute("src");
+        reportPreviewFrame.srcdoc = "<!DOCTYPE html><html><body style=\"font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#4d6480;\">Loading Excel preview...</body></html>";
+        if (reportPreviewExcel) {
+          reportPreviewExcel.hidden = true;
+          reportPreviewExcel.innerHTML = "";
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          try {
+            var data = event.target && event.target.result ? event.target.result : null;
+            if (!data) {
+              throw new Error("No file data");
+            }
+            renderExcelPreviewFromData(data, titleText);
+          } catch (error) {
+            if (reportPreviewFrame) {
+              reportPreviewFrame.hidden = true;
+            }
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Unable to parse Excel preview for this file.";
+              reportPreviewFallback.hidden = false;
+            }
+          }
+        };
+
+        reader.onerror = function () {
+          if (reportPreviewFrame) {
+            reportPreviewFrame.hidden = true;
+          }
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Unable to read Excel file for preview.";
+            reportPreviewFallback.hidden = false;
+          }
+        };
+
+        if (fileObject) {
+          reader.readAsArrayBuffer(fileObject);
+          return;
+        }
+
+        if (!viewUrl) {
+          if (reportPreviewFrame) {
+            reportPreviewFrame.hidden = true;
+          }
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Excel preview is unavailable. Re-upload the file and try again.";
+            reportPreviewFallback.hidden = false;
+          }
+          return;
+        }
+
+        fetch(viewUrl)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Unable to load file");
+            }
+            return response.arrayBuffer();
+          })
+          .then(function (data) {
+            renderExcelPreviewFromData(data, titleText);
+          })
+          .catch(function () {
+            if (reportPreviewFrame) {
+              reportPreviewFrame.hidden = true;
+            }
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Unable to read Excel file for preview.";
+              reportPreviewFallback.hidden = false;
+            }
+          });
+      }
+
+      function escapeHtml(text) {
+        return String(text || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function openPreviewTab(report) {
+        var previewTab = window.open("about:blank", "_blank");
+        if (!previewTab) {
+          openReportPreviewModal(report);
+          return;
+        }
+
+        var docTitle = report && report.name ? report.name : "Document Preview";
+        previewTab.document.open();
+        previewTab.document.write(
+          "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>" + escapeHtml(docTitle) + "</title>" +
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+          "<style>" +
+          "body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f7fb;color:#102a43;}" +
+          ".wrap{padding:16px;}" +
+          ".title{margin:0 0 10px;font-size:18px;font-weight:700;word-break:break-word;}" +
+          ".shell{background:#fff;border:1px solid #d6deea;border-radius:10px;padding:10px;min-height:70vh;}" +
+          ".msg{margin:0;padding:10px;border:1px dashed #ced8e4;border-radius:8px;background:#f7fbff;color:#5f748b;}" +
+          ".frame{width:100%;height:76vh;border:1px solid #d2dbe6;border-radius:8px;background:#fff;}" +
+          ".img{max-width:100%;max-height:76vh;display:block;margin:0 auto;border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:4px;}" +
+          ".text{margin:0;border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:10px;max-height:76vh;overflow:auto;white-space:pre-wrap;word-break:break-word;}" +
+          ".excel{border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:8px;max-height:76vh;overflow:auto;}" +
+          ".excel-meta{margin:0 0 8px;color:#4d6480;font-size:13px;line-height:1.35;}" +
+          ".excel table{width:max-content;min-width:100%;border-collapse:collapse;font-size:13px;}" +
+          ".excel th,.excel td{border:1px solid #d9e2ec;padding:6px 8px;white-space:nowrap;vertical-align:top;}" +
+          ".excel th{background:#f2f7fc;position:sticky;top:0;z-index:1;}" +
+          "</style></head><body><div class=\"wrap\"><h1 class=\"title\">" + escapeHtml(docTitle) +
+          "</h1><div id=\"tabPreviewRoot\" class=\"shell\"><p class=\"msg\">Loading preview...</p></div></div></body></html>"
+        );
+        previewTab.document.close();
+
+        function setTabMessage(message) {
+          if (!previewTab || previewTab.closed) {
+            return;
+          }
+          var root = previewTab.document.getElementById("tabPreviewRoot");
+          if (!root) {
+            return;
+          }
+          root.innerHTML = "<p class=\"msg\">" + escapeHtml(message) + "</p>";
+        }
+
+        function renderExcelInTab(data) {
+          if (!previewTab || previewTab.closed || !window.XLSX) {
+            setTabMessage("Excel preview engine is unavailable.");
+            return;
+          }
+          try {
+            var payload = buildExcelPreviewPayload(data, 5000, 300);
+            var htmlDoc = decorateWorkbookHtml(payload.html, docTitle);
+            previewTab.document.open();
+            previewTab.document.write(htmlDoc);
+            previewTab.document.close();
+          } catch (error) {
+            setTabMessage("Unable to parse Excel preview.");
+          }
+        }
+
+        ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+          var viewUrl = runtimeUrl || (report && report.url ? String(report.url) : "");
+          var mode = previewMode(report);
+
+          if (!viewUrl) {
+            setTabMessage("Preview unavailable for this file in the current session.");
+            return;
+          }
+
+          var root = previewTab.document.getElementById("tabPreviewRoot");
+          if (!root) {
+            return;
+          }
+          root.innerHTML = "";
+
+          if (mode === "pdf") {
+            var iframe = previewTab.document.createElement("iframe");
+            iframe.className = "frame";
+            iframe.src = viewUrl;
+            iframe.setAttribute("title", docTitle);
+            root.appendChild(iframe);
+            return;
+          }
+
+          if (mode === "image") {
+            var img = previewTab.document.createElement("img");
+            img.className = "img";
+            img.src = viewUrl;
+            img.alt = docTitle;
+            root.appendChild(img);
+            return;
+          }
+
+          if (mode === "text") {
+            var pre = previewTab.document.createElement("pre");
+            pre.className = "text";
+            pre.textContent = "Loading text preview...";
+            root.appendChild(pre);
+            fetch(viewUrl)
+              .then(function (response) { return response.text(); })
+              .then(function (textContent) {
+                var trimmed = textContent.length > 250000 ? textContent.slice(0, 250000) + "\n\n...truncated..." : textContent;
+                pre.textContent = trimmed;
+              })
+              .catch(function () {
+                pre.textContent = "Unable to preview this text file.";
+              });
+            return;
+          }
+
+          if (mode === "excel") {
+            var fileObj = getRuntimeReportFile(report);
+            if (fileObj) {
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                var data = event.target && event.target.result ? event.target.result : null;
+                if (!data) {
+                  setTabMessage("Unable to read Excel file.");
+                  return;
+                }
+                renderExcelInTab(data);
+              };
+              reader.onerror = function () {
+                setTabMessage("Unable to read Excel file.");
+              };
+              reader.readAsArrayBuffer(fileObj);
+              return;
+            }
+
+            fetch(viewUrl)
+              .then(function (response) {
+                if (!response.ok) {
+                  throw new Error("Failed");
+                }
+                return response.arrayBuffer();
+              })
+              .then(function (data) {
+                renderExcelInTab(data);
+              })
+              .catch(function () {
+                setTabMessage("Unable to load Excel file.");
+              });
+            return;
+          }
+
+          setTabMessage("Preview not supported for this file type.");
+        });
+      }
+
+      function closeReportPreviewModal() {
+        if (!reportPreviewModal) {
+          return;
+        }
+        reportPreviewModal.classList.remove("open");
+        reportPreviewModal.setAttribute("aria-hidden", "true");
+        resetReportPreviewContent();
+
+        if (
+          (!modal || !modal.classList.contains("open")) &&
+          (!detailsModal || !detailsModal.classList.contains("open")) &&
+          (!uploadScanModal || !uploadScanModal.classList.contains("open"))
+        ) {
+          document.body.classList.remove("modal-open");
+        }
+      }
+
+      function openReportPreviewModal(report) {
+        if (!reportPreviewModal || !report) {
+          return;
+        }
+
+        ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+          var viewUrl = runtimeUrl || (report.url ? String(report.url) : "");
+          resetReportPreviewContent();
+
+          if (reportPreviewTitle) {
+            reportPreviewTitle.textContent = report.name || "Document Preview";
+          }
+
+          if (!viewUrl) {
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Preview is unavailable for this file in the current browser session.";
+              reportPreviewFallback.hidden = false;
+            }
+            reportPreviewModal.classList.add("open");
+            reportPreviewModal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
+            return;
+          }
+
+          var mode = previewMode(report);
+
+          if (mode === "pdf" && reportPreviewFrame) {
+            reportPreviewFrame.src = viewUrl;
+            reportPreviewFrame.hidden = false;
+          } else if (mode === "excel") {
+            renderExcelPreviewFromFile(getRuntimeReportFile(report), viewUrl, report && report.name ? report.name : "Excel Preview");
+          } else if (mode === "image" && reportPreviewImage) {
+            reportPreviewImage.src = viewUrl;
+            reportPreviewImage.hidden = false;
+          } else if (mode === "text" && reportPreviewText) {
+            reportPreviewText.hidden = false;
+            reportPreviewText.textContent = "Loading preview...";
+
+            fetch(viewUrl)
+              .then(function (response) { return response.text(); })
+              .then(function (textContent) {
+                if (!reportPreviewText) {
+                  return;
+                }
+                var trimmed = textContent.length > 200000 ? textContent.slice(0, 200000) + "\n\n...truncated..." : textContent;
+                reportPreviewText.textContent = trimmed;
+              })
+              .catch(function () {
+                if (reportPreviewFallback) {
+                  reportPreviewFallback.textContent = "Unable to preview this text file.";
+                  reportPreviewFallback.hidden = false;
+                }
+                if (reportPreviewText) {
+                  reportPreviewText.hidden = true;
+                }
+              });
+          } else if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Preview not supported for this file type. Uploading is saved, but browser preview is unavailable.";
+            reportPreviewFallback.hidden = false;
+          }
+
+          reportPreviewModal.classList.add("open");
+          reportPreviewModal.setAttribute("aria-hidden", "false");
+          document.body.classList.add("modal-open");
+        });
+      }
+
+      function createReportDocumentLink(report, labelText) {
+        var link = document.createElement("a");
+        link.className = "report-doc-link";
+        link.textContent = labelText || "View Scan Document";
+        link.href = "#";
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener");
+
+        function resolveDirectReportHttpUrl(targetReport) {
+          if (!targetReport) {
+            return "";
+          }
+
+          var existingUrl = targetReport.url ? String(targetReport.url) : "";
+          if (existingUrl) {
+            if (/^https?:\/\//i.test(existingUrl)) {
+              return existingUrl;
+            }
+            if (existingUrl.indexOf("/media/") === 0) {
+              return window.location.origin + existingUrl;
+            }
+            if (existingUrl.indexOf("media/") === 0) {
+              return window.location.origin + "/" + existingUrl;
+            }
+          }
+
+          var rel = targetReport.relativePath ? String(targetReport.relativePath).replace(/\\/g, "/") : "";
+          if (!rel) {
+            return "";
+          }
+
+          var markerIndex = rel.indexOf("project_scans/");
+          if (markerIndex >= 0) {
+            var mediaRelative = rel.slice(markerIndex).split("/").map(encodeURIComponent).join("/");
+            return window.location.origin + "/media/" + mediaRelative;
+          }
+
+          if (rel.indexOf("media/") === 0) {
+            var mediaPath = rel.slice("media/".length).split("/").map(encodeURIComponent).join("/");
+            return window.location.origin + "/media/" + mediaPath;
+          }
+
+          return "";
+        }
+
+        var directHttpUrl = resolveDirectReportHttpUrl(report);
+        if (directHttpUrl) {
+          link.href = directHttpUrl;
+          link.title = directHttpUrl;
+        }
+
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          var nextTab = window.open("about:blank", "_blank");
+
+          ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+            var directUrl = resolveDirectReportHttpUrl(report);
+            var targetUrl = runtimeUrl || directUrl || "";
+
+            if (targetUrl) {
+              if (nextTab && !nextTab.closed) {
+                nextTab.location.href = targetUrl;
+              } else {
+                window.open(targetUrl, "_blank");
+              }
+              return;
+            }
+
+            if (nextTab && !nextTab.closed) {
+              nextTab.document.open();
+              nextTab.document.write(
+                "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Document not available</title></head>" +
+                "<body style=\"font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#2a3f56;\">" +
+                "<p>Unable to open this uploaded file in a new tab for the current browser session.</p></body></html>"
+              );
+              nextTab.document.close();
+            } else {
+              alert("Unable to open this uploaded file in a new tab.");
+            }
+          });
+        });
+
+        return link;
+      }
+
+      function renderReportDetails(reportItems) {
+        if (!detailReportDetails) {
+          return;
+        }
+
+        detailReportDetails.innerHTML = "";
+
+        if (!Array.isArray(reportItems) || reportItems.length === 0) {
+          if (detailReportDetailsEmpty) {
+            detailReportDetailsEmpty.hidden = false;
+            detailReportDetails.appendChild(detailReportDetailsEmpty);
+          }
+          return;
+        }
+
+        reportItems.forEach(function (report) {
+          var card = document.createElement("article");
+          card.className = "report-details-item";
+
+          var title = document.createElement("strong");
+          title.textContent = report.name || "Unnamed file";
+          card.appendChild(title);
+
+          var meta = document.createElement("span");
+          var typeText = report.type ? String(report.type) : "Unknown type";
+          var sizeText = formatFileSize(report.size || 0);
+          var uploadedText = report.uploadedAt ? formatHistoryDate(report.uploadedAt) : "-";
+          meta.textContent = "Type: " + typeText + " | Size: " + sizeText + " | Uploaded: " + uploadedText;
+          card.appendChild(meta);
+
+          if (report.relativePath) {
+            var pathLine = document.createElement("span");
+            pathLine.textContent = "Path: " + report.relativePath;
+            card.appendChild(pathLine);
+          }
+
+          card.appendChild(createReportDocumentLink(report, "View Scan Document"));
+
+          detailReportDetails.appendChild(card);
+        });
+      }
+
+      function setProjectDocumentListItem(targetEl, report, fallbackText) {
+        if (!targetEl) {
+          return;
+        }
+
+        targetEl.innerHTML = "";
+
+        if (!report) {
+          targetEl.textContent = fallbackText;
+          return;
+        }
+
+        var label = document.createElement("span");
+        label.textContent = report.name + " (" + formatFileSize(report.size || 0) + ")";
+        targetEl.appendChild(label);
+
+        var spacer = document.createTextNode(" ");
+        targetEl.appendChild(spacer);
+        targetEl.appendChild(createReportDocumentLink(report, "View Scan Document"));
       }
 
       function rowPayload(row) {
@@ -1743,7 +3325,8 @@
           projectImage: row.getAttribute("data-contractor-project-image") || "",
           createdAt: row.getAttribute("data-contractor-created-at") || "",
           updatedAt: row.getAttribute("data-contractor-updated-at") || "",
-          rating: row.getAttribute("data-contractor-rating") || "-"
+          rating: row.getAttribute("data-contractor-rating") || "-",
+          reports: parseReports(row.getAttribute("data-contractor-reports") || "[]")
         };
       }
 
@@ -1845,6 +3428,7 @@
         row.setAttribute("data-contractor-created-at", payload.createdAt || "");
         row.setAttribute("data-contractor-updated-at", payload.updatedAt || "");
         row.setAttribute("data-contractor-rating", payload.rating);
+        row.setAttribute("data-contractor-reports", JSON.stringify(Array.isArray(payload.reports) ? payload.reports : []));
 
         row.innerHTML = "";
 
@@ -1974,6 +3558,10 @@
           if (contractorRatingInput) {
             contractorRatingInput.value = payload.rating === "-" ? "" : payload.rating;
           }
+          setContractorFormReports(payload.reports || []);
+          if (contractorDocumentScanInput) {
+            contractorDocumentScanInput.value = "";
+          }
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Edit Contractor";
           }
@@ -1982,6 +3570,7 @@
           }
         } else {
           resetContractorForm();
+          setContractorFormReports([]);
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Add New Contractor";
           }
@@ -2241,8 +3830,22 @@
         if (detailRatingsEmpty) detailRatingsEmpty.hidden = hasRating;
         if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(totalContracts) + ")";
         if (detailsRatingsTab) detailsRatingsTab.textContent = "Ratings (" + String(ratingsCount) + ")";
-        if (detailDocPrimary) detailDocPrimary.textContent = valueOrDash(payload.projectName || payload.company) + " specification file";
-        if (detailDocSecondary) detailDocSecondary.textContent = valueOrDash(payload.company) + " supporting document";
+        var reportItems = Array.isArray(payload.reports) ? payload.reports : [];
+        if (detailDocPrimary) {
+          if (reportItems.length > 0) {
+            setProjectDocumentListItem(detailDocPrimary, reportItems[0], valueOrDash(payload.projectName || payload.company) + " specification file");
+          } else {
+            detailDocPrimary.textContent = valueOrDash(payload.projectName || payload.company) + " specification file";
+          }
+        }
+        if (detailDocSecondary) {
+          if (reportItems.length > 1) {
+            setProjectDocumentListItem(detailDocSecondary, reportItems[1], valueOrDash(payload.company) + " supporting document");
+          } else {
+            detailDocSecondary.textContent = valueOrDash(payload.company) + " supporting document";
+          }
+        }
+        renderReportDetails(reportItems);
         buildContractHistoryCards(payload, locationText);
 
         if (detailProjectImage && detailProjectNoImage) {
@@ -2291,6 +3894,218 @@
         }
       }
 
+      function updateUploadSelectionState() {
+        var count = Array.isArray(pendingUploadFiles) ? pendingUploadFiles.length : 0;
+
+        if (uploadSelectionText) {
+          if (count > 0) {
+            uploadSelectionText.textContent = String(count) + (count === 1 ? " file ready to scan." : " files ready to scan.");
+          } else {
+            uploadSelectionText.textContent = "No files selected.";
+          }
+        }
+
+        if (scanUploadBtn) {
+          scanUploadBtn.disabled = count === 0;
+        }
+      }
+
+      function closeUploadScanModal() {
+        if (!uploadScanModal) {
+          return;
+        }
+        uploadScanModal.classList.remove("open");
+        uploadScanModal.setAttribute("aria-hidden", "true");
+        pendingScanMatches = null;
+      }
+
+      function openUploadScanModal() {
+        if (!uploadScanModal) {
+          return;
+        }
+        uploadScanModal.classList.add("open");
+        uploadScanModal.setAttribute("aria-hidden", "false");
+      }
+
+      function buildScanMatches(files) {
+        var rows = contractorsTableBody ? contractorsTableBody.querySelectorAll("[data-contractor-row='1']") : [];
+        var rowItems = [];
+        rows.forEach(function (row) {
+          var payload = rowPayload(row);
+          if (payload && payload.company) {
+            rowItems.push({ row: row, payload: payload, files: [] });
+          }
+        });
+
+        var unmatched = [];
+        var totalMatched = 0;
+
+        files.forEach(function (file) {
+          var meta = fileMeta(file);
+          var fileIndexText = normalizeText((meta.relativePath || "") + " " + meta.name);
+          var bestScore = 0;
+          var bestMatch = null;
+
+          rowItems.forEach(function (item) {
+            var score = scoreFileForCompany(fileIndexText, item.payload.company, item.payload.tradeName);
+            if (score > bestScore) {
+              bestScore = score;
+              bestMatch = item;
+            }
+          });
+
+          if (bestMatch && bestScore >= 18) {
+            bestMatch.files.push(meta);
+            totalMatched += 1;
+          } else {
+            unmatched.push(meta);
+          }
+        });
+
+        var matchedItems = rowItems.filter(function (item) {
+          return item.files.length > 0;
+        });
+
+        return {
+          matchedItems: matchedItems,
+          unmatched: unmatched,
+          totalFiles: files.length,
+          totalMatched: totalMatched
+        };
+      }
+
+      function renderScanResults(scanData) {
+        if (!uploadScanResults) {
+          return;
+        }
+
+        uploadScanResults.innerHTML = "";
+
+        if (!scanData || (scanData.matchedItems.length === 0 && scanData.unmatched.length === 0)) {
+          var emptyMessage = document.createElement("p");
+          emptyMessage.className = "scan-result-empty";
+          emptyMessage.textContent = "No scan results available.";
+          uploadScanResults.appendChild(emptyMessage);
+          return;
+        }
+
+        if (scanData.matchedItems.length > 0) {
+          scanData.matchedItems.forEach(function (item) {
+            var card = document.createElement("article");
+            card.className = "scan-result-card";
+
+            var title = document.createElement("h4");
+            title.textContent = item.payload.company;
+            card.appendChild(title);
+
+            var meta = document.createElement("p");
+            meta.className = "scan-result-meta";
+            meta.textContent = String(item.files.length) + (item.files.length === 1 ? " file matched" : " files matched");
+            card.appendChild(meta);
+
+            var list = document.createElement("ul");
+            list.className = "scan-result-files";
+
+            item.files.slice(0, 6).forEach(function (reportFile) {
+              var li = document.createElement("li");
+              li.textContent = reportFile.name;
+              list.appendChild(li);
+            });
+
+            if (item.files.length > 6) {
+              var overflowItem = document.createElement("li");
+              overflowItem.textContent = "+" + String(item.files.length - 6) + " more";
+              list.appendChild(overflowItem);
+            }
+
+            card.appendChild(list);
+            uploadScanResults.appendChild(card);
+          });
+        }
+
+        if (scanData.unmatched.length > 0) {
+          var unmatchedCard = document.createElement("article");
+          unmatchedCard.className = "scan-result-card";
+
+          var unmatchedTitle = document.createElement("h4");
+          unmatchedTitle.textContent = "Unmatched Files";
+          unmatchedCard.appendChild(unmatchedTitle);
+
+          var unmatchedMeta = document.createElement("p");
+          unmatchedMeta.className = "scan-result-meta";
+          unmatchedMeta.textContent = String(scanData.unmatched.length) + " file(s) were not matched to any company";
+          unmatchedCard.appendChild(unmatchedMeta);
+
+          var unmatchedList = document.createElement("ul");
+          unmatchedList.className = "scan-result-files";
+          scanData.unmatched.slice(0, 6).forEach(function (reportFile) {
+            var unmatchedItem = document.createElement("li");
+            unmatchedItem.textContent = reportFile.name;
+            unmatchedList.appendChild(unmatchedItem);
+          });
+          if (scanData.unmatched.length > 6) {
+            var remaining = document.createElement("li");
+            remaining.textContent = "+" + String(scanData.unmatched.length - 6) + " more";
+            unmatchedList.appendChild(remaining);
+          }
+
+          unmatchedCard.appendChild(unmatchedList);
+          uploadScanResults.appendChild(unmatchedCard);
+        }
+      }
+
+      function commitScannedReports() {
+        if (!pendingScanMatches || !pendingScanMatches.matchedItems || pendingScanMatches.matchedItems.length === 0) {
+          closeUploadScanModal();
+          return;
+        }
+
+        var nowIso = new Date().toISOString();
+        var updatedCompanies = 0;
+        var totalImported = 0;
+
+        pendingScanMatches.matchedItems.forEach(function (item) {
+          var payload = rowPayload(item.row);
+          if (!payload) {
+            return;
+          }
+
+          var existingReports = Array.isArray(payload.reports) ? payload.reports.slice() : [];
+          var existingKeys = {};
+          existingReports.forEach(function (report) {
+            var reportKey = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+            existingKeys[reportKey] = true;
+          });
+
+          item.files.forEach(function (reportFile) {
+            var key = (reportFile.relativePath || reportFile.name || "") + "|" + String(reportFile.size || 0);
+            if (existingKeys[key]) {
+              return;
+            }
+            existingKeys[key] = true;
+            var importedReport = {
+              name: reportFile.name,
+              relativePath: reportFile.relativePath || "",
+              type: reportFile.type || "",
+              size: reportFile.size || 0,
+              uploadedAt: nowIso
+            };
+            registerRuntimeReportUrl(importedReport, reportFile.fileObject || null);
+            existingReports.push(importedReport);
+            totalImported += 1;
+          });
+
+          payload.reports = existingReports;
+          payload.updatedAt = nowIso;
+          applyRowPayload(item.row, payload);
+          updatedCompanies += 1;
+        });
+
+        persistContractorsToStorage();
+        closeUploadScanModal();
+        alert("Imported " + String(totalImported) + " report file(s) into " + String(updatedCompanies) + " contractor(s).");
+      }
+
       function saveContractorRow() {
         if (!contractorsTableBody || !firstInput) {
           return;
@@ -2307,11 +4122,17 @@
         if (isEditingContractor && editingContractorRow) {
           var existingPayload = rowPayload(editingContractorRow);
           payload.createdAt = existingPayload && existingPayload.createdAt ? existingPayload.createdAt : nowIso;
+          if ((!payload.reports || payload.reports.length === 0) && existingPayload && Array.isArray(existingPayload.reports)) {
+            payload.reports = existingPayload.reports.slice();
+          }
           payload.updatedAt = nowIso;
           applyRowPayload(editingContractorRow, payload);
         } else {
           payload.createdAt = nowIso;
           payload.updatedAt = nowIso;
+          if (!Array.isArray(payload.reports)) {
+            payload.reports = [];
+          }
           var row = document.createElement("div");
           applyRowPayload(row, payload);
           contractorsTableBody.appendChild(row);
@@ -2393,6 +4214,103 @@
         });
       }
 
+      if (contractorDocumentScanInput) {
+        contractorDocumentScanInput.addEventListener("change", function () {
+          var selectedFiles = Array.prototype.slice.call(contractorDocumentScanInput.files || []);
+          if (selectedFiles.length === 0) {
+            return;
+          }
+
+          var nowIso = new Date().toISOString();
+          var uploadedFiles = [];
+
+          selectedFiles.forEach(function (selectedFile) {
+            var meta = fileMeta(selectedFile);
+            uploadedFiles.push({
+              name: meta.name,
+              relativePath: meta.relativePath || "",
+              type: meta.type || "",
+              size: meta.size || 0,
+              uploadedAt: nowIso,
+              fileObject: selectedFile
+            });
+          });
+
+          if (uploadedFiles.length > 0) {
+            var existing = Array.isArray(contractorFormReports) ? contractorFormReports.slice() : [];
+            var keys = {};
+            existing.forEach(function (report) {
+              var key = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+              keys[key] = true;
+            });
+
+            uploadedFiles.forEach(function (report) {
+              var reportKey = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+              if (keys[reportKey]) {
+                return;
+              }
+              keys[reportKey] = true;
+              existing.push(report);
+            });
+
+            setContractorFormReports(existing);
+          }
+
+          contractorDocumentScanInput.value = "";
+        });
+      }
+
+      if (contractorUploadInput) {
+        contractorUploadInput.addEventListener("change", function () {
+          var selectedFiles = Array.prototype.slice.call(contractorUploadInput.files || []);
+          pendingUploadFiles = [];
+          rejectedUploadFiles = [];
+
+          selectedFiles.forEach(function (selectedFile) {
+            pendingUploadFiles.push(selectedFile);
+          });
+
+          updateUploadSelectionState();
+        });
+      }
+
+      if (scanUploadBtn) {
+        scanUploadBtn.addEventListener("click", function () {
+          if (!pendingUploadFiles || pendingUploadFiles.length === 0) {
+            alert("Select files first before scanning.");
+            return;
+          }
+
+          copyUploadedFilesContent(pendingUploadFiles).then(function (copyResult) {
+            if (copyResult && copyResult.message) {
+              alert(copyResult.message);
+            }
+
+            if (!contractorsTableBody || contractorsTableBody.querySelectorAll("[data-contractor-row='1']").length === 0) {
+              alert("No contractors found. Add contractors first before scanning.");
+              return;
+            }
+
+            var scanData = buildScanMatches(pendingUploadFiles);
+            if (!scanData || scanData.totalFiles === 0) {
+              alert("No files available to scan.");
+              return;
+            }
+
+            if (scanData.matchedItems.length === 0) {
+              alert("Scan finished, but no files matched any contractor company name.");
+              return;
+            }
+
+            pendingScanMatches = scanData;
+            renderScanResults(scanData);
+            openUploadScanModal();
+          }).catch(function () {
+            alert("Scan failed while copying file content.");
+          });
+        });
+      }
+
       if (modal) {
         modal.addEventListener("click", function (event) {
           if (event.target === modal) {
@@ -2409,12 +4327,48 @@
         });
       }
 
+      if (uploadScanModal) {
+        uploadScanModal.addEventListener("click", function (event) {
+          if (event.target === uploadScanModal) {
+            closeUploadScanModal();
+          }
+        });
+      }
+
+      if (reportPreviewModal) {
+        reportPreviewModal.addEventListener("click", function (event) {
+          if (event.target === reportPreviewModal) {
+            closeReportPreviewModal();
+          }
+        });
+      }
+
       if (closeDetailsBtn) {
         closeDetailsBtn.addEventListener("click", closeContractorDetails);
       }
 
       if (closeDetailsFooterBtn) {
         closeDetailsFooterBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (closeUploadScanModalBtn) {
+        closeUploadScanModalBtn.addEventListener("click", closeUploadScanModal);
+      }
+
+      if (cancelUploadScanBtn) {
+        cancelUploadScanBtn.addEventListener("click", closeUploadScanModal);
+      }
+
+      if (confirmUploadScanBtn) {
+        confirmUploadScanBtn.addEventListener("click", commitScannedReports);
+      }
+
+      if (closeReportPreviewModalBtn) {
+        closeReportPreviewModalBtn.addEventListener("click", closeReportPreviewModal);
+      }
+
+      if (closeReportPreviewFooterBtn) {
+        closeReportPreviewFooterBtn.addEventListener("click", closeReportPreviewModal);
       }
 
       if (detailTabButtons) {
@@ -2431,6 +4385,8 @@
 
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
+          closeReportPreviewModal();
+          closeUploadScanModal();
           closeContractorDetails();
           closeContractorModal();
         }
@@ -2439,6 +4395,7 @@
       loadContractorsFromStorage();
       hydrateExistingContractorRows();
       refreshContractorCount();
+      updateUploadSelectionState();
     });
   </script>
 </body>

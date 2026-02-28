@@ -266,15 +266,15 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
+            width: 100px;
+            height: 100px;
             background: transparent;
             border: 3px solid #3c3c3c;
             border-radius: 50%;
             text-align: center;
-            line-height: 70px;
+            line-height: 100px;
             font-family: sans-serif;
-            font-size: 12px;
+            font-size: 15px;
             color: #00eaff;
             text-transform: uppercase;
             box-shadow: 0 0 20px rgba(0, 0, 0, .5);
@@ -297,10 +297,10 @@
         .loader-circle-9 span {
             display: block;
             position: absolute;
-            top: calc(50% - 2px);
+            top: calc(50% - 3.5px);
             left: 50%;
             width: 50%;
-            height: 4px;
+            height: 6px;
             background: transparent;
             transform-origin: left;
             animation: animate 2s linear infinite;
@@ -309,12 +309,12 @@
         .loader-circle-9 span:before {
             content: '';
             position: absolute;
-            width: 16px;
-            height: 16px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             background: #00eaff;
-            top: -6px;
-            right: -8px;
+            top: -8.5px;
+            right: -11px;
             box-shadow: 0 0 20px #00eaff;
         }
 
@@ -1219,6 +1219,8 @@
             var navLoadingMinTimeoutId = null;
             var navLoadingShownAt = 0;
             var NAV_LOADING_MIN_VISIBLE_MS = 1400;
+            var NAV_RELOAD_LOADER_KEY = "peo.home.reload_loader";
+            var NAV_RELOAD_LOADER_EXTRA_MS = 180;
             var LAST_SIDEBAR_VIEW_KEY = "peo.home.last_sidebar_view";
             var VIEW_KEYS = {
                 DASHBOARD: "dashboard",
@@ -1297,6 +1299,43 @@
                 } catch (error) {
                     return null;
                 }
+            }
+
+            function markReloadLoaderRequest() {
+                try {
+                    window.sessionStorage.setItem(NAV_RELOAD_LOADER_KEY, "1");
+                } catch (error) {
+                    // Ignore browser storage errors.
+                }
+            }
+
+            function consumeReloadLoaderRequest() {
+                try {
+                    var requested = window.sessionStorage.getItem(NAV_RELOAD_LOADER_KEY) === "1";
+                    if (requested) {
+                        window.sessionStorage.removeItem(NAV_RELOAD_LOADER_KEY);
+                    }
+                    return requested;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            function isReloadNavigation() {
+                try {
+                    var navEntries = window.performance && window.performance.getEntriesByType
+                        ? window.performance.getEntriesByType("navigation")
+                        : [];
+                    if (navEntries && navEntries.length) {
+                        return navEntries[0].type === "reload";
+                    }
+                    if (window.performance && window.performance.navigation) {
+                        return window.performance.navigation.type === 1;
+                    }
+                } catch (error) {
+                    // Ignore browser performance API errors.
+                }
+                return false;
             }
 
             function setActiveDataTab(activeTab) {
@@ -1510,6 +1549,26 @@
                     projectsPanel.classList.remove("hidden");
                 }
             }
+
+            var shouldShowReloadLoader = consumeReloadLoaderRequest() || isReloadNavigation();
+            if (shouldShowReloadLoader) {
+                showNavLoading();
+                window.addEventListener("load", function () {
+                    window.setTimeout(function () {
+                        hideNavLoading();
+                    }, NAV_RELOAD_LOADER_EXTRA_MS);
+                }, { once: true });
+            }
+
+            window.addEventListener("keydown", function (event) {
+                if (event.key === "F5" || ((event.ctrlKey || event.metaKey) && (event.key === "r" || event.key === "R"))) {
+                    markReloadLoaderRequest();
+                }
+            });
+
+            window.addEventListener("beforeunload", function () {
+                showNavLoading();
+            });
 
             function runAfterNavTransition(callback, useDelay) {
                 if (!callback) {
