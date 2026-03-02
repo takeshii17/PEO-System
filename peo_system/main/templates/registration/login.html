@@ -56,10 +56,12 @@
         .visual-pane {
             position: relative;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: center;
             padding: 32px;
             color: #f4f9ff;
             background: rgba(6, 30, 54, 0.34);
+            text-align: center;
         }
 
         .visual-copy h1 {
@@ -69,7 +71,7 @@
         }
 
         .visual-copy p {
-            margin: 12px 0 0;
+            margin: 12px auto 0;
             color: #d5e5f5;
             font-size: 1.02rem;
             line-height: 1.45;
@@ -216,6 +218,83 @@
                 padding: 22px 18px;
             }
         }
+
+        .login-loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #202628;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 3000;
+        }
+
+        .login-loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .loader-circle-2 {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            display: inline-block;
+        }
+
+        .loader-circle-2:before,
+        .loader-circle-2:after {
+            content: "";
+            display: block;
+            position: absolute;
+            border-width: 5px;
+            border-style: solid;
+            border-radius: 50%;
+        }
+
+        .loader-circle-2:before {
+            width: 70px;
+            height: 70px;
+            border-bottom-color: #009688;
+            border-right-color: #009688;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            animation: loader-circle-2-animation-2 1s linear infinite;
+        }
+
+        .loader-circle-2:after {
+            width: 40px;
+            height: 40px;
+            border-bottom-color: #e91e63;
+            border-right-color: #e91e63;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            top: 22%;
+            left: 22%;
+            animation: loader-circle-2-animation 0.85s linear infinite;
+        }
+
+        @keyframes loader-circle-2-animation-2 {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes loader-circle-2-animation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -257,6 +336,30 @@
             </div>
         </div>
     </section>
+    <div class="login-loading-overlay" id="loginLoadingOverlay" aria-hidden="true">
+        <div class="loader-circle-2" aria-label="Loading" role="status"></div>
+    </div>
+    <script>
+        (function () {
+            var form = document.querySelector('form[action="{% url "login" %}"]');
+            var overlay = document.getElementById("loginLoadingOverlay");
+            var submitButton = form ? form.querySelector('button[type="submit"]') : null;
+
+            if (!form || !overlay) {
+                return;
+            }
+
+            form.addEventListener("submit", function () {
+                overlay.classList.add("show");
+                overlay.setAttribute("aria-hidden", "false");
+
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Signing in...";
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
 
