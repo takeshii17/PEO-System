@@ -5540,7 +5540,7 @@
 
       if (detailCriteriaStars && detailCriteriaStars.length > 0) {
         detailCriteriaStars.forEach(function (starBtn) {
-          starBtn.addEventListener("click", function () {
+          starBtn.addEventListener("click", function (event) {
             var criteriaKey = starBtn.getAttribute("data-rating-criteria") || "";
             if (PERFORMANCE_CRITERIA_KEYS.indexOf(criteriaKey) === -1) {
               return;
@@ -5549,7 +5549,18 @@
             if (starValue < 1 || starValue > 5) {
               return;
             }
-            queueCriteriaRatingSelection(criteriaKey, starValue);
+
+            var selectedRating = starValue;
+            var rect = starBtn.getBoundingClientRect();
+            var clickX = event && isFinite(event.clientX) ? (event.clientX - rect.left) : NaN;
+            if (isFinite(clickX)) {
+              selectedRating = clickX <= rect.width / 2 ? starValue - 0.5 : starValue;
+            }
+            if (selectedRating < 0.5) {
+              selectedRating = 0.5;
+            }
+
+            queueCriteriaRatingSelection(criteriaKey, selectedRating);
           });
         });
       }
