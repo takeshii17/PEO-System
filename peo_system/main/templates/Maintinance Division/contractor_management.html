@@ -55,6 +55,13 @@
       color: #162739;
     }
 
+    .header-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
     .btn-add {
       border: 1px solid #0f375d;
       border-radius: 12px;
@@ -67,6 +74,77 @@
       align-items: center;
       gap: 8px;
       cursor: pointer;
+    }
+
+    .btn-upload {
+      border: 1px solid #0f375d;
+      border-radius: 12px;
+      background: #f2f7fc;
+      color: #0f375d;
+      padding: 9px 14px;
+      font: inherit;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .btn-upload:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    .upload-selection-text {
+      margin: 0;
+      font-size: 0.83rem;
+      color: #5e748d;
+      max-width: 260px;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    .scan-results {
+      display: grid;
+      gap: 10px;
+      max-height: 44vh;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .scan-result-card {
+      border: 1px solid #d5deea;
+      border-radius: 11px;
+      background: #f9fcff;
+      padding: 10px 12px;
+    }
+
+    .scan-result-card h4 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      color: #113253;
+    }
+
+    .scan-result-meta {
+      margin: 0 0 6px;
+      font-size: 0.86rem;
+      color: #4f6680;
+    }
+
+    .scan-result-files {
+      margin: 0;
+      padding-left: 18px;
+      color: #24425f;
+      font-size: 0.88rem;
+      display: grid;
+      gap: 2px;
+    }
+
+    .scan-result-empty {
+      margin: 0;
+      color: #5e748d;
+      font-size: 0.9rem;
     }
 
     .stats-grid {
@@ -213,22 +291,84 @@
       overflow-x: auto;
       border: 1px solid #d2d9e1;
       border-radius: 12px;
-      background: #fff;
+      background: #f4f7fb;
+      padding: 10px;
     }
 
     .contractor-table {
       width: 100%;
-      border-collapse: collapse;
-      min-width: 980px;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 0;
     }
 
-    .contractor-table th,
-    .contractor-table td {
-      text-align: left;
-      padding: 11px 12px;
-      border-bottom: 1px solid #e0e5eb;
+    .contractor-table thead {
+      display: none;
+    }
+
+    .contractor-table tbody {
+      display: block;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(160px, 1fr));
+      gap: 10px 14px;
+      border: 1px solid #d8e0ea;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td {
+      border: 0;
+      padding: 0;
       font-size: 0.95rem;
-      vertical-align: top;
+      min-height: 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+      color: #233d58;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td::before {
+      content: attr(data-label);
+      font-size: 0.75rem;
+      color: #637a92;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.company-cell {
+      grid-column: 1 / -1;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #0f2a46;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.company-cell .company-subline {
+      font-size: 0.86rem;
+      font-weight: 500;
+      color: #5f748b;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell {
+      grid-column: 1 / -1;
+      align-items: flex-end;
+    }
+
+    .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell::before {
+      content: "";
+    }
+
+    .contractor-table .empty-row {
+      display: table-row;
     }
 
     .contractor-table th {
@@ -243,11 +383,757 @@
       border-bottom: 0;
     }
 
-    .empty-row td {
+    .empty-row {
       text-align: center;
       color: #637a92;
       padding: 28px 16px;
       font-size: 1rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 12px;
+      background: #f8fbff;
+    }
+
+    .company-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .company-card {
+      border: 1px solid #d3ddea;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      box-shadow: var(--shadow);
+      min-height: 102px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+    }
+
+    .company-card:hover {
+      transform: translateY(-1px);
+      border-color: #a8bed9;
+      box-shadow: 0 4px 16px rgba(17, 47, 79, 0.12);
+    }
+
+    .company-card:focus-visible {
+      outline: 2px solid #0f4b89;
+      outline-offset: 2px;
+    }
+
+    .company-name {
+      color: #16304a;
+      font-size: 1.06rem;
+      font-weight: 700;
+      line-height: 1.4;
+      word-break: break-word;
+      flex: 1 1 auto;
+    }
+
+    .company-card-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+
+    .company-card-btn {
+      width: 40px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid #c8d2de;
+      background: #f4f7fb;
+      color: #2a3f56;
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.14s ease, border-color 0.14s ease;
+    }
+
+    .company-card-btn:hover {
+      background: #ecf2f9;
+      border-color: #b3c3d6;
+    }
+
+    .company-card-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .details-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #d5dfea;
+      border-radius: 12px;
+      background: #ecf2f8;
+      padding: 4px;
+    }
+
+    .details-tab {
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #24384f;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 7px 11px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .details-tab.is-active {
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(14, 34, 54, 0.14);
+    }
+
+    .details-status-row {
+      margin-top: 12px;
+    }
+
+    .details-status-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .details-status-chip-active {
+      background: #beeedb;
+      color: #0a7e4c;
+    }
+
+    .details-status-chip-blacklisted {
+      background: #f7dbe0;
+      color: #b4233f;
+    }
+
+    .details-status-chip-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .details-panel {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .details-panel.is-active {
+      display: block;
+    }
+
+    .details-two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .details-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .details-card h3 {
+      margin: 0;
+      font-size: 1.04rem;
+      color: #4f5e6f;
+      font-weight: 700;
+    }
+
+    .details-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .details-list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .details-list-row span {
+      color: #5f748b;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .details-list-row strong {
+      color: #1a2f46;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .details-contact-row {
+      justify-content: flex-start;
+      gap: 10px;
+    }
+
+    .details-contact-icon {
+      width: 18px;
+      min-width: 18px;
+      height: 18px;
+      color: #596f86;
+      display: inline-grid;
+      place-items: center;
+      font-size: 0.95rem;
+      line-height: 1;
+    }
+
+    .details-summary {
+      margin-top: 14px;
+    }
+
+    .details-contract-layout {
+      align-items: start;
+    }
+
+    .details-project-card h3 {
+      color: #1b2f46;
+      font-size: 1.15rem;
+    }
+
+    .project-board {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(260px, 1fr);
+      gap: 14px;
+    }
+
+    .project-main {
+      display: grid;
+      gap: 14px;
+    }
+
+    .project-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .project-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-card-head h3 {
+      margin: 0;
+      color: #0f2a46;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .project-subline {
+      margin: 6px 0 0;
+      color: #4f647c;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .project-gallery {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(130px, 0.65fr);
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .project-gallery-main,
+    .project-gallery-thumb {
+      border-radius: 10px;
+      border: 1px solid #d2dbe6;
+      background: #eef3f9;
+      overflow: hidden;
+      min-height: 150px;
+      display: block;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .project-gallery-thumbs {
+      display: grid;
+      gap: 10px;
+    }
+
+    .project-overview {
+      margin: 10px 0 0;
+      color: #1f3750;
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .project-side {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .project-side-card {
+      border: 1px solid #d8e1ec;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .project-side-card h4 {
+      margin: 0;
+      color: #4f5e6f;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .project-doc-list {
+      margin: 10px 0 0;
+      padding-left: 16px;
+      display: grid;
+      gap: 6px;
+      color: #1e3550;
+      font-size: 0.9rem;
+    }
+
+    .project-doc-list a {
+      color: #0f4a8a;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+      font-weight: 700;
+    }
+
+    .project-doc-list a:hover {
+      color: #0b3c71;
+    }
+
+    .report-details-list {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .report-details-item {
+      border: 1px solid #d6dfea;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px 10px;
+      display: grid;
+      gap: 3px;
+    }
+
+    .report-details-item strong {
+      color: #102a43;
+      font-size: 0.89rem;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .report-details-item span {
+      color: #4d6480;
+      font-size: 0.8rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .report-doc-link {
+      color: #0f4a8a;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      margin-top: 2px;
+      width: fit-content;
+      cursor: pointer;
+    }
+
+    .report-doc-link:hover {
+      color: #0b3c71;
+    }
+
+    .report-preview-shell {
+      border: 1px solid #d6deea;
+      border-radius: 12px;
+      background: #f8fbff;
+      padding: 10px;
+      min-height: 300px;
+      display: grid;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .report-preview-frame {
+      width: 100%;
+      min-height: 62vh;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    .report-preview-image {
+      width: 100%;
+      max-height: 65vh;
+      object-fit: contain;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+    }
+
+    .report-preview-text {
+      margin: 0;
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      max-height: 62vh;
+      overflow: auto;
+      color: #1b344e;
+      font-size: 0.86rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .report-preview-fallback {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      color: #5f748b;
+      font-size: 0.9rem;
+      padding: 12px;
+    }
+
+    .report-preview-excel {
+      border: 1px solid #d2dbe6;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px;
+      max-height: 65vh;
+      overflow: auto;
+    }
+
+    .report-preview-excel table {
+      width: max-content;
+      min-width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      color: #15324e;
+    }
+
+    .report-preview-excel td,
+    .report-preview-excel th {
+      border: 1px solid #d9e2ec;
+      padding: 6px 8px;
+      vertical-align: top;
+      white-space: nowrap;
+    }
+
+    .report-preview-excel th {
+      background: #f2f7fc;
+      font-weight: 700;
+      color: #0f2a46;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .report-preview-excel-meta {
+      margin: 0 0 8px;
+      color: #4d6480;
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .report-details-empty {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      color: #5f748b;
+      font-size: 0.88rem;
+      padding: 10px;
+    }
+
+    .project-location {
+      margin-top: 10px;
+      border: 1px solid #d8e1ec;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 10px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .project-location strong {
+      color: #0f2a46;
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .project-location span {
+      color: #5d7188;
+      font-size: 0.84rem;
+      font-weight: 600;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .summary-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .summary-metric {
+      border: 1px solid #dbe4ee;
+      border-radius: 12px;
+      background: #fff;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .summary-metric strong {
+      display: block;
+      color: #111f2e;
+      font-size: 2rem;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .summary-metric span {
+      display: block;
+      margin-top: 6px;
+      color: #566a80;
+      font-size: 0.88rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .details-empty {
+      margin: 12px 0 0;
+      color: #5f748b;
+      font-size: 0.95rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 10px;
+      background: #f7fbff;
+      padding: 12px;
+    }
+
+    .contract-history-card {
+      margin-top: 14px;
+    }
+
+    .contract-history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .contract-history-header h3 {
+      margin: 0;
+      color: #0f2a46;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .contract-history-total {
+      color: #3d556f;
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .contract-history-total strong {
+      color: #102a43;
+      font-weight: 800;
+    }
+
+    .contract-history-cards {
+      margin-top: 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .contract-history-item {
+      border: 1px solid #d7e0ea;
+      border-radius: 16px;
+      background: #ffffff;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .contract-history-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .contract-history-title {
+      margin: 0;
+      color: #102a43;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.45;
+      max-width: 90%;
+      white-space: pre-line;
+    }
+
+    .contract-history-status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .contract-history-status-completed {
+      background: #0f3a66;
+      color: #ffffff;
+    }
+
+    .contract-history-status-ongoing {
+      background: #f1f6fb;
+      border: 1px solid #cfd9e5;
+      color: #0f2a46;
+    }
+
+    .contract-history-status-pending {
+      background: #ffefd2;
+      color: #9a5a00;
+    }
+
+    .contract-history-status-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .contract-history-code {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #ced8e4;
+      border-radius: 999px;
+      background: #f7faff;
+      color: #1a3149;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+    }
+
+    .contract-history-location {
+      margin-top: 10px;
+      color: #516881;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .contract-history-meta {
+      margin-top: 10px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: #102a43;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .contract-history-empty {
+      margin: 0;
+      color: #5f748b;
+      font-size: 0.95rem;
+      border: 1px dashed #ced8e4;
+      border-radius: 12px;
+      background: #f7fbff;
+      padding: 12px;
+    }
+
+    .project-status-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .project-status-ongoing {
+      background: #d7e9ff;
+      color: #0d4a92;
+    }
+
+    .project-status-completed {
+      background: #d7f3e1;
+      color: #0f7c3a;
+    }
+
+    .project-status-pending {
+      background: #ffefd2;
+      color: #9a5a00;
+    }
+
+    .project-status-neutral {
+      background: #e8edf4;
+      color: #3d546f;
+    }
+
+    .details-image-wrap {
+      margin-top: 10px;
+      border: 1px solid #d8e1ec;
+      border-radius: 10px;
+      background: #f8fbff;
+      padding: 10px;
+    }
+
+    .details-image-wrap img {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #d2dbe6;
+      display: block;
+    }
+
+    .details-no-image {
+      margin: 0;
+      color: #5f748b;
+      font-size: 0.9rem;
     }
 
     .badge {
@@ -324,7 +1210,9 @@
     }
 
     .contractor-modal {
-      width: min(760px, 100%);
+      width: min(860px, 100%);
+      max-height: min(92vh, 920px);
+      overflow-y: auto;
       background: #fff;
       border-radius: 16px;
       border: 1px solid #d7dde5;
@@ -354,19 +1242,29 @@
     .contractor-close {
       width: 34px;
       height: 34px;
-      border: 1px solid #cdd5de;
+      border: 0;
       border-radius: 10px;
-      background: #f8fafc;
-      color: #24364d;
-      font-size: 1.4rem;
+      background: transparent;
+      color: #4b5f76;
+      font-size: 1.6rem;
       line-height: 1;
       cursor: pointer;
     }
 
     .contractor-form {
       display: grid;
-      gap: 10px;
+      gap: 12px;
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .form-section-title {
+      grid-column: 1 / -1;
+      margin: 6px 0 0;
+      padding-top: 10px;
+      border-top: 1px solid #dce4ee;
+      color: #162d47;
+      font-size: 1.04rem;
+      font-weight: 700;
     }
 
     .form-field {
@@ -379,8 +1277,8 @@
     }
 
     .form-field span {
-      color: #304862;
-      font-size: 0.9rem;
+      color: #1d3550;
+      font-size: 0.95rem;
       font-weight: 600;
     }
 
@@ -397,9 +1295,55 @@
     }
 
     .form-field textarea {
-      min-height: 90px;
+      min-height: 88px;
       padding: 10px;
       resize: vertical;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      outline: none;
+      border-color: #0f375d;
+      box-shadow: 0 0 0 2px rgba(15, 55, 93, 0.12);
+    }
+
+    .scan-upload-field {
+      border: 1px solid #d5deea;
+      border-radius: 12px;
+      background: #f7fbff;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .scan-upload-list {
+      display: grid;
+      gap: 6px;
+      max-height: 170px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .scan-upload-item {
+      border: 1px solid #d8e1ec;
+      border-radius: 9px;
+      background: #fff;
+      padding: 7px 9px;
+      color: #1e3752;
+      font-size: 0.86rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .scan-upload-empty {
+      margin: 0;
+      border: 1px dashed #ced8e4;
+      border-radius: 9px;
+      background: #fbfdff;
+      color: #5f748b;
+      font-size: 0.86rem;
+      padding: 9px;
     }
 
     .form-actions {
@@ -407,7 +1351,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 2px;
     }
 
     .form-btn {
@@ -437,8 +1381,59 @@
         justify-content: center;
       }
 
+      .btn-upload {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .header-actions {
+        width: 100%;
+      }
+
       .contractor-form {
         grid-template-columns: 1fr;
+      }
+
+      .company-cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .company-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .company-card-actions {
+        justify-content: flex-start;
+      }
+
+      .details-two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .project-board {
+        grid-template-columns: 1fr;
+      }
+
+      .project-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .project-gallery-thumbs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contractor-table tbody tr[data-contractor-row="1"] {
+        grid-template-columns: 1fr;
+      }
+
+      .contractor-table tbody tr[data-contractor-row="1"] td.company-cell,
+      .contractor-table tbody tr[data-contractor-row="1"] td.actions-cell {
+        grid-column: auto;
       }
 
       .form-actions {
@@ -449,13 +1444,25 @@
         flex: 1;
       }
     }
+
+    @media (max-width: 560px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body{% if request.GET.embedded %} class="embedded-maintenance-view"{% endif %}>
   <main class="contractor-page">
     <header class="contractor-header">
       <h1 class="contractor-title">Contractor Management</h1>
-      <button type="button" class="btn-add" id="openContractorModal"><span>+</span><span>Add Contractor</span></button>
+      <div class="header-actions">
+        <button type="button" class="btn-add" id="openContractorModal"><span>+</span><span>Add Contractor</span></button>
+        <label class="btn-upload" for="contractorUploadInput"><span>&#8682;</span><span>Upload Files</span></label>
+        <input id="contractorUploadInput" type="file" multiple hidden accept="*/*">
+        <button type="button" class="btn-upload" id="scanUploadBtn" disabled><span>&#128269;</span><span>Scan Folder</span></button>
+        <p class="upload-selection-text" id="uploadSelectionText">No files selected.</p>
+      </div>
     </header>
 
     <section class="stats-grid" aria-label="Contractor summary cards">
@@ -515,26 +1522,8 @@
       </div>
 
       <div class="table-wrap">
-        <table class="contractor-table">
-          <thead>
-            <tr>
-              <th>Company Name</th>
-              <th>TIN</th>
-              <th>PhilGEPS</th>
-              <th>PCAB Category</th>
-              <th>Status</th>
-              <th>Contact Person</th>
-              <th>Mobile</th>
-              <th>Rating</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="contractorsTableBody">
-            <tr id="contractorsEmptyRow" class="empty-row">
-              <td colspan="9">No contractors found</td>
-            </tr>
-          </tbody>
-        </table>
+        <div id="contractorsTableBody" class="company-cards-grid">
+        </div>
       </div>
     </section>
   </main>
@@ -550,10 +1539,17 @@
       </div>
 
       <form class="contractor-form" id="contractorForm">
-        <label class="form-field full">
+        <label class="form-field">
           <span>Company Name *</span>
           <input id="contractorCompanyName" type="text" placeholder="Full company name" required>
         </label>
+
+        <label class="form-field">
+          <span>Trade Name</span>
+          <input id="contractorTradeName" type="text" placeholder="DBA / Trade name">
+        </label>
+
+        <h3 class="form-section-title">Registration Details</h3>
 
         <label class="form-field">
           <span>TIN</span>
@@ -563,6 +1559,11 @@
         <label class="form-field">
           <span>PhilGEPS Number</span>
           <input id="contractorPhilgeps" type="text" placeholder="PhilGEPS registration">
+        </label>
+
+        <label class="form-field">
+          <span>PCAB License</span>
+          <input id="contractorPcabLicense" type="text" placeholder="License number">
         </label>
 
         <label class="form-field">
@@ -579,6 +1580,33 @@
         </label>
 
         <label class="form-field">
+          <span>License Expiry</span>
+          <input id="contractorLicenseExpiry" type="date">
+        </label>
+
+        <label class="form-field full">
+          <span>PCAB Classification</span>
+          <input id="contractorPcabClassification" type="text" placeholder="e.g., General Engineering, General Building">
+        </label>
+
+        <h3 class="form-section-title">Contact Information</h3>
+
+        <label class="form-field full">
+          <span>Address</span>
+          <input id="contractorAddress" type="text" placeholder="Street address">
+        </label>
+
+        <label class="form-field">
+          <span>City/Municipality</span>
+          <input id="contractorCity" type="text">
+        </label>
+
+        <label class="form-field">
+          <span>Province</span>
+          <input id="contractorProvince" type="text">
+        </label>
+
+        <label class="form-field">
           <span>Contact Person</span>
           <input id="contractorContactPerson" type="text" placeholder="Contact person name">
         </label>
@@ -589,29 +1617,34 @@
         </label>
 
         <label class="form-field">
+          <span>Phone</span>
+          <input id="contractorPhone" type="text" placeholder="Landline number">
+        </label>
+
+        <label class="form-field">
           <span>Mobile</span>
           <input id="contractorMobile" type="text" placeholder="e.g., 09171234567">
-        </label>
-
-        <label class="form-field">
-          <span>Status</span>
-          <select id="contractorStatus">
-            <option value="Active" selected>Active</option>
-            <option value="Blacklisted">Blacklisted</option>
-            <option value="Suspended">Suspended</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </label>
-
-        <label class="form-field">
-          <span>Rating</span>
-          <input id="contractorRating" type="number" min="0" max="5" step="0.1" placeholder="0.0 to 5.0">
         </label>
 
         <label class="form-field full">
           <span>Remarks</span>
           <textarea id="contractorRemarks"></textarea>
         </label>
+
+        <h3 class="form-section-title">Document Scan</h3>
+
+        <label class="form-field full">
+          <span>Attach Scanned Documents (Any file type)</span>
+          <div class="scan-upload-field">
+            <input id="contractorDocumentScanInput" type="file" multiple accept="*/*">
+            <div class="scan-upload-list" id="contractorDocumentScanList">
+              <p class="scan-upload-empty" id="contractorDocumentScanEmpty">No document scan selected yet.</p>
+            </div>
+          </div>
+        </label>
+
+        <input id="contractorStatus" type="hidden" value="Active">
+        <input id="contractorRating" type="hidden" value="">
 
         <div class="form-actions">
           <button type="button" class="form-btn" id="cancelContractorModal">Cancel</button>
@@ -621,6 +1654,208 @@
     </div>
   </div>
 
+  <div class="contractor-modal-overlay" id="contractorDetailsModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="contractorDetailsTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="contractorDetailsTitle">Contractor Details</h2>
+          <p>Click a company in the list to view complete information.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeContractorDetails" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="details-tabs" role="tablist" aria-label="Contractor details sections">
+          <button type="button" class="details-tab is-active" data-details-tab="information" aria-selected="true">Information</button>
+          <button type="button" class="details-tab" data-details-tab="contract" aria-selected="false" id="detailsContractTab">Contract (0)</button>
+          <button type="button" class="details-tab" data-details-tab="project" aria-selected="false">Project</button>
+          <button type="button" class="details-tab" data-details-tab="ratings" aria-selected="false" id="detailsRatingsTab">Ratings (0)</button>
+        </div>
+
+        <div class="details-status-row">
+          <span id="detailStatusChip" class="details-status-chip details-status-chip-active">Active</span>
+        </div>
+
+        <section class="details-panel is-active" data-details-panel="information">
+          <div class="details-two-col">
+            <article class="details-card">
+              <h3>Registration</h3>
+              <div class="details-list">
+                <div class="details-list-row"><span>TIN:</span><strong id="detailTin">-</strong></div>
+                <div class="details-list-row"><span>PhilGEPS:</span><strong id="detailPhilgeps">-</strong></div>
+                <div class="details-list-row"><span>PCAB License:</span><strong id="detailPcabLicense">-</strong></div>
+                <div class="details-list-row"><span>Classification:</span><strong id="detailPcabClassification">-</strong></div>
+                <div class="details-list-row"><span>License Expiry:</span><strong id="detailLicenseExpiry">-</strong></div>
+              </div>
+            </article>
+
+            <article class="details-card">
+              <h3>Contact</h3>
+              <div class="details-list">
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128100;</span><strong id="detailContact">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#9993;</span><strong id="detailEmail">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#9742;</span><strong id="detailPhone">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128241;</span><strong id="detailMobile">-</strong></div>
+                <div class="details-list-row details-contact-row"><span class="details-contact-icon">&#128205;</span><strong id="detailLocation">-</strong></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="details-card details-summary">
+            <h3>Contract Summary</h3>
+            <div class="summary-grid">
+              <div class="summary-metric"><strong id="detailSummaryTotalContracts">0</strong><span>Total Contracts</span></div>
+              <div class="summary-metric"><strong id="detailSummaryCompleted">0</strong><span>Completed</span></div>
+              <div class="summary-metric"><strong id="detailSummaryOngoing">0</strong><span>Ongoing</span></div>
+              <div class="summary-metric"><strong id="detailSummaryTotalValue">₱0</strong><span>Total Value</span></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="details-panel" data-details-panel="contract">
+          <div class="details-two-col details-contract-layout">
+            <article class="details-card">
+              <h3>Contract Record</h3>
+              <div class="details-list">
+                <div class="details-list-row"><span>Company:</span><strong id="detailCompanyName">-</strong></div>
+                <div class="details-list-row"><span>Trade Name:</span><strong id="detailTradeName">-</strong></div>
+                <div class="details-list-row"><span>Status:</span><strong><span id="detailProjectStatus" class="project-status-pill project-status-neutral">-</span></strong></div>
+                <div class="details-list-row"><span>PCAB Category:</span><strong id="detailPcab">-</strong></div>
+                <div class="details-list-row"><span>Remarks:</span><strong id="detailRemarks">-</strong></div>
+              </div>
+            </article>
+
+            <article class="details-card">
+              <h3>Contract Summary</h3>
+              <div class="summary-grid">
+                <div class="summary-metric"><strong id="detailContractTotal">0</strong><span>Total Contracts</span></div>
+                <div class="summary-metric"><strong id="detailContractCompleted">0</strong><span>Completed</span></div>
+                <div class="summary-metric"><strong id="detailContractOngoing">0</strong><span>Ongoing</span></div>
+                <div class="summary-metric"><strong id="detailContractValue">P0</strong><span>Total Value</span></div>
+              </div>
+            </article>
+          </div>
+
+          <article class="details-card contract-history-card">
+            <div class="contract-history-header">
+              <h3>Contract History</h3>
+              <p class="contract-history-total">Total Cost: <strong id="detailHistoryTotalCost">P0</strong></p>
+            </div>
+            <div class="contract-history-cards" id="detailHistoryCards">
+              <p class="contract-history-empty" id="detailHistoryEmpty">No contract history records yet.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="details-panel" data-details-panel="project">
+          <div class="project-board">
+            <div class="project-main">
+              <article class="project-card">
+                <div class="project-card-head">
+                  <h3 id="detailProjectName">-</h3>
+                  <span id="detailProjectStatusBadge" class="project-status-pill project-status-neutral">-</span>
+                </div>
+                <p class="project-subline" id="detailProjectPanelLocation">-</p>
+                <div class="project-gallery">
+                  <img id="detailProjectImage" class="project-gallery-main" src="" alt="Project image" hidden>
+                  <div class="project-gallery-thumbs">
+                    <img id="detailProjectImageThumbOne" class="project-gallery-thumb" src="" alt="Project thumbnail" hidden>
+                    <img id="detailProjectImageThumbTwo" class="project-gallery-thumb" src="" alt="Project thumbnail" hidden>
+                  </div>
+                </div>
+                <p class="details-no-image" id="detailProjectNoImage">No project image provided.</p>
+              </article>
+
+              <article class="project-card">
+                <h3>Detailed Overview</h3>
+                <p class="project-overview" id="detailProjectOverview">No project overview available.</p>
+              </article>
+            </div>
+
+            <aside class="project-side">
+              <article class="project-side-card">
+                <h4>Project Documents</h4>
+                <ul class="project-doc-list">
+                  <li id="detailDocPrimary">Project document not available</li>
+                  <li id="detailDocSecondary">No additional file</li>
+                </ul>
+                <div class="report-details-list" id="detailReportDetails">
+                  <p class="report-details-empty" id="detailReportDetailsEmpty">No scanned report details yet.</p>
+                </div>
+              </article>
+
+              <article class="project-side-card">
+                <h4>Site Location</h4>
+                <div class="project-location">
+                  <strong id="detailProjectAddress">-</strong>
+                  <span id="detailProjectCityProvince">-</span>
+                </div>
+              </article>
+            </aside>
+          </div>
+        </section>
+
+        <section class="details-panel" data-details-panel="ratings">
+          <article class="details-card">
+            <h3>Ratings</h3>
+            <div class="details-list">
+              <div class="details-list-row"><span>Current Rating:</span><strong id="detailRatingValue">-</strong></div>
+            </div>
+            <p class="details-empty" id="detailRatingsEmpty">No ratings yet.</p>
+          </article>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="closeContractorDetailsFooter">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contractor-modal-overlay" id="uploadScanModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="uploadScanTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="uploadScanTitle">Scan Results</h2>
+          <p>Review matched files per company, then confirm to upload into contractor reports.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeUploadScanModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="scan-results" id="uploadScanResults"></div>
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="cancelUploadScanBtn">Cancel</button>
+          <button type="button" class="form-btn form-submit" id="confirmUploadScanBtn">Confirm Upload</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contractor-modal-overlay" id="reportPreviewModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="reportPreviewTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="reportPreviewTitle">Document Preview</h2>
+          <p>Preview scanned document without automatic download.</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeReportPreviewModal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="report-preview-shell">
+          <iframe id="reportPreviewFrame" class="report-preview-frame" src="about:blank" title="Document preview" hidden></iframe>
+          <img id="reportPreviewImage" class="report-preview-image" alt="Document preview" hidden>
+          <pre id="reportPreviewText" class="report-preview-text" hidden></pre>
+          <div id="reportPreviewExcel" class="report-preview-excel" hidden></div>
+          <p id="reportPreviewFallback" class="report-preview-fallback" hidden>Preview is not available for this file type.</p>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="form-btn" id="closeReportPreviewFooter">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var modal = document.getElementById("contractorModal");
@@ -629,20 +1864,131 @@
       var cancelModalBtn = document.getElementById("cancelContractorModal");
       var contractorForm = document.getElementById("contractorForm");
       var firstInput = document.getElementById("contractorCompanyName");
+      var contractorTradeNameInput = document.getElementById("contractorTradeName");
       var contractorTinInput = document.getElementById("contractorTin");
       var contractorPhilgepsInput = document.getElementById("contractorPhilgeps");
+      var contractorPcabLicenseInput = document.getElementById("contractorPcabLicense");
       var contractorPcabInput = document.getElementById("contractorPcab");
+      var contractorLicenseExpiryInput = document.getElementById("contractorLicenseExpiry");
+      var contractorPcabClassificationInput = document.getElementById("contractorPcabClassification");
+      var contractorAddressInput = document.getElementById("contractorAddress");
+      var contractorCityInput = document.getElementById("contractorCity");
+      var contractorProvinceInput = document.getElementById("contractorProvince");
       var contractorContactInput = document.getElementById("contractorContactPerson");
+      var contractorEmailInput = document.getElementById("contractorEmail");
+      var contractorPhoneInput = document.getElementById("contractorPhone");
       var contractorMobileInput = document.getElementById("contractorMobile");
+      var contractorRemarksInput = document.getElementById("contractorRemarks");
+      var contractorProjectNameInput = document.getElementById("contractorProjectName");
+      var contractorProjectStatusInput = document.getElementById("contractorProjectStatus");
+      var contractorProjectImageInput = document.getElementById("contractorProjectImage");
       var contractorStatusInput = document.getElementById("contractorStatus");
       var contractorRatingInput = document.getElementById("contractorRating");
+      var contractorDocumentScanInput = document.getElementById("contractorDocumentScanInput");
+      var contractorDocumentScanList = document.getElementById("contractorDocumentScanList");
+      var contractorDocumentScanEmpty = document.getElementById("contractorDocumentScanEmpty");
+      var contractorUploadInput = document.getElementById("contractorUploadInput");
+      var scanUploadBtn = document.getElementById("scanUploadBtn");
+      var uploadSelectionText = document.getElementById("uploadSelectionText");
       var contractorCountText = document.getElementById("contractorCountText");
       var contractorsTableBody = document.getElementById("contractorsTableBody");
       var contractorsEmptyRow = document.getElementById("contractorsEmptyRow");
       var contractorModalTitle = document.getElementById("contractorModalTitle");
       var contractorSubmitBtn = document.getElementById("contractorSubmitBtn");
+      var detailsModal = document.getElementById("contractorDetailsModal");
+      var closeDetailsBtn = document.getElementById("closeContractorDetails");
+      var closeDetailsFooterBtn = document.getElementById("closeContractorDetailsFooter");
+      var detailTabButtons = detailsModal ? detailsModal.querySelectorAll("[data-details-tab]") : [];
+      var detailPanels = detailsModal ? detailsModal.querySelectorAll("[data-details-panel]") : [];
+      var detailsContractTab = document.getElementById("detailsContractTab");
+      var detailsRatingsTab = document.getElementById("detailsRatingsTab");
+      var detailStatusChip = document.getElementById("detailStatusChip");
+      var detailCompanyName = document.getElementById("detailCompanyName");
+      var detailTradeName = document.getElementById("detailTradeName");
+      var detailTin = document.getElementById("detailTin");
+      var detailPhilgeps = document.getElementById("detailPhilgeps");
+      var detailPcabLicense = document.getElementById("detailPcabLicense");
+      var detailPcab = document.getElementById("detailPcab");
+      var detailLicenseExpiry = document.getElementById("detailLicenseExpiry");
+      var detailPcabClassification = document.getElementById("detailPcabClassification");
+      var detailLocation = document.getElementById("detailLocation");
+      var detailContact = document.getElementById("detailContact");
+      var detailEmail = document.getElementById("detailEmail");
+      var detailPhone = document.getElementById("detailPhone");
+      var detailMobile = document.getElementById("detailMobile");
+      var detailRemarks = document.getElementById("detailRemarks");
+      var detailProjectName = document.getElementById("detailProjectName");
+      var detailProjectStatus = document.getElementById("detailProjectStatus");
+      var detailProjectStatusBadge = document.getElementById("detailProjectStatusBadge");
+      var detailProjectAddress = document.getElementById("detailProjectAddress");
+      var detailProjectCityProvince = document.getElementById("detailProjectCityProvince");
+      var detailProjectPanelLocation = document.getElementById("detailProjectPanelLocation");
+      var detailProjectOverview = document.getElementById("detailProjectOverview");
+      var detailProjectImage = document.getElementById("detailProjectImage");
+      var detailProjectImageThumbOne = document.getElementById("detailProjectImageThumbOne");
+      var detailProjectImageThumbTwo = document.getElementById("detailProjectImageThumbTwo");
+      var detailProjectNoImage = document.getElementById("detailProjectNoImage");
+      var detailDocPrimary = document.getElementById("detailDocPrimary");
+      var detailDocSecondary = document.getElementById("detailDocSecondary");
+      var detailReportDetails = document.getElementById("detailReportDetails");
+      var detailReportDetailsEmpty = document.getElementById("detailReportDetailsEmpty");
+      var detailContractTotal = document.getElementById("detailContractTotal");
+      var detailContractCompleted = document.getElementById("detailContractCompleted");
+      var detailContractOngoing = document.getElementById("detailContractOngoing");
+      var detailContractValue = document.getElementById("detailContractValue");
+      var detailHistoryTotalCost = document.getElementById("detailHistoryTotalCost");
+      var detailHistoryCards = document.getElementById("detailHistoryCards");
+      var detailHistoryEmpty = document.getElementById("detailHistoryEmpty");
+      var detailSummaryTotalContracts = document.getElementById("detailSummaryTotalContracts");
+      var detailSummaryCompleted = document.getElementById("detailSummaryCompleted");
+      var detailSummaryOngoing = document.getElementById("detailSummaryOngoing");
+      var detailSummaryTotalValue = document.getElementById("detailSummaryTotalValue");
+      var detailRatingValue = document.getElementById("detailRatingValue");
+      var detailRatingsEmpty = document.getElementById("detailRatingsEmpty");
+      var uploadScanModal = document.getElementById("uploadScanModal");
+      var uploadScanResults = document.getElementById("uploadScanResults");
+      var closeUploadScanModalBtn = document.getElementById("closeUploadScanModal");
+      var cancelUploadScanBtn = document.getElementById("cancelUploadScanBtn");
+      var confirmUploadScanBtn = document.getElementById("confirmUploadScanBtn");
+      var reportPreviewModal = document.getElementById("reportPreviewModal");
+      var reportPreviewTitle = document.getElementById("reportPreviewTitle");
+      var closeReportPreviewModalBtn = document.getElementById("closeReportPreviewModal");
+      var closeReportPreviewFooterBtn = document.getElementById("closeReportPreviewFooter");
+      var reportPreviewFrame = document.getElementById("reportPreviewFrame");
+      var reportPreviewImage = document.getElementById("reportPreviewImage");
+      var reportPreviewText = document.getElementById("reportPreviewText");
+      var reportPreviewExcel = document.getElementById("reportPreviewExcel");
+      var reportPreviewFallback = document.getElementById("reportPreviewFallback");
+      var PREVIEW_PROV_LOGO_URL = "{% static 'images/prov-logo.png' %}";
+      var PREVIEW_PEO_LOGO_URL = "{% static 'images/peo-logo.png' %}";
+      var CONTRACTORS_STORAGE_KEY = "peo_contractors_v1";
+      var REPORT_BLOB_DB_NAME = "peo_contractor_report_blobs_v1";
+      var REPORT_BLOB_STORE_NAME = "reports";
       var isEditingContractor = false;
       var editingContractorRow = null;
+      var contractorFormReports = [];
+      var runtimeReportUrlMap = {};
+      var runtimeReportFileMap = {};
+      var reportBlobDbPromise = null;
+      var pendingUploadFiles = [];
+      var rejectedUploadFiles = [];
+      var pendingScanMatches = null;
+      var ALLOWED_UPLOAD_EXTENSIONS = {
+        pdf: true,
+        xls: true,
+        xlsx: true,
+        csv: true,
+        doc: true,
+        docx: true,
+        ppt: true,
+        pptx: true,
+        txt: true,
+        rtf: true,
+        jpg: true,
+        jpeg: true,
+        png: true,
+        zip: true
+      };
 
       function statusBadgeClass(status) {
         if (status === "Active") {
@@ -659,7 +2005,7 @@
           return;
         }
 
-        var count = contractorsTableBody.querySelectorAll("tr[data-contractor-row='1']").length;
+        var count = contractorsTableBody.querySelectorAll("[data-contractor-row='1']").length;
         contractorCountText.textContent = String(count) + (count === 1 ? " contractor found" : " contractors found");
         if (contractorsEmptyRow) {
           contractorsEmptyRow.hidden = count > 0;
@@ -670,20 +2016,59 @@
         if (firstInput) {
           firstInput.value = "";
         }
+        if (contractorTradeNameInput) {
+          contractorTradeNameInput.value = "";
+        }
         if (contractorTinInput) {
           contractorTinInput.value = "";
         }
         if (contractorPhilgepsInput) {
           contractorPhilgepsInput.value = "";
         }
+        if (contractorPcabLicenseInput) {
+          contractorPcabLicenseInput.value = "";
+        }
         if (contractorPcabInput) {
           contractorPcabInput.value = "";
+        }
+        if (contractorLicenseExpiryInput) {
+          contractorLicenseExpiryInput.value = "";
+        }
+        if (contractorPcabClassificationInput) {
+          contractorPcabClassificationInput.value = "";
+        }
+        if (contractorAddressInput) {
+          contractorAddressInput.value = "";
+        }
+        if (contractorCityInput) {
+          contractorCityInput.value = "";
+        }
+        if (contractorProvinceInput) {
+          contractorProvinceInput.value = "";
         }
         if (contractorContactInput) {
           contractorContactInput.value = "";
         }
+        if (contractorEmailInput) {
+          contractorEmailInput.value = "";
+        }
+        if (contractorPhoneInput) {
+          contractorPhoneInput.value = "";
+        }
         if (contractorMobileInput) {
           contractorMobileInput.value = "";
+        }
+        if (contractorRemarksInput) {
+          contractorRemarksInput.value = "";
+        }
+        if (contractorProjectNameInput) {
+          contractorProjectNameInput.value = "";
+        }
+        if (contractorProjectStatusInput) {
+          contractorProjectStatusInput.value = "Ongoing";
+        }
+        if (contractorProjectImageInput) {
+          contractorProjectImageInput.value = "";
         }
         if (contractorStatusInput) {
           contractorStatusInput.value = "Active";
@@ -691,6 +2076,10 @@
         if (contractorRatingInput) {
           contractorRatingInput.value = "";
         }
+        if (contractorDocumentScanInput) {
+          contractorDocumentScanInput.value = "";
+        }
+        setContractorFormReports([]);
       }
 
       function getContractorPayloadFromForm() {
@@ -705,15 +2094,1206 @@
 
         return {
           company: firstInput ? firstInput.value.trim() : "",
+          tradeName: contractorTradeNameInput && contractorTradeNameInput.value.trim() ? contractorTradeNameInput.value.trim() : "",
           tin: contractorTinInput && contractorTinInput.value.trim() ? contractorTinInput.value.trim() : "-",
           philgeps: contractorPhilgepsInput && contractorPhilgepsInput.value.trim() ? contractorPhilgepsInput.value.trim() : "-",
+          pcabLicense: contractorPcabLicenseInput && contractorPcabLicenseInput.value.trim() ? contractorPcabLicenseInput.value.trim() : "",
           pcab: pcabLabel,
           pcabValue: pcabValue,
+          licenseExpiry: contractorLicenseExpiryInput && contractorLicenseExpiryInput.value ? contractorLicenseExpiryInput.value : "",
+          pcabClassification: contractorPcabClassificationInput && contractorPcabClassificationInput.value.trim() ? contractorPcabClassificationInput.value.trim() : "",
+          address: contractorAddressInput && contractorAddressInput.value.trim() ? contractorAddressInput.value.trim() : "",
+          city: contractorCityInput && contractorCityInput.value.trim() ? contractorCityInput.value.trim() : "",
+          province: contractorProvinceInput && contractorProvinceInput.value.trim() ? contractorProvinceInput.value.trim() : "",
           status: contractorStatusInput && contractorStatusInput.value ? contractorStatusInput.value : "Active",
           contact: contractorContactInput && contractorContactInput.value.trim() ? contractorContactInput.value.trim() : "-",
+          email: contractorEmailInput && contractorEmailInput.value.trim() ? contractorEmailInput.value.trim() : "",
+          phone: contractorPhoneInput && contractorPhoneInput.value.trim() ? contractorPhoneInput.value.trim() : "",
           mobile: contractorMobileInput && contractorMobileInput.value.trim() ? contractorMobileInput.value.trim() : "-",
-          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-"
+          remarks: contractorRemarksInput && contractorRemarksInput.value.trim() ? contractorRemarksInput.value.trim() : "",
+          projectName: contractorProjectNameInput && contractorProjectNameInput.value.trim() ? contractorProjectNameInput.value.trim() : "-",
+          projectStatus: contractorProjectStatusInput && contractorProjectStatusInput.value ? contractorProjectStatusInput.value : "Ongoing",
+          projectImage: contractorProjectImageInput && contractorProjectImageInput.value.trim() ? contractorProjectImageInput.value.trim() : "",
+          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-",
+          reports: Array.isArray(contractorFormReports) ? contractorFormReports.slice() : []
         };
+      }
+
+      function parseReports(value) {
+        if (!value) {
+          return [];
+        }
+
+        try {
+          var parsed = JSON.parse(value);
+          if (!Array.isArray(parsed)) {
+            return [];
+          }
+          return parsed
+            .filter(function (item) {
+              return item && typeof item === "object";
+            })
+            .map(function (item) {
+              return {
+                name: item.name ? String(item.name) : "Unnamed file",
+                relativePath: item.relativePath ? String(item.relativePath) : "",
+                type: item.type ? String(item.type) : "",
+                size: Number(item.size) > 0 ? Number(item.size) : 0,
+                uploadedAt: item.uploadedAt ? String(item.uploadedAt) : "",
+                url: item.url ? String(item.url) : ""
+              };
+            });
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function supportsIndexedDb() {
+        return typeof window.indexedDB !== "undefined";
+      }
+
+      function openReportBlobDb() {
+        if (!supportsIndexedDb()) {
+          return Promise.resolve(null);
+        }
+        if (reportBlobDbPromise) {
+          return reportBlobDbPromise;
+        }
+
+        reportBlobDbPromise = new Promise(function (resolve) {
+          try {
+            var request = window.indexedDB.open(REPORT_BLOB_DB_NAME, 1);
+            request.onupgradeneeded = function (event) {
+              var db = event.target && event.target.result;
+              if (db && !db.objectStoreNames.contains(REPORT_BLOB_STORE_NAME)) {
+                db.createObjectStore(REPORT_BLOB_STORE_NAME);
+              }
+            };
+            request.onsuccess = function (event) {
+              resolve(event.target ? event.target.result : null);
+            };
+            request.onerror = function () {
+              resolve(null);
+            };
+          } catch (error) {
+            resolve(null);
+          }
+        });
+
+        return reportBlobDbPromise;
+      }
+
+      function saveReportBlob(key, blob) {
+        if (!key || !blob) {
+          return;
+        }
+
+        openReportBlobDb().then(function (db) {
+          if (!db) {
+            return;
+          }
+          try {
+            var tx = db.transaction(REPORT_BLOB_STORE_NAME, "readwrite");
+            tx.objectStore(REPORT_BLOB_STORE_NAME).put(blob, key);
+          } catch (error) {
+            // Ignore IndexedDB write errors.
+          }
+        });
+      }
+
+      function loadReportBlob(key) {
+        if (!key) {
+          return Promise.resolve(null);
+        }
+
+        return openReportBlobDb().then(function (db) {
+          if (!db) {
+            return null;
+          }
+
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction(REPORT_BLOB_STORE_NAME, "readonly");
+              var request = tx.objectStore(REPORT_BLOB_STORE_NAME).get(key);
+              request.onsuccess = function (event) {
+                resolve(event && event.target ? event.target.result || null : null);
+              };
+              request.onerror = function () {
+                resolve(null);
+              };
+            } catch (error) {
+              resolve(null);
+            }
+          });
+        });
+      }
+
+      function reportRuntimeKey(report) {
+        if (!report) {
+          return "";
+        }
+        return (report.relativePath || report.name || "") + "|" + String(report.size || 0) + "|" + (report.uploadedAt || "");
+      }
+
+      function registerRuntimeReportUrl(report, sourceFile) {
+        if (!report || !sourceFile || !window.URL || typeof window.URL.createObjectURL !== "function") {
+          return;
+        }
+
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return;
+        }
+
+        try {
+          if (!runtimeReportUrlMap[key]) {
+            runtimeReportUrlMap[key] = window.URL.createObjectURL(sourceFile);
+          }
+          runtimeReportFileMap[key] = sourceFile;
+          saveReportBlob(key, sourceFile);
+        } catch (error) {
+          // Ignore blob URL creation errors.
+        }
+      }
+
+      function ensureRuntimeReportUrl(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return Promise.resolve("");
+        }
+        if (runtimeReportUrlMap[key]) {
+          return Promise.resolve(runtimeReportUrlMap[key]);
+        }
+
+        return loadReportBlob(key).then(function (blob) {
+          if (!blob || !window.URL || typeof window.URL.createObjectURL !== "function") {
+            return "";
+          }
+          try {
+            runtimeReportFileMap[key] = blob;
+            runtimeReportUrlMap[key] = window.URL.createObjectURL(blob);
+            return runtimeReportUrlMap[key];
+          } catch (error) {
+            return "";
+          }
+        });
+      }
+
+      function getRuntimeReportUrl(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return "";
+        }
+        return runtimeReportUrlMap[key] || "";
+      }
+
+      function getRuntimeReportFile(report) {
+        var key = reportRuntimeKey(report);
+        if (!key) {
+          return null;
+        }
+        return runtimeReportFileMap[key] || null;
+      }
+
+      function normalizeText(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim();
+      }
+
+      function normalizeCompact(value) {
+        return normalizeText(value).replace(/\s+/g, "");
+      }
+
+      function extractCompanyTokens(companyName) {
+        return normalizeText(companyName)
+          .split(/\s+/)
+          .filter(function (token) {
+            return token.length >= 3;
+          });
+      }
+
+      function scoreFileForCompany(fileIndexText, companyName, tradeName) {
+        var compactFileText = normalizeCompact(fileIndexText);
+        var topScore = 0;
+
+        [companyName, tradeName].forEach(function (name) {
+          var base = normalizeText(name);
+          if (!base) {
+            return;
+          }
+
+          var compact = base.replace(/\s+/g, "");
+          var score = 0;
+
+          if (compact && compactFileText.indexOf(compact) !== -1) {
+            score += 100;
+          }
+
+          var tokens = extractCompanyTokens(base);
+          var matched = 0;
+          tokens.forEach(function (token) {
+            if (fileIndexText.indexOf(token) !== -1) {
+              matched += 1;
+            }
+          });
+
+          score += matched * 12;
+          if (tokens.length > 0 && matched === tokens.length) {
+            score += 20;
+          }
+
+          if (score > topScore) {
+            topScore = score;
+          }
+        });
+
+        return topScore;
+      }
+
+      function fileMeta(file) {
+        var relativePath = file.webkitRelativePath || file.name || "";
+        return {
+          name: file.name || "Unnamed file",
+          relativePath: relativePath,
+          type: file.type || "",
+          size: file.size || 0,
+          fileObject: file
+        };
+      }
+
+      function isTextLikeFile(file) {
+        if (!file) {
+          return false;
+        }
+
+        var mime = file.type ? String(file.type).toLowerCase() : "";
+        var ext = fileExtension(file.name || "");
+        var textExtensions = {
+          txt: true,
+          csv: true,
+          rtf: true,
+          md: true,
+          log: true,
+          json: true,
+          xml: true,
+          html: true,
+          htm: true,
+          css: true,
+          js: true,
+          ts: true,
+          jsx: true,
+          tsx: true,
+          py: true,
+          java: true,
+          c: true,
+          cpp: true,
+          cs: true,
+          php: true,
+          rb: true,
+          go: true,
+          rs: true,
+          sh: true,
+          yml: true,
+          yaml: true,
+          ini: true,
+          conf: true,
+          sql: true
+        };
+
+        if (mime.indexOf("text/") === 0) {
+          return true;
+        }
+        if (mime.indexOf("json") !== -1 || mime.indexOf("xml") !== -1 || mime.indexOf("javascript") !== -1) {
+          return true;
+        }
+        return Boolean(textExtensions[ext]);
+      }
+
+      function readFileTextSafe(file) {
+        if (!file) {
+          return Promise.resolve("");
+        }
+        if (typeof file.text === "function") {
+          return file.text().catch(function () {
+            return "";
+          });
+        }
+
+        return new Promise(function (resolve) {
+          try {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+              resolve(event && event.target && typeof event.target.result === "string" ? event.target.result : "");
+            };
+            reader.onerror = function () {
+              resolve("");
+            };
+            reader.readAsText(file);
+          } catch (error) {
+            resolve("");
+          }
+        });
+      }
+
+      function fallbackCopyToClipboard(text) {
+        try {
+          var helper = document.createElement("textarea");
+          helper.value = text;
+          helper.setAttribute("readonly", "true");
+          helper.style.position = "fixed";
+          helper.style.left = "-9999px";
+          document.body.appendChild(helper);
+          helper.focus();
+          helper.select();
+          var copied = document.execCommand("copy");
+          document.body.removeChild(helper);
+          return copied;
+        } catch (error) {
+          return false;
+        }
+      }
+
+      function copyTextToClipboard(text) {
+        if (!text) {
+          return Promise.resolve(false);
+        }
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+          return navigator.clipboard.writeText(text).then(function () {
+            return true;
+          }).catch(function () {
+            return fallbackCopyToClipboard(text);
+          });
+        }
+
+        return Promise.resolve(fallbackCopyToClipboard(text));
+      }
+
+      function copyUploadedFilesContent(files) {
+        var sourceFiles = Array.isArray(files) ? files : [];
+        if (sourceFiles.length === 0) {
+          return Promise.resolve({ copied: false, message: "No files selected for scan." });
+        }
+
+        var perFileCharLimit = 120000;
+        var totalCharLimit = 500000;
+        var totalChars = 0;
+
+        var chunks = [];
+        var chain = Promise.resolve();
+
+        sourceFiles.forEach(function (file, index) {
+          chain = chain.then(function () {
+            if (!isTextLikeFile(file)) {
+              chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[Binary/unsupported for text extraction]\n");
+              return;
+            }
+
+            return readFileTextSafe(file).then(function (rawText) {
+              var textValue = typeof rawText === "string" ? rawText : "";
+              if (!textValue) {
+                chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[No readable text found]\n");
+                return;
+              }
+
+              var remaining = totalCharLimit - totalChars;
+              if (remaining <= 0) {
+                chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n[Scan text limit reached]\n");
+                return;
+              }
+
+              var trimmed = textValue.length > perFileCharLimit ? textValue.slice(0, perFileCharLimit) + "\n\n...truncated..." : textValue;
+              if (trimmed.length > remaining) {
+                trimmed = trimmed.slice(0, remaining) + "\n\n...truncated...";
+              }
+              totalChars += trimmed.length;
+
+              chunks.push("----- FILE " + String(index + 1) + " -----\nName: " + (file && file.name ? file.name : "Unnamed file") + "\n" + trimmed + "\n");
+            });
+          });
+        });
+
+        return chain.then(function () {
+          var joined = chunks.join("\n");
+          if (!joined.trim()) {
+            return { copied: false, message: "No readable text could be copied from the selected files." };
+          }
+
+          return copyTextToClipboard(joined).then(function (copied) {
+            if (copied) {
+              return { copied: true, message: "Scanned file content was copied to clipboard." };
+            }
+            return { copied: false, message: "Scan completed, but clipboard permission blocked copying content." };
+          });
+        });
+      }
+
+      function formatFileSize(size) {
+        if (!size || size <= 0) {
+          return "0 B";
+        }
+        if (size < 1024) {
+          return String(size) + " B";
+        }
+        if (size < 1024 * 1024) {
+          return (size / 1024).toFixed(1) + " KB";
+        }
+        return (size / (1024 * 1024)).toFixed(2) + " MB";
+      }
+
+      function normalizeReportMeta(report) {
+        if (!report) {
+          return null;
+        }
+        return {
+          name: report.name ? String(report.name) : "Unnamed file",
+          relativePath: report.relativePath ? String(report.relativePath) : "",
+          type: report.type ? String(report.type) : "",
+          size: Number(report.size) > 0 ? Number(report.size) : 0,
+          uploadedAt: report.uploadedAt ? String(report.uploadedAt) : "",
+          url: report.url ? String(report.url) : ""
+        };
+      }
+
+      function renderContractorFormReports() {
+        if (!contractorDocumentScanList) {
+          return;
+        }
+
+        contractorDocumentScanList.innerHTML = "";
+
+        if (!Array.isArray(contractorFormReports) || contractorFormReports.length === 0) {
+          if (contractorDocumentScanEmpty) {
+            contractorDocumentScanEmpty.hidden = false;
+            contractorDocumentScanList.appendChild(contractorDocumentScanEmpty);
+          }
+          return;
+        }
+
+        contractorFormReports.forEach(function (report) {
+          var item = document.createElement("div");
+          item.className = "scan-upload-item";
+          var typeText = report.type ? report.type : "Unknown type";
+          item.textContent = report.name + " | " + typeText + " | " + formatFileSize(report.size || 0);
+          var spacer = document.createTextNode(" ");
+          item.appendChild(spacer);
+          item.appendChild(createReportDocumentLink(report, "View Scan Document"));
+          contractorDocumentScanList.appendChild(item);
+        });
+      }
+
+      function setContractorFormReports(reports) {
+        contractorFormReports = Array.isArray(reports)
+          ? reports.map(function (report) {
+              var normalized = normalizeReportMeta(report);
+              if (!normalized) {
+                return null;
+              }
+              if (report && report.fileObject) {
+                registerRuntimeReportUrl(normalized, report.fileObject);
+              }
+              return normalized;
+            }).filter(function (report) { return !!report; })
+          : [];
+        renderContractorFormReports();
+      }
+
+      function fileExtension(name) {
+        if (!name) {
+          return "";
+        }
+        var dotIndex = name.lastIndexOf(".");
+        if (dotIndex === -1 || dotIndex === name.length - 1) {
+          return "";
+        }
+        return name.slice(dotIndex + 1).toLowerCase();
+      }
+
+      function isAllowedUploadFile(file) {
+        return Boolean(file && file.name);
+      }
+
+      function previewMode(report) {
+        var ext = fileExtension(report && report.name ? report.name : "");
+        var mime = report && report.type ? String(report.type).toLowerCase() : "";
+
+        if (ext === "pdf" || mime.indexOf("pdf") !== -1) {
+          return "pdf";
+        }
+        if (
+          ext === "xlsx" ||
+          ext === "xls" ||
+          mime.indexOf("spreadsheet") !== -1 ||
+          mime.indexOf("excel") !== -1 ||
+          mime.indexOf("officedocument.spreadsheetml") !== -1
+        ) {
+          return "excel";
+        }
+        if (mime.indexOf("image/") === 0 || ext === "jpg" || ext === "jpeg" || ext === "png") {
+          return "image";
+        }
+        if (mime.indexOf("text/") === 0 || ext === "txt" || ext === "csv" || ext === "rtf") {
+          return "text";
+        }
+        return "unsupported";
+      }
+
+      function resetReportPreviewContent() {
+        if (reportPreviewFrame) {
+          reportPreviewFrame.removeAttribute("srcdoc");
+          reportPreviewFrame.src = "about:blank";
+          reportPreviewFrame.hidden = true;
+        }
+        if (reportPreviewImage) {
+          reportPreviewImage.src = "";
+          reportPreviewImage.hidden = true;
+        }
+        if (reportPreviewText) {
+          reportPreviewText.textContent = "";
+          reportPreviewText.hidden = true;
+        }
+        if (reportPreviewExcel) {
+          reportPreviewExcel.innerHTML = "";
+          reportPreviewExcel.hidden = true;
+        }
+        if (reportPreviewFallback) {
+          reportPreviewFallback.textContent = "Preview is not available for this file type.";
+          reportPreviewFallback.hidden = true;
+        }
+      }
+
+      function buildExcelPreviewPayload(data, rowLimit, colLimit) {
+        if (!window.XLSX) {
+          throw new Error("XLSX unavailable");
+        }
+
+        var workbook = window.XLSX.read(data, {
+          type: "array",
+          cellStyles: true,
+          cellNF: true,
+          cellText: true,
+          cellDates: true
+        });
+        var firstSheetName = workbook.SheetNames && workbook.SheetNames.length ? workbook.SheetNames[0] : null;
+        if (!firstSheetName) {
+          throw new Error("No worksheet found");
+        }
+
+        var worksheet = workbook.Sheets[firstSheetName];
+        if (!worksheet || !worksheet["!ref"]) {
+          throw new Error("Empty worksheet");
+        }
+
+        var sourceRange = window.XLSX.utils.decode_range(worksheet["!ref"]);
+        var maxRow = Math.max(sourceRange.s.r, sourceRange.s.r + Math.max(1, rowLimit || 300) - 1);
+        var maxCol = Math.max(sourceRange.s.c, sourceRange.s.c + Math.max(1, colLimit || 80) - 1);
+        var limitedEndRow = Math.min(sourceRange.e.r, maxRow);
+        var limitedEndCol = Math.min(sourceRange.e.c, maxCol);
+        var trimmed = limitedEndRow < sourceRange.e.r || limitedEndCol < sourceRange.e.c;
+
+        var workingSheet = worksheet;
+        if (trimmed) {
+          var limitedRange = {
+            s: { r: sourceRange.s.r, c: sourceRange.s.c },
+            e: { r: limitedEndRow, c: limitedEndCol }
+          };
+
+          workingSheet = { "!ref": window.XLSX.utils.encode_range(limitedRange) };
+          Object.keys(worksheet).forEach(function (key) {
+            if (!key || key.charAt(0) === "!") {
+              return;
+            }
+            var cell = window.XLSX.utils.decode_cell(key);
+            if (
+              cell.r >= limitedRange.s.r &&
+              cell.r <= limitedRange.e.r &&
+              cell.c >= limitedRange.s.c &&
+              cell.c <= limitedRange.e.c
+            ) {
+              workingSheet[key] = worksheet[key];
+            }
+          });
+
+          if (Array.isArray(worksheet["!merges"])) {
+            workingSheet["!merges"] = worksheet["!merges"].filter(function (merge) {
+              return (
+                merge.s.r >= limitedRange.s.r &&
+                merge.e.r <= limitedRange.e.r &&
+                merge.s.c >= limitedRange.s.c &&
+                merge.e.c <= limitedRange.e.c
+              );
+            });
+          }
+        }
+
+        var previewWorkbook = {
+          SheetNames: [firstSheetName],
+          Sheets: {}
+        };
+        previewWorkbook.Sheets[firstSheetName] = workingSheet;
+        var html = window.XLSX.write(previewWorkbook, {
+          bookType: "html",
+          type: "string"
+        });
+
+        return {
+          sheetName: firstSheetName,
+          html: html,
+          trimmed: trimmed,
+          rows: limitedEndRow - sourceRange.s.r + 1,
+          cols: limitedEndCol - sourceRange.s.c + 1
+        };
+      }
+
+      function decorateWorkbookHtml(rawHtml, titleText) {
+        var html = String(rawHtml || "");
+        if (!html) {
+          return "";
+        }
+
+        var safeTitle = escapeHtml(titleText || "Document Preview");
+        var hasImage = /<img[\s>]/i.test(html);
+        var headerHtml = "";
+        if (!hasImage) {
+          headerHtml =
+            "<section class=\"sheet-letterhead\">" +
+            "<img class=\"sheet-logo\" src=\"" + escapeHtml(PREVIEW_PROV_LOGO_URL) + "\" alt=\"Province of Palawan logo\">" +
+            "<div class=\"sheet-letterhead-text\">" +
+            "<p>Republic of the Philippines</p>" +
+            "<p>PROVINCIAL GOVERNMENT OF PALAWAN</p>" +
+            "<p><strong>OFFICE OF THE PROVINCIAL ENGINEER</strong></p>" +
+            "<p>Capitol Building, Puerto Princesa City</p>" +
+            "</div>" +
+            "<img class=\"sheet-logo\" src=\"" + escapeHtml(PREVIEW_PEO_LOGO_URL) + "\" alt=\"PEO logo\">" +
+            "</section>";
+        }
+
+        var styleBlock =
+          "<style id=\"peo-professional-workbook-style\">" +
+          "html,body{margin:0;padding:0;background:#2e3137;color:#1b2f45;font-family:\"Calibri\",\"Segoe UI\",Arial,sans-serif;}" +
+          ".excel-appbar{height:52px;background:#1f2328;color:#d9dde4;display:flex;align-items:center;padding:0 16px;gap:12px;border-bottom:1px solid #3a3f47;}" +
+          ".excel-dot{width:16px;height:16px;border-radius:3px;background:#1f9d55;display:inline-block;}" +
+          ".excel-title{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
+          ".doc-shell{padding:14px 0 22px;display:flex;justify-content:center;}" +
+          ".doc-page{width:min(99vw,1880px);background:#f7f8fa;border:1px solid #343941;box-shadow:0 8px 22px rgba(0,0,0,.28);overflow:auto;}" +
+          ".sheet-letterhead{display:flex;align-items:center;justify-content:center;gap:24px;padding:14px 12px 10px;background:#f3f4f6;}" +
+          ".sheet-logo{width:88px;height:88px;object-fit:contain;}" +
+          ".sheet-letterhead-text{text-align:center;color:#111;line-height:1.2;font-size:14px;}" +
+          ".sheet-letterhead-text p{margin:0 0 4px;}" +
+          ".sheet-grid{padding:0;}" +
+          "table{border-collapse:collapse;font-size:12px;line-height:1.3;color:#101820;min-width:100%;background:#f7f8fa;}" +
+          "th,td{border:1.2px solid #2f3338 !important;padding:5px 6px !important;vertical-align:middle;background:#f6f7f9;}" +
+          ".sheet-grid table tr:nth-child(8)>th,.sheet-grid table tr:nth-child(8)>td,.sheet-grid table tr:nth-child(9)>th,.sheet-grid table tr:nth-child(9)>td{background:#8ecb4f !important;font-weight:700;color:#111;}" +
+          ".sheet-grid table tr:nth-child(10)>th,.sheet-grid table tr:nth-child(10)>td{background:#b9c9a2 !important;font-weight:700;color:#111;}" +
+          "</style>";
+
+        if (/<head[\s>]/i.test(html)) {
+          html = html.replace(/<\/head>/i, "<title>" + safeTitle + "</title>" + styleBlock + "</head>");
+        } else {
+          html = "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>" + safeTitle + "</title>" + styleBlock + "</head><body>" + html + "</body></html>";
+        }
+
+        if (/<body[^>]*>/i.test(html)) {
+          html = html.replace(/<body[^>]*>/i, function (match) {
+            return match +
+              "<div class=\"excel-appbar\"><span class=\"excel-dot\" aria-hidden=\"true\"></span><span class=\"excel-title\">" + safeTitle + "</span></div>" +
+              "<div class=\"doc-shell\"><div class=\"doc-page\">" + headerHtml + "<div class=\"sheet-grid\">";
+          });
+          html = html.replace(/<\/body>/i, "</div></div></div></body>");
+        }
+
+        return html;
+      }
+
+      function renderExcelPreviewFromData(data, titleText) {
+        if (!reportPreviewFrame) {
+          return;
+        }
+        var payload = buildExcelPreviewPayload(data, 1200, 200);
+        var htmlDoc = decorateWorkbookHtml(payload.html, titleText);
+        if (reportPreviewExcel) {
+          reportPreviewExcel.hidden = true;
+          reportPreviewExcel.innerHTML = "";
+        }
+        reportPreviewFrame.removeAttribute("src");
+        reportPreviewFrame.srcdoc = htmlDoc;
+        reportPreviewFrame.hidden = false;
+      }
+
+      function renderExcelPreviewFromFile(fileObject, viewUrl, titleText) {
+        if (!reportPreviewFrame) {
+          return;
+        }
+        if (!window.XLSX) {
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Excel preview engine not loaded. Please check your internet and reload.";
+            reportPreviewFallback.hidden = false;
+          }
+          return;
+        }
+
+        reportPreviewFrame.hidden = false;
+        reportPreviewFrame.removeAttribute("src");
+        reportPreviewFrame.srcdoc = "<!DOCTYPE html><html><body style=\"font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#4d6480;\">Loading Excel preview...</body></html>";
+        if (reportPreviewExcel) {
+          reportPreviewExcel.hidden = true;
+          reportPreviewExcel.innerHTML = "";
+        }
+
+        var reader = new FileReader();
+        reader.onload = function (event) {
+          try {
+            var data = event.target && event.target.result ? event.target.result : null;
+            if (!data) {
+              throw new Error("No file data");
+            }
+            renderExcelPreviewFromData(data, titleText);
+          } catch (error) {
+            if (reportPreviewFrame) {
+              reportPreviewFrame.hidden = true;
+            }
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Unable to parse Excel preview for this file.";
+              reportPreviewFallback.hidden = false;
+            }
+          }
+        };
+
+        reader.onerror = function () {
+          if (reportPreviewFrame) {
+            reportPreviewFrame.hidden = true;
+          }
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Unable to read Excel file for preview.";
+            reportPreviewFallback.hidden = false;
+          }
+        };
+
+        if (fileObject) {
+          reader.readAsArrayBuffer(fileObject);
+          return;
+        }
+
+        if (!viewUrl) {
+          if (reportPreviewFrame) {
+            reportPreviewFrame.hidden = true;
+          }
+          if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Excel preview is unavailable. Re-upload the file and try again.";
+            reportPreviewFallback.hidden = false;
+          }
+          return;
+        }
+
+        fetch(viewUrl)
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error("Unable to load file");
+            }
+            return response.arrayBuffer();
+          })
+          .then(function (data) {
+            renderExcelPreviewFromData(data, titleText);
+          })
+          .catch(function () {
+            if (reportPreviewFrame) {
+              reportPreviewFrame.hidden = true;
+            }
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Unable to read Excel file for preview.";
+              reportPreviewFallback.hidden = false;
+            }
+          });
+      }
+
+      function escapeHtml(text) {
+        return String(text || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function openPreviewTab(report) {
+        var previewTab = window.open("about:blank", "_blank");
+        if (!previewTab) {
+          openReportPreviewModal(report);
+          return;
+        }
+
+        var docTitle = report && report.name ? report.name : "Document Preview";
+        previewTab.document.open();
+        previewTab.document.write(
+          "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>" + escapeHtml(docTitle) + "</title>" +
+          "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+          "<style>" +
+          "body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f7fb;color:#102a43;}" +
+          ".wrap{padding:16px;}" +
+          ".title{margin:0 0 10px;font-size:18px;font-weight:700;word-break:break-word;}" +
+          ".shell{background:#fff;border:1px solid #d6deea;border-radius:10px;padding:10px;min-height:70vh;}" +
+          ".msg{margin:0;padding:10px;border:1px dashed #ced8e4;border-radius:8px;background:#f7fbff;color:#5f748b;}" +
+          ".frame{width:100%;height:76vh;border:1px solid #d2dbe6;border-radius:8px;background:#fff;}" +
+          ".img{max-width:100%;max-height:76vh;display:block;margin:0 auto;border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:4px;}" +
+          ".text{margin:0;border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:10px;max-height:76vh;overflow:auto;white-space:pre-wrap;word-break:break-word;}" +
+          ".excel{border:1px solid #d2dbe6;border-radius:8px;background:#fff;padding:8px;max-height:76vh;overflow:auto;}" +
+          ".excel-meta{margin:0 0 8px;color:#4d6480;font-size:13px;line-height:1.35;}" +
+          ".excel table{width:max-content;min-width:100%;border-collapse:collapse;font-size:13px;}" +
+          ".excel th,.excel td{border:1px solid #d9e2ec;padding:6px 8px;white-space:nowrap;vertical-align:top;}" +
+          ".excel th{background:#f2f7fc;position:sticky;top:0;z-index:1;}" +
+          "</style></head><body><div class=\"wrap\"><h1 class=\"title\">" + escapeHtml(docTitle) +
+          "</h1><div id=\"tabPreviewRoot\" class=\"shell\"><p class=\"msg\">Loading preview...</p></div></div></body></html>"
+        );
+        previewTab.document.close();
+
+        function setTabMessage(message) {
+          if (!previewTab || previewTab.closed) {
+            return;
+          }
+          var root = previewTab.document.getElementById("tabPreviewRoot");
+          if (!root) {
+            return;
+          }
+          root.innerHTML = "<p class=\"msg\">" + escapeHtml(message) + "</p>";
+        }
+
+        function renderExcelInTab(data) {
+          if (!previewTab || previewTab.closed || !window.XLSX) {
+            setTabMessage("Excel preview engine is unavailable.");
+            return;
+          }
+          try {
+            var payload = buildExcelPreviewPayload(data, 5000, 300);
+            var htmlDoc = decorateWorkbookHtml(payload.html, docTitle);
+            previewTab.document.open();
+            previewTab.document.write(htmlDoc);
+            previewTab.document.close();
+          } catch (error) {
+            setTabMessage("Unable to parse Excel preview.");
+          }
+        }
+
+        ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+          var viewUrl = runtimeUrl || (report && report.url ? String(report.url) : "");
+          var mode = previewMode(report);
+
+          if (!viewUrl) {
+            setTabMessage("Preview unavailable for this file in the current session.");
+            return;
+          }
+
+          var root = previewTab.document.getElementById("tabPreviewRoot");
+          if (!root) {
+            return;
+          }
+          root.innerHTML = "";
+
+          if (mode === "pdf") {
+            var iframe = previewTab.document.createElement("iframe");
+            iframe.className = "frame";
+            iframe.src = viewUrl;
+            iframe.setAttribute("title", docTitle);
+            root.appendChild(iframe);
+            return;
+          }
+
+          if (mode === "image") {
+            var img = previewTab.document.createElement("img");
+            img.className = "img";
+            img.src = viewUrl;
+            img.alt = docTitle;
+            root.appendChild(img);
+            return;
+          }
+
+          if (mode === "text") {
+            var pre = previewTab.document.createElement("pre");
+            pre.className = "text";
+            pre.textContent = "Loading text preview...";
+            root.appendChild(pre);
+            fetch(viewUrl)
+              .then(function (response) { return response.text(); })
+              .then(function (textContent) {
+                var trimmed = textContent.length > 250000 ? textContent.slice(0, 250000) + "\n\n...truncated..." : textContent;
+                pre.textContent = trimmed;
+              })
+              .catch(function () {
+                pre.textContent = "Unable to preview this text file.";
+              });
+            return;
+          }
+
+          if (mode === "excel") {
+            var fileObj = getRuntimeReportFile(report);
+            if (fileObj) {
+              var reader = new FileReader();
+              reader.onload = function (event) {
+                var data = event.target && event.target.result ? event.target.result : null;
+                if (!data) {
+                  setTabMessage("Unable to read Excel file.");
+                  return;
+                }
+                renderExcelInTab(data);
+              };
+              reader.onerror = function () {
+                setTabMessage("Unable to read Excel file.");
+              };
+              reader.readAsArrayBuffer(fileObj);
+              return;
+            }
+
+            fetch(viewUrl)
+              .then(function (response) {
+                if (!response.ok) {
+                  throw new Error("Failed");
+                }
+                return response.arrayBuffer();
+              })
+              .then(function (data) {
+                renderExcelInTab(data);
+              })
+              .catch(function () {
+                setTabMessage("Unable to load Excel file.");
+              });
+            return;
+          }
+
+          setTabMessage("Preview not supported for this file type.");
+        });
+      }
+
+      function closeReportPreviewModal() {
+        if (!reportPreviewModal) {
+          return;
+        }
+        reportPreviewModal.classList.remove("open");
+        reportPreviewModal.setAttribute("aria-hidden", "true");
+        resetReportPreviewContent();
+
+        if (
+          (!modal || !modal.classList.contains("open")) &&
+          (!detailsModal || !detailsModal.classList.contains("open")) &&
+          (!uploadScanModal || !uploadScanModal.classList.contains("open"))
+        ) {
+          document.body.classList.remove("modal-open");
+        }
+      }
+
+      function openReportPreviewModal(report) {
+        if (!reportPreviewModal || !report) {
+          return;
+        }
+
+        ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+          var viewUrl = runtimeUrl || (report.url ? String(report.url) : "");
+          resetReportPreviewContent();
+
+          if (reportPreviewTitle) {
+            reportPreviewTitle.textContent = report.name || "Document Preview";
+          }
+
+          if (!viewUrl) {
+            if (reportPreviewFallback) {
+              reportPreviewFallback.textContent = "Preview is unavailable for this file in the current browser session.";
+              reportPreviewFallback.hidden = false;
+            }
+            reportPreviewModal.classList.add("open");
+            reportPreviewModal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
+            return;
+          }
+
+          var mode = previewMode(report);
+
+          if (mode === "pdf" && reportPreviewFrame) {
+            reportPreviewFrame.src = viewUrl;
+            reportPreviewFrame.hidden = false;
+          } else if (mode === "excel") {
+            renderExcelPreviewFromFile(getRuntimeReportFile(report), viewUrl, report && report.name ? report.name : "Excel Preview");
+          } else if (mode === "image" && reportPreviewImage) {
+            reportPreviewImage.src = viewUrl;
+            reportPreviewImage.hidden = false;
+          } else if (mode === "text" && reportPreviewText) {
+            reportPreviewText.hidden = false;
+            reportPreviewText.textContent = "Loading preview...";
+
+            fetch(viewUrl)
+              .then(function (response) { return response.text(); })
+              .then(function (textContent) {
+                if (!reportPreviewText) {
+                  return;
+                }
+                var trimmed = textContent.length > 200000 ? textContent.slice(0, 200000) + "\n\n...truncated..." : textContent;
+                reportPreviewText.textContent = trimmed;
+              })
+              .catch(function () {
+                if (reportPreviewFallback) {
+                  reportPreviewFallback.textContent = "Unable to preview this text file.";
+                  reportPreviewFallback.hidden = false;
+                }
+                if (reportPreviewText) {
+                  reportPreviewText.hidden = true;
+                }
+              });
+          } else if (reportPreviewFallback) {
+            reportPreviewFallback.textContent = "Preview not supported for this file type. Uploading is saved, but browser preview is unavailable.";
+            reportPreviewFallback.hidden = false;
+          }
+
+          reportPreviewModal.classList.add("open");
+          reportPreviewModal.setAttribute("aria-hidden", "false");
+          document.body.classList.add("modal-open");
+        });
+      }
+
+      function createReportDocumentLink(report, labelText) {
+        var link = document.createElement("a");
+        link.className = "report-doc-link";
+        link.textContent = labelText || "View Scan Document";
+        link.href = "#";
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener");
+
+        function resolveDirectReportHttpUrl(targetReport) {
+          if (!targetReport) {
+            return "";
+          }
+
+          var existingUrl = targetReport.url ? String(targetReport.url) : "";
+          if (existingUrl) {
+            if (/^https?:\/\//i.test(existingUrl)) {
+              return existingUrl;
+            }
+            if (existingUrl.indexOf("/media/") === 0) {
+              return window.location.origin + existingUrl;
+            }
+            if (existingUrl.indexOf("media/") === 0) {
+              return window.location.origin + "/" + existingUrl;
+            }
+          }
+
+          var rel = targetReport.relativePath ? String(targetReport.relativePath).replace(/\\/g, "/") : "";
+          if (!rel) {
+            return "";
+          }
+
+          var markerIndex = rel.indexOf("project_scans/");
+          if (markerIndex >= 0) {
+            var mediaRelative = rel.slice(markerIndex).split("/").map(encodeURIComponent).join("/");
+            return window.location.origin + "/media/" + mediaRelative;
+          }
+
+          if (rel.indexOf("media/") === 0) {
+            var mediaPath = rel.slice("media/".length).split("/").map(encodeURIComponent).join("/");
+            return window.location.origin + "/media/" + mediaPath;
+          }
+
+          return "";
+        }
+
+        var directHttpUrl = resolveDirectReportHttpUrl(report);
+        if (directHttpUrl) {
+          link.href = directHttpUrl;
+          link.title = directHttpUrl;
+        }
+
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          var nextTab = window.open("about:blank", "_blank");
+
+          ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
+            var directUrl = resolveDirectReportHttpUrl(report);
+            var targetUrl = runtimeUrl || directUrl || "";
+
+            if (targetUrl) {
+              if (nextTab && !nextTab.closed) {
+                nextTab.location.href = targetUrl;
+              } else {
+                window.open(targetUrl, "_blank");
+              }
+              return;
+            }
+
+            if (nextTab && !nextTab.closed) {
+              nextTab.document.open();
+              nextTab.document.write(
+                "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Document not available</title></head>" +
+                "<body style=\"font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#2a3f56;\">" +
+                "<p>Unable to open this uploaded file in a new tab for the current browser session.</p></body></html>"
+              );
+              nextTab.document.close();
+            } else {
+              alert("Unable to open this uploaded file in a new tab.");
+            }
+          });
+        });
+
+        return link;
+      }
+
+      function renderReportDetails(reportItems) {
+        if (!detailReportDetails) {
+          return;
+        }
+
+        detailReportDetails.innerHTML = "";
+
+        if (!Array.isArray(reportItems) || reportItems.length === 0) {
+          if (detailReportDetailsEmpty) {
+            detailReportDetailsEmpty.hidden = false;
+            detailReportDetails.appendChild(detailReportDetailsEmpty);
+          }
+          return;
+        }
+
+        reportItems.forEach(function (report) {
+          var card = document.createElement("article");
+          card.className = "report-details-item";
+
+          var title = document.createElement("strong");
+          title.textContent = report.name || "Unnamed file";
+          card.appendChild(title);
+
+          var meta = document.createElement("span");
+          var typeText = report.type ? String(report.type) : "Unknown type";
+          var sizeText = formatFileSize(report.size || 0);
+          var uploadedText = report.uploadedAt ? formatHistoryDate(report.uploadedAt) : "-";
+          meta.textContent = "Type: " + typeText + " | Size: " + sizeText + " | Uploaded: " + uploadedText;
+          card.appendChild(meta);
+
+          if (report.relativePath) {
+            var pathLine = document.createElement("span");
+            pathLine.textContent = "Path: " + report.relativePath;
+            card.appendChild(pathLine);
+          }
+
+          card.appendChild(createReportDocumentLink(report, "View Scan Document"));
+
+          detailReportDetails.appendChild(card);
+        });
+      }
+
+      function setProjectDocumentListItem(targetEl, report, fallbackText) {
+        if (!targetEl) {
+          return;
+        }
+
+        targetEl.innerHTML = "";
+
+        if (!report) {
+          targetEl.textContent = fallbackText;
+          return;
+        }
+
+        var label = document.createElement("span");
+        label.textContent = report.name + " (" + formatFileSize(report.size || 0) + ")";
+        targetEl.appendChild(label);
+
+        var spacer = document.createTextNode(" ");
+        targetEl.appendChild(spacer);
+        targetEl.appendChild(createReportDocumentLink(report, "View Scan Document"));
       }
 
       function rowPayload(row) {
@@ -721,18 +3301,98 @@
           return null;
         }
 
-        var statusBadge = row.querySelector(".badge");
         return {
-          company: row.getAttribute("data-contractor-company") || (row.cells[0] ? row.cells[0].textContent.trim() : ""),
-          tin: row.getAttribute("data-contractor-tin") || (row.cells[1] ? row.cells[1].textContent.trim() : "-"),
-          philgeps: row.getAttribute("data-contractor-philgeps") || (row.cells[2] ? row.cells[2].textContent.trim() : "-"),
-          pcab: row.getAttribute("data-contractor-pcab") || (row.cells[3] ? row.cells[3].textContent.trim() : "-"),
+          company: row.getAttribute("data-contractor-company") || (row.querySelector(".company-name") ? row.querySelector(".company-name").textContent.trim() : ""),
+          tradeName: row.getAttribute("data-contractor-trade-name") || "",
+          tin: row.getAttribute("data-contractor-tin") || "-",
+          philgeps: row.getAttribute("data-contractor-philgeps") || "-",
+          pcabLicense: row.getAttribute("data-contractor-pcab-license") || "",
+          pcab: row.getAttribute("data-contractor-pcab") || "-",
           pcabValue: row.getAttribute("data-contractor-pcab-value") || "",
-          status: row.getAttribute("data-contractor-status") || (statusBadge ? statusBadge.textContent.trim() : "Active"),
-          contact: row.getAttribute("data-contractor-contact") || (row.cells[5] ? row.cells[5].textContent.trim() : "-"),
-          mobile: row.getAttribute("data-contractor-mobile") || (row.cells[6] ? row.cells[6].textContent.trim() : "-"),
-          rating: row.getAttribute("data-contractor-rating") || (row.cells[7] ? row.cells[7].textContent.trim() : "-")
+          licenseExpiry: row.getAttribute("data-contractor-license-expiry") || "",
+          pcabClassification: row.getAttribute("data-contractor-pcab-classification") || "",
+          address: row.getAttribute("data-contractor-address") || "",
+          city: row.getAttribute("data-contractor-city") || "",
+          province: row.getAttribute("data-contractor-province") || "",
+          status: row.getAttribute("data-contractor-status") || "Active",
+          contact: row.getAttribute("data-contractor-contact") || "-",
+          email: row.getAttribute("data-contractor-email") || "",
+          phone: row.getAttribute("data-contractor-phone") || "",
+          mobile: row.getAttribute("data-contractor-mobile") || "-",
+          remarks: row.getAttribute("data-contractor-remarks") || "",
+          projectName: row.getAttribute("data-contractor-project-name") || "-",
+          projectStatus: row.getAttribute("data-contractor-project-status") || "Ongoing",
+          projectImage: row.getAttribute("data-contractor-project-image") || "",
+          createdAt: row.getAttribute("data-contractor-created-at") || "",
+          updatedAt: row.getAttribute("data-contractor-updated-at") || "",
+          rating: row.getAttribute("data-contractor-rating") || "-",
+          reports: parseReports(row.getAttribute("data-contractor-reports") || "[]")
         };
+      }
+
+      function collectContractorPayloads() {
+        if (!contractorsTableBody) {
+          return [];
+        }
+
+        var payloads = [];
+        var rows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
+        rows.forEach(function (row) {
+          var payload = rowPayload(row);
+          if (payload && payload.company) {
+            payloads.push(payload);
+          }
+        });
+
+        return payloads;
+      }
+
+      function persistContractorsToStorage() {
+        if (!contractorsTableBody || !window.localStorage) {
+          return;
+        }
+
+        try {
+          var payloads = collectContractorPayloads();
+          window.localStorage.setItem(CONTRACTORS_STORAGE_KEY, JSON.stringify(payloads));
+        } catch (error) {
+          // Ignore storage errors (quota or private mode restrictions).
+        }
+      }
+
+      function loadContractorsFromStorage() {
+        if (!contractorsTableBody || !window.localStorage) {
+          return;
+        }
+
+        var existingRows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
+        if (existingRows.length > 0) {
+          return;
+        }
+
+        try {
+          var raw = window.localStorage.getItem(CONTRACTORS_STORAGE_KEY);
+          if (!raw) {
+            return;
+          }
+
+          var payloads = JSON.parse(raw);
+          if (!Array.isArray(payloads)) {
+            return;
+          }
+
+          payloads.forEach(function (payload) {
+            if (!payload || !payload.company) {
+              return;
+            }
+
+            var row = document.createElement("div");
+            applyRowPayload(row, payload);
+            contractorsTableBody.appendChild(row);
+          });
+        } catch (error) {
+          // Ignore malformed JSON or blocked storage access.
+        }
       }
 
       function applyRowPayload(row, payload) {
@@ -740,61 +3400,71 @@
           return;
         }
 
+        row.className = "company-card";
+        row.setAttribute("role", "button");
+        row.setAttribute("tabindex", "0");
         row.setAttribute("data-contractor-row", "1");
         row.setAttribute("data-contractor-company", payload.company);
+        row.setAttribute("data-contractor-trade-name", payload.tradeName || "");
         row.setAttribute("data-contractor-tin", payload.tin);
         row.setAttribute("data-contractor-philgeps", payload.philgeps);
+        row.setAttribute("data-contractor-pcab-license", payload.pcabLicense || "");
         row.setAttribute("data-contractor-pcab", payload.pcab);
         row.setAttribute("data-contractor-pcab-value", payload.pcabValue || "");
+        row.setAttribute("data-contractor-license-expiry", payload.licenseExpiry || "");
+        row.setAttribute("data-contractor-pcab-classification", payload.pcabClassification || "");
+        row.setAttribute("data-contractor-address", payload.address || "");
+        row.setAttribute("data-contractor-city", payload.city || "");
+        row.setAttribute("data-contractor-province", payload.province || "");
         row.setAttribute("data-contractor-status", payload.status);
         row.setAttribute("data-contractor-contact", payload.contact);
+        row.setAttribute("data-contractor-email", payload.email || "");
+        row.setAttribute("data-contractor-phone", payload.phone || "");
         row.setAttribute("data-contractor-mobile", payload.mobile);
+        row.setAttribute("data-contractor-remarks", payload.remarks || "");
+        row.setAttribute("data-contractor-project-name", payload.projectName || "-");
+        row.setAttribute("data-contractor-project-status", payload.projectStatus || "Ongoing");
+        row.setAttribute("data-contractor-project-image", payload.projectImage || "");
+        row.setAttribute("data-contractor-created-at", payload.createdAt || "");
+        row.setAttribute("data-contractor-updated-at", payload.updatedAt || "");
         row.setAttribute("data-contractor-rating", payload.rating);
+        row.setAttribute("data-contractor-reports", JSON.stringify(Array.isArray(payload.reports) ? payload.reports : []));
 
         row.innerHTML = "";
 
-        function appendTextCell(value) {
-          var cell = document.createElement("td");
-          cell.textContent = value;
-          row.appendChild(cell);
-        }
+        var companyName = document.createElement("div");
+        companyName.className = "company-name";
+        companyName.textContent = payload.company;
+        row.appendChild(companyName);
 
-        appendTextCell(payload.company);
-        appendTextCell(payload.tin);
-        appendTextCell(payload.philgeps);
-        appendTextCell(payload.pcab);
-
-        var statusCell = document.createElement("td");
-        var badge = document.createElement("span");
-        badge.className = "badge " + statusBadgeClass(payload.status);
-        badge.textContent = payload.status;
-        statusCell.appendChild(badge);
-        row.appendChild(statusCell);
-
-        appendTextCell(payload.contact);
-        appendTextCell(payload.mobile);
-        appendTextCell(payload.rating);
-
-        var actionsCell = document.createElement("td");
         var actionsWrap = document.createElement("div");
-        actionsWrap.className = "contractor-row-actions";
+        actionsWrap.className = "company-card-actions";
+
+        var viewBtn = document.createElement("button");
+        viewBtn.type = "button";
+        viewBtn.className = "company-card-btn";
+        viewBtn.setAttribute("data-card-action", "view");
+        viewBtn.setAttribute("aria-label", "View contractor details");
+        viewBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
 
         var editBtn = document.createElement("button");
         editBtn.type = "button";
-        editBtn.className = "contractor-row-btn";
-        editBtn.setAttribute("data-contractor-action", "edit");
-        editBtn.textContent = "Edit";
+        editBtn.className = "company-card-btn";
+        editBtn.setAttribute("data-card-action", "edit");
+        editBtn.setAttribute("aria-label", "Edit contractor");
+        editBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"/></svg>';
 
         var deleteBtn = document.createElement("button");
         deleteBtn.type = "button";
-        deleteBtn.className = "contractor-row-btn delete";
-        deleteBtn.setAttribute("data-contractor-action", "delete");
-        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "company-card-btn";
+        deleteBtn.setAttribute("data-card-action", "delete");
+        deleteBtn.setAttribute("aria-label", "Delete contractor");
+        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
 
+        actionsWrap.appendChild(viewBtn);
         actionsWrap.appendChild(editBtn);
         actionsWrap.appendChild(deleteBtn);
-        actionsCell.appendChild(actionsWrap);
-        row.appendChild(actionsCell);
+        row.appendChild(actionsWrap);
       }
 
       function hydrateExistingContractorRows() {
@@ -802,7 +3472,7 @@
           return;
         }
 
-        var rows = contractorsTableBody.querySelectorAll("tr");
+        var rows = contractorsTableBody.querySelectorAll("[data-contractor-row='1']");
         rows.forEach(function (row) {
           if (contractorsEmptyRow && row === contractorsEmptyRow) {
             return;
@@ -828,26 +3498,69 @@
           if (firstInput) {
             firstInput.value = payload.company;
           }
+          if (contractorTradeNameInput) {
+            contractorTradeNameInput.value = payload.tradeName || "";
+          }
           if (contractorTinInput) {
             contractorTinInput.value = payload.tin === "-" ? "" : payload.tin;
           }
           if (contractorPhilgepsInput) {
             contractorPhilgepsInput.value = payload.philgeps === "-" ? "" : payload.philgeps;
           }
+          if (contractorPcabLicenseInput) {
+            contractorPcabLicenseInput.value = payload.pcabLicense || "";
+          }
           if (contractorPcabInput) {
             contractorPcabInput.value = payload.pcabValue || "";
+          }
+          if (contractorLicenseExpiryInput) {
+            contractorLicenseExpiryInput.value = payload.licenseExpiry || "";
+          }
+          if (contractorPcabClassificationInput) {
+            contractorPcabClassificationInput.value = payload.pcabClassification || "";
+          }
+          if (contractorAddressInput) {
+            contractorAddressInput.value = payload.address || "";
+          }
+          if (contractorCityInput) {
+            contractorCityInput.value = payload.city || "";
+          }
+          if (contractorProvinceInput) {
+            contractorProvinceInput.value = payload.province || "";
           }
           if (contractorContactInput) {
             contractorContactInput.value = payload.contact === "-" ? "" : payload.contact;
           }
+          if (contractorEmailInput) {
+            contractorEmailInput.value = payload.email || "";
+          }
+          if (contractorPhoneInput) {
+            contractorPhoneInput.value = payload.phone || "";
+          }
           if (contractorMobileInput) {
             contractorMobileInput.value = payload.mobile === "-" ? "" : payload.mobile;
+          }
+          if (contractorRemarksInput) {
+            contractorRemarksInput.value = payload.remarks || "";
+          }
+          if (contractorProjectNameInput) {
+            contractorProjectNameInput.value = payload.projectName && payload.projectName !== "-" ? payload.projectName : "";
+          }
+          if (contractorProjectStatusInput) {
+            contractorProjectStatusInput.value = payload.projectStatus || "Ongoing";
+          }
+          if (contractorProjectImageInput) {
+            contractorProjectImageInput.value = payload.projectImage || "";
           }
           if (contractorStatusInput) {
             contractorStatusInput.value = payload.status || "Active";
           }
           if (contractorRatingInput) {
             contractorRatingInput.value = payload.rating === "-" ? "" : payload.rating;
+          }
+          setContractorFormReports(payload.reports || []);
+          if (contractorDocumentScanInput) {
+            contractorDocumentScanInput.value = "";
           }
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Edit Contractor";
@@ -857,6 +3570,7 @@
           }
         } else {
           resetContractorForm();
+          setContractorFormReports([]);
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Add New Contractor";
           }
@@ -896,6 +3610,502 @@
         refreshContractorCount();
       }
 
+      function valueOrDash(value) {
+        if (!value) {
+          return "-";
+        }
+        return String(value).trim() ? String(value).trim() : "-";
+      }
+
+      function formatHistoryDate(value) {
+        if (!value) {
+          return "-";
+        }
+
+        var parsed = new Date(value);
+        if (isNaN(parsed.getTime())) {
+          return valueOrDash(value);
+        }
+
+        return parsed.toLocaleString();
+      }
+
+      function contractHistoryStatusClass(status) {
+        if (status === "Completed") {
+          return "contract-history-status contract-history-status-completed";
+        }
+        if (status === "Ongoing") {
+          return "contract-history-status contract-history-status-ongoing";
+        }
+        if (status === "Pending") {
+          return "contract-history-status contract-history-status-pending";
+        }
+        return "contract-history-status contract-history-status-neutral";
+      }
+
+      function contractProgressByStatus(status) {
+        if (status === "Completed") {
+          return "1.00%";
+        }
+        if (status === "Ongoing") {
+          return "0.43%";
+        }
+        if (status === "Pending") {
+          return "0.00%";
+        }
+        return "0.00%";
+      }
+
+      function buildContractHistoryCards(payload, locationText) {
+        if (!detailHistoryCards) {
+          return;
+        }
+
+        detailHistoryCards.innerHTML = "";
+        if (detailHistoryTotalCost) {
+          detailHistoryTotalCost.textContent = "P0";
+        }
+
+        var hasProject = payload && payload.projectName && payload.projectName !== "-";
+        if (!hasProject) {
+          if (detailHistoryEmpty) {
+            detailHistoryEmpty.hidden = false;
+            detailHistoryCards.appendChild(detailHistoryEmpty);
+          }
+          return;
+        }
+
+        var historyCard = document.createElement("article");
+        historyCard.className = "contract-history-item";
+
+        var topRow = document.createElement("div");
+        topRow.className = "contract-history-top";
+
+        var titleEl = document.createElement("h4");
+        titleEl.className = "contract-history-title";
+        titleEl.textContent = valueOrDash(payload.projectName);
+
+        var statusEl = document.createElement("span");
+        statusEl.className = contractHistoryStatusClass(payload.projectStatus);
+        statusEl.textContent = payload.projectStatus === "Ongoing" ? "On going" : valueOrDash(payload.projectStatus);
+
+        topRow.appendChild(titleEl);
+        topRow.appendChild(statusEl);
+        historyCard.appendChild(topRow);
+
+        var codeEl = document.createElement("span");
+        codeEl.className = "contract-history-code";
+        codeEl.textContent = valueOrDash(payload.tin) === "-" ? "NO CODE" : valueOrDash(payload.tin);
+        historyCard.appendChild(codeEl);
+
+        var locationEl = document.createElement("p");
+        locationEl.className = "contract-history-location";
+        locationEl.textContent = "⊙ " + valueOrDash(locationText);
+        historyCard.appendChild(locationEl);
+
+        var metaEl = document.createElement("p");
+        metaEl.className = "contract-history-meta";
+
+        var fyValue = "-";
+        var fySource = payload.updatedAt || payload.createdAt;
+        if (fySource) {
+          var fyDate = new Date(fySource);
+          if (!isNaN(fyDate.getTime())) {
+            fyValue = String(fyDate.getFullYear());
+          }
+        }
+
+        metaEl.textContent = "Cost: P0    FY " + fyValue + "    Progress: " + contractProgressByStatus(payload.projectStatus);
+        historyCard.appendChild(metaEl);
+
+        detailHistoryCards.appendChild(historyCard);
+      }
+
+      function projectStatusClass(status) {
+        if (status === "Ongoing") {
+          return "project-status-pill project-status-ongoing";
+        }
+        if (status === "Completed") {
+          return "project-status-pill project-status-completed";
+        }
+        if (status === "Pending") {
+          return "project-status-pill project-status-pending";
+        }
+        return "project-status-pill project-status-neutral";
+      }
+
+      function statusChipClass(status) {
+        if (status === "Active") {
+          return "details-status-chip details-status-chip-active";
+        }
+        if (status === "Blacklisted") {
+          return "details-status-chip details-status-chip-blacklisted";
+        }
+        return "details-status-chip details-status-chip-neutral";
+      }
+
+      function setActiveDetailsTab(tabName) {
+        if (!detailTabButtons || !detailPanels) {
+          return;
+        }
+
+        detailTabButtons.forEach(function (btn) {
+          var isActive = btn.getAttribute("data-details-tab") === tabName;
+          btn.classList.toggle("is-active", isActive);
+          btn.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+
+        detailPanels.forEach(function (panel) {
+          var isPanelActive = panel.getAttribute("data-details-panel") === tabName;
+          panel.classList.toggle("is-active", isPanelActive);
+        });
+      }
+
+      function openContractorDetails(row) {
+        if (!row || !detailsModal) {
+          return;
+        }
+
+        var payload = rowPayload(row);
+        if (!payload) {
+          return;
+        }
+
+        var locationParts = [payload.address, payload.city, payload.province].filter(function (value) {
+          return value && value !== "-";
+        });
+        var locationText = locationParts.length ? locationParts.join(", ") : "-";
+        var hasContract = Boolean(payload.projectName && payload.projectName !== "-");
+        var totalContracts = hasContract ? 1 : 0;
+        var completedContracts = hasContract && payload.projectStatus === "Completed" ? 1 : 0;
+        var ongoingContracts = hasContract && payload.projectStatus === "Ongoing" ? 1 : 0;
+        var hasRating = Boolean(payload.rating && payload.rating !== "-" && payload.rating !== "0" && payload.rating !== "0.0");
+        var ratingsCount = hasRating ? 1 : 0;
+
+        if (detailCompanyName) detailCompanyName.textContent = valueOrDash(payload.company);
+        if (detailTradeName) detailTradeName.textContent = valueOrDash(payload.tradeName);
+        if (detailTin) detailTin.textContent = valueOrDash(payload.tin);
+        if (detailPhilgeps) detailPhilgeps.textContent = valueOrDash(payload.philgeps);
+        if (detailPcabLicense) detailPcabLicense.textContent = valueOrDash(payload.pcabLicense);
+        if (detailPcab) detailPcab.textContent = valueOrDash(payload.pcab);
+        if (detailLicenseExpiry) detailLicenseExpiry.textContent = valueOrDash(payload.licenseExpiry);
+        if (detailPcabClassification) detailPcabClassification.textContent = valueOrDash(payload.pcabClassification);
+        if (detailLocation) detailLocation.textContent = valueOrDash(locationText);
+        if (detailContact) detailContact.textContent = valueOrDash(payload.contact);
+        if (detailEmail) detailEmail.textContent = valueOrDash(payload.email);
+        if (detailPhone) detailPhone.textContent = valueOrDash(payload.phone);
+        if (detailMobile) detailMobile.textContent = valueOrDash(payload.mobile);
+        if (detailRemarks) detailRemarks.textContent = valueOrDash(payload.remarks);
+        if (detailProjectName) detailProjectName.textContent = valueOrDash(payload.projectName || (payload.company ? payload.company + " Project" : "-"));
+        if (detailProjectAddress) detailProjectAddress.textContent = valueOrDash(payload.address);
+        if (detailProjectCityProvince) {
+          var cityProvinceText = [payload.city, payload.province].filter(function (part) {
+            return part && part !== "-";
+          }).join(", ");
+          detailProjectCityProvince.textContent = valueOrDash(cityProvinceText || "-");
+        }
+        if (detailProjectPanelLocation) detailProjectPanelLocation.textContent = valueOrDash(locationText);
+        if (detailProjectOverview) detailProjectOverview.textContent = valueOrDash(payload.remarks || "No project overview available.");
+        if (detailProjectStatus) {
+          detailProjectStatus.textContent = valueOrDash(payload.projectStatus);
+          detailProjectStatus.className = projectStatusClass(payload.projectStatus);
+        }
+        if (detailProjectStatusBadge) {
+          detailProjectStatusBadge.textContent = valueOrDash(payload.projectStatus);
+          detailProjectStatusBadge.className = projectStatusClass(payload.projectStatus);
+        }
+        if (detailStatusChip) {
+          detailStatusChip.textContent = valueOrDash(payload.status);
+          detailStatusChip.className = statusChipClass(payload.status);
+        }
+        if (detailContractTotal) detailContractTotal.textContent = String(totalContracts);
+        if (detailContractCompleted) detailContractCompleted.textContent = String(completedContracts);
+        if (detailContractOngoing) detailContractOngoing.textContent = String(ongoingContracts);
+        if (detailContractValue) detailContractValue.textContent = "P0";
+        if (detailSummaryTotalContracts) detailSummaryTotalContracts.textContent = String(totalContracts);
+        if (detailSummaryCompleted) detailSummaryCompleted.textContent = String(completedContracts);
+        if (detailSummaryOngoing) detailSummaryOngoing.textContent = String(ongoingContracts);
+        if (detailSummaryTotalValue) detailSummaryTotalValue.textContent = "P0";
+        if (detailRatingValue) detailRatingValue.textContent = valueOrDash(payload.rating);
+        if (detailRatingsEmpty) detailRatingsEmpty.hidden = hasRating;
+        if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(totalContracts) + ")";
+        if (detailsRatingsTab) detailsRatingsTab.textContent = "Ratings (" + String(ratingsCount) + ")";
+        var reportItems = Array.isArray(payload.reports) ? payload.reports : [];
+        if (detailDocPrimary) {
+          if (reportItems.length > 0) {
+            setProjectDocumentListItem(detailDocPrimary, reportItems[0], valueOrDash(payload.projectName || payload.company) + " specification file");
+          } else {
+            detailDocPrimary.textContent = valueOrDash(payload.projectName || payload.company) + " specification file";
+          }
+        }
+        if (detailDocSecondary) {
+          if (reportItems.length > 1) {
+            setProjectDocumentListItem(detailDocSecondary, reportItems[1], valueOrDash(payload.company) + " supporting document");
+          } else {
+            detailDocSecondary.textContent = valueOrDash(payload.company) + " supporting document";
+          }
+        }
+        renderReportDetails(reportItems);
+        buildContractHistoryCards(payload, locationText);
+
+        if (detailProjectImage && detailProjectNoImage) {
+          if (payload.projectImage) {
+            detailProjectImage.src = payload.projectImage;
+            detailProjectImage.hidden = false;
+            if (detailProjectImageThumbOne) {
+              detailProjectImageThumbOne.src = payload.projectImage;
+              detailProjectImageThumbOne.hidden = false;
+            }
+            if (detailProjectImageThumbTwo) {
+              detailProjectImageThumbTwo.src = payload.projectImage;
+              detailProjectImageThumbTwo.hidden = false;
+            }
+            detailProjectNoImage.hidden = true;
+          } else {
+            detailProjectImage.src = "";
+            detailProjectImage.hidden = true;
+            if (detailProjectImageThumbOne) {
+              detailProjectImageThumbOne.src = "";
+              detailProjectImageThumbOne.hidden = true;
+            }
+            if (detailProjectImageThumbTwo) {
+              detailProjectImageThumbTwo.src = "";
+              detailProjectImageThumbTwo.hidden = true;
+            }
+            detailProjectNoImage.hidden = false;
+          }
+        }
+
+        setActiveDetailsTab("information");
+        detailsModal.classList.add("open");
+        detailsModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+      }
+
+      function closeContractorDetails() {
+        if (!detailsModal) {
+          return;
+        }
+
+        detailsModal.classList.remove("open");
+        detailsModal.setAttribute("aria-hidden", "true");
+        if (!modal || !modal.classList.contains("open")) {
+          document.body.classList.remove("modal-open");
+        }
+      }
+
+      function updateUploadSelectionState() {
+        var count = Array.isArray(pendingUploadFiles) ? pendingUploadFiles.length : 0;
+
+        if (uploadSelectionText) {
+          if (count > 0) {
+            uploadSelectionText.textContent = String(count) + (count === 1 ? " file ready to scan." : " files ready to scan.");
+          } else {
+            uploadSelectionText.textContent = "No files selected.";
+          }
+        }
+
+        if (scanUploadBtn) {
+          scanUploadBtn.disabled = count === 0;
+        }
+      }
+
+      function closeUploadScanModal() {
+        if (!uploadScanModal) {
+          return;
+        }
+        uploadScanModal.classList.remove("open");
+        uploadScanModal.setAttribute("aria-hidden", "true");
+        pendingScanMatches = null;
+      }
+
+      function openUploadScanModal() {
+        if (!uploadScanModal) {
+          return;
+        }
+        uploadScanModal.classList.add("open");
+        uploadScanModal.setAttribute("aria-hidden", "false");
+      }
+
+      function buildScanMatches(files) {
+        var rows = contractorsTableBody ? contractorsTableBody.querySelectorAll("[data-contractor-row='1']") : [];
+        var rowItems = [];
+        rows.forEach(function (row) {
+          var payload = rowPayload(row);
+          if (payload && payload.company) {
+            rowItems.push({ row: row, payload: payload, files: [] });
+          }
+        });
+
+        var unmatched = [];
+        var totalMatched = 0;
+
+        files.forEach(function (file) {
+          var meta = fileMeta(file);
+          var fileIndexText = normalizeText((meta.relativePath || "") + " " + meta.name);
+          var bestScore = 0;
+          var bestMatch = null;
+
+          rowItems.forEach(function (item) {
+            var score = scoreFileForCompany(fileIndexText, item.payload.company, item.payload.tradeName);
+            if (score > bestScore) {
+              bestScore = score;
+              bestMatch = item;
+            }
+          });
+
+          if (bestMatch && bestScore >= 18) {
+            bestMatch.files.push(meta);
+            totalMatched += 1;
+          } else {
+            unmatched.push(meta);
+          }
+        });
+
+        var matchedItems = rowItems.filter(function (item) {
+          return item.files.length > 0;
+        });
+
+        return {
+          matchedItems: matchedItems,
+          unmatched: unmatched,
+          totalFiles: files.length,
+          totalMatched: totalMatched
+        };
+      }
+
+      function renderScanResults(scanData) {
+        if (!uploadScanResults) {
+          return;
+        }
+
+        uploadScanResults.innerHTML = "";
+
+        if (!scanData || (scanData.matchedItems.length === 0 && scanData.unmatched.length === 0)) {
+          var emptyMessage = document.createElement("p");
+          emptyMessage.className = "scan-result-empty";
+          emptyMessage.textContent = "No scan results available.";
+          uploadScanResults.appendChild(emptyMessage);
+          return;
+        }
+
+        if (scanData.matchedItems.length > 0) {
+          scanData.matchedItems.forEach(function (item) {
+            var card = document.createElement("article");
+            card.className = "scan-result-card";
+
+            var title = document.createElement("h4");
+            title.textContent = item.payload.company;
+            card.appendChild(title);
+
+            var meta = document.createElement("p");
+            meta.className = "scan-result-meta";
+            meta.textContent = String(item.files.length) + (item.files.length === 1 ? " file matched" : " files matched");
+            card.appendChild(meta);
+
+            var list = document.createElement("ul");
+            list.className = "scan-result-files";
+
+            item.files.slice(0, 6).forEach(function (reportFile) {
+              var li = document.createElement("li");
+              li.textContent = reportFile.name;
+              list.appendChild(li);
+            });
+
+            if (item.files.length > 6) {
+              var overflowItem = document.createElement("li");
+              overflowItem.textContent = "+" + String(item.files.length - 6) + " more";
+              list.appendChild(overflowItem);
+            }
+
+            card.appendChild(list);
+            uploadScanResults.appendChild(card);
+          });
+        }
+
+        if (scanData.unmatched.length > 0) {
+          var unmatchedCard = document.createElement("article");
+          unmatchedCard.className = "scan-result-card";
+
+          var unmatchedTitle = document.createElement("h4");
+          unmatchedTitle.textContent = "Unmatched Files";
+          unmatchedCard.appendChild(unmatchedTitle);
+
+          var unmatchedMeta = document.createElement("p");
+          unmatchedMeta.className = "scan-result-meta";
+          unmatchedMeta.textContent = String(scanData.unmatched.length) + " file(s) were not matched to any company";
+          unmatchedCard.appendChild(unmatchedMeta);
+
+          var unmatchedList = document.createElement("ul");
+          unmatchedList.className = "scan-result-files";
+          scanData.unmatched.slice(0, 6).forEach(function (reportFile) {
+            var unmatchedItem = document.createElement("li");
+            unmatchedItem.textContent = reportFile.name;
+            unmatchedList.appendChild(unmatchedItem);
+          });
+          if (scanData.unmatched.length > 6) {
+            var remaining = document.createElement("li");
+            remaining.textContent = "+" + String(scanData.unmatched.length - 6) + " more";
+            unmatchedList.appendChild(remaining);
+          }
+
+          unmatchedCard.appendChild(unmatchedList);
+          uploadScanResults.appendChild(unmatchedCard);
+        }
+      }
+
+      function commitScannedReports() {
+        if (!pendingScanMatches || !pendingScanMatches.matchedItems || pendingScanMatches.matchedItems.length === 0) {
+          closeUploadScanModal();
+          return;
+        }
+
+        var nowIso = new Date().toISOString();
+        var updatedCompanies = 0;
+        var totalImported = 0;
+
+        pendingScanMatches.matchedItems.forEach(function (item) {
+          var payload = rowPayload(item.row);
+          if (!payload) {
+            return;
+          }
+
+          var existingReports = Array.isArray(payload.reports) ? payload.reports.slice() : [];
+          var existingKeys = {};
+          existingReports.forEach(function (report) {
+            var reportKey = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+            existingKeys[reportKey] = true;
+          });
+
+          item.files.forEach(function (reportFile) {
+            var key = (reportFile.relativePath || reportFile.name || "") + "|" + String(reportFile.size || 0);
+            if (existingKeys[key]) {
+              return;
+            }
+            existingKeys[key] = true;
+            var importedReport = {
+              name: reportFile.name,
+              relativePath: reportFile.relativePath || "",
+              type: reportFile.type || "",
+              size: reportFile.size || 0,
+              uploadedAt: nowIso
+            };
+            registerRuntimeReportUrl(importedReport, reportFile.fileObject || null);
+            existingReports.push(importedReport);
+            totalImported += 1;
+          });
+
+          payload.reports = existingReports;
+          payload.updatedAt = nowIso;
+          applyRowPayload(item.row, payload);
+          updatedCompanies += 1;
+        });
+
+        persistContractorsToStorage();
+        closeUploadScanModal();
+        alert("Imported " + String(totalImported) + " report file(s) into " + String(updatedCompanies) + " contractor(s).");
+      }
+
       function saveContractorRow() {
         if (!contractorsTableBody || !firstInput) {
           return;
@@ -907,42 +4117,79 @@
           return;
         }
 
+        var nowIso = new Date().toISOString();
+
         if (isEditingContractor && editingContractorRow) {
+          var existingPayload = rowPayload(editingContractorRow);
+          payload.createdAt = existingPayload && existingPayload.createdAt ? existingPayload.createdAt : nowIso;
+          if ((!payload.reports || payload.reports.length === 0) && existingPayload && Array.isArray(existingPayload.reports)) {
+            payload.reports = existingPayload.reports.slice();
+          }
+          payload.updatedAt = nowIso;
           applyRowPayload(editingContractorRow, payload);
         } else {
-          var row = document.createElement("tr");
+          payload.createdAt = nowIso;
+          payload.updatedAt = nowIso;
+          if (!Array.isArray(payload.reports)) {
+            payload.reports = [];
+          }
+          var row = document.createElement("div");
           applyRowPayload(row, payload);
           contractorsTableBody.appendChild(row);
         }
 
+        persistContractorsToStorage();
         closeContractorModal();
       }
 
       if (contractorsTableBody) {
         contractorsTableBody.addEventListener("click", function (event) {
-          var actionBtn = event.target.closest("button[data-contractor-action]");
-          if (!actionBtn) {
-            return;
-          }
-
-          var row = actionBtn.closest("tr[data-contractor-row='1']");
+          var row = event.target.closest("[data-contractor-row='1']");
           if (!row) {
             return;
           }
 
-          var action = actionBtn.getAttribute("data-contractor-action");
-          if (action === "edit") {
-            openContractorModal(row);
+          var actionBtn = event.target.closest("button[data-card-action]");
+          if (actionBtn) {
+            var action = actionBtn.getAttribute("data-card-action");
+            if (action === "view") {
+              openContractorDetails(row);
+              return;
+            }
+            if (action === "edit") {
+              openContractorModal(row);
+              return;
+            }
+            if (action === "delete") {
+              if (editingContractorRow === row) {
+                closeContractorModal();
+              }
+              row.remove();
+              refreshContractorCount();
+              persistContractorsToStorage();
+              return;
+            }
+          }
+
+          openContractorDetails(row);
+        });
+
+        contractorsTableBody.addEventListener("keydown", function (event) {
+          if (event.key !== "Enter" && event.key !== " ") {
             return;
           }
 
-          if (action === "delete") {
-            if (editingContractorRow === row) {
-              closeContractorModal();
-            }
-            row.remove();
-            refreshContractorCount();
+          if (event.target.closest("button[data-card-action]")) {
+            return;
           }
+
+          var row = event.target.closest("[data-contractor-row='1']");
+          if (!row) {
+            return;
+          }
+
+          event.preventDefault();
+          openContractorDetails(row);
         });
       }
 
@@ -967,6 +4214,103 @@
         });
       }
 
+      if (contractorDocumentScanInput) {
+        contractorDocumentScanInput.addEventListener("change", function () {
+          var selectedFiles = Array.prototype.slice.call(contractorDocumentScanInput.files || []);
+          if (selectedFiles.length === 0) {
+            return;
+          }
+
+          var nowIso = new Date().toISOString();
+          var uploadedFiles = [];
+
+          selectedFiles.forEach(function (selectedFile) {
+            var meta = fileMeta(selectedFile);
+            uploadedFiles.push({
+              name: meta.name,
+              relativePath: meta.relativePath || "",
+              type: meta.type || "",
+              size: meta.size || 0,
+              uploadedAt: nowIso,
+              fileObject: selectedFile
+            });
+          });
+
+          if (uploadedFiles.length > 0) {
+            var existing = Array.isArray(contractorFormReports) ? contractorFormReports.slice() : [];
+            var keys = {};
+            existing.forEach(function (report) {
+              var key = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+              keys[key] = true;
+            });
+
+            uploadedFiles.forEach(function (report) {
+              var reportKey = (report.relativePath || report.name || "") + "|" + String(report.size || 0);
+              if (keys[reportKey]) {
+                return;
+              }
+              keys[reportKey] = true;
+              existing.push(report);
+            });
+
+            setContractorFormReports(existing);
+          }
+
+          contractorDocumentScanInput.value = "";
+        });
+      }
+
+      if (contractorUploadInput) {
+        contractorUploadInput.addEventListener("change", function () {
+          var selectedFiles = Array.prototype.slice.call(contractorUploadInput.files || []);
+          pendingUploadFiles = [];
+          rejectedUploadFiles = [];
+
+          selectedFiles.forEach(function (selectedFile) {
+            pendingUploadFiles.push(selectedFile);
+          });
+
+          updateUploadSelectionState();
+        });
+      }
+
+      if (scanUploadBtn) {
+        scanUploadBtn.addEventListener("click", function () {
+          if (!pendingUploadFiles || pendingUploadFiles.length === 0) {
+            alert("Select files first before scanning.");
+            return;
+          }
+
+          copyUploadedFilesContent(pendingUploadFiles).then(function (copyResult) {
+            if (copyResult && copyResult.message) {
+              alert(copyResult.message);
+            }
+
+            if (!contractorsTableBody || contractorsTableBody.querySelectorAll("[data-contractor-row='1']").length === 0) {
+              alert("No contractors found. Add contractors first before scanning.");
+              return;
+            }
+
+            var scanData = buildScanMatches(pendingUploadFiles);
+            if (!scanData || scanData.totalFiles === 0) {
+              alert("No files available to scan.");
+              return;
+            }
+
+            if (scanData.matchedItems.length === 0) {
+              alert("Scan finished, but no files matched any contractor company name.");
+              return;
+            }
+
+            pendingScanMatches = scanData;
+            renderScanResults(scanData);
+            openUploadScanModal();
+          }).catch(function () {
+            alert("Scan failed while copying file content.");
+          });
+        });
+      }
+
       if (modal) {
         modal.addEventListener("click", function (event) {
           if (event.target === modal) {
@@ -975,14 +4319,83 @@
         });
       }
 
+      if (detailsModal) {
+        detailsModal.addEventListener("click", function (event) {
+          if (event.target === detailsModal) {
+            closeContractorDetails();
+          }
+        });
+      }
+
+      if (uploadScanModal) {
+        uploadScanModal.addEventListener("click", function (event) {
+          if (event.target === uploadScanModal) {
+            closeUploadScanModal();
+          }
+        });
+      }
+
+      if (reportPreviewModal) {
+        reportPreviewModal.addEventListener("click", function (event) {
+          if (event.target === reportPreviewModal) {
+            closeReportPreviewModal();
+          }
+        });
+      }
+
+      if (closeDetailsBtn) {
+        closeDetailsBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (closeDetailsFooterBtn) {
+        closeDetailsFooterBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (closeUploadScanModalBtn) {
+        closeUploadScanModalBtn.addEventListener("click", closeUploadScanModal);
+      }
+
+      if (cancelUploadScanBtn) {
+        cancelUploadScanBtn.addEventListener("click", closeUploadScanModal);
+      }
+
+      if (confirmUploadScanBtn) {
+        confirmUploadScanBtn.addEventListener("click", commitScannedReports);
+      }
+
+      if (closeReportPreviewModalBtn) {
+        closeReportPreviewModalBtn.addEventListener("click", closeReportPreviewModal);
+      }
+
+      if (closeReportPreviewFooterBtn) {
+        closeReportPreviewFooterBtn.addEventListener("click", closeReportPreviewModal);
+      }
+
+      if (detailTabButtons) {
+        detailTabButtons.forEach(function (tabBtn) {
+          tabBtn.addEventListener("click", function () {
+            var targetTab = tabBtn.getAttribute("data-details-tab");
+            if (!targetTab) {
+              return;
+            }
+            setActiveDetailsTab(targetTab);
+          });
+        });
+      }
+
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
+          closeReportPreviewModal();
+          closeUploadScanModal();
+          closeContractorDetails();
           closeContractorModal();
         }
       });
 
+      loadContractorsFromStorage();
       hydrateExistingContractorRows();
       refreshContractorCount();
+      updateUploadSelectionState();
     });
   </script>
 </body>

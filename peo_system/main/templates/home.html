@@ -241,6 +241,83 @@
             background: #f6f8fb;
         }
 
+        .nav-loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(38, 38, 38, 0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 1200;
+        }
+
+        .nav-loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: none;
+        }
+
+        .loader-circle-9 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: transparent;
+            border: 3px solid #3c3c3c;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 100px;
+            font-family: sans-serif;
+            font-size: 15px;
+            color: #00eaff;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(0, 0, 0, .5);
+        }
+
+        .loader-circle-9:before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid #00eaff;
+            border-right: 3px solid #00eaff;
+            border-radius: 50%;
+            animation: animateC 2s linear infinite;
+        }
+
+        .loader-circle-9 span {
+            display: block;
+            position: absolute;
+            top: calc(50% - 3.5px);
+            left: 50%;
+            width: 50%;
+            height: 6px;
+            background: transparent;
+            transform-origin: left;
+            animation: animate 2s linear infinite;
+        }
+
+        .loader-circle-9 span:before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #00eaff;
+            top: -8.5px;
+            right: -11px;
+            box-shadow: 0 0 20px #00eaff;
+        }
+
         @keyframes navItemBlink {
             0%, 100% {
                 background: rgba(8, 39, 74, 0.32);
@@ -261,6 +338,24 @@
             }
         }
 
+        @keyframes animateC {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes animate {
+            0% {
+                transform: rotate(45deg);
+            }
+            100% {
+                transform: rotate(405deg);
+            }
+        }
+
         .nav-icon {
             width: 22px;
             height: 22px;
@@ -277,6 +372,7 @@
             flex: 1;
             min-width: 0;
             background: #f2f4f7;
+            position: relative;
         }
 
         .topbar {
@@ -999,6 +1095,12 @@
                     <iframe id="embeddedMaintenanceFrame" class="embedded-frame" src="about:blank" loading="lazy" title="Maintenance View"></iframe>
                 </section>
             </main>
+            <div class="nav-loading-overlay" id="navLoadingOverlay" aria-hidden="true">
+                <div class="loader-circle-9" aria-label="Loading">
+                    Loading
+                    <span></span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="new-item-modal {% if show_new_item_modal %}show{% endif %}" id="newItemModal">
@@ -1112,6 +1214,129 @@
             var subItems = submenu ? submenu.querySelectorAll(".nav-subitem") : [];
             var topNavItems = document.querySelectorAll(".nav-menu > a.nav-item");
             var maintenanceGroupItem = group ? group.querySelector(".nav-item-group") : null;
+            var navLoadingOverlay = document.getElementById("navLoadingOverlay");
+            var navLoadingTimeoutId = null;
+            var navLoadingMinTimeoutId = null;
+            var navLoadingShownAt = 0;
+            var NAV_LOADING_MIN_VISIBLE_MS = 1400;
+            var NAV_RELOAD_LOADER_KEY = "peo.home.reload_loader";
+            var NAV_RELOAD_LOADER_EXTRA_MS = 180;
+            var LAST_SIDEBAR_VIEW_KEY = "peo.home.last_sidebar_view";
+            var VIEW_KEYS = {
+                DASHBOARD: "dashboard",
+                ADMIN: "admin_division",
+                PROJECTS: "projects",
+                CONSTRUCTION: "construction_division",
+                QUALITY: "quality_division",
+                PLANNING: "planning_division",
+                HISTORY: "history",
+                ASSIGNMENTS: "my_assignments",
+                MAINTENANCE: "maintenance_management",
+                TASKS: "maintenance_tasks",
+                CONTRACTORS: "maintenance_contractors"
+            };
+
+            function showNavLoading() {
+                if (!navLoadingOverlay) {
+                    return;
+                }
+                if (navLoadingTimeoutId) {
+                    window.clearTimeout(navLoadingTimeoutId);
+                }
+                if (navLoadingMinTimeoutId) {
+                    window.clearTimeout(navLoadingMinTimeoutId);
+                    navLoadingMinTimeoutId = null;
+                }
+                navLoadingShownAt = Date.now();
+                navLoadingOverlay.classList.add("show");
+                navLoadingOverlay.setAttribute("aria-hidden", "false");
+                navLoadingTimeoutId = window.setTimeout(hideNavLoading, 6000);
+            }
+
+            function hideNavLoading(force) {
+                if (!navLoadingOverlay) {
+                    return;
+                }
+                if (navLoadingTimeoutId) {
+                    window.clearTimeout(navLoadingTimeoutId);
+                    navLoadingTimeoutId = null;
+                }
+                if (!force && navLoadingShownAt) {
+                    var elapsed = Date.now() - navLoadingShownAt;
+                    if (elapsed < NAV_LOADING_MIN_VISIBLE_MS) {
+                        if (navLoadingMinTimeoutId) {
+                            window.clearTimeout(navLoadingMinTimeoutId);
+                        }
+                        navLoadingMinTimeoutId = window.setTimeout(function () {
+                            hideNavLoading(true);
+                        }, NAV_LOADING_MIN_VISIBLE_MS - elapsed);
+                        return;
+                    }
+                }
+                if (navLoadingMinTimeoutId) {
+                    window.clearTimeout(navLoadingMinTimeoutId);
+                    navLoadingMinTimeoutId = null;
+                }
+                navLoadingShownAt = 0;
+                navLoadingOverlay.classList.remove("show");
+                navLoadingOverlay.setAttribute("aria-hidden", "true");
+            }
+
+            function saveLastSidebarView(viewKey) {
+                if (!viewKey) {
+                    return;
+                }
+                try {
+                    window.localStorage.setItem(LAST_SIDEBAR_VIEW_KEY, viewKey);
+                } catch (error) {
+                    // Ignore browser storage errors.
+                }
+            }
+
+            function getLastSidebarView() {
+                try {
+                    return window.localStorage.getItem(LAST_SIDEBAR_VIEW_KEY);
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function markReloadLoaderRequest() {
+                try {
+                    window.sessionStorage.setItem(NAV_RELOAD_LOADER_KEY, "1");
+                } catch (error) {
+                    // Ignore browser storage errors.
+                }
+            }
+
+            function consumeReloadLoaderRequest() {
+                try {
+                    var requested = window.sessionStorage.getItem(NAV_RELOAD_LOADER_KEY) === "1";
+                    if (requested) {
+                        window.sessionStorage.removeItem(NAV_RELOAD_LOADER_KEY);
+                    }
+                    return requested;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            function isReloadNavigation() {
+                try {
+                    var navEntries = window.performance && window.performance.getEntriesByType
+                        ? window.performance.getEntriesByType("navigation")
+                        : [];
+                    if (navEntries && navEntries.length) {
+                        return navEntries[0].type === "reload";
+                    }
+                    if (window.performance && window.performance.navigation) {
+                        return window.performance.navigation.type === 1;
+                    }
+                } catch (error) {
+                    // Ignore browser performance API errors.
+                }
+                return false;
+            }
 
             function setActiveDataTab(activeTab) {
                 dataTabs.forEach(function (tab) {
@@ -1195,7 +1420,10 @@
             }
 
             if (embeddedFrame) {
-                embeddedFrame.addEventListener("load", resizeEmbeddedFrame);
+                embeddedFrame.addEventListener("load", function () {
+                    resizeEmbeddedFrame();
+                    hideNavLoading();
+                });
             }
 
             function playBlink(target) {
@@ -1245,7 +1473,16 @@
                 group.classList.toggle("open", isOpen);
             }
 
-            function openEmbeddedMaintenance(link, title) {
+            function openEmbeddedMaintenance(link, title, withLoading) {
+                if (!link) {
+                    hideNavLoading();
+                    return;
+                }
+
+                if (withLoading) {
+                    showNavLoading();
+                }
+
                 if (!embeddedPanel || !embeddedFrame) {
                     window.location.href = link;
                     return;
@@ -1269,6 +1506,7 @@
                     embeddedFrame.setAttribute("src", embeddedLink);
                 } else {
                     resizeEmbeddedFrame();
+                    hideNavLoading();
                 }
 
                 var targetTop = embeddedPanel.getBoundingClientRect().top + window.scrollY - 88;
@@ -1286,6 +1524,7 @@
 
             function showDivisionsPanel() {
                 closeEmbeddedMaintenance();
+                hideNavLoading();
                 setDataTabsVisible(true);
 
                 if (homeOverviewContent) {
@@ -1299,6 +1538,7 @@
 
             function showProjectsPanel() {
                 closeEmbeddedMaintenance();
+                hideNavLoading();
                 setDataTabsVisible(true);
 
                 if (homeOverviewContent) {
@@ -1308,6 +1548,197 @@
                 if (projectsPanel) {
                     projectsPanel.classList.remove("hidden");
                 }
+            }
+
+            var shouldShowReloadLoader = consumeReloadLoaderRequest() || isReloadNavigation();
+            if (shouldShowReloadLoader) {
+                showNavLoading();
+                window.addEventListener("load", function () {
+                    window.setTimeout(function () {
+                        hideNavLoading();
+                    }, NAV_RELOAD_LOADER_EXTRA_MS);
+                }, { once: true });
+            }
+
+            window.addEventListener("keydown", function (event) {
+                if (event.key === "F5" || ((event.ctrlKey || event.metaKey) && (event.key === "r" || event.key === "R"))) {
+                    markReloadLoaderRequest();
+                }
+            });
+
+            window.addEventListener("beforeunload", function () {
+                showNavLoading();
+            });
+
+            function runAfterNavTransition(callback, useDelay) {
+                if (!callback) {
+                    return;
+                }
+                if (useDelay) {
+                    window.setTimeout(callback, 180);
+                    return;
+                }
+                callback();
+            }
+
+            function openSidebarView(viewKey, options) {
+                options = options || {};
+                var animate = options.animate !== false;
+                var persist = options.persist !== false;
+                var useLoader = options.useLoader !== false;
+
+                if (persist) {
+                    saveLastSidebarView(viewKey);
+                }
+
+                if (viewKey === VIEW_KEYS.DASHBOARD) {
+                    setMaintenanceMenuState(false);
+                    if (tabDivisions) {
+                        setActiveDataTab(tabDivisions);
+                    }
+                    showDivisionsPanel();
+                    if (dashboardNavLink) {
+                        setActiveTopNavItem(dashboardNavLink);
+                        if (animate) {
+                            playBlink(dashboardNavLink);
+                        }
+                    }
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.ADMIN && adminDivisionNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(adminDivisionNavLink);
+                    if (animate) {
+                        playBlink(adminDivisionNavLink);
+                    }
+                    setDataTabsVisible(true);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(adminDivisionNavLink.getAttribute("href"), "Admin Division", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.PROJECTS && projectsNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(projectsNavLink);
+                    if (animate) {
+                        playBlink(projectsNavLink);
+                    }
+                    setDataTabsVisible(true);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(projectsNavLink.getAttribute("href"), "Projects", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.QUALITY && qualityDivisionNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(qualityDivisionNavLink);
+                    if (animate) {
+                        playBlink(qualityDivisionNavLink);
+                    }
+                    setDataTabsVisible(true);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(qualityDivisionNavLink.getAttribute("href"), "Quality Division", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.PLANNING && planningDivisionNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(planningDivisionNavLink);
+                    if (animate) {
+                        playBlink(planningDivisionNavLink);
+                    }
+                    setDataTabsVisible(true);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(planningDivisionNavLink.getAttribute("href"), "Planning Division", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.CONSTRUCTION && constructionDivisionNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(constructionDivisionNavLink);
+                    if (animate) {
+                        playBlink(constructionDivisionNavLink);
+                    }
+                    setDataTabsVisible(true);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(constructionDivisionNavLink.getAttribute("href"), "Construction Division", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.ASSIGNMENTS && myAssignmentsNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(myAssignmentsNavLink);
+                    if (animate) {
+                        playBlink(myAssignmentsNavLink);
+                    }
+                    setDataTabsVisible(false);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(myAssignmentsNavLink.getAttribute("href"), "My Assignments", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.HISTORY && historyNavLink) {
+                    setMaintenanceMenuState(false);
+                    setActiveTopNavItem(historyNavLink);
+                    if (animate) {
+                        playBlink(historyNavLink);
+                    }
+                    setDataTabsVisible(false);
+                    runAfterNavTransition(function () {
+                        openEmbeddedMaintenance(historyNavLink.getAttribute("href"), "History", useLoader);
+                    }, animate);
+                    return;
+                }
+
+                if (viewKey === VIEW_KEYS.MAINTENANCE && maintenanceManagementNavLink) {
+                    setMaintenanceMenuState(true);
+                    setActiveMaintenanceGroup(maintenanceManagementNavLink);
+                    if (animate) {
+                        playBlink(maintenanceManagementNavLink);
+                    }
+                    runAfterNavTransition(function () {
+                        var maintenanceTitle = maintenanceManagementNavLink.getAttribute("data-view-title") || "Maintenance Management";
+                        openEmbeddedMaintenance(maintenanceManagementNavLink.getAttribute("href"), maintenanceTitle, useLoader);
+                    }, animate);
+                    return;
+                }
+
+                var maintenanceTaskNavLink = document.getElementById("maintenanceTaskNavLink");
+                if (viewKey === VIEW_KEYS.TASKS && maintenanceTaskNavLink) {
+                    setMaintenanceMenuState(true);
+                    setActiveMaintenanceGroup(maintenanceTaskNavLink);
+                    if (animate) {
+                        playBlink(maintenanceTaskNavLink);
+                    }
+                    runAfterNavTransition(function () {
+                        var taskTitle = maintenanceTaskNavLink.getAttribute("data-view-title") || "Task Management";
+                        openEmbeddedMaintenance(maintenanceTaskNavLink.getAttribute("href"), taskTitle, useLoader);
+                    }, animate);
+                    return;
+                }
+
+                var maintenanceContractorNavLink = document.getElementById("maintenanceContractorNavLink");
+                if (viewKey === VIEW_KEYS.CONTRACTORS && maintenanceContractorNavLink) {
+                    setMaintenanceMenuState(true);
+                    setActiveMaintenanceGroup(maintenanceContractorNavLink);
+                    if (animate) {
+                        playBlink(maintenanceContractorNavLink);
+                    }
+                    runAfterNavTransition(function () {
+                        var contractorTitle = maintenanceContractorNavLink.getAttribute("data-view-title") || "Contractor Management";
+                        openEmbeddedMaintenance(maintenanceContractorNavLink.getAttribute("href"), contractorTitle, useLoader);
+                    }, animate);
+                    return;
+                }
+
+                hideNavLoading();
             }
 
             if (hasMaintenanceToggle) {
@@ -1323,16 +1754,13 @@
                 subItems.forEach(function (item) {
                     item.addEventListener("click", function (event) {
                         event.preventDefault();
-                        setActiveMaintenanceGroup(item);
-                        playBlink(item);
-
-                        var link = item.getAttribute("href");
-                        var viewTitle = item.getAttribute("data-view-title") || item.textContent.trim();
-                        if (link) {
-                            window.setTimeout(function () {
-                                openEmbeddedMaintenance(link, viewTitle);
-                            }, 180);
+                        var itemViewKey = VIEW_KEYS.MAINTENANCE;
+                        if (item.id === "maintenanceTaskNavLink") {
+                            itemViewKey = VIEW_KEYS.TASKS;
+                        } else if (item.id === "maintenanceContractorNavLink") {
+                            itemViewKey = VIEW_KEYS.CONTRACTORS;
                         }
+                        openSidebarView(itemViewKey, { animate: true, persist: true, useLoader: true });
                     });
                 });
             }
@@ -1340,112 +1768,49 @@
             if (myAssignmentsNavLink) {
                 myAssignmentsNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(myAssignmentsNavLink);
-                    playBlink(myAssignmentsNavLink);
-                    setDataTabsVisible(false);
-
-                    var link = myAssignmentsNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "My Assignments");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.ASSIGNMENTS, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (historyNavLink) {
                 historyNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(historyNavLink);
-                    playBlink(historyNavLink);
-                    setDataTabsVisible(false);
-
-                    var link = historyNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "History");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.HISTORY, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (adminDivisionNavLink) {
                 adminDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(adminDivisionNavLink);
-                    playBlink(adminDivisionNavLink);
-                    setDataTabsVisible(true);
-
-                    var link = adminDivisionNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "Admin Division");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.ADMIN, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (projectsNavLink) {
                 projectsNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(projectsNavLink);
-                    playBlink(projectsNavLink);
-                    setDataTabsVisible(true);
-
-                    var link = projectsNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "Projects");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.PROJECTS, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (qualityDivisionNavLink) {
                 qualityDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(qualityDivisionNavLink);
-                    playBlink(qualityDivisionNavLink);
-                    setDataTabsVisible(true);
-
-                    var link = qualityDivisionNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "Quality Division");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.QUALITY, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (planningDivisionNavLink) {
                 planningDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(planningDivisionNavLink);
-                    playBlink(planningDivisionNavLink);
-                    setDataTabsVisible(true);
-
-                    var link = planningDivisionNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "Planning Division");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.PLANNING, { animate: true, persist: true, useLoader: true });
                 });
             }
 
             if (constructionDivisionNavLink) {
                 constructionDivisionNavLink.addEventListener("click", function (event) {
                     event.preventDefault();
-                    setActiveTopNavItem(constructionDivisionNavLink);
-                    playBlink(constructionDivisionNavLink);
-                    setDataTabsVisible(true);
-
-                    var link = constructionDivisionNavLink.getAttribute("href");
-                    if (link) {
-                        window.setTimeout(function () {
-                            openEmbeddedMaintenance(link, "Construction Division");
-                        }, 180);
-                    }
+                    openSidebarView(VIEW_KEYS.CONSTRUCTION, { animate: true, persist: true, useLoader: true });
                 });
             }
 
@@ -1462,6 +1827,7 @@
                             if (dashboardNavLink) {
                                 setActiveTopNavItem(dashboardNavLink);
                             }
+                            saveLastSidebarView(VIEW_KEYS.DASHBOARD);
                             return;
                         }
 
@@ -1470,6 +1836,7 @@
                             if (planningDivisionNavLink) {
                                 setActiveTopNavItem(planningDivisionNavLink);
                             }
+                            saveLastSidebarView(VIEW_KEYS.PLANNING);
                             return;
                         }
 
@@ -1479,30 +1846,33 @@
 
                         if (tab.id === "tabDocuments" && adminDivisionNavLink) {
                             setActiveTopNavItem(adminDivisionNavLink);
+                            saveLastSidebarView(VIEW_KEYS.ADMIN);
                         } else if (tab.id === "tabTaskMatrix") {
                             if (maintenanceManagementNavLink) {
                                 setActiveMaintenanceGroup(maintenanceManagementNavLink);
                             }
+                            saveLastSidebarView(VIEW_KEYS.MAINTENANCE);
                         }
 
-                        openEmbeddedMaintenance(link, viewTitle);
+                        openEmbeddedMaintenance(link, viewTitle, true);
                     });
                 });
             }
 
             if (dashboardNavLink) {
                 dashboardNavLink.addEventListener("click", function (event) {
-                    if (embeddedPanel && embeddedPanel.classList.contains("visible")) {
-                        event.preventDefault();
-                        showDivisionsPanel();
-                        if (tabDivisions) {
-                            setActiveDataTab(tabDivisions);
-                        }
-                        setActiveTopNavItem(dashboardNavLink);
-                    } else {
-                        setActiveTopNavItem(dashboardNavLink);
-                    }
+                    event.preventDefault();
+                    openSidebarView(VIEW_KEYS.DASHBOARD, { animate: true, persist: true, useLoader: false });
                 });
+            }
+
+            var lastSidebarView = getLastSidebarView();
+            if (lastSidebarView && lastSidebarView !== VIEW_KEYS.DASHBOARD) {
+                window.setTimeout(function () {
+                    openSidebarView(lastSidebarView, { animate: false, persist: false, useLoader: true });
+                }, 100);
+            } else if (!lastSidebarView) {
+                saveLastSidebarView(VIEW_KEYS.DASHBOARD);
             }
         });
     </script>
