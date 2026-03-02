@@ -105,6 +105,7 @@
       line-height: 1.35;
     }
 
+
     .scan-results {
       display: grid;
       gap: 10px;
@@ -1392,19 +1393,21 @@
       inset: 0;
       background: rgba(7, 18, 30, 0.45);
       display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
+      place-items: center;
+      padding: clamp(12px, 2.5vw, 24px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
       z-index: 1000;
     }
 
     .contractor-modal-overlay.open {
-      display: flex;
+      display: grid;
     }
 
     .contractor-modal {
       width: min(860px, 100%);
-      max-height: min(92vh, 920px);
+      max-height: min(92dvh, 920px);
+      margin: auto;
       overflow-y: auto;
       background: #fff;
       border-radius: 16px;
@@ -1639,6 +1642,14 @@
     }
 
     @media (max-width: 560px) {
+      .contractor-modal-overlay {
+        padding: 12px;
+      }
+
+      .contractor-modal {
+        max-height: 90dvh;
+      }
+
       .summary-grid {
         grid-template-columns: 1fr;
       }
@@ -1827,9 +1838,16 @@
         <h3 class="form-section-title">Document Scan</h3>
 
         <label class="form-field full">
+          <span>Select Types *</span>
+          <select id="contractorFormBaseType">
+            <option value="" selected>Select Types</option>
+            <option value="contract">Contract</option>
+            <option value="project">Project</option>
+            <option value="accomplish">Accomplishment Reports</option>
+          </select>
           <span>Attach Scanned Documents (Any file type)</span>
           <div class="scan-upload-field">
-            <input id="contractorDocumentScanInput" type="file" multiple accept="*/*">
+            <input id="contractorDocumentScanInput" type="file" multiple accept="*/*" disabled>
             <div class="scan-upload-list" id="contractorDocumentScanList">
               <p class="scan-upload-empty" id="contractorDocumentScanEmpty">No document scan selected yet.</p>
             </div>
@@ -1861,7 +1879,7 @@
         <div class="details-tabs" role="tablist" aria-label="Contractor details sections">
           <button type="button" class="details-tab is-active" data-details-tab="information" aria-selected="true">Information</button>
           <button type="button" class="details-tab" data-details-tab="contract" aria-selected="false" id="detailsContractTab">Contract (0)</button>
-          <button type="button" class="details-tab" data-details-tab="project" aria-selected="false">Project</button>
+          <button type="button" class="details-tab" data-details-tab="project" aria-selected="false" id="detailsProjectTab">Project (0)</button>
           <button type="button" class="details-tab" data-details-tab="accomplish" aria-selected="false" id="detailsAccomplishTab">Accomplish Reports (0)</button>
         </div>
 
@@ -1936,6 +1954,13 @@
             </div>
             <div class="contract-history-cards" id="detailHistoryCards">
               <p class="contract-history-empty" id="detailHistoryEmpty">No contract history records yet.</p>
+            </div>
+          </article>
+
+          <article class="details-card">
+            <h3>Contract Files</h3>
+            <div class="report-details-list" id="detailContractFiles">
+              <p class="report-details-empty" id="detailContractFilesEmpty">No contract files yet.</p>
             </div>
           </article>
         </section>
@@ -2210,6 +2235,7 @@
       var contractorStatusInput = document.getElementById("contractorStatus");
       var contractorRatingInput = document.getElementById("contractorRating");
       var contractorDocumentScanInput = document.getElementById("contractorDocumentScanInput");
+      var contractorFormBaseType = document.getElementById("contractorFormBaseType");
       var contractorDocumentScanList = document.getElementById("contractorDocumentScanList");
       var contractorDocumentScanEmpty = document.getElementById("contractorDocumentScanEmpty");
       var contractorUploadInput = document.getElementById("contractorUploadInput");
@@ -2226,6 +2252,7 @@
       var detailTabButtons = detailsModal ? detailsModal.querySelectorAll("[data-details-tab]") : [];
       var detailPanels = detailsModal ? detailsModal.querySelectorAll("[data-details-panel]") : [];
       var detailsContractTab = document.getElementById("detailsContractTab");
+      var detailsProjectTab = document.getElementById("detailsProjectTab");
       var detailsAccomplishTab = document.getElementById("detailsAccomplishTab");
       var ratingModal = document.getElementById("contractorRatingModal");
       var closeRatingBtn = document.getElementById("closeContractorRating");
@@ -2259,6 +2286,8 @@
       var detailProjectNoImage = document.getElementById("detailProjectNoImage");
       var detailDocPrimary = document.getElementById("detailDocPrimary");
       var detailDocSecondary = document.getElementById("detailDocSecondary");
+      var detailContractFiles = document.getElementById("detailContractFiles");
+      var detailContractFilesEmpty = document.getElementById("detailContractFilesEmpty");
       var detailReportDetails = document.getElementById("detailReportDetails");
       var detailReportDetailsEmpty = document.getElementById("detailReportDetailsEmpty");
       var detailContractTotal = document.getElementById("detailContractTotal");
@@ -2432,6 +2461,10 @@
         if (contractorDocumentScanInput) {
           contractorDocumentScanInput.value = "";
         }
+        if (contractorFormBaseType) {
+          contractorFormBaseType.value = "";
+        }
+        syncContractorFormUploadState();
         setContractorFormReports([]);
       }
 
@@ -2491,13 +2524,23 @@
               return item && typeof item === "object";
             })
             .map(function (item) {
-              return {
+              var normalizedItem = {
                 name: item.name ? String(item.name) : "Unnamed file",
                 relativePath: item.relativePath ? String(item.relativePath) : "",
                 type: item.type ? String(item.type) : "",
                 size: Number(item.size) > 0 ? Number(item.size) : 0,
                 uploadedAt: item.uploadedAt ? String(item.uploadedAt) : "",
-                url: item.url ? String(item.url) : ""
+                url: item.url ? String(item.url) : "",
+                category: item.category ? String(item.category) : ""
+              };
+              return {
+                name: normalizedItem.name,
+                relativePath: normalizedItem.relativePath,
+                type: normalizedItem.type,
+                size: normalizedItem.size,
+                uploadedAt: normalizedItem.uploadedAt,
+                url: normalizedItem.url,
+                category: getReportCategory(normalizedItem)
               };
             });
         } catch (error) {
@@ -2770,6 +2813,93 @@
         return normalizeText(value).replace(/\s+/g, "");
       }
 
+      function reportCategoryKey(value) {
+        var normalized = normalizeText(value);
+        if (!normalized) {
+          return "";
+        }
+        if (normalized.indexOf("contract") !== -1) {
+          return "contract";
+        }
+        if (normalized.indexOf("project") !== -1) {
+          return "project";
+        }
+        if (normalized.indexOf("accomplish") !== -1 || normalized.indexOf("accomplishment") !== -1) {
+          return "accomplish";
+        }
+        return "";
+      }
+
+      function selectedReportCategory(selectEl) {
+        var selectedValue = selectEl && typeof selectEl.value === "string" ? selectEl.value : "";
+        return reportCategoryKey(selectedValue);
+      }
+
+      function syncContractorFormUploadState() {
+        var selectedCategory = selectedReportCategory(contractorFormBaseType);
+        var hasType = Boolean(selectedCategory);
+        if (contractorDocumentScanInput) {
+          contractorDocumentScanInput.disabled = !hasType;
+        }
+      }
+
+      function classifyReportCategory(report) {
+        var reportName = report && report.name ? String(report.name) : "";
+        var reportPath = report && report.relativePath ? String(report.relativePath) : "";
+        var normalizedText = normalizeText(reportName + " " + reportPath);
+        var compactText = normalizeCompact(reportName + " " + reportPath);
+
+        if (
+          normalizedText.indexOf("accomplish") !== -1 ||
+          normalizedText.indexOf("accomplishment") !== -1 ||
+          compactText.indexOf("accomplish") !== -1 ||
+          compactText.indexOf("accomplishment") !== -1
+        ) {
+          return "accomplish";
+        }
+        if (normalizedText.indexOf("contract") !== -1 || compactText.indexOf("contract") !== -1) {
+          return "contract";
+        }
+        if (normalizedText.indexOf("project") !== -1 || compactText.indexOf("project") !== -1) {
+          return "project";
+        }
+        return "accomplish";
+      }
+
+      function getReportCategory(report) {
+        if (!report || typeof report !== "object") {
+          return "accomplish";
+        }
+        var explicitCategory = reportCategoryKey(report.category);
+        if (explicitCategory) {
+          return explicitCategory;
+        }
+        return classifyReportCategory(report);
+      }
+
+      function splitReportsByCategory(reportItems) {
+        var grouped = {
+          contract: [],
+          project: [],
+          accomplish: []
+        };
+
+        if (!Array.isArray(reportItems)) {
+          return grouped;
+        }
+
+        reportItems.forEach(function (report) {
+          var category = getReportCategory(report);
+          if (!grouped[category]) {
+            grouped.accomplish.push(report);
+            return;
+          }
+          grouped[category].push(report);
+        });
+
+        return grouped;
+      }
+
       function extractCompanyTokens(companyName) {
         return normalizeText(companyName)
           .split(/\s+/)
@@ -3011,13 +3141,23 @@
         if (!report) {
           return null;
         }
-        return {
+        var normalized = {
           name: report.name ? String(report.name) : "Unnamed file",
           relativePath: report.relativePath ? String(report.relativePath) : "",
           type: report.type ? String(report.type) : "",
           size: Number(report.size) > 0 ? Number(report.size) : 0,
           uploadedAt: report.uploadedAt ? String(report.uploadedAt) : "",
-          url: report.url ? String(report.url) : ""
+          url: report.url ? String(report.url) : "",
+          category: report.category ? String(report.category) : ""
+        };
+        return {
+          name: normalized.name,
+          relativePath: normalized.relativePath,
+          type: normalized.type,
+          size: normalized.size,
+          uploadedAt: normalized.uploadedAt,
+          url: normalized.url,
+          category: getReportCategory(normalized)
         };
       }
 
@@ -3040,7 +3180,13 @@
           var item = document.createElement("div");
           item.className = "scan-upload-item";
           var typeText = report.type ? report.type : "Unknown type";
-          item.textContent = report.name + " | " + typeText + " | " + formatFileSize(report.size || 0);
+          var categoryValue = getReportCategory(report);
+          var categoryText = categoryValue === "contract"
+            ? "Contract"
+            : categoryValue === "project"
+              ? "Project"
+              : "Accomplish Reports";
+          item.textContent = report.name + " | " + typeText + " | " + formatFileSize(report.size || 0) + " | " + categoryText;
           var spacer = document.createTextNode(" ");
           item.appendChild(spacer);
           item.appendChild(createReportDocumentLink(report, "View Scan Document"));
@@ -3687,17 +3833,17 @@
         return link;
       }
 
-      function renderReportDetails(reportItems) {
-        if (!detailReportDetails) {
+      function renderReportDetailsInto(listEl, emptyEl, reportItems) {
+        if (!listEl) {
           return;
         }
 
-        detailReportDetails.innerHTML = "";
+        listEl.innerHTML = "";
 
         if (!Array.isArray(reportItems) || reportItems.length === 0) {
-          if (detailReportDetailsEmpty) {
-            detailReportDetailsEmpty.hidden = false;
-            detailReportDetails.appendChild(detailReportDetailsEmpty);
+          if (emptyEl) {
+            emptyEl.hidden = false;
+            listEl.appendChild(emptyEl);
           }
           return;
         }
@@ -3714,7 +3860,13 @@
           var typeText = report.type ? String(report.type) : "Unknown type";
           var sizeText = formatFileSize(report.size || 0);
           var uploadedText = report.uploadedAt ? formatHistoryDate(report.uploadedAt) : "-";
-          meta.textContent = "Type: " + typeText + " | Size: " + sizeText + " | Uploaded: " + uploadedText;
+          var categoryValue = getReportCategory(report);
+          var categoryText = categoryValue === "contract"
+            ? "Contract"
+            : categoryValue === "project"
+              ? "Project"
+              : "Accomplish Reports";
+          meta.textContent = "Type: " + typeText + " | Size: " + sizeText + " | Uploaded: " + uploadedText + " | Category: " + categoryText;
           card.appendChild(meta);
 
           if (report.relativePath) {
@@ -3725,8 +3877,16 @@
 
           card.appendChild(createReportDocumentLink(report, "View Scan Document"));
 
-          detailReportDetails.appendChild(card);
+          listEl.appendChild(card);
         });
+      }
+
+      function renderReportDetails(reportItems) {
+        renderReportDetailsInto(detailReportDetails, detailReportDetailsEmpty, reportItems);
+      }
+
+      function renderContractReportDetails(reportItems) {
+        renderReportDetailsInto(detailContractFiles, detailContractFilesEmpty, reportItems);
       }
 
       function setProjectDocumentListItem(targetEl, report, fallbackText) {
@@ -4245,9 +4405,14 @@
             contractorRatingInput.value = ratingAggregate.average > 0 ? (Number.isInteger(ratingAggregate.average) ? String(ratingAggregate.average) : ratingAggregate.average.toFixed(1)) : "";
           }
           setContractorFormReports(payload.reports || []);
+          if (contractorFormBaseType) {
+            var existingReports = Array.isArray(payload.reports) ? payload.reports : [];
+            contractorFormBaseType.value = existingReports.length > 0 ? getReportCategory(existingReports[0]) : "";
+          }
           if (contractorDocumentScanInput) {
             contractorDocumentScanInput.value = "";
           }
+          syncContractorFormUploadState();
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Edit Contractor";
           }
@@ -4257,6 +4422,7 @@
         } else {
           resetContractorForm();
           setContractorFormReports([]);
+          syncContractorFormUploadState();
           if (contractorModalTitle) {
             contractorModalTitle.textContent = "Add New Contractor";
           }
@@ -4651,6 +4817,10 @@
         var completedContracts = hasContract && payload.projectStatus === "Completed" ? 1 : 0;
         var ongoingContracts = hasContract && payload.projectStatus === "Ongoing" ? 1 : 0;
         var reportItems = Array.isArray(payload.reports) ? payload.reports : [];
+        var reportGroups = splitReportsByCategory(reportItems);
+        var contractReportItems = reportGroups.contract;
+        var projectReportItems = reportGroups.project;
+        var accomplishReportItems = reportGroups.accomplish;
 
         if (detailCompanyName) detailCompanyName.textContent = valueOrDash(payload.company);
         if (detailTradeName) detailTradeName.textContent = valueOrDash(payload.tradeName);
@@ -4696,23 +4866,25 @@
         if (detailSummaryCompleted) detailSummaryCompleted.textContent = String(completedContracts);
         if (detailSummaryOngoing) detailSummaryOngoing.textContent = String(ongoingContracts);
         if (detailSummaryTotalValue) detailSummaryTotalValue.textContent = "P0";
-        if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(totalContracts) + ")";
-        if (detailsAccomplishTab) detailsAccomplishTab.textContent = "Accomplish Reports (" + String(reportItems.length) + ")";
+        if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(contractReportItems.length) + ")";
+        if (detailsProjectTab) detailsProjectTab.textContent = "Project (" + String(projectReportItems.length) + ")";
+        if (detailsAccomplishTab) detailsAccomplishTab.textContent = "Accomplish Reports (" + String(accomplishReportItems.length) + ")";
         if (detailDocPrimary) {
-          if (reportItems.length > 0) {
-            setProjectDocumentListItem(detailDocPrimary, reportItems[0], valueOrDash(payload.projectName || payload.company) + " specification file");
+          if (projectReportItems.length > 0) {
+            setProjectDocumentListItem(detailDocPrimary, projectReportItems[0], valueOrDash(payload.projectName || payload.company) + " specification file");
           } else {
             detailDocPrimary.textContent = valueOrDash(payload.projectName || payload.company) + " specification file";
           }
         }
         if (detailDocSecondary) {
-          if (reportItems.length > 1) {
-            setProjectDocumentListItem(detailDocSecondary, reportItems[1], valueOrDash(payload.company) + " supporting document");
+          if (projectReportItems.length > 1) {
+            setProjectDocumentListItem(detailDocSecondary, projectReportItems[1], valueOrDash(payload.company) + " supporting document");
           } else {
             detailDocSecondary.textContent = valueOrDash(payload.company) + " supporting document";
           }
         }
-        renderReportDetails(reportItems);
+        renderContractReportDetails(contractReportItems);
+        renderReportDetails(accomplishReportItems);
         buildContractHistoryCards(payload, locationText);
 
         if (detailProjectImage && detailProjectNoImage) {
@@ -4868,6 +5040,7 @@
 
         files.forEach(function (file) {
           var meta = fileMeta(file);
+          meta.category = classifyReportCategory(meta);
           var fileIndexText = normalizeText((meta.relativePath || "") + " " + meta.name);
           var bestScore = 0;
           var bestMatch = null;
@@ -4934,7 +5107,13 @@
 
             item.files.slice(0, 6).forEach(function (reportFile) {
               var li = document.createElement("li");
-              li.textContent = reportFile.name;
+              var categoryKey = getReportCategory(reportFile);
+              var categoryText = categoryKey === "contract"
+                ? "Contract"
+                : categoryKey === "project"
+                  ? "Project"
+                  : "Accomplish Reports";
+              li.textContent = reportFile.name + " (" + categoryText + ")";
               list.appendChild(li);
             });
 
@@ -4966,7 +5145,13 @@
           unmatchedList.className = "scan-result-files";
           scanData.unmatched.slice(0, 6).forEach(function (reportFile) {
             var unmatchedItem = document.createElement("li");
-            unmatchedItem.textContent = reportFile.name;
+            var unmatchedCategoryKey = getReportCategory(reportFile);
+            var unmatchedCategoryText = unmatchedCategoryKey === "contract"
+              ? "Contract"
+              : unmatchedCategoryKey === "project"
+                ? "Project"
+                : "Accomplish Reports";
+            unmatchedItem.textContent = reportFile.name + " (" + unmatchedCategoryText + ")";
             unmatchedList.appendChild(unmatchedItem);
           });
           if (scanData.unmatched.length > 6) {
@@ -5014,7 +5199,8 @@
               relativePath: reportFile.relativePath || "",
               type: reportFile.type || "",
               size: reportFile.size || 0,
-              uploadedAt: nowIso
+              uploadedAt: nowIso,
+              category: getReportCategory(reportFile)
             };
             registerRuntimeReportUrl(importedReport, reportFile.fileObject || null);
             existingReports.push(importedReport);
@@ -5136,6 +5322,12 @@
         });
       }
 
+      if (contractorFormBaseType) {
+        contractorFormBaseType.addEventListener("change", function () {
+          syncContractorFormUploadState();
+        });
+      }
+
       if (closeModalBtn) {
         closeModalBtn.addEventListener("click", closeContractorModal);
       }
@@ -5159,6 +5351,15 @@
           }
 
           var nowIso = new Date().toISOString();
+          var selectedFormCategory = selectedReportCategory(contractorFormBaseType);
+          if (!selectedFormCategory) {
+            alert("Select Types first before uploading files.");
+            if (contractorFormBaseType) {
+              contractorFormBaseType.focus();
+            }
+            contractorDocumentScanInput.value = "";
+            return;
+          }
           var uploadedFiles = [];
 
           selectedFiles.forEach(function (selectedFile) {
@@ -5169,6 +5370,7 @@
               type: meta.type || "",
               size: meta.size || 0,
               uploadedAt: nowIso,
+              category: selectedFormCategory,
               fileObject: selectedFile
             });
           });
@@ -5370,6 +5572,7 @@
       hydrateExistingContractorRows();
       refreshContractorCount();
       updateUploadSelectionState();
+      syncContractorFormUploadState();
     });
   </script>
 </body>
