@@ -435,6 +435,71 @@
       flex: 1 1 auto;
     }
 
+    .company-main {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .company-rating-meta {
+      color: #4d6480;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .company-criteria-preview {
+      display: grid;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .company-criteria-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .company-criteria-label {
+      color: #56708b;
+      font-size: 0.74rem;
+      font-weight: 700;
+      min-width: 48px;
+    }
+
+    .company-mini-stars {
+      display: inline-flex;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .company-mini-star {
+      position: relative;
+      color: #c7d2df;
+      font-size: 0.78rem;
+      line-height: 1;
+    }
+
+    .company-mini-star::before {
+      content: "★";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--star-fill, 0%);
+      overflow: hidden;
+      color: #f2c94c;
+      pointer-events: none;
+    }
+
+    .company-criteria-score {
+      color: #2f4e6b;
+      font-size: 0.74rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
     .company-card-actions {
       display: inline-flex;
       align-items: center;
@@ -946,6 +1011,134 @@
       border-radius: 10px;
       background: #f7fbff;
       padding: 12px;
+    }
+
+    .rating-star-picker {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .rating-star-picker-criteria {
+      margin-top: 0;
+    }
+
+    .rating-star-btn {
+      position: relative;
+      border: 0;
+      background: transparent;
+      color: #c7d2df;
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.14s ease, transform 0.14s ease;
+    }
+
+    .rating-star-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .rating-star-btn::before {
+      content: "★";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: var(--star-fill, 0%);
+      overflow: hidden;
+      color: #f2c94c;
+      pointer-events: none;
+    }
+
+    .rating-stars-note {
+      margin: 10px 0 0;
+      color: #5b7189;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .rating-evaluator-field {
+      margin-top: 12px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .rating-evaluator-field label {
+      color: #304c67;
+      font-size: 0.84rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .rating-evaluator-field input {
+      border: 1px solid #c7d3df;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #18324d;
+      padding: 8px 10px;
+      font: inherit;
+      font-size: 0.9rem;
+    }
+
+    .rating-company-name {
+      margin: 4px 0 0;
+      color: #17344f;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .rating-criteria-list {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .rating-criteria-item {
+      border: 1px solid #d6deea;
+      border-radius: 12px;
+      background: #ffffff;
+      padding: 10px 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .rating-criteria-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .rating-criteria-head strong {
+      color: #12314f;
+      font-size: 0.92rem;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .rating-criteria-head span {
+      color: #0f4a8a;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .rating-criteria-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .rating-criteria-value {
+      color: #2a4762;
+      font-size: 0.84rem;
+      font-weight: 700;
+      min-width: 54px;
+      text-align: right;
     }
 
     .contract-history-card {
@@ -1669,7 +1862,7 @@
           <button type="button" class="details-tab is-active" data-details-tab="information" aria-selected="true">Information</button>
           <button type="button" class="details-tab" data-details-tab="contract" aria-selected="false" id="detailsContractTab">Contract (0)</button>
           <button type="button" class="details-tab" data-details-tab="project" aria-selected="false">Project</button>
-          <button type="button" class="details-tab" data-details-tab="ratings" aria-selected="false" id="detailsRatingsTab">Ratings (0)</button>
+          <button type="button" class="details-tab" data-details-tab="accomplish" aria-selected="false" id="detailsAccomplishTab">Accomplish Reports (0)</button>
         </div>
 
         <div class="details-status-row">
@@ -1779,9 +1972,6 @@
                   <li id="detailDocPrimary">Project document not available</li>
                   <li id="detailDocSecondary">No additional file</li>
                 </ul>
-                <div class="report-details-list" id="detailReportDetails">
-                  <p class="report-details-empty" id="detailReportDetailsEmpty">No scanned report details yet.</p>
-                </div>
               </article>
 
               <article class="project-side-card">
@@ -1795,19 +1985,154 @@
           </div>
         </section>
 
-        <section class="details-panel" data-details-panel="ratings">
+        <section class="details-panel" data-details-panel="accomplish">
           <article class="details-card">
-            <h3>Ratings</h3>
-            <div class="details-list">
-              <div class="details-list-row"><span>Current Rating:</span><strong id="detailRatingValue">-</strong></div>
+            <h3>Accomplish Reports</h3>
+            <div class="report-details-list" id="detailReportDetails">
+              <p class="report-details-empty" id="detailReportDetailsEmpty">No scanned report details yet.</p>
             </div>
-            <p class="details-empty" id="detailRatingsEmpty">No ratings yet.</p>
           </article>
         </section>
 
         <div class="form-actions">
           <button type="button" class="form-btn" id="closeContractorDetailsFooter">Close</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contractor-modal-overlay" id="contractorRatingModal" aria-hidden="true">
+    <div class="contractor-modal" role="dialog" aria-modal="true" aria-labelledby="contractorRatingTitle">
+      <div class="contractor-modal-head">
+        <div>
+          <h2 id="contractorRatingTitle">Rate Contractor Company</h2>
+          <p>Rate each criterion from 1 to 5 stars.</p>
+          <p class="rating-company-name" id="ratingCompanyNameLine">Company: -</p>
+        </div>
+        <button type="button" class="contractor-close" id="closeContractorRating" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <article class="details-card">
+          <h3>Ratings</h3>
+          <div class="details-list">
+            <div class="details-list-row"><span>Overall Performance:</span><strong id="detailRatingValue">-</strong></div>
+            <div class="details-list-row"><span>Overall Percentage:</span><strong id="detailRatingPercentage">0%</strong></div>
+            <div class="details-list-row"><span>Total Raters:</span><strong id="detailRatingCount">0</strong></div>
+          </div>
+
+          <div class="rating-criteria-list" aria-label="Performance criteria ratings">
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Quality of Work</strong>
+                <span>30%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate quality of work from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="quality" data-rating-star="1" aria-label="Quality of work 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="quality" data-rating-star="2" aria-label="Quality of work 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="quality" data-rating-star="3" aria-label="Quality of work 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="quality" data-rating-star="4" aria-label="Quality of work 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="quality" data-rating-star="5" aria-label="Quality of work 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="quality">-</span>
+              </div>
+            </div>
+
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Timeliness</strong>
+                <span>20%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate timeliness from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="time" data-rating-star="1" aria-label="Timeliness 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="time" data-rating-star="2" aria-label="Timeliness 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="time" data-rating-star="3" aria-label="Timeliness 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="time" data-rating-star="4" aria-label="Timeliness 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="time" data-rating-star="5" aria-label="Timeliness 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="time">-</span>
+              </div>
+            </div>
+
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Cost &amp; Budget Control</strong>
+                <span>15%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate cost and budget control from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="cost" data-rating-star="1" aria-label="Cost and budget control 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="cost" data-rating-star="2" aria-label="Cost and budget control 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="cost" data-rating-star="3" aria-label="Cost and budget control 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="cost" data-rating-star="4" aria-label="Cost and budget control 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="cost" data-rating-star="5" aria-label="Cost and budget control 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="cost">-</span>
+              </div>
+            </div>
+
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Safety Compliance</strong>
+                <span>25%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate safety compliance from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="safety" data-rating-star="1" aria-label="Safety compliance 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="safety" data-rating-star="2" aria-label="Safety compliance 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="safety" data-rating-star="3" aria-label="Safety compliance 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="safety" data-rating-star="4" aria-label="Safety compliance 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="safety" data-rating-star="5" aria-label="Safety compliance 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="safety">-</span>
+              </div>
+            </div>
+
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Professionalism</strong>
+                <span>0%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate professionalism from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="professionalism" data-rating-star="1" aria-label="Professionalism 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="professionalism" data-rating-star="2" aria-label="Professionalism 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="professionalism" data-rating-star="3" aria-label="Professionalism 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="professionalism" data-rating-star="4" aria-label="Professionalism 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="professionalism" data-rating-star="5" aria-label="Professionalism 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="professionalism">-</span>
+              </div>
+            </div>
+
+            <div class="rating-criteria-item">
+              <div class="rating-criteria-head">
+                <strong>Communications</strong>
+                <span>10%</span>
+              </div>
+              <div class="rating-criteria-controls">
+                <div class="rating-star-picker rating-star-picker-criteria" role="group" aria-label="Rate communications from 1 to 5 stars">
+                  <button type="button" class="rating-star-btn" data-rating-criteria="communications" data-rating-star="1" aria-label="Communications 1 star" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="communications" data-rating-star="2" aria-label="Communications 2 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="communications" data-rating-star="3" aria-label="Communications 3 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="communications" data-rating-star="4" aria-label="Communications 4 stars" aria-pressed="false">&#9733;</button>
+                  <button type="button" class="rating-star-btn" data-rating-criteria="communications" data-rating-star="5" aria-label="Communications 5 stars" aria-pressed="false">&#9733;</button>
+                </div>
+                <span class="rating-criteria-value" data-rating-criteria-value="communications">-</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="rating-stars-note">Star Scale: 1 Very Poor, 2 Poor, 3 Fair, 4 Good, 5 Excellent.</p>
+          <p class="rating-stars-note">Weight Total: 100% (Quality 30%, Safety 25%, Timeliness 20%, Cost 15%, Communications 10%).</p>
+          <p class="rating-stars-note" id="detailRatingStarHint">Rate each criterion from 1 to 5 stars, then click Submit Rating.</p>
+          <div class="form-actions">
+            <button type="button" class="form-btn form-submit" id="submitCriteriaRatingBtn">Submit Rating</button>
+            <button type="button" class="form-btn" id="closeContractorRatingFooter">Close</button>
+          </div>
+          <p class="details-empty" id="detailRatingsEmpty">No ratings yet.</p>
+        </article>
       </div>
     </div>
   </div>
@@ -1901,7 +2226,11 @@
       var detailTabButtons = detailsModal ? detailsModal.querySelectorAll("[data-details-tab]") : [];
       var detailPanels = detailsModal ? detailsModal.querySelectorAll("[data-details-panel]") : [];
       var detailsContractTab = document.getElementById("detailsContractTab");
-      var detailsRatingsTab = document.getElementById("detailsRatingsTab");
+      var detailsAccomplishTab = document.getElementById("detailsAccomplishTab");
+      var ratingModal = document.getElementById("contractorRatingModal");
+      var closeRatingBtn = document.getElementById("closeContractorRating");
+      var closeRatingFooterBtn = document.getElementById("closeContractorRatingFooter");
+      var ratingCompanyNameLine = document.getElementById("ratingCompanyNameLine");
       var detailStatusChip = document.getElementById("detailStatusChip");
       var detailCompanyName = document.getElementById("detailCompanyName");
       var detailTradeName = document.getElementById("detailTradeName");
@@ -1944,6 +2273,13 @@
       var detailSummaryOngoing = document.getElementById("detailSummaryOngoing");
       var detailSummaryTotalValue = document.getElementById("detailSummaryTotalValue");
       var detailRatingValue = document.getElementById("detailRatingValue");
+      var detailRatingPercentage = document.getElementById("detailRatingPercentage");
+      var detailRatingCount = document.getElementById("detailRatingCount");
+      var detailCriteriaStars = ratingModal ? ratingModal.querySelectorAll("[data-rating-criteria][data-rating-star]") : [];
+      var detailCriteriaValues = ratingModal ? ratingModal.querySelectorAll("[data-rating-criteria-value]") : [];
+      var detailRatingStarHint = document.getElementById("detailRatingStarHint");
+      var submitCriteriaRatingBtn = document.getElementById("submitCriteriaRatingBtn");
+      var ratingEvaluatorNameInput = document.getElementById("ratingEvaluatorName");
       var detailRatingsEmpty = document.getElementById("detailRatingsEmpty");
       var uploadScanModal = document.getElementById("uploadScanModal");
       var uploadScanResults = document.getElementById("uploadScanResults");
@@ -1962,10 +2298,23 @@
       var PREVIEW_PROV_LOGO_URL = "{% static 'images/prov-logo.png' %}";
       var PREVIEW_PEO_LOGO_URL = "{% static 'images/peo-logo.png' %}";
       var CONTRACTORS_STORAGE_KEY = "peo_contractors_v1";
+      var PERFORMANCE_CRITERIA = [
+        { key: "quality", label: "Quality of Work", weight: 30 },
+        { key: "time", label: "Timeliness", weight: 20 },
+        { key: "cost", label: "Cost & Budget Control", weight: 15 },
+        { key: "safety", label: "Safety Compliance", weight: 25 },
+        { key: "professionalism", label: "Professionalism", weight: 0 },
+        { key: "communications", label: "Communications", weight: 10 }
+      ];
+      var PERFORMANCE_CRITERIA_KEYS = PERFORMANCE_CRITERIA.map(function (item) { return item.key; });
+      var PERFORMANCE_WEIGHT_TOTAL = PERFORMANCE_CRITERIA.reduce(function (sum, item) {
+        return sum + (Number(item.weight) || 0);
+      }, 0);
       var REPORT_BLOB_DB_NAME = "peo_contractor_report_blobs_v1";
       var REPORT_BLOB_STORE_NAME = "reports";
       var isEditingContractor = false;
       var editingContractorRow = null;
+      var activeDetailsRow = null;
       var contractorFormReports = [];
       var runtimeReportUrlMap = {};
       var runtimeReportFileMap = {};
@@ -1973,6 +2322,10 @@
       var pendingUploadFiles = [];
       var rejectedUploadFiles = [];
       var pendingScanMatches = null;
+      var activeRatingAggregate = null;
+      var pendingCriteriaDraftScores = null;
+      var currentUserSavedCriteriaScores = null;
+      var hasPendingCriteriaChanges = false;
       var ALLOWED_UPLOAD_EXTENSIONS = {
         pdf: true,
         xls: true,
@@ -2114,7 +2467,11 @@
           projectName: contractorProjectNameInput && contractorProjectNameInput.value.trim() ? contractorProjectNameInput.value.trim() : "-",
           projectStatus: contractorProjectStatusInput && contractorProjectStatusInput.value ? contractorProjectStatusInput.value : "Ongoing",
           projectImage: contractorProjectImageInput && contractorProjectImageInput.value.trim() ? contractorProjectImageInput.value.trim() : "",
-          rating: contractorRatingInput && contractorRatingInput.value.trim() ? contractorRatingInput.value.trim() : "-",
+          rating: "-",
+          ratingAverage: 0,
+          ratingCount: 0,
+          ratingEntries: [],
+          ratingByUser: {},
           reports: Array.isArray(contractorFormReports) ? contractorFormReports.slice() : []
         };
       }
@@ -2145,6 +2502,113 @@
             });
         } catch (error) {
           return [];
+        }
+      }
+
+      function parseRatingEntries(value) {
+        if (!value) {
+          return [];
+        }
+
+        try {
+          var parsed = JSON.parse(value);
+          if (!Array.isArray(parsed)) {
+            return [];
+          }
+
+          return parsed
+            .filter(function (entry) {
+              return entry && typeof entry === "object";
+            })
+            .map(function (entry) {
+              var normalizedScores = normalizeCriteriaScores(entry.scores || entry.rating || entry.value || {});
+              return {
+                evaluator: entry.evaluator ? String(entry.evaluator).trim() : "",
+                submittedAt: entry.submittedAt ? String(entry.submittedAt) : "",
+                scores: normalizedScores
+              };
+            })
+            .filter(function (entry) {
+              return hasAnyCriteriaScore(entry.scores);
+            });
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function emptyCriteriaScores() {
+        var scores = {};
+        PERFORMANCE_CRITERIA_KEYS.forEach(function (key) {
+          scores[key] = 0;
+        });
+        return scores;
+      }
+
+      function hasAnyCriteriaScore(scores) {
+        if (!scores || typeof scores !== "object") {
+          return false;
+        }
+        return PERFORMANCE_CRITERIA_KEYS.some(function (key) {
+          return normalizeRatingValue(scores[key]) > 0;
+        });
+      }
+
+      function normalizeCriteriaScores(rawValue) {
+        var normalizedScores = emptyCriteriaScores();
+
+        if (rawValue && typeof rawValue === "object" && !Array.isArray(rawValue)) {
+          PERFORMANCE_CRITERIA_KEYS.forEach(function (key) {
+            normalizedScores[key] = normalizeRatingValue(rawValue[key]);
+          });
+          // Backward compatibility for previously stored keys.
+          if (normalizedScores.quality <= 0) {
+            normalizedScores.quality = normalizeRatingValue(rawValue.work_quality);
+          }
+          if (normalizedScores.time <= 0) {
+            normalizedScores.time = normalizeRatingValue(rawValue.timeliness);
+          }
+          if (normalizedScores.cost <= 0) {
+            normalizedScores.cost = normalizeRatingValue(rawValue.cost_control);
+          }
+          if (normalizedScores.safety <= 0) {
+            normalizedScores.safety = normalizeRatingValue(rawValue.safety);
+          }
+          if (normalizedScores.communications <= 0) {
+            normalizedScores.communications = normalizeRatingValue(rawValue.documentation);
+          }
+          return normalizedScores;
+        }
+
+        var singleScore = normalizeRatingValue(rawValue);
+        if (singleScore > 0) {
+          PERFORMANCE_CRITERIA_KEYS.forEach(function (key) {
+            normalizedScores[key] = singleScore;
+          });
+        }
+        return normalizedScores;
+      }
+
+      function parseRatingByUser(value) {
+        if (!value) {
+          return {};
+        }
+
+        try {
+          var parsed = JSON.parse(value);
+          if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+            return {};
+          }
+
+          var cleaned = {};
+          Object.keys(parsed).forEach(function (userKey) {
+            var normalizedScores = normalizeCriteriaScores(parsed[userKey]);
+            if (hasAnyCriteriaScore(normalizedScores)) {
+              cleaned[String(userKey)] = normalizedScores;
+            }
+          });
+          return cleaned;
+        } catch (error) {
+          return {};
         }
       }
 
@@ -3153,7 +3617,6 @@
         link.className = "report-doc-link";
         link.textContent = labelText || "View Scan Document";
         link.href = "#";
-        link.setAttribute("target", "_blank");
         link.setAttribute("rel", "noopener");
 
         function resolveDirectReportHttpUrl(targetReport) {
@@ -3201,32 +3664,23 @@
 
         link.addEventListener("click", function (event) {
           event.preventDefault();
-          var nextTab = window.open("about:blank", "_blank");
 
           ensureRuntimeReportUrl(report).then(function (runtimeUrl) {
             var directUrl = resolveDirectReportHttpUrl(report);
             var targetUrl = runtimeUrl || directUrl || "";
 
             if (targetUrl) {
-              if (nextTab && !nextTab.closed) {
-                nextTab.location.href = targetUrl;
-              } else {
-                window.open(targetUrl, "_blank");
-              }
+              var downloadLink = document.createElement("a");
+              downloadLink.href = targetUrl;
+              downloadLink.setAttribute("download", report && report.name ? String(report.name) : "scan-document");
+              downloadLink.style.display = "none";
+              document.body.appendChild(downloadLink);
+              downloadLink.click();
+              downloadLink.remove();
               return;
             }
 
-            if (nextTab && !nextTab.closed) {
-              nextTab.document.open();
-              nextTab.document.write(
-                "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><title>Document not available</title></head>" +
-                "<body style=\"font-family:Segoe UI,Arial,sans-serif;padding:16px;color:#2a3f56;\">" +
-                "<p>Unable to open this uploaded file in a new tab for the current browser session.</p></body></html>"
-              );
-              nextTab.document.close();
-            } else {
-              alert("Unable to open this uploaded file in a new tab.");
-            }
+            alert("Unable to download this uploaded file in the current browser session.");
           });
         });
 
@@ -3296,6 +3750,139 @@
         targetEl.appendChild(createReportDocumentLink(report, "View Scan Document"));
       }
 
+      function ratingAggregateFromPayload(payload) {
+        var ratingEntries = Array.isArray(payload && payload.ratingEntries) ? payload.ratingEntries : [];
+        if (ratingEntries.length > 0) {
+          var entriesTotals = emptyCriteriaScores();
+          var entriesCounts = emptyCriteriaScores();
+          var normalizedEntries = [];
+
+          ratingEntries.forEach(function (entry) {
+            if (!entry || typeof entry !== "object") {
+              return;
+            }
+            var normalizedScores = normalizeCriteriaScores(entry.scores || entry);
+            if (!hasAnyCriteriaScore(normalizedScores)) {
+              return;
+            }
+
+            normalizedEntries.push({
+              evaluator: entry.evaluator ? String(entry.evaluator).trim() : "",
+              submittedAt: entry.submittedAt ? String(entry.submittedAt) : "",
+              scores: normalizedScores
+            });
+
+            PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+              var criteriaValue = normalizeRatingValue(normalizedScores[criteriaKey]);
+              if (criteriaValue > 0) {
+                entriesTotals[criteriaKey] += criteriaValue;
+                entriesCounts[criteriaKey] += 1;
+              }
+            });
+          });
+
+          if (normalizedEntries.length > 0) {
+            var entriesCriteriaAverages = emptyCriteriaScores();
+            PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+              if (entriesCounts[criteriaKey] > 0) {
+                entriesCriteriaAverages[criteriaKey] = Math.round((entriesTotals[criteriaKey] / entriesCounts[criteriaKey]) * 10) / 10;
+              }
+            });
+
+            var entriesWeightedTotal = 0;
+            if (PERFORMANCE_WEIGHT_TOTAL > 0) {
+              PERFORMANCE_CRITERIA.forEach(function (criteria) {
+                var criteriaAverage = normalizeRatingValue(entriesCriteriaAverages[criteria.key]);
+                var criteriaWeight = Number(criteria.weight) || 0;
+                entriesWeightedTotal += criteriaAverage * (criteriaWeight / PERFORMANCE_WEIGHT_TOTAL);
+              });
+            }
+            var entriesOverall = normalizeRatingValue(entriesWeightedTotal);
+            return {
+              average: entriesOverall,
+              count: normalizedEntries.length,
+              criteriaAverages: entriesCriteriaAverages,
+              ratingEntries: normalizedEntries,
+              ratingByUser: {}
+            };
+          }
+        }
+
+        var ratingMap = payload && payload.ratingByUser && typeof payload.ratingByUser === "object" ? payload.ratingByUser : {};
+        var raterKeys = Object.keys(ratingMap);
+        var criteriaTotals = emptyCriteriaScores();
+        var criteriaCounts = emptyCriteriaScores();
+        var normalizedRatingByUser = {};
+        if (raterKeys.length > 0) {
+          var count = 0;
+          raterKeys.forEach(function (key) {
+            var normalizedScores = normalizeCriteriaScores(ratingMap[key]);
+            if (hasAnyCriteriaScore(normalizedScores)) {
+              normalizedRatingByUser[key] = normalizedScores;
+              count += 1;
+              PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+                var criteriaValue = normalizeRatingValue(normalizedScores[criteriaKey]);
+                if (criteriaValue > 0) {
+                  criteriaTotals[criteriaKey] += criteriaValue;
+                  criteriaCounts[criteriaKey] += 1;
+                }
+              });
+            }
+          });
+
+          if (count > 0) {
+            var criteriaAverages = emptyCriteriaScores();
+            PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+              if (criteriaCounts[criteriaKey] > 0) {
+                criteriaAverages[criteriaKey] = Math.round((criteriaTotals[criteriaKey] / criteriaCounts[criteriaKey]) * 10) / 10;
+              }
+            });
+
+            var weightedTotal = 0;
+            if (PERFORMANCE_WEIGHT_TOTAL > 0) {
+              PERFORMANCE_CRITERIA.forEach(function (criteria) {
+                var criteriaAverage = normalizeRatingValue(criteriaAverages[criteria.key]);
+                var criteriaWeight = Number(criteria.weight) || 0;
+                weightedTotal += criteriaAverage * (criteriaWeight / PERFORMANCE_WEIGHT_TOTAL);
+              });
+            }
+            var overall = normalizeRatingValue(weightedTotal);
+            return {
+              average: overall,
+              count: count,
+              criteriaAverages: criteriaAverages,
+              ratingEntries: [],
+              ratingByUser: normalizedRatingByUser
+            };
+          }
+        }
+
+        var average = normalizeRatingValue(payload && (payload.ratingAverage || payload.rating));
+        var countValue = Math.round(Number(payload && payload.ratingCount));
+        var count = isFinite(countValue) && countValue > 0 ? countValue : 0;
+        if (average > 0 && count === 0) {
+          count = 1;
+        }
+        if (average === 0) {
+          count = 0;
+        }
+
+        var fallbackCriteriaAverages = emptyCriteriaScores();
+        if (average > 0) {
+          PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+            fallbackCriteriaAverages[criteriaKey] = average;
+          });
+        }
+
+        return {
+          average: average,
+          count: count,
+          criteriaAverages: fallbackCriteriaAverages,
+          ratingEntries: [],
+          ratingByUser: {}
+        };
+      }
+
       function rowPayload(row) {
         if (!row) {
           return null;
@@ -3326,6 +3913,10 @@
           createdAt: row.getAttribute("data-contractor-created-at") || "",
           updatedAt: row.getAttribute("data-contractor-updated-at") || "",
           rating: row.getAttribute("data-contractor-rating") || "-",
+          ratingAverage: row.getAttribute("data-contractor-rating-average") || "",
+          ratingCount: row.getAttribute("data-contractor-rating-count") || "0",
+          ratingEntries: parseRatingEntries(row.getAttribute("data-contractor-rating-entries") || "[]"),
+          ratingByUser: parseRatingByUser(row.getAttribute("data-contractor-rating-by-user") || "{}"),
           reports: parseReports(row.getAttribute("data-contractor-reports") || "[]")
         };
       }
@@ -3358,6 +3949,43 @@
         } catch (error) {
           // Ignore storage errors (quota or private mode restrictions).
         }
+      }
+
+      function criteriaPreviewLabel(criteriaKey) {
+        if (criteriaKey === "quality") return "Quality";
+        if (criteriaKey === "time") return "Time";
+        if (criteriaKey === "cost") return "Cost";
+        if (criteriaKey === "safety") return "Safety";
+        if (criteriaKey === "professionalism") return "Pro";
+        if (criteriaKey === "communications") return "Comms";
+        return "Rate";
+      }
+
+      function createCompanyMiniStars(ratingValue) {
+        var wrap = document.createElement("span");
+        wrap.className = "company-mini-stars";
+
+        var normalized = normalizeRatingValue(ratingValue);
+        for (var starIndex = 1; starIndex <= 5; starIndex += 1) {
+          var star = document.createElement("span");
+          star.className = "company-mini-star";
+          star.textContent = "★";
+
+          var fillPercent = (normalized - (starIndex - 1)) * 100;
+          if (!isFinite(fillPercent)) {
+            fillPercent = 0;
+          }
+          if (fillPercent < 0) {
+            fillPercent = 0;
+          } else if (fillPercent > 100) {
+            fillPercent = 100;
+          }
+
+          star.style.setProperty("--star-fill", String(fillPercent) + "%");
+          wrap.appendChild(star);
+        }
+
+        return wrap;
       }
 
       function loadContractorsFromStorage() {
@@ -3427,18 +4055,74 @@
         row.setAttribute("data-contractor-project-image", payload.projectImage || "");
         row.setAttribute("data-contractor-created-at", payload.createdAt || "");
         row.setAttribute("data-contractor-updated-at", payload.updatedAt || "");
-        row.setAttribute("data-contractor-rating", payload.rating);
+        var ratingAggregate = ratingAggregateFromPayload(payload);
+        var ratingText = ratingAggregate.average > 0 ? (Number.isInteger(ratingAggregate.average) ? String(ratingAggregate.average) : ratingAggregate.average.toFixed(1)) : "-";
+        row.setAttribute("data-contractor-rating", ratingText);
+        row.setAttribute("data-contractor-rating-average", ratingAggregate.average > 0 ? String(ratingAggregate.average) : "");
+        row.setAttribute("data-contractor-rating-count", String(ratingAggregate.count));
+        row.setAttribute("data-contractor-rating-entries", JSON.stringify(Array.isArray(ratingAggregate.ratingEntries) ? ratingAggregate.ratingEntries : []));
+        row.setAttribute("data-contractor-rating-by-user", JSON.stringify(ratingAggregate.ratingByUser || {}));
         row.setAttribute("data-contractor-reports", JSON.stringify(Array.isArray(payload.reports) ? payload.reports : []));
 
         row.innerHTML = "";
 
+        var companyMain = document.createElement("div");
+        companyMain.className = "company-main";
+
         var companyName = document.createElement("div");
         companyName.className = "company-name";
         companyName.textContent = payload.company;
-        row.appendChild(companyName);
+        companyMain.appendChild(companyName);
+
+        var companyRatingMeta = document.createElement("div");
+        companyRatingMeta.className = "company-rating-meta";
+        if (ratingAggregate.count > 0 && ratingAggregate.average > 0) {
+          var performancePercent = Math.round((ratingAggregate.average / 5) * 1000) / 10;
+          var performancePercentText = Number.isInteger(performancePercent) ? String(performancePercent) : performancePercent.toFixed(1);
+          companyRatingMeta.textContent = "Overall: " + performancePercentText + "% (" + ratingText + "/5) | " + String(ratingAggregate.count) + (ratingAggregate.count === 1 ? " evaluator" : " evaluators");
+        } else {
+          companyRatingMeta.textContent = "No ratings yet.";
+        }
+        companyMain.appendChild(companyRatingMeta);
+
+        var criteriaPreview = document.createElement("div");
+        criteriaPreview.className = "company-criteria-preview";
+        PERFORMANCE_CRITERIA.forEach(function (criteria) {
+          var criteriaRow = document.createElement("div");
+          criteriaRow.className = "company-criteria-row";
+
+          var criteriaLabel = document.createElement("span");
+          criteriaLabel.className = "company-criteria-label";
+          criteriaLabel.textContent = criteriaPreviewLabel(criteria.key) + ":";
+
+          var criteriaValue = ratingAggregate.criteriaAverages && typeof ratingAggregate.criteriaAverages === "object"
+            ? normalizeRatingValue(ratingAggregate.criteriaAverages[criteria.key])
+            : 0;
+          var criteriaStars = createCompanyMiniStars(criteriaValue);
+
+          var criteriaScore = document.createElement("span");
+          criteriaScore.className = "company-criteria-score";
+          criteriaScore.textContent = ratingAggregate.count > 0 && criteriaValue > 0
+            ? (Number.isInteger(criteriaValue) ? String(criteriaValue) : criteriaValue.toFixed(1))
+            : "-";
+
+          criteriaRow.appendChild(criteriaLabel);
+          criteriaRow.appendChild(criteriaStars);
+          criteriaRow.appendChild(criteriaScore);
+          criteriaPreview.appendChild(criteriaRow);
+        });
+        companyMain.appendChild(criteriaPreview);
+        row.appendChild(companyMain);
 
         var actionsWrap = document.createElement("div");
         actionsWrap.className = "company-card-actions";
+
+        var rateBtn = document.createElement("button");
+        rateBtn.type = "button";
+        rateBtn.className = "company-card-btn";
+        rateBtn.setAttribute("data-card-action", "rate");
+        rateBtn.setAttribute("aria-label", "Rate contractor performance");
+        rateBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.4 6.5 20.2l1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>';
 
         var viewBtn = document.createElement("button");
         viewBtn.type = "button";
@@ -3461,6 +4145,7 @@
         deleteBtn.setAttribute("aria-label", "Delete contractor");
         deleteBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>';
 
+        actionsWrap.appendChild(rateBtn);
         actionsWrap.appendChild(viewBtn);
         actionsWrap.appendChild(editBtn);
         actionsWrap.appendChild(deleteBtn);
@@ -3556,7 +4241,8 @@
             contractorStatusInput.value = payload.status || "Active";
           }
           if (contractorRatingInput) {
-            contractorRatingInput.value = payload.rating === "-" ? "" : payload.rating;
+            var ratingAggregate = ratingAggregateFromPayload(payload);
+            contractorRatingInput.value = ratingAggregate.average > 0 ? (Number.isInteger(ratingAggregate.average) ? String(ratingAggregate.average) : ratingAggregate.average.toFixed(1)) : "";
           }
           setContractorFormReports(payload.reports || []);
           if (contractorDocumentScanInput) {
@@ -3744,6 +4430,191 @@
         return "details-status-chip details-status-chip-neutral";
       }
 
+      function normalizeRatingValue(value) {
+        var numeric = Number(value);
+        if (!isFinite(numeric) || numeric <= 0) {
+          return 0;
+        }
+        if (numeric > 5) {
+          numeric = 5;
+        }
+        return Math.round(numeric * 10) / 10;
+      }
+
+      function criteriaScoresEqual(leftScores, rightScores) {
+        var left = normalizeCriteriaScores(leftScores);
+        var right = normalizeCriteriaScores(rightScores);
+        return PERFORMANCE_CRITERIA_KEYS.every(function (key) {
+          return Math.abs(left[key] - right[key]) < 0.001;
+        });
+      }
+
+      function incompleteCriteriaLabels(scores) {
+        var normalized = normalizeCriteriaScores(scores);
+        return PERFORMANCE_CRITERIA.filter(function (criteria) {
+          return normalizeRatingValue(normalized[criteria.key]) <= 0;
+        }).map(function (criteria) {
+          return criteria.label;
+        });
+      }
+
+      function setCriteriaStarFill(criteriaKey, ratingValue) {
+        if (!detailCriteriaStars || detailCriteriaStars.length === 0 || !criteriaKey) {
+          return;
+        }
+
+        var normalized = normalizeRatingValue(ratingValue);
+        detailCriteriaStars.forEach(function (starBtn) {
+          var starCriteriaKey = starBtn.getAttribute("data-rating-criteria") || "";
+          if (starCriteriaKey !== criteriaKey) {
+            return;
+          }
+
+          var starValue = Number(starBtn.getAttribute("data-rating-star")) || 0;
+          var fillPercent = (normalized - (starValue - 1)) * 100;
+          if (!isFinite(fillPercent)) {
+            fillPercent = 0;
+          }
+          if (fillPercent < 0) {
+            fillPercent = 0;
+          } else if (fillPercent > 100) {
+            fillPercent = 100;
+          }
+          starBtn.style.setProperty("--star-fill", String(fillPercent) + "%");
+          starBtn.setAttribute("aria-pressed", fillPercent > 0 ? "true" : "false");
+        });
+      }
+
+      function applyDetailRating(aggregate, displayCriteriaScores) {
+        var result = aggregate || { average: 0, count: 0, criteriaAverages: emptyCriteriaScores() };
+        var normalizedOverall = normalizeRatingValue(result.average);
+        var countValue = Math.round(Number(result.count));
+        var ratersCount = isFinite(countValue) && countValue > 0 ? countValue : 0;
+        var hasRating = normalizedOverall > 0 && ratersCount > 0;
+        var displayRating = Number.isInteger(normalizedOverall) ? String(normalizedOverall) : normalizedOverall.toFixed(1);
+        var percentageValue = hasRating ? Math.round((normalizedOverall / 5) * 1000) / 10 : 0;
+        var percentageText = hasRating ? (Number.isInteger(percentageValue) ? String(percentageValue) : percentageValue.toFixed(1)) + "%" : "0%";
+        var criteriaAverages = result.criteriaAverages && typeof result.criteriaAverages === "object" ? result.criteriaAverages : emptyCriteriaScores();
+        var hasDisplayCriteria = displayCriteriaScores !== null && typeof displayCriteriaScores !== "undefined";
+        var criteriaDisplay = hasDisplayCriteria ? normalizeCriteriaScores(displayCriteriaScores) : criteriaAverages;
+
+        if (detailRatingValue) {
+          detailRatingValue.textContent = hasRating ? displayRating + " / 5" : "-";
+        }
+        if (detailRatingPercentage) {
+          detailRatingPercentage.textContent = percentageText;
+        }
+        if (detailRatingCount) {
+          detailRatingCount.textContent = hasRating ? String(ratersCount) : "0";
+        }
+        if (detailRatingsEmpty) {
+          detailRatingsEmpty.hidden = hasRating;
+        }
+        if (contractorRatingInput) {
+          contractorRatingInput.value = hasRating ? displayRating : "";
+        }
+
+        PERFORMANCE_CRITERIA_KEYS.forEach(function (criteriaKey) {
+          var criteriaValue = normalizeRatingValue(criteriaDisplay[criteriaKey]);
+          setCriteriaStarFill(criteriaKey, criteriaValue);
+        });
+
+        if (detailCriteriaValues && detailCriteriaValues.length > 0) {
+          detailCriteriaValues.forEach(function (valueEl) {
+            var criteriaKey = valueEl.getAttribute("data-rating-criteria-value") || "";
+            var criteriaValue = normalizeRatingValue(criteriaDisplay[criteriaKey]);
+            valueEl.textContent = criteriaValue > 0 ? (Number.isInteger(criteriaValue) ? String(criteriaValue) : criteriaValue.toFixed(1)) + " / 5" : "-";
+          });
+        }
+
+        if (detailRatingStarHint) {
+          if (hasPendingCriteriaChanges) {
+            detailRatingStarHint.textContent = "Rating changes are not submitted yet. Click Submit Rating to save.";
+          } else if (hasRating) {
+            detailRatingStarHint.textContent = "Overall Weighted Rating: " + displayRating + " / 5";
+          } else {
+            detailRatingStarHint.textContent = "Rate each criterion from 1 to 5 stars, then click Submit Rating.";
+          }
+        }
+      }
+
+      function queueCriteriaRatingSelection(criteriaKey, ratingValue) {
+        if (!activeDetailsRow || PERFORMANCE_CRITERIA_KEYS.indexOf(criteriaKey) === -1) {
+          return;
+        }
+
+        var normalized = normalizeRatingValue(ratingValue);
+        if (normalized <= 0) {
+          return;
+        }
+
+        if (!pendingCriteriaDraftScores) {
+          pendingCriteriaDraftScores = emptyCriteriaScores();
+        }
+        pendingCriteriaDraftScores[criteriaKey] = normalized;
+
+        hasPendingCriteriaChanges = !criteriaScoresEqual(pendingCriteriaDraftScores, currentUserSavedCriteriaScores);
+        applyDetailRating(activeRatingAggregate, pendingCriteriaDraftScores);
+      }
+
+      function submitCriteriaRatingFromDetails() {
+        if (!activeDetailsRow) {
+          return;
+        }
+
+        var evaluatorName = ratingEvaluatorNameInput ? String(ratingEvaluatorNameInput.value || "").trim() : "";
+        if (!evaluatorName) {
+          evaluatorName = "Anonymous";
+        }
+
+        var draftScores = normalizeCriteriaScores(pendingCriteriaDraftScores || emptyCriteriaScores());
+        var missingCriteria = incompleteCriteriaLabels(draftScores);
+        if (missingCriteria.length > 0) {
+          alert("Complete all criteria before submitting: " + missingCriteria.join(", "));
+          return;
+        }
+
+        var payload = rowPayload(activeDetailsRow);
+        if (!payload) {
+          return;
+        }
+
+        var ratingEntries = Array.isArray(payload.ratingEntries) ? payload.ratingEntries.slice() : [];
+        ratingEntries.push({
+          evaluator: evaluatorName,
+          submittedAt: new Date().toISOString(),
+          scores: draftScores
+        });
+
+        var ratingByUser = payload.ratingByUser && typeof payload.ratingByUser === "object" ? payload.ratingByUser : {};
+
+        var aggregate = ratingAggregateFromPayload({
+          ratingEntries: ratingEntries,
+          ratingByUser: ratingByUser,
+          ratingAverage: payload.ratingAverage,
+          ratingCount: payload.ratingCount,
+          rating: payload.rating
+        });
+
+        payload.ratingEntries = aggregate.ratingEntries;
+        payload.ratingByUser = aggregate.ratingByUser;
+        payload.ratingAverage = aggregate.average;
+        payload.ratingCount = aggregate.count;
+        payload.rating = aggregate.average > 0 ? (Number.isInteger(aggregate.average) ? String(aggregate.average) : aggregate.average.toFixed(1)) : "-";
+        payload.updatedAt = new Date().toISOString();
+        applyRowPayload(activeDetailsRow, payload);
+        persistContractorsToStorage();
+
+        activeRatingAggregate = aggregate;
+        currentUserSavedCriteriaScores = emptyCriteriaScores();
+        pendingCriteriaDraftScores = emptyCriteriaScores();
+        hasPendingCriteriaChanges = false;
+        if (ratingEvaluatorNameInput) {
+          ratingEvaluatorNameInput.value = "";
+        }
+        applyDetailRating(aggregate, pendingCriteriaDraftScores);
+      }
+
       function setActiveDetailsTab(tabName) {
         if (!detailTabButtons || !detailPanels) {
           return;
@@ -3779,8 +4650,7 @@
         var totalContracts = hasContract ? 1 : 0;
         var completedContracts = hasContract && payload.projectStatus === "Completed" ? 1 : 0;
         var ongoingContracts = hasContract && payload.projectStatus === "Ongoing" ? 1 : 0;
-        var hasRating = Boolean(payload.rating && payload.rating !== "-" && payload.rating !== "0" && payload.rating !== "0.0");
-        var ratingsCount = hasRating ? 1 : 0;
+        var reportItems = Array.isArray(payload.reports) ? payload.reports : [];
 
         if (detailCompanyName) detailCompanyName.textContent = valueOrDash(payload.company);
         if (detailTradeName) detailTradeName.textContent = valueOrDash(payload.tradeName);
@@ -3826,11 +4696,8 @@
         if (detailSummaryCompleted) detailSummaryCompleted.textContent = String(completedContracts);
         if (detailSummaryOngoing) detailSummaryOngoing.textContent = String(ongoingContracts);
         if (detailSummaryTotalValue) detailSummaryTotalValue.textContent = "P0";
-        if (detailRatingValue) detailRatingValue.textContent = valueOrDash(payload.rating);
-        if (detailRatingsEmpty) detailRatingsEmpty.hidden = hasRating;
         if (detailsContractTab) detailsContractTab.textContent = "Contract (" + String(totalContracts) + ")";
-        if (detailsRatingsTab) detailsRatingsTab.textContent = "Ratings (" + String(ratingsCount) + ")";
-        var reportItems = Array.isArray(payload.reports) ? payload.reports : [];
+        if (detailsAccomplishTab) detailsAccomplishTab.textContent = "Accomplish Reports (" + String(reportItems.length) + ")";
         if (detailDocPrimary) {
           if (reportItems.length > 0) {
             setProjectDocumentListItem(detailDocPrimary, reportItems[0], valueOrDash(payload.projectName || payload.company) + " specification file");
@@ -3882,6 +4749,35 @@
         document.body.classList.add("modal-open");
       }
 
+      function openContractorRatingModal(row) {
+        if (!row || !ratingModal) {
+          return;
+        }
+
+        var payload = rowPayload(row);
+        if (!payload) {
+          return;
+        }
+
+        var ratingAggregate = ratingAggregateFromPayload(payload);
+        activeDetailsRow = row;
+        activeRatingAggregate = ratingAggregate;
+        if (ratingCompanyNameLine) {
+          ratingCompanyNameLine.textContent = "Company: " + valueOrDash(payload.company);
+        }
+        currentUserSavedCriteriaScores = emptyCriteriaScores();
+        pendingCriteriaDraftScores = emptyCriteriaScores();
+        hasPendingCriteriaChanges = false;
+        if (ratingEvaluatorNameInput) {
+          ratingEvaluatorNameInput.value = "";
+        }
+
+        applyDetailRating(ratingAggregate, pendingCriteriaDraftScores);
+        ratingModal.classList.add("open");
+        ratingModal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+      }
+
       function closeContractorDetails() {
         if (!detailsModal) {
           return;
@@ -3889,7 +4785,37 @@
 
         detailsModal.classList.remove("open");
         detailsModal.setAttribute("aria-hidden", "true");
-        if (!modal || !modal.classList.contains("open")) {
+        if (
+          (!modal || !modal.classList.contains("open")) &&
+          (!ratingModal || !ratingModal.classList.contains("open"))
+        ) {
+          document.body.classList.remove("modal-open");
+        }
+      }
+
+      function closeContractorRatingModal() {
+        if (!ratingModal) {
+          return;
+        }
+
+        activeDetailsRow = null;
+        activeRatingAggregate = null;
+        pendingCriteriaDraftScores = null;
+        currentUserSavedCriteriaScores = null;
+        hasPendingCriteriaChanges = false;
+        if (ratingEvaluatorNameInput) {
+          ratingEvaluatorNameInput.value = "";
+        }
+        if (ratingCompanyNameLine) {
+          ratingCompanyNameLine.textContent = "Company: -";
+        }
+        applyDetailRating(null, null);
+        ratingModal.classList.remove("open");
+        ratingModal.setAttribute("aria-hidden", "true");
+        if (
+          (!modal || !modal.classList.contains("open")) &&
+          (!detailsModal || !detailsModal.classList.contains("open"))
+        ) {
           document.body.classList.remove("modal-open");
         }
       }
@@ -4125,6 +5051,13 @@
           if ((!payload.reports || payload.reports.length === 0) && existingPayload && Array.isArray(existingPayload.reports)) {
             payload.reports = existingPayload.reports.slice();
           }
+          if (existingPayload) {
+            payload.rating = existingPayload.rating || payload.rating || "-";
+            payload.ratingAverage = existingPayload.ratingAverage || payload.ratingAverage || "";
+            payload.ratingCount = existingPayload.ratingCount || payload.ratingCount || "0";
+            payload.ratingEntries = Array.isArray(existingPayload.ratingEntries) ? existingPayload.ratingEntries.slice() : [];
+            payload.ratingByUser = existingPayload.ratingByUser && typeof existingPayload.ratingByUser === "object" ? existingPayload.ratingByUser : {};
+          }
           payload.updatedAt = nowIso;
           applyRowPayload(editingContractorRow, payload);
         } else {
@@ -4152,6 +5085,10 @@
           var actionBtn = event.target.closest("button[data-card-action]");
           if (actionBtn) {
             var action = actionBtn.getAttribute("data-card-action");
+            if (action === "rate") {
+              openContractorRatingModal(row);
+              return;
+            }
             if (action === "view") {
               openContractorDetails(row);
               return;
@@ -4327,6 +5264,14 @@
         });
       }
 
+      if (ratingModal) {
+        ratingModal.addEventListener("click", function (event) {
+          if (event.target === ratingModal) {
+            closeContractorRatingModal();
+          }
+        });
+      }
+
       if (uploadScanModal) {
         uploadScanModal.addEventListener("click", function (event) {
           if (event.target === uploadScanModal) {
@@ -4349,6 +5294,14 @@
 
       if (closeDetailsFooterBtn) {
         closeDetailsFooterBtn.addEventListener("click", closeContractorDetails);
+      }
+
+      if (closeRatingBtn) {
+        closeRatingBtn.addEventListener("click", closeContractorRatingModal);
+      }
+
+      if (closeRatingFooterBtn) {
+        closeRatingFooterBtn.addEventListener("click", closeContractorRatingModal);
       }
 
       if (closeUploadScanModalBtn) {
@@ -4383,10 +5336,31 @@
         });
       }
 
+      if (detailCriteriaStars && detailCriteriaStars.length > 0) {
+        detailCriteriaStars.forEach(function (starBtn) {
+          starBtn.addEventListener("click", function () {
+            var criteriaKey = starBtn.getAttribute("data-rating-criteria") || "";
+            if (PERFORMANCE_CRITERIA_KEYS.indexOf(criteriaKey) === -1) {
+              return;
+            }
+            var starValue = Number(starBtn.getAttribute("data-rating-star")) || 0;
+            if (starValue < 1 || starValue > 5) {
+              return;
+            }
+            queueCriteriaRatingSelection(criteriaKey, starValue);
+          });
+        });
+      }
+
+      if (submitCriteriaRatingBtn) {
+        submitCriteriaRatingBtn.addEventListener("click", submitCriteriaRatingFromDetails);
+      }
+
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closeReportPreviewModal();
           closeUploadScanModal();
+          closeContractorRatingModal();
           closeContractorDetails();
           closeContractorModal();
         }
