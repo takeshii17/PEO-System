@@ -208,33 +208,6 @@
             border-top: 1px solid var(--line);
         }
 
-        .tab-strip {
-            margin-top: 22px;
-            width: fit-content;
-            background: #eceff3;
-            border-radius: 12px;
-            padding: 4px;
-            display: inline-flex;
-            gap: 2px;
-            box-shadow: 0 1px 3px rgba(8, 34, 61, 0.12);
-        }
-
-        .tab-btn {
-            border: 0;
-            border-radius: 10px;
-            background: transparent;
-            padding: 8px 12px;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .tab-btn.active {
-            background: #f8fafc;
-            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
-        }
-
         .empty {
             margin-top: 90px;
             text-align: center;
@@ -253,6 +226,297 @@
             font-size: 1.65rem;
         }
 
+        .tracker-board {
+            margin-top: 18px;
+            max-width: 1180px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .tracker-add-btn {
+            border: 0;
+            border-radius: 12px;
+            background: #173f6f;
+            color: #f4f8ff;
+            font: inherit;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 13px 18px;
+            width: min(520px, 100%);
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(7, 25, 45, 0.2);
+        }
+
+        .tracker-add-btn:hover {
+            background: #12345e;
+        }
+
+        .tracker-card {
+            background: #f4f7fb;
+            border: 1px solid #c5cfdb;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 1px 3px rgba(8, 34, 61, 0.08);
+        }
+
+        .tracker-card h3 {
+            margin: 0;
+            font-size: 1.9rem;
+            color: #0d2d4f;
+        }
+
+        .tracker-meta {
+            margin: 4px 0 12px;
+            color: #5e6f84;
+            font-size: 1.02rem;
+        }
+
+        .tracker-table-wrap {
+            border: 1px solid #b9c5d3;
+            border-radius: 12px;
+            background: #f9fbfd;
+            overflow-x: auto;
+        }
+
+        .tracker-table {
+            width: 100%;
+            min-width: 1600px;
+            border-collapse: collapse;
+            color: #0f2740;
+        }
+
+        .tracker-table th,
+        .tracker-table td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #d1dae4;
+            vertical-align: top;
+            font-size: 0.95rem;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .tracker-table th {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0a2a49;
+            background: #eef3f8;
+        }
+
+        .tracker-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .tracker-empty {
+            color: #5f7288;
+            font-style: italic;
+        }
+
+        .table-action-btn {
+            border: 1px solid #c8d3e0;
+            border-radius: 8px;
+            background: #f7fafc;
+            color: #11395f;
+            padding: 5px 10px;
+            font: inherit;
+            font-size: 0.86rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .table-action-btn:hover {
+            background: #ecf2f8;
+        }
+
+        .table-action-btn.delete {
+            color: #7b1f26;
+            border-color: #dfc0c3;
+            background: #fff6f6;
+        }
+
+        .table-action-btn.delete:hover {
+            background: #ffe9eb;
+        }
+
+        .qc-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 25, 44, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 30;
+        }
+
+        .qc-modal.open {
+            display: flex;
+        }
+
+        .qc-modal-card {
+            width: min(980px, 100%);
+            max-height: min(88vh, 920px);
+            overflow: auto;
+            border-radius: 14px;
+            background: #f6f9fc;
+            border: 1px solid #c8d4e2;
+            box-shadow: 0 18px 42px rgba(3, 16, 30, 0.32);
+        }
+
+        .qc-modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #d0d8e2;
+            position: sticky;
+            top: 0;
+            background: #f6f9fc;
+        }
+
+        .qc-modal-head h3 {
+            margin: 0;
+            color: #0c2d4d;
+            font-size: 1.2rem;
+        }
+
+        .qc-close-btn {
+            border: 0;
+            background: transparent;
+            color: #40566d;
+            font-size: 1.35rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .qc-modal-body {
+            padding: 14px 16px 16px;
+        }
+
+        .qc-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .qc-field {
+            display: grid;
+            gap: 7px;
+        }
+
+        .qc-field.hidden {
+            display: none;
+        }
+
+        .qc-field.span-2 {
+            grid-column: span 2;
+        }
+
+        .qc-label {
+            font-size: 0.93rem;
+            font-weight: 600;
+            color: #102943;
+        }
+
+        .qc-input,
+        .qc-select,
+        .qc-textarea {
+            border: 1px solid #c7d2de;
+            border-radius: 10px;
+            background: #fff;
+            padding: 9px 11px;
+            font: inherit;
+            color: #112a42;
+        }
+
+        .qc-textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        .qc-input:focus,
+        .qc-select:focus,
+        .qc-textarea:focus {
+            border-color: #1f4f7c;
+            outline: 2px solid rgba(31, 79, 124, 0.14);
+        }
+
+        .qc-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .qc-btn {
+            border: 0;
+            border-radius: 10px;
+            font: inherit;
+            font-weight: 600;
+            padding: 9px 14px;
+            cursor: pointer;
+        }
+
+        .qc-btn.secondary {
+            background: #e8eef6;
+            color: #1b3f66;
+        }
+
+        .qc-btn.primary {
+            background: #18487c;
+            color: #fff;
+        }
+
+        .qc-btn.secondary:hover {
+            background: #dbe6f3;
+        }
+
+        .qc-btn.primary:hover {
+            background: #143e6c;
+        }
+
+        .dashboard-tabs {
+            margin-top: 18px;
+            width: fit-content;
+            background: #d7dde4;
+            border-radius: 12px;
+            padding: 3px;
+            display: inline-flex;
+            gap: 3px;
+        }
+
+        .dashboard-tab {
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #0f2740;
+            font: inherit;
+            font-size: 1rem;
+            padding: 8px 14px;
+            line-height: 1.1;
+            cursor: pointer;
+        }
+
+        .dashboard-tab.active {
+            background: #eef3f8;
+            border: 1px solid #1c476f;
+            font-weight: 600;
+            box-shadow: 0 1px 1px rgba(8, 34, 61, 0.16);
+        }
+
+        .dashboard-tab:not(.active):hover {
+            background: rgba(255, 255, 255, 0.34);
+        }
+
+        .dashboard-panel {
+            display: none;
+        }
+
+        .dashboard-panel.active {
+            display: block;
+        }
+
         @media (max-width: 1400px) {
             .sidebar { width: 280px; }
         }
@@ -266,6 +530,18 @@
             }
             .page h2 { font-size: 1.45rem; }
             .empty p { font-size: 1.05rem; }
+            .tracker-card h3 { font-size: 1.45rem; }
+            .dashboard-tabs {
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            .qc-form-grid {
+                grid-template-columns: 1fr;
+            }
+            .qc-field.span-2 {
+                grid-column: auto;
+            }
         }
 
         body.embedded-maintenance-view .app-shell { display: block; min-height: auto; }
@@ -329,22 +605,387 @@
                 </div>
                 <div class="section-line"></div>
 
-                <section class="tab-strip" aria-label="Quality Tabs">
-                    <button class="tab-btn active" type="button">Testing &amp; QA/QC</button>
-                    <button class="tab-btn" type="button">Non-Conformance Reports</button>
-                    <button class="tab-btn" type="button">Final Inspections</button>
+                <section class="dashboard-tabs" aria-label="Quality Dashboard Sections">
+                    <button class="dashboard-tab active" type="button">Quality Control Tracker</button>
+                    <button class="dashboard-tab" type="button">Projects</button>
+                    <button class="dashboard-tab" type="button">Report</button>
                 </section>
 
-                <section class="empty">
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3 5 6v6c0 5 3.5 7.5 7 9 3.5-1.5 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.8"/>
-                        <path d="m9.5 12 1.7 1.7L15 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
-                    <p>Testing &amp; QA/QC tracking coming soon</p>
+                <section class="dashboard-panel active" id="quality-control-tracker-panel">
+                    <div class="tracker-board">
+                        <button class="tracker-add-btn" id="open-quality-record-modal" type="button">+ Add Quality Record</button>
+
+                        <section class="tracker-card">
+                            <h3>Quality Control Tracker</h3>
+                            <p class="tracker-meta" id="quality-record-count">0 records found</p>
+                            <div class="tracker-table-wrap">
+                                <table class="tracker-table" aria-label="Quality Control Tracker Records">
+                                    <thead>
+                                        <tr>
+                                            <th>Received From</th>
+                                            <th>Doc/Letter Date</th>
+                                            <th>Particulars</th>
+                                            <th>Details</th>
+                                            <th>Document No.</th>
+                                            <th>Route</th>
+                                            <th>Released By</th>
+                                            <th>Date Released</th>
+                                            <th>Received By</th>
+                                            <th>Date Received</th>
+                                            <th>Transmitted To</th>
+                                            <th>Remarks</th>
+                                            <th>Initial Status</th>
+                                            <th>Owner/Representative</th>
+                                            <th>Contact</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="quality-records-body">
+                                        <tr>
+                                            <td class="tracker-empty" id="quality-empty-state" colspan="16">No quality records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
                 </section>
             </main>
         </div>
     </div>
+
+    <div class="qc-modal" id="quality-record-modal" aria-hidden="true">
+        <div class="qc-modal-card" role="dialog" aria-modal="true" aria-labelledby="quality-record-modal-title">
+            <div class="qc-modal-head">
+                <h3 id="quality-record-modal-title">Add Quality Record</h3>
+                <button class="qc-close-btn" id="close-quality-record-modal" type="button" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="qc-modal-body">
+                <form id="quality-record-form">
+                    <div class="qc-form-grid">
+                        <label class="qc-field">
+                            <span class="qc-label">Received From</span>
+                            <input class="qc-input" type="text" name="received_from" required>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Doc/Letter Date</span>
+                            <input class="qc-input" type="date" name="doc_letter_date" required>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Particulars</span>
+                            <select class="qc-select" name="particulars" required>
+                                <option value="">Select...</option>
+                                <option>Inspection Request</option>
+                                <option>Field Density Test Request</option>
+                                <option>Pouring Permit Request</option>
+                                <option>Test Result</option>
+                                <option>Quality Control Program</option>
+                                <option>Quality Control Assurance</option>
+                                <option>Certificate of No Testing</option>
+                                <option>Affidavit (Inspectorate)</option>
+                                <option>Accomplishment Report (Signed)</option>
+                                <option>Travel Order</option>
+                                <option>Order of Payment</option>
+                                <option>Certification</option>
+                                <option>Punch List</option>
+                                <option>Pouring Permit</option>
+                                <option>Others</option>
+                            </select>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Document No.</span>
+                            <input class="qc-input" type="text" name="document_no" required>
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Details</span>
+                            <textarea class="qc-textarea" name="details" required></textarea>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Route</span>
+                            <select class="qc-select" name="route" required>
+                                <option value="">Select...</option>
+                                <option>Incoming</option>
+                                <option>Outgoing</option>
+                            </select>
+                        </label>
+                        <label class="qc-field" id="released-by-field">
+                            <span class="qc-label">Released By</span>
+                            <input class="qc-input" type="text" name="released_by" id="released-by-input">
+                        </label>
+                        <label class="qc-field" id="date-released-field">
+                            <span class="qc-label">Date Released</span>
+                            <input class="qc-input" type="date" name="date_released" id="date-released-input">
+                        </label>
+                        <label class="qc-field" id="received-by-field">
+                            <span class="qc-label">Received By</span>
+                            <input class="qc-input" type="text" name="received_by" id="received-by-input">
+                        </label>
+                        <label class="qc-field" id="date-received-field">
+                            <span class="qc-label">Date Received</span>
+                            <input class="qc-input" type="date" name="date_received" id="date-received-input">
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Transmitted To</span>
+                            <select class="qc-select" name="transmitted_to">
+                                <option value="">Select...</option>
+                                <option>Admin Division</option>
+                                <option>Planning Division</option>
+                                <option>Construction Division</option>
+                                <option>Quality Division</option>
+                                <option>Maintenance Division</option>
+                                <option>Others</option>
+                            </select>
+                        </label>
+                        <label class="qc-field span-2 hidden" id="transmitted-to-other-field">
+                            <span class="qc-label">Specify Other Division/Office</span>
+                            <input class="qc-input" type="text" name="transmitted_to_other" id="transmitted-to-other-input">
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Remarks</span>
+                            <textarea class="qc-textarea" name="remarks"></textarea>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Initial Status</span>
+                            <select class="qc-select" name="initial_status" required>
+                                <option value="">Select...</option>
+                                <option>For Filing</option>
+                                <option>For Action</option>
+                                <option>For Records Only</option>
+                            </select>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Owner/Representative</span>
+                            <input class="qc-input" type="text" name="owner_representative" required>
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Contact</span>
+                            <input class="qc-input" type="text" name="contact" required>
+                        </label>
+                    </div>
+                    <div class="qc-modal-actions">
+                        <button class="qc-btn secondary" id="cancel-quality-record-modal" type="button">Cancel</button>
+                        <button class="qc-btn primary" type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const openBtn = document.getElementById('open-quality-record-modal');
+            const closeBtn = document.getElementById('close-quality-record-modal');
+            const cancelBtn = document.getElementById('cancel-quality-record-modal');
+            const modal = document.getElementById('quality-record-modal');
+            const form = document.getElementById('quality-record-form');
+            const recordsBody = document.getElementById('quality-records-body');
+            const emptyState = document.getElementById('quality-empty-state');
+            const recordCount = document.getElementById('quality-record-count');
+            const routeSelect = form.querySelector('[name="route"]');
+            const transmittedToSelect = form.querySelector('[name="transmitted_to"]');
+            const transmittedToOtherField = document.getElementById('transmitted-to-other-field');
+            const transmittedToOtherInput = document.getElementById('transmitted-to-other-input');
+            const releasedByField = document.getElementById('released-by-field');
+            const releasedByInput = document.getElementById('released-by-input');
+            const dateReleasedField = document.getElementById('date-released-field');
+            const dateReleasedInput = document.getElementById('date-released-input');
+            const receivedByField = document.getElementById('received-by-field');
+            const receivedByInput = document.getElementById('received-by-input');
+            const dateReceivedField = document.getElementById('date-received-field');
+            const dateReceivedInput = document.getElementById('date-received-input');
+
+            if (!openBtn || !modal || !form || !recordsBody || !recordCount) {
+                return;
+            }
+
+            const formatDate = (value) => {
+                if (!value) {
+                    return '';
+                }
+                const parsed = new Date(value + 'T00:00:00');
+                if (Number.isNaN(parsed.getTime())) {
+                    return value;
+                }
+                return parsed.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
+            };
+
+            const updateRecordCount = () => {
+                const count = recordsBody.querySelectorAll('tr[data-record-row="true"]').length;
+                recordCount.textContent = count + ' record' + (count === 1 ? '' : 's') + ' found';
+            };
+
+            const openModal = () => {
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+                const firstInput = form.querySelector('input, select, textarea');
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+                form.reset();
+                if (transmittedToOtherField) {
+                    transmittedToOtherField.classList.add('hidden');
+                }
+                if (transmittedToOtherInput) {
+                    transmittedToOtherInput.required = false;
+                }
+                toggleRouteFields();
+            };
+
+            const createCell = (text) => {
+                const td = document.createElement('td');
+                td.textContent = text || '-';
+                return td;
+            };
+
+            const addRecordRow = (data) => {
+                if (emptyState) {
+                    emptyState.closest('tr').remove();
+                }
+
+                const row = document.createElement('tr');
+                row.setAttribute('data-record-row', 'true');
+                const isIncoming = (data.route || '').toLowerCase() === 'incoming';
+                const isOutgoing = (data.route || '').toLowerCase() === 'outgoing';
+
+                const columns = [
+                    data.received_from,
+                    formatDate(data.doc_letter_date),
+                    data.particulars,
+                    data.details,
+                    data.document_no,
+                    data.route,
+                    isOutgoing ? data.released_by : '',
+                    isOutgoing ? formatDate(data.date_released) : '',
+                    isIncoming ? data.received_by : '',
+                    isIncoming ? formatDate(data.date_received) : '',
+                    data.transmitted_to,
+                    data.remarks,
+                    data.initial_status,
+                    data.owner_representative,
+                    data.contact
+                ];
+
+                columns.forEach((value) => row.appendChild(createCell(value)));
+
+                const actionsCell = document.createElement('td');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'table-action-btn delete';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.addEventListener('click', () => {
+                    row.remove();
+                    if (!recordsBody.querySelector('tr[data-record-row="true"]')) {
+                        recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="16">No quality records found</td></tr>';
+                    }
+                    updateRecordCount();
+                });
+                actionsCell.appendChild(deleteBtn);
+                row.appendChild(actionsCell);
+
+                recordsBody.appendChild(row);
+                updateRecordCount();
+            };
+
+            const toggleTransmittedOther = () => {
+                if (!transmittedToSelect || !transmittedToOtherField || !transmittedToOtherInput) {
+                    return;
+                }
+                const isOthers = transmittedToSelect.value === 'Others';
+                transmittedToOtherField.classList.toggle('hidden', !isOthers);
+                transmittedToOtherInput.required = isOthers;
+                if (!isOthers) {
+                    transmittedToOtherInput.value = '';
+                }
+            };
+
+            const toggleRouteFields = () => {
+                if (!routeSelect) {
+                    return;
+                }
+                const routeValue = routeSelect.value;
+                const isIncoming = routeValue === 'Incoming';
+                const isOutgoing = routeValue === 'Outgoing';
+
+                if (releasedByField) {
+                    releasedByField.classList.toggle('hidden', isIncoming || !routeValue);
+                }
+                if (dateReleasedField) {
+                    dateReleasedField.classList.toggle('hidden', isIncoming || !routeValue);
+                }
+                if (receivedByField) {
+                    receivedByField.classList.toggle('hidden', isOutgoing || !routeValue);
+                }
+                if (dateReceivedField) {
+                    dateReceivedField.classList.toggle('hidden', isOutgoing || !routeValue);
+                }
+
+                if (releasedByInput) {
+                    releasedByInput.required = isOutgoing;
+                    if (!isOutgoing) {
+                        releasedByInput.value = '';
+                    }
+                }
+                if (dateReleasedInput) {
+                    dateReleasedInput.required = isOutgoing;
+                    if (!isOutgoing) {
+                        dateReleasedInput.value = '';
+                    }
+                }
+                if (receivedByInput) {
+                    receivedByInput.required = isIncoming;
+                    if (!isIncoming) {
+                        receivedByInput.value = '';
+                    }
+                }
+                if (dateReceivedInput) {
+                    dateReceivedInput.required = isIncoming;
+                    if (!isIncoming) {
+                        dateReceivedInput.value = '';
+                    }
+                }
+            };
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            if (transmittedToSelect) {
+                transmittedToSelect.addEventListener('change', toggleTransmittedOther);
+            }
+            if (routeSelect) {
+                routeSelect.addEventListener('change', toggleRouteFields);
+            }
+
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && modal.classList.contains('open')) {
+                    closeModal();
+                }
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+                if (data.transmitted_to === 'Others') {
+                    data.transmitted_to = (data.transmitted_to_other || '').trim();
+                }
+                addRecordRow(data);
+                closeModal();
+            });
+
+            toggleRouteFields();
+        })();
+    </script>
 </body>
 </html>
 
