@@ -7,6 +7,7 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = [
+            "slip_ref_no",
             "document_name",
             "location",
             "doc_type",
@@ -28,6 +29,7 @@ class DocumentForm(forms.ModelForm):
             "completion_date",
         ]
         widgets = {
+            "slip_ref_no": forms.TextInput(attrs={"placeholder": "e.g., SLIP-2026-001"}),
             "document_name": forms.TextInput(attrs={"placeholder": "e.g., Site Instruction No. 03"}),
             "location": forms.TextInput(attrs={"placeholder": "e.g., Brgy. San Isidro, Bayombong"}),
             "doc_type": forms.Select(),
@@ -51,6 +53,7 @@ class DocumentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["slip_ref_no"].required = True
         self.fields["billing_type"].widget = forms.Select(
             choices=[
                 ("", "Select billing type"),

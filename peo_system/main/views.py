@@ -448,7 +448,8 @@ def admin_div_dashboard(request):
             if search_l in label.lower() or search_l in value.replace("_", " ").lower()
         ]
         documents_qs = documents_qs.filter(
-            Q(document_name__icontains=search)
+            Q(slip_ref_no__icontains=search)
+            | Q(document_name__icontains=search)
             | Q(billing_type__icontains=search)
             | Q(description__icontains=search)
             | Q(doc_type__in=matching_types)

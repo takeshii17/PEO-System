@@ -793,7 +793,7 @@
                         {% else %}
                         <thead>
                             <tr>
-                                <th>Slip Ref. No</th>
+                                <th>Slip No</th>
                                 <th>Document</th>
                                 <th>Type</th>
                                 <th>Contractor</th>
@@ -806,7 +806,7 @@
                         <tbody>
                             {% for doc in documents %}
                             <tr>
-                                <td>SLIP-{{ doc.id|stringformat:"04d" }}</td>
+                                <td>{{ doc.slip_ref_no|default:"-" }}</td>
                                 <td>{{ doc.document_name }}</td>
                                 <td>{{ doc.get_doc_type_display }}</td>
                                 <td>{{ doc.contractor_display|default:"-" }}</td>
@@ -881,6 +881,13 @@
                     {% if editing_document %}
                     <input type="hidden" name="document_id" value="{{ editing_document.id }}">
                     {% endif %}
+
+                    <div class="field-grid one">
+                        <div class="field">
+                            <label>Slip Ref. No *</label>
+                            {{ form.slip_ref_no }}
+                        </div>
+                    </div>
 
                     <div class="field-grid one">
                         <div class="field">

@@ -17,6 +17,7 @@ def _scan_upload_path(instance, filename):
 
 
 class Document(models.Model):
+    slip_ref_no = models.CharField(max_length=80, blank=True)
     TYPE_SITE_INSTRUCTION = "site_instruction"
     TYPE_NCR = "ncr"
     TYPE_DED_PACKAGE = "ded_package"
