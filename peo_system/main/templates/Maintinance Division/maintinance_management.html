@@ -363,6 +363,38 @@
     .p-poor { width: 0%; }
     .p-bad { width: 0%; }
 
+    .condition-upload-row {
+      display: flex;
+      justify-content: flex-end;
+      margin: -4px 0 12px;
+    }
+
+    .upload-files-btn {
+      min-height: 38px;
+      border: 1px solid #1a476f;
+      border-radius: 10px;
+      background: #123760;
+      color: #ffffff;
+      padding: 10px 16px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .upload-files-btn:hover {
+      background: #0f3154;
+    }
+
+    .upload-files-input {
+      display: none;
+    }
+
     .filter-card {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -654,6 +686,10 @@
       background: #f7f9fc;
       color: #1f3550;
       line-height: 1;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .table-action-btn:hover {
@@ -781,6 +817,128 @@
       margin: 0;
       color: var(--muted);
       font-size: 1rem;
+    }
+
+    .road-results-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 16px 14px;
+      margin-top: 12px;
+    }
+
+    .road-results-head h3 {
+      margin: 0;
+      font-size: clamp(1.05rem, 0.55vw + 0.86rem, 1.3rem);
+    }
+
+    .road-results-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .road-group {
+      margin-top: 12px;
+      border: 1px solid #cfd6de;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+
+    .road-group-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #d8dee6;
+      background: #edf2f7;
+      font-weight: 700;
+      color: #113457;
+    }
+
+    .road-group-pill {
+      margin-left: 8px;
+      border: 1px solid #cfd6de;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #334e68;
+      background: #f7fafc;
+    }
+
+    .road-group-table-wrap {
+      overflow-x: auto;
+    }
+
+    .road-group-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    .road-group-table th,
+    .road-group-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid #d9dfe6;
+      font-size: 0.98rem;
+      color: #1f3348;
+    }
+
+    .road-group-table th {
+      font-weight: 600;
+      color: #102741;
+      background: #f8fafc;
+    }
+
+    .road-group-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .road-condition-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .road-condition-good {
+      background: #c9efd8;
+      color: #07933f;
+    }
+
+    .road-condition-fair {
+      background: #cee0f7;
+      color: #2159dc;
+    }
+
+    .road-condition-poor {
+      background: #f8e6bc;
+      color: #ce7600;
+    }
+
+    .road-condition-bad {
+      background: #fad0d5;
+      color: #c22131;
+    }
+
+    .road-condition-unknown {
+      background: #e3e8ef;
+      color: #445b75;
+    }
+
+    .road-results-empty {
+      margin: 10px 0 2px;
+      color: var(--muted);
+      font-size: 0.98rem;
     }
 
     .filter-row {
@@ -967,6 +1125,14 @@
         padding: 14px 12px;
       }
 
+      .condition-upload-row {
+        justify-content: stretch;
+      }
+
+      .upload-files-btn {
+        width: 100%;
+      }
+
       .filter-card {
         padding: 12px;
       }
@@ -1055,7 +1221,7 @@
           <svg viewBox="0 0 24 24" fill="none"><circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="3" stroke="currentColor" stroke-width="2"/><path d="M8.6 10.8 15.5 7.3M8.6 13.2l6.9 3.5" stroke="currentColor" stroke-width="2"/></svg>
         </div>
         <div>
-          <div class="kpi-value">0</div>
+          <div class="kpi-value" id="roadsKpiValue">0</div>
           <div class="kpi-label">Provincial Roads</div>
         </div>
       </article>
@@ -1065,7 +1231,7 @@
           <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s7-5.3 7-11a7 7 0 1 0-14 0c0 5.7 7 11 7 11Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="2"/></svg>
         </div>
         <div>
-          <div class="kpi-value">0 km</div>
+          <div class="kpi-value" id="roadsLengthKpiValue">0 km</div>
           <div class="kpi-label">Total Length</div>
         </div>
       </article>
@@ -1095,35 +1261,39 @@
       <article class="condition-card">
         <div class="condition-head">
           <h3>Good Condition</h3>
-          <span class="badge good">0</span>
+          <span class="badge good" id="goodConditionCount">0</span>
         </div>
-        <div class="progress"><span class="p-good"></span></div>
+        <div class="progress"><span class="p-good" id="goodConditionBar"></span></div>
       </article>
 
       <article class="condition-card">
         <div class="condition-head">
           <h3>Fair Condition</h3>
-          <span class="badge fair">0</span>
+          <span class="badge fair" id="fairConditionCount">0</span>
         </div>
-        <div class="progress"><span class="p-fair"></span></div>
+        <div class="progress"><span class="p-fair" id="fairConditionBar"></span></div>
       </article>
 
       <article class="condition-card">
         <div class="condition-head">
           <h3>Poor Condition</h3>
-          <span class="badge poor">0</span>
+          <span class="badge poor" id="poorConditionCount">0</span>
         </div>
-        <div class="progress"><span class="p-poor"></span></div>
+        <div class="progress"><span class="p-poor" id="poorConditionBar"></span></div>
       </article>
 
       <article class="condition-card">
         <div class="condition-head">
           <h3>Bad Condition</h3>
-          <span class="badge bad">0</span>
+          <span class="badge bad" id="badConditionCount">0</span>
         </div>
-        <div class="progress"><span class="p-bad"></span></div>
+        <div class="progress"><span class="p-bad" id="badConditionBar"></span></div>
       </article>
     </section>
+    <div class="condition-upload-row">
+      <label class="upload-files-btn" for="badConditionUploadInput">Upload Files</label>
+      <input class="upload-files-input" id="badConditionUploadInput" type="file" multiple>
+    </div>
 
         <section class="maintenance-tabs" aria-label="Maintenance dashboard tabs">
       <button type="button" class="maintenance-tab active" data-tab-target="roads">Provincial Roads</button>
@@ -1145,10 +1315,8 @@
               <span class="button-label">All Municipalities</span>
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="menu-submenu" id="maintenanceSubmenu" aria-hidden="false">
-              <a class="menu-subitem" href="{% url 'maintinance_div_dashboard' %}">Maintenance Management</a>
-              <a class="menu-subitem" href="{% url 'maintinance_task_management' %}">Task Management</a>
-              <a class="menu-subitem" href="{% url 'maintinance_contractor_management' %}">Contractor Management</a>
+            <div class="menu-list" role="listbox">
+              <button type="button" class="menu-option active" data-value="all" data-label="All Municipalities"><span>All Municipalities</span><span class="option-check">&#10003;</span></button>
             </div>
           </div>
 
@@ -1193,6 +1361,16 @@
               <button type="button" class="menu-option" data-value="desc" data-label="Descending"><span>Descending</span><span class="option-check">&#10003;</span></button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="road-results-card" aria-label="Provincial roads data">
+        <div class="road-results-head">
+          <h3>Provincial Roads</h3>
+          <p id="roadResultsCountText">0 roads found</p>
+        </div>
+        <div id="roadResultsContainer">
+          <p class="road-results-empty">Upload CSV or JSON files to display road records.</p>
         </div>
       </section>
     </section>
@@ -1564,6 +1742,7 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       var selects = document.querySelectorAll(".menu-select");
@@ -1593,8 +1772,24 @@
       var scheduleInProgressValue = document.getElementById("scheduleInProgressValue");
       var scheduleCompletedValue = document.getElementById("scheduleCompletedValue");
       var scheduleUrgentValue = document.getElementById("scheduleUrgentValue");
+      var roadSearchInput = document.getElementById("road-search");
+      var roadUploadInput = document.getElementById("badConditionUploadInput");
+      var roadResultsContainer = document.getElementById("roadResultsContainer");
+      var roadResultsCountText = document.getElementById("roadResultsCountText");
+      var roadsKpiValue = document.getElementById("roadsKpiValue");
+      var roadsLengthKpiValue = document.getElementById("roadsLengthKpiValue");
+      var goodConditionCount = document.getElementById("goodConditionCount");
+      var fairConditionCount = document.getElementById("fairConditionCount");
+      var poorConditionCount = document.getElementById("poorConditionCount");
+      var badConditionCount = document.getElementById("badConditionCount");
+      var goodConditionBar = document.getElementById("goodConditionBar");
+      var fairConditionBar = document.getElementById("fairConditionBar");
+      var poorConditionBar = document.getElementById("poorConditionBar");
+      var badConditionBar = document.getElementById("badConditionBar");
       var equipmentEntries = [];
       var scheduleEntries = [];
+      var uploadedRoadRecords = [];
+      var xlsxSupportWarningShown = false;
       var editingEquipmentIndex = null;
       var editingScheduleIndex = null;
 
@@ -1634,6 +1829,750 @@
         var td = document.createElement("td");
         td.textContent = text;
         return td;
+      }
+
+      function normalizeText(value) {
+        return String(value || "").trim().toLowerCase();
+      }
+
+      function normalizeKey(value) {
+        return normalizeText(value).replace(/[^a-z0-9]/g, "");
+      }
+
+      function toRoadCondition(rawCondition) {
+        var label = String(rawCondition || "").trim();
+        var key = normalizeText(label);
+        if (key.indexOf("good") === 0) {
+          return { key: "good", label: "Good" };
+        }
+        if (key.indexOf("fair") === 0) {
+          return { key: "fair", label: "Fair" };
+        }
+        if (key.indexOf("poor") === 0) {
+          return { key: "poor", label: "Poor" };
+        }
+        if (key.indexOf("bad") === 0) {
+          return { key: "bad", label: "Bad" };
+        }
+        return { key: "unknown", label: label || "Unknown" };
+      }
+
+      function parseLengthKm(rawLength) {
+        var normalized = String(rawLength || "").replace(/[^0-9.\-]/g, "");
+        var parsed = parseFloat(normalized);
+        return isNaN(parsed) ? null : parsed;
+      }
+
+      function formatLength(lengthKm) {
+        if (typeof lengthKm !== "number") {
+          return "-";
+        }
+        return lengthKm.toFixed(2);
+      }
+
+      function parseCsvLine(line, delimiter) {
+        var values = [];
+        var current = "";
+        var inQuotes = false;
+        var i = 0;
+
+        while (i < line.length) {
+          var ch = line.charAt(i);
+          if (ch === "\"") {
+            if (inQuotes && line.charAt(i + 1) === "\"") {
+              current += "\"";
+              i += 2;
+              continue;
+            }
+            inQuotes = !inQuotes;
+            i += 1;
+            continue;
+          }
+          if (ch === delimiter && !inQuotes) {
+            values.push(current.trim());
+            current = "";
+            i += 1;
+            continue;
+          }
+          current += ch;
+          i += 1;
+        }
+
+        values.push(current.trim());
+        return values;
+      }
+
+      function detectCsvDelimiter(headerLine) {
+        var commaCount = (headerLine.match(/,/g) || []).length;
+        var semicolonCount = (headerLine.match(/;/g) || []).length;
+        var tabCount = (headerLine.match(/\t/g) || []).length;
+        if (tabCount >= commaCount && tabCount >= semicolonCount) {
+          return "\t";
+        }
+        if (semicolonCount > commaCount) {
+          return ";";
+        }
+        return ",";
+      }
+
+      function findHeaderIndex(headers, aliases) {
+        var normalizedAliases = aliases.map(normalizeKey);
+        for (var i = 0; i < headers.length; i += 1) {
+          var normalizedHeader = normalizeKey(headers[i]);
+          if (normalizedAliases.indexOf(normalizedHeader) > -1) {
+            return i;
+          }
+        }
+        return -1;
+      }
+
+      function mapCsvRowToRoadRecord(values, indexMap, sourceName) {
+        var roadName = indexMap.roadName > -1 ? (values[indexMap.roadName] || "").trim() : "";
+        if (!roadName) {
+          return null;
+        }
+
+        var municipalityRaw = indexMap.municipality > -1 ? (values[indexMap.municipality] || "").trim() : "";
+        var municipality = municipalityRaw || "Unspecified";
+        var condition = toRoadCondition(indexMap.condition > -1 ? values[indexMap.condition] : "");
+        var lengthKm = indexMap.lengthKm > -1 ? parseLengthKm(values[indexMap.lengthKm]) : null;
+        var roadId = indexMap.roadId > -1 ? String(values[indexMap.roadId] || "").trim() : "";
+        var roadIdNumber = parseFloat(String(roadId || "").replace(/[^0-9.\-]/g, ""));
+
+        return {
+          roadId: roadId || "-",
+          roadIdNumber: isNaN(roadIdNumber) ? null : roadIdNumber,
+          roadName: roadName,
+          municipality: municipality,
+          municipalityKey: normalizeText(municipality),
+          conditionKey: condition.key,
+          conditionLabel: condition.label,
+          lengthKm: lengthKm,
+          surfaceType: indexMap.surfaceType > -1 ? (values[indexMap.surfaceType] || "").trim() || "-" : "-",
+          sourceFile: sourceName || ""
+        };
+      }
+
+      function parseRoadRecordsFromCsv(text, sourceName) {
+        var rawLines = String(text || "").replace(/\r/g, "").split("\n");
+        var lines = rawLines.filter(function (line) {
+          return String(line || "").trim() !== "";
+        });
+        if (lines.length < 2) {
+          return [];
+        }
+
+        var delimiter = detectCsvDelimiter(lines[0]);
+        var headers = parseCsvLine(lines[0], delimiter);
+        var indexMap = {
+          roadId: findHeaderIndex(headers, ["road id", "roadid", "id", "road no", "road number"]),
+          roadName: findHeaderIndex(headers, ["road name", "roadname", "name", "road"]),
+          municipality: findHeaderIndex(headers, ["municipality", "citymunicipality", "city", "town"]),
+          condition: findHeaderIndex(headers, ["condition", "road condition"]),
+          lengthKm: findHeaderIndex(headers, ["length", "length km", "lengthkm", "length (km)"]),
+          surfaceType: findHeaderIndex(headers, ["surface type", "surfacetype", "surface"])
+        };
+
+        if (indexMap.roadName === -1) {
+          return [];
+        }
+
+        var parsed = [];
+        for (var i = 1; i < lines.length; i += 1) {
+          var values = parseCsvLine(lines[i], delimiter);
+          var nextRecord = mapCsvRowToRoadRecord(values, indexMap, sourceName);
+          if (nextRecord) {
+            parsed.push(nextRecord);
+          }
+        }
+        return parsed;
+      }
+
+      function extractJsonRoadArray(payload) {
+        if (Array.isArray(payload)) {
+          return payload;
+        }
+        if (payload && Array.isArray(payload.roads)) {
+          return payload.roads;
+        }
+        if (payload && Array.isArray(payload.data)) {
+          return payload.data;
+        }
+        return [];
+      }
+
+      function findObjectValue(obj, aliases) {
+        if (!obj || typeof obj !== "object") {
+          return "";
+        }
+        var aliasKeys = aliases.map(normalizeKey);
+        var keys = Object.keys(obj);
+        for (var i = 0; i < keys.length; i += 1) {
+          var key = keys[i];
+          if (aliasKeys.indexOf(normalizeKey(key)) > -1) {
+            return obj[key];
+          }
+        }
+        return "";
+      }
+
+      function mapJsonObjectToRoadRecord(item, sourceName) {
+        var roadNameRaw = findObjectValue(item, ["road name", "roadname", "name", "road"]);
+        var roadName = String(roadNameRaw || "").trim();
+        if (!roadName) {
+          return null;
+        }
+
+        var municipalityRaw = findObjectValue(item, ["municipality", "citymunicipality", "city", "town"]);
+        var municipality = String(municipalityRaw || "").trim() || "Unspecified";
+        var condition = toRoadCondition(findObjectValue(item, ["condition", "road condition"]));
+        var roadIdRaw = findObjectValue(item, ["road id", "roadid", "id", "road number", "road no"]);
+        var roadId = String(roadIdRaw || "").trim() || "-";
+        var roadIdNumber = parseFloat(String(roadId || "").replace(/[^0-9.\-]/g, ""));
+        var lengthKm = parseLengthKm(findObjectValue(item, ["length", "length km", "lengthkm", "length (km)"]));
+        var surfaceTypeRaw = findObjectValue(item, ["surface type", "surfacetype", "surface"]);
+
+        return {
+          roadId: roadId,
+          roadIdNumber: isNaN(roadIdNumber) ? null : roadIdNumber,
+          roadName: roadName,
+          municipality: municipality,
+          municipalityKey: normalizeText(municipality),
+          conditionKey: condition.key,
+          conditionLabel: condition.label,
+          lengthKm: lengthKm,
+          surfaceType: String(surfaceTypeRaw || "").trim() || "-",
+          sourceFile: sourceName || ""
+        };
+      }
+
+      function parseRoadRecordsFromJson(text, sourceName) {
+        try {
+          var payload = JSON.parse(text);
+          var list = extractJsonRoadArray(payload);
+          var parsed = [];
+          list.forEach(function (item) {
+            var mapped = mapJsonObjectToRoadRecord(item, sourceName);
+            if (mapped) {
+              parsed.push(mapped);
+            }
+          });
+          return parsed;
+        } catch (error) {
+          return [];
+        }
+      }
+
+      function toRowStrings(row) {
+        if (!Array.isArray(row)) {
+          return [];
+        }
+        return row.map(function (value) {
+          return String(value == null ? "" : value).trim();
+        });
+      }
+
+      function findRoadHeaderInfo(rows) {
+        var maxScan = Math.min(rows.length, 80);
+        for (var i = 0; i < maxScan; i += 1) {
+          var headerRow = toRowStrings(rows[i]);
+          if (!headerRow.length) {
+            continue;
+          }
+
+          var indexMap = {
+            roadId: findHeaderIndex(headerRow, ["road id", "roadid", "id", "road no", "road number"]),
+            roadName: findHeaderIndex(headerRow, ["road name", "roadname", "name", "road"]),
+            municipality: findHeaderIndex(headerRow, ["municipality", "citymunicipality", "city", "town"]),
+            condition: findHeaderIndex(headerRow, ["condition", "road condition"]),
+            lengthKm: findHeaderIndex(headerRow, ["length", "length km", "lengthkm", "length (km)"]),
+            surfaceType: findHeaderIndex(headerRow, ["surface type", "surfacetype", "surface"])
+          };
+
+          if (indexMap.roadName > -1 && (indexMap.roadId > -1 || indexMap.condition > -1 || indexMap.lengthKm > -1)) {
+            return {
+              headerRowIndex: i,
+              indexMap: indexMap
+            };
+          }
+        }
+        return null;
+      }
+
+      function detectSurfaceComponentIndexes(rows, headerRowIndex) {
+        var indexes = {
+          concrete: -1,
+          asphalt: -1,
+          earth: -1,
+          gravel: -1
+        };
+
+        for (var offset = 1; offset <= 3; offset += 1) {
+          var row = toRowStrings(rows[headerRowIndex + offset]);
+          if (!row.length) {
+            continue;
+          }
+
+          for (var i = 0; i < row.length; i += 1) {
+            var cellKey = normalizeKey(row[i]);
+            if (cellKey === "concrete" && indexes.concrete === -1) {
+              indexes.concrete = i;
+            } else if (cellKey === "asphalt" && indexes.asphalt === -1) {
+              indexes.asphalt = i;
+            } else if (cellKey === "earth" && indexes.earth === -1) {
+              indexes.earth = i;
+            } else if (cellKey === "gravel" && indexes.gravel === -1) {
+              indexes.gravel = i;
+            }
+          }
+        }
+
+        return indexes;
+      }
+
+      function detectMunicipalitySection(rowValues) {
+        var nonEmpty = rowValues.filter(function (value) {
+          return String(value || "").trim() !== "";
+        });
+        if (!nonEmpty.length) {
+          return "";
+        }
+
+        var joined = nonEmpty.join(" ").replace(/\s+/g, " ").trim();
+        if (!/municipality/i.test(joined) || nonEmpty.length > 4) {
+          return "";
+        }
+
+        var match = joined.match(/municipality(?:\s+of)?\s+(.+)/i);
+        if (!match || !match[1]) {
+          return "";
+        }
+
+        return match[1].trim();
+      }
+
+      function buildSurfaceTypeLabel(rowValues, indexMap, surfaceIndexes) {
+        var baseValue = indexMap.surfaceType > -1 ? String(rowValues[indexMap.surfaceType] || "").trim() : "";
+        var labels = {
+          concrete: "Concrete",
+          asphalt: "Asphalt",
+          earth: "Earth",
+          gravel: "Gravel"
+        };
+        var parts = [];
+
+        Object.keys(surfaceIndexes).forEach(function (key) {
+          var idx = surfaceIndexes[key];
+          if (idx < 0 || idx >= rowValues.length) {
+            return;
+          }
+          var numeric = parseLengthKm(rowValues[idx]);
+          if (typeof numeric === "number" && numeric > 0) {
+            parts.push(labels[key] + ": " + numeric.toFixed(3) + "km");
+          }
+        });
+
+        if (parts.length) {
+          return parts.join("  ");
+        }
+        if (baseValue) {
+          return baseValue;
+        }
+        return "-";
+      }
+
+      function parseRoadRecordsFromRowMatrix(rows, sourceName) {
+        var headerInfo = findRoadHeaderInfo(rows);
+        if (!headerInfo) {
+          return [];
+        }
+
+        var headerRowIndex = headerInfo.headerRowIndex;
+        var indexMap = headerInfo.indexMap;
+        var surfaceIndexes = detectSurfaceComponentIndexes(rows, headerRowIndex);
+        var parsed = [];
+        var currentMunicipality = "";
+
+        for (var r = headerRowIndex + 1; r < rows.length; r += 1) {
+          var rowValues = toRowStrings(rows[r]);
+          if (!rowValues.length || !rowValues.some(function (value) { return value !== ""; })) {
+            continue;
+          }
+
+          var municipalityMarker = detectMunicipalitySection(rowValues);
+          if (municipalityMarker) {
+            currentMunicipality = municipalityMarker;
+            continue;
+          }
+
+          var roadName = indexMap.roadName > -1 ? String(rowValues[indexMap.roadName] || "").trim() : "";
+          if (!roadName) {
+            continue;
+          }
+
+          if (normalizeText(roadName).indexOf("road name") > -1) {
+            continue;
+          }
+
+          var roadId = indexMap.roadId > -1 ? String(rowValues[indexMap.roadId] || "").trim() : "";
+          var roadIdNumber = parseFloat(String(roadId || "").replace(/[^0-9.\-]/g, ""));
+          var lengthKm = indexMap.lengthKm > -1 ? parseLengthKm(rowValues[indexMap.lengthKm]) : null;
+          var condition = toRoadCondition(indexMap.condition > -1 ? rowValues[indexMap.condition] : "");
+          var municipalityRaw = indexMap.municipality > -1 ? String(rowValues[indexMap.municipality] || "").trim() : "";
+          var municipality = municipalityRaw || currentMunicipality || "Unspecified";
+
+          parsed.push({
+            roadId: roadId || "-",
+            roadIdNumber: isNaN(roadIdNumber) ? null : roadIdNumber,
+            roadName: roadName,
+            municipality: municipality,
+            municipalityKey: normalizeText(municipality),
+            conditionKey: condition.key,
+            conditionLabel: condition.label,
+            lengthKm: lengthKm,
+            surfaceType: buildSurfaceTypeLabel(rowValues, indexMap, surfaceIndexes),
+            sourceFile: sourceName || ""
+          });
+        }
+
+        return parsed;
+      }
+
+      async function parseRoadRecordsFromXlsx(file, sourceName) {
+        if (!window.XLSX || !window.XLSX.read || !window.XLSX.utils) {
+          if (!xlsxSupportWarningShown) {
+            xlsxSupportWarningShown = true;
+            window.alert("XLSX parser is not available right now. Please upload CSV/JSON or refresh and try again.");
+          }
+          return [];
+        }
+
+        try {
+          var buffer = await file.arrayBuffer();
+          var workbook = window.XLSX.read(buffer, { type: "array", cellDates: false });
+          if (!workbook || !workbook.SheetNames || !workbook.SheetNames.length) {
+            return [];
+          }
+
+          var sheetStates = (workbook.Workbook && workbook.Workbook.Sheets) ? workbook.Workbook.Sheets : [];
+          var visibleSheetNames = workbook.SheetNames.filter(function (name) {
+            var stateEntry = sheetStates.find(function (sheetMeta) {
+              return sheetMeta && sheetMeta.name === name;
+            });
+            return !stateEntry || stateEntry.Hidden !== 1;
+          });
+          if (!visibleSheetNames.length) {
+            visibleSheetNames = workbook.SheetNames.slice();
+          }
+
+          var bestRecords = [];
+          visibleSheetNames.forEach(function (sheetName) {
+            var sheet = workbook.Sheets[sheetName];
+            if (!sheet) {
+              return;
+            }
+
+            var rowMatrix = window.XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            var parsed = parseRoadRecordsFromRowMatrix(rowMatrix, sourceName + " / " + sheetName);
+            if (parsed.length > bestRecords.length) {
+              bestRecords = parsed;
+            }
+          });
+          return bestRecords;
+        } catch (error) {
+          return [];
+        }
+      }
+
+      async function parseRoadRecordsFromFile(file) {
+        var fileName = file && file.name ? file.name : "";
+        var lowerName = String(fileName || "").toLowerCase();
+        if (lowerName.endsWith(".xlsx")) {
+          return parseRoadRecordsFromXlsx(file, fileName);
+        }
+
+        var text = "";
+        if (file && typeof file.text === "function") {
+          text = await file.text();
+        }
+
+        if (lowerName.endsWith(".json")) {
+          return parseRoadRecordsFromJson(text, fileName);
+        }
+        if (lowerName.endsWith(".csv") || lowerName.endsWith(".txt")) {
+          return parseRoadRecordsFromCsv(text, fileName);
+        }
+        var trimmed = String(text || "").trim();
+        if (trimmed.charAt(0) === "{" || trimmed.charAt(0) === "[") {
+          return parseRoadRecordsFromJson(text, fileName);
+        }
+        return parseRoadRecordsFromCsv(text, fileName);
+      }
+
+      function getRoadFilterValue(filterName, fallback) {
+        var hidden = document.querySelector(".menu-select[data-name='" + filterName + "'] input[type='hidden']");
+        if (!hidden || !String(hidden.value || "").trim()) {
+          return fallback;
+        }
+        return hidden.value;
+      }
+
+      function compareRoadRecords(a, b, sortBy) {
+        if (sortBy === "road_name") {
+          return a.roadName.localeCompare(b.roadName);
+        }
+        if (sortBy === "municipality") {
+          return a.municipality.localeCompare(b.municipality);
+        }
+        if (sortBy === "length") {
+          var aLength = typeof a.lengthKm === "number" ? a.lengthKm : -1;
+          var bLength = typeof b.lengthKm === "number" ? b.lengthKm : -1;
+          return aLength - bLength;
+        }
+        if (sortBy === "condition") {
+          var order = { good: 1, fair: 2, poor: 3, bad: 4, unknown: 5 };
+          return (order[a.conditionKey] || 99) - (order[b.conditionKey] || 99);
+        }
+        var aRoadId = typeof a.roadIdNumber === "number" ? a.roadIdNumber : Number.POSITIVE_INFINITY;
+        var bRoadId = typeof b.roadIdNumber === "number" ? b.roadIdNumber : Number.POSITIVE_INFINITY;
+        if (aRoadId !== bRoadId) {
+          return aRoadId - bRoadId;
+        }
+        return a.roadId.localeCompare(b.roadId);
+      }
+
+      function updateRoadDashboardMetrics(records) {
+        var total = records.length;
+        var good = 0;
+        var fair = 0;
+        var poor = 0;
+        var bad = 0;
+        var totalLength = 0;
+
+        records.forEach(function (record) {
+          if (record.conditionKey === "good") {
+            good += 1;
+          } else if (record.conditionKey === "fair") {
+            fair += 1;
+          } else if (record.conditionKey === "poor") {
+            poor += 1;
+          } else if (record.conditionKey === "bad") {
+            bad += 1;
+          }
+
+          if (typeof record.lengthKm === "number") {
+            totalLength += record.lengthKm;
+          }
+        });
+
+        if (roadsKpiValue) {
+          roadsKpiValue.textContent = String(total);
+        }
+        if (roadsLengthKpiValue) {
+          roadsLengthKpiValue.textContent = totalLength.toFixed(2) + " km";
+        }
+        if (goodConditionCount) {
+          goodConditionCount.textContent = String(good);
+        }
+        if (fairConditionCount) {
+          fairConditionCount.textContent = String(fair);
+        }
+        if (poorConditionCount) {
+          poorConditionCount.textContent = String(poor);
+        }
+        if (badConditionCount) {
+          badConditionCount.textContent = String(bad);
+        }
+
+        var safeTotal = total > 0 ? total : 1;
+        if (goodConditionBar) {
+          goodConditionBar.style.width = ((good / safeTotal) * 100).toFixed(2) + "%";
+        }
+        if (fairConditionBar) {
+          fairConditionBar.style.width = ((fair / safeTotal) * 100).toFixed(2) + "%";
+        }
+        if (poorConditionBar) {
+          poorConditionBar.style.width = ((poor / safeTotal) * 100).toFixed(2) + "%";
+        }
+        if (badConditionBar) {
+          badConditionBar.style.width = ((bad / safeTotal) * 100).toFixed(2) + "%";
+        }
+      }
+
+      function createRoadConditionPill(conditionKey, conditionLabel) {
+        var pill = document.createElement("span");
+        pill.className = "road-condition-pill road-condition-" + conditionKey;
+        if (["good", "fair", "poor", "bad"].indexOf(conditionKey) === -1) {
+          pill.className = "road-condition-pill road-condition-unknown";
+        }
+        pill.textContent = conditionLabel;
+        return pill;
+      }
+
+      function renderRoadResults(records) {
+        if (!roadResultsContainer) {
+          return;
+        }
+
+        roadResultsContainer.innerHTML = "";
+
+        if (!records.length) {
+          var empty = document.createElement("p");
+          empty.className = "road-results-empty";
+          empty.textContent = "No roads found for current filters.";
+          roadResultsContainer.appendChild(empty);
+          return;
+        }
+
+        var groupsMap = {};
+        records.forEach(function (record) {
+          if (!groupsMap[record.municipalityKey]) {
+            groupsMap[record.municipalityKey] = {
+              label: record.municipality.toUpperCase(),
+              entries: []
+            };
+          }
+          groupsMap[record.municipalityKey].entries.push(record);
+        });
+
+        var groupKeys = Object.keys(groupsMap).sort(function (a, b) {
+          return groupsMap[a].label.localeCompare(groupsMap[b].label);
+        });
+
+        groupKeys.forEach(function (key) {
+          var group = groupsMap[key];
+          var card = document.createElement("article");
+          card.className = "road-group";
+
+          var head = document.createElement("div");
+          head.className = "road-group-head";
+          head.textContent = group.label;
+
+          var countPill = document.createElement("span");
+          countPill.className = "road-group-pill";
+          countPill.textContent = group.entries.length + " roads";
+          head.appendChild(countPill);
+          card.appendChild(head);
+
+          var wrap = document.createElement("div");
+          wrap.className = "road-group-table-wrap";
+          var table = document.createElement("table");
+          table.className = "road-group-table";
+          table.innerHTML = "<thead><tr><th>Road ID</th><th>Road Name</th><th>Length (km)</th><th>Condition</th><th>Surface Type</th></tr></thead>";
+
+          var body = document.createElement("tbody");
+          group.entries.forEach(function (record) {
+            var row = document.createElement("tr");
+            row.appendChild(makeCell(record.roadId));
+            row.appendChild(makeCell(record.roadName));
+            row.appendChild(makeCell(formatLength(record.lengthKm)));
+            var conditionCell = document.createElement("td");
+            conditionCell.appendChild(createRoadConditionPill(record.conditionKey, record.conditionLabel));
+            row.appendChild(conditionCell);
+            row.appendChild(makeCell(record.surfaceType));
+            body.appendChild(row);
+          });
+
+          table.appendChild(body);
+          wrap.appendChild(table);
+          card.appendChild(wrap);
+          roadResultsContainer.appendChild(card);
+        });
+      }
+
+      function buildRoadViewRecords() {
+        var searchTerm = normalizeText(roadSearchInput ? roadSearchInput.value : "");
+        var municipalityFilter = normalizeText(getRoadFilterValue("municipality", "all"));
+        var conditionFilter = normalizeText(getRoadFilterValue("condition", "all"));
+        var sortBy = normalizeText(getRoadFilterValue("sort_by", "road_id"));
+        var sortOrder = normalizeText(getRoadFilterValue("sort_order", "asc"));
+
+        var filtered = uploadedRoadRecords.filter(function (record) {
+          var matchesMunicipality = municipalityFilter === "all" || record.municipalityKey === municipalityFilter;
+          var matchesCondition = conditionFilter === "all" || record.conditionKey === conditionFilter;
+          var haystack = [record.roadId, record.roadName, record.municipality, record.surfaceType].join(" ").toLowerCase();
+          var matchesSearch = !searchTerm || haystack.indexOf(searchTerm) > -1;
+          return matchesMunicipality && matchesCondition && matchesSearch;
+        });
+
+        filtered.sort(function (a, b) {
+          var compared = compareRoadRecords(a, b, sortBy || "road_id");
+          return sortOrder === "desc" ? (compared * -1) : compared;
+        });
+
+        return filtered;
+      }
+
+      function refreshRoadView() {
+        var records = buildRoadViewRecords();
+        if (roadResultsCountText) {
+          roadResultsCountText.textContent = records.length + " roads found";
+        }
+        updateRoadDashboardMetrics(records);
+        renderRoadResults(records);
+      }
+
+      function rebuildMunicipalityOptions() {
+        var municipalitySelect = document.querySelector(".menu-select[data-name='municipality']");
+        if (!municipalitySelect) {
+          return;
+        }
+
+        var menuList = municipalitySelect.querySelector(".menu-list");
+        var label = municipalitySelect.querySelector(".button-label");
+        var hidden = municipalitySelect.querySelector("input[type='hidden']");
+        if (!menuList || !label || !hidden) {
+          return;
+        }
+
+        var seen = {};
+        var municipalities = [];
+        uploadedRoadRecords.forEach(function (record) {
+          if (!seen[record.municipalityKey]) {
+            seen[record.municipalityKey] = true;
+            municipalities.push({
+              key: record.municipalityKey,
+              label: record.municipality.toUpperCase()
+            });
+          }
+        });
+
+        municipalities.sort(function (a, b) {
+          return a.label.localeCompare(b.label);
+        });
+
+        var currentValue = normalizeText(hidden.value || "all");
+        if (currentValue !== "all" && !seen[currentValue]) {
+          currentValue = "all";
+        }
+        hidden.value = currentValue || "all";
+        label.textContent = currentValue === "all"
+          ? "All Municipalities"
+          : (municipalities.find(function (item) { return item.key === currentValue; }) || {}).label || "All Municipalities";
+
+        menuList.innerHTML = "";
+
+        function appendOption(value, optionLabel) {
+          var option = document.createElement("button");
+          option.type = "button";
+          option.className = "menu-option" + (currentValue === value ? " active" : "");
+          option.setAttribute("data-value", value);
+          option.setAttribute("data-label", optionLabel);
+
+          var left = document.createElement("span");
+          left.textContent = optionLabel;
+          var right = document.createElement("span");
+          right.className = "option-check";
+          right.innerHTML = "&#10003;";
+          option.appendChild(left);
+          option.appendChild(right);
+          menuList.appendChild(option);
+        }
+
+        appendOption("all", "All Municipalities");
+        municipalities.forEach(function (municipality) {
+          appendOption(municipality.key, municipality.label);
+        });
       }
 
       function renderEquipmentTable() {
@@ -1995,6 +2934,8 @@
       renderEquipmentTable();
       updateScheduleSummary();
       renderScheduleTable();
+      rebuildMunicipalityOptions();
+      refreshRoadView();
 
       function syncModalBodyState() {
         var hasOpenModal = (addEquipmentModal && addEquipmentModal.classList.contains("open"))
@@ -2212,6 +3153,33 @@
         });
       }
 
+      if (roadUploadInput) {
+        roadUploadInput.addEventListener("change", async function () {
+          var selectedFiles = Array.prototype.slice.call(roadUploadInput.files || []);
+          if (!selectedFiles.length) {
+            return;
+          }
+          var addedCount = 0;
+
+          for (var i = 0; i < selectedFiles.length; i += 1) {
+            var file = selectedFiles[i];
+            var parsedRoads = await parseRoadRecordsFromFile(file);
+            parsedRoads.forEach(function (record) {
+              uploadedRoadRecords.push(record);
+              addedCount += 1;
+            });
+          }
+
+          if (!addedCount) {
+            window.alert("No road records were detected. Please upload CSV/JSON/XLSX with Road Name and Municipality columns.");
+          }
+
+          rebuildMunicipalityOptions();
+          refreshRoadView();
+          roadUploadInput.value = "";
+        });
+      }
+
       function closeAll(exceptNode) {
         selects.forEach(function (node) {
           if (node !== exceptNode) {
@@ -2228,9 +3196,7 @@
         var button = select.querySelector(".menu-button");
         var label = select.querySelector(".button-label");
         var hiddenInput = select.querySelector("input[type='hidden']");
-        var options = select.querySelectorAll(".menu-option");
-
-        if (!button || !options.length || !label) {
+        if (!button || !label) {
           return;
         }
 
@@ -2242,27 +3208,42 @@
           button.setAttribute("aria-expanded", String(willOpen));
         });
 
-        options.forEach(function (option) {
-          option.addEventListener("click", function () {
-            options.forEach(function (opt) {
-              opt.classList.remove("active");
-            });
+        select.addEventListener("click", function (event) {
+          var option = event.target.closest(".menu-option");
+          if (!option || !select.contains(option)) {
+            return;
+          }
 
-            option.classList.add("active");
-
-            var nextLabel = option.getAttribute("data-label") || option.textContent.trim();
-            var nextValue = option.getAttribute("data-value") || nextLabel;
-
-            label.textContent = nextLabel;
-            if (hiddenInput) {
-              hiddenInput.value = nextValue;
-            }
-
-            select.classList.remove("open");
-            button.setAttribute("aria-expanded", "false");
+          var options = select.querySelectorAll(".menu-option");
+          options.forEach(function (opt) {
+            opt.classList.remove("active");
           });
+
+          option.classList.add("active");
+
+          var nextLabel = option.getAttribute("data-label") || option.textContent.trim();
+          var nextValue = option.getAttribute("data-value") || nextLabel;
+
+          label.textContent = nextLabel;
+          if (hiddenInput) {
+            hiddenInput.value = nextValue;
+          }
+
+          select.classList.remove("open");
+          button.setAttribute("aria-expanded", "false");
+
+          var selectName = select.getAttribute("data-name");
+          if (selectName === "municipality" || selectName === "condition" || selectName === "sort_by" || selectName === "sort_order") {
+            refreshRoadView();
+          }
         });
       });
+
+      if (roadSearchInput) {
+        roadSearchInput.addEventListener("input", function () {
+          refreshRoadView();
+        });
+      }
 
       document.addEventListener("click", function (event) {
         if (!event.target.closest(".menu-select")) {
@@ -2277,6 +3258,7 @@
           closeAll(null);
         }
       });
+
     });
   </script>
 </body>

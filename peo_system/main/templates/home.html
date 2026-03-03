@@ -246,8 +246,10 @@
             inset: 0;
             background: #202628;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 14px;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -298,6 +300,18 @@
             top: 22%;
             left: 22%;
             animation: loader-circle-2-animation 0.85s linear infinite;
+        }
+
+        .nav-loading-toast {
+            margin: 0;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #f4f7fb;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
         }
 
         @keyframes navItemBlink {
@@ -1079,6 +1093,7 @@
             </main>
             <div class="nav-loading-overlay" id="navLoadingOverlay" aria-hidden="true">
                 <div class="loader-circle-2" aria-label="Loading" role="status"></div>
+                <p class="nav-loading-toast" id="navLoadingToast">Loading...</p>
             </div>
         </div>
     </div>
@@ -1194,13 +1209,17 @@
             var topNavItems = document.querySelectorAll(".nav-menu > a.nav-item");
             var maintenanceGroupItem = group ? group.querySelector(".nav-item-group") : null;
             var navLoadingOverlay = document.getElementById("navLoadingOverlay");
+            var navLoadingToast = document.getElementById("navLoadingToast");
             var navLoadingTimeoutId = null;
             var navLoadingMinTimeoutId = null;
             var navLoadingShownAt = 0;
             var NAV_LOADING_MIN_VISIBLE_MS = 1400;
+            var NAV_LOADING_DEFAULT_TEXT = "Loading...";
+            var DASHBOARD_WELCOME_TEXT = "Welcome to Dashboard";
             var NAV_RELOAD_LOADER_KEY = "peo.home.reload_loader";
             var NAV_RELOAD_LOADER_EXTRA_MS = 180;
             var LAST_SIDEBAR_VIEW_KEY = "peo.home.last_sidebar_view";
+            var POST_LOGIN_DASHBOARD_KEY = "peo.home.force_dashboard_after_login";
             var VIEW_KEYS = {
                 DASHBOARD: "dashboard",
                 ADMIN: "admin_division",
@@ -1215,9 +1234,12 @@
                 CONTRACTORS: "maintenance_contractors"
             };
 
-            function showNavLoading() {
+            function showNavLoading(message) {
                 if (!navLoadingOverlay) {
                     return;
+                }
+                if (navLoadingToast) {
+                    navLoadingToast.textContent = message || NAV_LOADING_DEFAULT_TEXT;
                 }
                 if (navLoadingTimeoutId) {
                     window.clearTimeout(navLoadingTimeoutId);
@@ -1277,6 +1299,18 @@
                     return window.localStorage.getItem(LAST_SIDEBAR_VIEW_KEY);
                 } catch (error) {
                     return null;
+                }
+            }
+
+            function consumePostLoginDashboardRequest() {
+                try {
+                    var requested = window.sessionStorage.getItem(POST_LOGIN_DASHBOARD_KEY) === "1";
+                    if (requested) {
+                        window.sessionStorage.removeItem(POST_LOGIN_DASHBOARD_KEY);
+                    }
+                    return requested;
+                } catch (error) {
+                    return false;
                 }
             }
 
@@ -1565,6 +1599,7 @@
                 var animate = options.animate !== false;
                 var persist = options.persist !== false;
                 var useLoader = options.useLoader !== false;
+                var loaderMessage = options.loaderMessage || "";
 
                 if (persist) {
                     saveLastSidebarView(viewKey);
@@ -1572,7 +1607,7 @@
 
                 if (viewKey === VIEW_KEYS.DASHBOARD) {
                     if (useLoader) {
-                        showNavLoading();
+                        showNavLoading(loaderMessage);
                     }
                     setMaintenanceMenuState(false);
                     if (tabDivisions) {
@@ -1848,13 +1883,23 @@
                 });
             }
 
-            var lastSidebarView = getLastSidebarView();
-            if (lastSidebarView && lastSidebarView !== VIEW_KEYS.DASHBOARD) {
-                window.setTimeout(function () {
-                    openSidebarView(lastSidebarView, { animate: false, persist: false, useLoader: true });
-                }, 100);
-            } else if (!lastSidebarView) {
-                saveLastSidebarView(VIEW_KEYS.DASHBOARD);
+            var shouldForceDashboard = consumePostLoginDashboardRequest();
+            if (shouldForceDashboard) {
+                openSidebarView(VIEW_KEYS.DASHBOARD, {
+                    animate: false,
+                    persist: true,
+                    useLoader: true,
+                    loaderMessage: DASHBOARD_WELCOME_TEXT
+                });
+            } else {
+                var lastSidebarView = getLastSidebarView();
+                if (lastSidebarView && lastSidebarView !== VIEW_KEYS.DASHBOARD) {
+                    window.setTimeout(function () {
+                        openSidebarView(lastSidebarView, { animate: false, persist: false, useLoader: true });
+                    }, 100);
+                } else if (!lastSidebarView) {
+                    saveLastSidebarView(VIEW_KEYS.DASHBOARD);
+                }
             }
         });
     </script>

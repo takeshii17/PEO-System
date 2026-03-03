@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging Out</title>
+    <style>
+        :root {
+            --bg: #202628;
+            --text: #f4f7fb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+            font-family: "Sora", "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+        }
+
+        .logout-shell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            text-align: center;
+        }
+
+        .loader-circle-2 {
+            position: relative;
+            width: 70px;
+            height: 70px;
+            display: inline-block;
+        }
+
+        .loader-circle-2:before,
+        .loader-circle-2:after {
+            content: "";
+            display: block;
+            position: absolute;
+            border-width: 5px;
+            border-style: solid;
+            border-radius: 50%;
+        }
+
+        .loader-circle-2:before {
+            width: 70px;
+            height: 70px;
+            border-bottom-color: #009688;
+            border-right-color: #009688;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            animation: loader-circle-2-animation-2 1s linear infinite;
+        }
+
+        .loader-circle-2:after {
+            width: 40px;
+            height: 40px;
+            border-bottom-color: #e91e63;
+            border-right-color: #e91e63;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            top: 22%;
+            left: 22%;
+            animation: loader-circle-2-animation 0.85s linear infinite;
+        }
+
+        .logout-loading-text,
+        .logout-toast {
+            margin: 0;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .logout-toast {
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+
+        .logout-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes loader-circle-2-animation-2 {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes loader-circle-2-animation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-shell">
+        <div class="loader-circle-2" aria-label="Loading" role="status"></div>
+        <p class="logout-loading-text">Please wait to logout</p>
+        <p id="logoutToast" class="logout-toast">Thank You Admin!</p>
+    </div>
+
+    <script>
+        (function () {
+            var toast = document.getElementById("logoutToast");
+            var loginUrl = "{{ login_url|escapejs }}";
+
+            window.setTimeout(function () {
+                if (toast) {
+                    toast.classList.add("show");
+                }
+            }, 900);
+
+            window.setTimeout(function () {
+                window.location.replace(loginUrl);
+            }, 2200);
+        })();
+    </script>
+</body>
+</html>

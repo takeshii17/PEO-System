@@ -224,8 +224,10 @@
             inset: 0;
             background: #202628;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 14px;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -278,6 +280,18 @@
             animation: loader-circle-2-animation 0.85s linear infinite;
         }
 
+        .login-loading-toast {
+            margin: 0;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #f4f7fb;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
         @keyframes loader-circle-2-animation-2 {
             0% {
                 transform: rotate(0deg);
@@ -314,6 +328,7 @@
 
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'dashboard' %}">
 
                     {% if form.non_field_errors %}
                     <div class="error-box">{{ form.non_field_errors }}</div>
@@ -338,18 +353,26 @@
     </section>
     <div class="login-loading-overlay" id="loginLoadingOverlay" aria-hidden="true">
         <div class="loader-circle-2" aria-label="Loading" role="status"></div>
+        <p class="login-loading-toast">Please wait to login</p>
     </div>
     <script>
         (function () {
             var form = document.querySelector('form[action="{% url "login" %}"]');
             var overlay = document.getElementById("loginLoadingOverlay");
             var submitButton = form ? form.querySelector('button[type="submit"]') : null;
+            var POST_LOGIN_DASHBOARD_KEY = "peo.home.force_dashboard_after_login";
 
             if (!form || !overlay) {
                 return;
             }
 
             form.addEventListener("submit", function () {
+                try {
+                    window.sessionStorage.setItem(POST_LOGIN_DASHBOARD_KEY, "1");
+                } catch (error) {
+                    // Ignore browser storage errors.
+                }
+
                 overlay.classList.add("show");
                 overlay.setAttribute("aria-hidden", "false");
 

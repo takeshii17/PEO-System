@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 from django.core.paginator import Paginator
 from django.db import connection
 from django.db.models import Case, DecimalField, F, Q, Sum, Value, When
@@ -10,6 +11,17 @@ from decimal import Decimal
 
 from .forms import ConstructionStatusReportForm, DocumentForm, PlanningBudgetForm, PlanningProjectForm
 from .models import ConstructionStatusReport, Document, DocumentScan, PlanningBudget, PlanningProject
+
+
+def logout_view(request):
+    if request.method == "POST":
+        auth_logout(request)
+        return render(
+            request,
+            "registration/logout.html",
+            {"login_url": reverse("login")},
+        )
+    return redirect("login")
 
 
 @login_required
