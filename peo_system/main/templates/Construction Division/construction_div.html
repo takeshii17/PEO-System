@@ -45,8 +45,9 @@
             background: #ffffff;
         }
         .column-table {
-            width: max-content;
-            min-width: 1800px;
+            width: 2482px;
+            min-width: 2482px;
+            table-layout: fixed;
             border-collapse: collapse;
             margin-top: 0;
             font-size: .82rem;
@@ -55,32 +56,131 @@
             border: 1px solid #cfd8e4;
             padding: 8px;
             text-align: center;
-            white-space: nowrap;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.25;
         }
         .column-table th {
             position: sticky;
             top: 0;
             background: #f4f7fa;
             z-index: 2;
+            font-weight: 700;
         }
         .column-table td { background:#fff; }
+        .column-table td:nth-child(2),
+        .column-table td:nth-child(3),
+        .column-table td:nth-child(5),
+        .column-table td:nth-child(18) {
+            text-align: left;
+        }
+        .column-table td:nth-child(6),
+        .column-table td:nth-child(8),
+        .column-table td:nth-child(10),
+        .column-table td:nth-child(13),
+        .column-table td:nth-child(14),
+        .column-table td:nth-child(15),
+        .column-table td:nth-child(16),
+        .column-table td:nth-child(17) {
+            text-align: right;
+        }
         .column-table th:first-child {
             position: sticky;
             left: 0;
             z-index: 3;
             background: #f4f7fa;
+            box-shadow: 2px 0 0 #d5ddea;
         }
         .column-table td:first-child {
             position: sticky;
             left: 0;
             z-index: 1;
             background: #ffffff;
+            box-shadow: 2px 0 0 #e2e8f0;
         }
         .toolbar { margin-top:0; display:flex; justify-content:flex-end; }
+        .toolbar-actions { display:flex; gap:8px; width:min(620px, 100%); max-width:100%; align-items:stretch; justify-content:flex-end; }
+        .toolbar-card {
+            background:#f4f7fb;
+            border:1px solid #c5cfdb;
+            border-radius:10px;
+            padding:10px;
+            box-shadow:0 1px 2px rgba(7,25,45,.08);
+        }
+        .add-record-card { flex: 0 0 145px; }
+        .add-record-card .btn { width:100%; }
+        .action-stack { display:grid; gap:8px; }
+        .hidden-upload-form,
+        .hidden-upload-input { display:none; }
+        .notice {
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: .84rem;
+        }
+        .notice.ok {
+            background: #ecfdf3;
+            border: 1px solid #9de4ba;
+            color: #14532d;
+        }
+        .notice.err {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
         .btn { border:1px solid #123760; background:#123760; color:#fff; border-radius:8px; padding:8px 12px; font-size:.82rem; cursor:pointer; }
         .btn.light { background:#fff; color:#123760; }
-        .actions { display:flex; gap:6px; justify-content:center; }
+        .btn.danger { background:#8e1f2d; border-color:#8e1f2d; color:#fff; }
+        .btn.danger:disabled { background:#c7cdd6; border-color:#c7cdd6; color:#eff3f8; cursor:not-allowed; }
+        .select-cell { text-align:center !important; }
+        .select-checkbox { width:15px; height:15px; accent-color:#123760; }
+        .actions { display:flex; gap:6px; justify-content:center; align-items:center; }
+        .actions form { margin:0; }
+        .actions .btn {
+            min-width: 64px;
+            height: 32px;
+            padding: 0 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
         .no-data { color:#5f6f84; text-align:center; padding:10px 0; }
+        .table-pagination {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .page-link {
+            min-width: 78px;
+            height: 30px;
+            padding: 0 10px;
+            border: 1px solid #bfccdb;
+            border-radius: 8px;
+            background: #fff;
+            color: #123760;
+            text-decoration: none;
+            font-size: .78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-link:hover { background:#edf3fa; }
+        .page-link.disabled {
+            pointer-events: none;
+            opacity: .55;
+            background:#f1f4f7;
+        }
+        .page-info {
+            font-size:.78rem;
+            color:#4a5e74;
+            padding: 0 2px;
+        }
         .modal { position:fixed; inset:0; background:rgba(11,22,38,.45); display:none; align-items:center; justify-content:center; z-index:50; }
         .modal.show { display:flex; }
         .modal-card { width:min(980px,94vw); max-height:90vh; overflow:auto; background:#f7f9fc; border:1px solid #c9d2de; border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.22); }
@@ -104,7 +204,7 @@
         @media (max-width:1200px) { .sidebar { width:280px; } }
         @media (max-width:1024px) {
             .page { padding:12px; }
-            .column-table { min-width:1450px; font-size:.76rem; }
+            .column-table { min-width:2482px; font-size:.76rem; }
             .column-table th, .column-table td { padding:6px; }
             .btn { font-size:.76rem; padding:6px 8px; }
         }
@@ -114,9 +214,13 @@
             .topbar { height:auto; padding:12px 16px; }
             .form-grid { grid-template-columns:1fr; }
             .field.wide { grid-column:span 1; }
-            .column-table { min-width:1250px; font-size:.72rem; }
+            .column-table { min-width:2482px; font-size:.72rem; }
             .actions { flex-direction:column; align-items:stretch; }
             .actions .btn { width:100%; }
+        }
+        @media (max-width:640px) {
+            .toolbar-actions { width:100%; flex-wrap:wrap; }
+            .add-record-card { flex:1 1 100%; }
         }
     </style>
 </head>
@@ -162,14 +266,73 @@
             <h2>Construction Division</h2>
             <div class="subhead"><span class="chip">Construction Division</span><span>Project Implementation &amp; Supervision</span></div>
             <section class="card">
+                {% if import_error %}
+                <div class="notice err">{{ import_error }}</div>
+                {% elif import_success %}
+                <div class="notice ok">
+                    Imported {{ import_success }} record{{ import_success|pluralize }} from Excel{% if import_skipped %} ({{ import_skipped }} skipped row{{ import_skipped|pluralize }} with blank project name){% endif %}.
+                </div>
+                {% endif %}
                 <div class="report-head">
                     <h3>Physical Accomplishment Status Report</h3>
                     <div class="toolbar">
-                        <button class="btn" type="button" id="openReportModal">+ Add Record</button>
+                        <div class="toolbar-actions">
+                            <div class="toolbar-card add-record-card">
+                                <div class="action-stack">
+                                    <button class="btn" type="button" id="openReportModal">+ Add Record</button>
+                                    <button class="btn light" type="button" id="uploadExcelTrigger">Upload Excel</button>
+                                    <button class="btn danger" type="button" id="bulkDeleteTrigger" disabled>Delete Selected</button>
+                                </div>
+                            </div>
+                            <form method="post" enctype="multipart/form-data" id="constructionExcelUploadForm" class="hidden-upload-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="import_excel">
+                                {% if request.GET.embedded %}
+                                <input type="hidden" name="embedded" value="1">
+                                {% endif %}
+                                {% if page_obj %}
+                                <input type="hidden" name="page" value="{{ page_obj.number }}">
+                                {% endif %}
+                                <input class="hidden-upload-input" id="constructionExcelInput" type="file" name="excel_file" accept=".xlsx,.xls">
+                            </form>
+                            <form method="post" id="constructionBulkDeleteForm" class="hidden-upload-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="bulk_delete">
+                                {% if request.GET.embedded %}
+                                <input type="hidden" name="embedded" value="1">
+                                {% endif %}
+                                {% if page_obj %}
+                                <input type="hidden" name="page" value="{{ page_obj.number }}">
+                                {% endif %}
+                                <input type="hidden" id="bulkDeleteIds" name="selected_ids" value="">
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div class="table-wrap">
                 <table class="column-table">
+                    <colgroup>
+                        <col style="width:46px">
+                        <col style="width:230px">
+                        <col style="width:190px">
+                        <col style="width:78px">
+                        <col style="width:185px">
+                        <col style="width:118px">
+                        <col style="width:96px">
+                        <col style="width:64px">
+                        <col style="width:118px">
+                        <col style="width:82px">
+                        <col style="width:122px">
+                        <col style="width:116px">
+                        <col style="width:138px">
+                        <col style="width:82px">
+                        <col style="width:82px">
+                        <col style="width:110px">
+                        <col style="width:110px">
+                        <col style="width:190px">
+                        <col style="width:153px">
+                        <col style="width:72px">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th rowspan="2">#</th>
@@ -188,6 +351,7 @@
                             <th rowspan="2">Slippage (+) (-) %</th>
                             <th rowspan="2">Remarks</th>
                             <th rowspan="2">Actions</th>
+                            <th rowspan="2" class="select-cell"><input type="checkbox" id="selectAllProjects" class="select-checkbox" aria-label="Select all projects"></th>
                         </tr>
                         <tr>
                             <th>Original Expiry Date</th>
@@ -220,7 +384,7 @@
                             <td>{{ report.remarks|default:"-" }}</td>
                             <td>
                                 <div class="actions">
-                                    <a class="btn light" href="?edit={{ report.id }}{% if request.GET.embedded %}&embedded=1{% endif %}">Edit</a>
+                                    <a class="btn light" href="?edit={{ report.id }}{% if request.GET.embedded %}&embedded=1{% endif %}{% if page_obj %}&page={{ page_obj.number }}{% endif %}">Edit</a>
                                     <form method="post">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="delete">
@@ -228,19 +392,38 @@
                                         {% if request.GET.embedded %}
                                         <input type="hidden" name="embedded" value="1">
                                         {% endif %}
+                                        {% if page_obj %}
+                                        <input type="hidden" name="page" value="{{ page_obj.number }}">
+                                        {% endif %}
                                         <button class="btn light" type="submit">Delete</button>
                                     </form>
                                 </div>
                             </td>
+                            <td class="select-cell"><input type="checkbox" class="select-checkbox project-select-checkbox" value="{{ report.id }}" aria-label="Select project {{ forloop.counter }}"></td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="19" class="no-data">No records yet.</td>
+                            <td colspan="20" class="no-data">No records yet.</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 </div>
+                {% if page_obj and page_obj.paginator.num_pages > 1 %}
+                <nav class="table-pagination" aria-label="Construction table pagination">
+                    {% if page_obj.has_previous %}
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.embedded %}&embedded=1{% endif %}">Previous</a>
+                    {% else %}
+                    <span class="page-link disabled">Previous</span>
+                    {% endif %}
+                    <span class="page-info">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    {% if page_obj.has_next %}
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.embedded %}&embedded=1{% endif %}">Next</a>
+                    {% else %}
+                    <span class="page-link disabled">Next</span>
+                    {% endif %}
+                </nav>
+                {% endif %}
             </section>
         </main>
     </div>
@@ -261,6 +444,9 @@
                 <input type="hidden" name="action" value="{% if editing_report %}update{% else %}create{% endif %}">
                 {% if request.GET.embedded %}
                 <input type="hidden" name="embedded" value="1">
+                {% endif %}
+                {% if page_obj %}
+                <input type="hidden" name="page" value="{{ page_obj.number }}">
                 {% endif %}
                 {% if editing_report %}
                 <input type="hidden" name="report_id" value="{{ editing_report.id }}">
@@ -298,9 +484,30 @@
         const openBtn = document.getElementById("openReportModal");
         const closeBtn = document.getElementById("closeReportModal");
         const cancelBtn = document.getElementById("cancelReportModal");
-        const closeUrl = "{% url 'construction_div_dashboard' %}{% if request.GET.embedded %}?embedded=1{% endif %}";
+        const uploadTriggerBtn = document.getElementById("uploadExcelTrigger");
+        const uploadForm = document.getElementById("constructionExcelUploadForm");
+        const uploadInput = document.getElementById("constructionExcelInput");
+        const bulkDeleteBtn = document.getElementById("bulkDeleteTrigger");
+        const bulkDeleteForm = document.getElementById("constructionBulkDeleteForm");
+        const bulkDeleteIdsInput = document.getElementById("bulkDeleteIds");
+        const selectAllProjects = document.getElementById("selectAllProjects");
+        const closeUrl = "{% url 'construction_div_dashboard' %}{% if request.GET.embedded or request.GET.page %}?{% endif %}{% if request.GET.embedded %}embedded=1{% endif %}{% if request.GET.page %}{% if request.GET.embedded %}&{% endif %}page={{ request.GET.page }}{% endif %}";
+        const projectCheckboxes = Array.from(document.querySelectorAll(".project-select-checkbox"));
         function openModal() { modal.classList.add("show"); }
         function closeModal() { window.location.href = closeUrl; }
+        function getSelectedProjectIds() {
+            return projectCheckboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
+        }
+        function syncBulkDeleteState() {
+            const selectedCount = getSelectedProjectIds().length;
+            if (bulkDeleteBtn) {
+                bulkDeleteBtn.disabled = selectedCount === 0;
+            }
+            if (selectAllProjects && projectCheckboxes.length) {
+                selectAllProjects.checked = selectedCount === projectCheckboxes.length;
+                selectAllProjects.indeterminate = selectedCount > 0 && selectedCount < projectCheckboxes.length;
+            }
+        }
         if (openBtn) openBtn.addEventListener("click", openModal);
         if (closeBtn) closeBtn.addEventListener("click", closeModal);
         if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
@@ -309,6 +516,53 @@
                 if (event.target === modal) closeModal();
             });
         }
+        if (uploadTriggerBtn && uploadInput) {
+            uploadTriggerBtn.addEventListener("click", function () {
+                uploadInput.value = "";
+                uploadInput.click();
+            });
+        }
+        if (uploadInput && uploadForm) {
+            uploadInput.addEventListener("change", function () {
+                if (uploadInput.files && uploadInput.files.length) {
+                    const fileName = uploadInput.files[0].name || "";
+                    const lowerName = fileName.toLowerCase();
+                    const isExcel = lowerName.endsWith(".xlsx") || lowerName.endsWith(".xls");
+                    if (!isExcel) {
+                        alert("Please upload a valid Excel file (.xlsx or .xls).");
+                        uploadInput.value = "";
+                        return;
+                    }
+                    uploadForm.submit();
+                }
+            });
+        }
+        if (selectAllProjects && projectCheckboxes.length) {
+            selectAllProjects.addEventListener("change", function () {
+                projectCheckboxes.forEach((checkbox) => {
+                    checkbox.checked = selectAllProjects.checked;
+                });
+                syncBulkDeleteState();
+            });
+        }
+        projectCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", syncBulkDeleteState);
+        });
+        if (bulkDeleteBtn && bulkDeleteForm && bulkDeleteIdsInput) {
+            bulkDeleteBtn.addEventListener("click", function () {
+                const selectedIds = getSelectedProjectIds();
+                if (!selectedIds.length) {
+                    return;
+                }
+                const shouldDelete = confirm("Delete " + selectedIds.length + " selected project(s)?");
+                if (!shouldDelete) {
+                    return;
+                }
+                bulkDeleteIdsInput.value = selectedIds.join(",");
+                bulkDeleteForm.submit();
+            });
+        }
+        syncBulkDeleteState();
     })();
 </script>
 </body>

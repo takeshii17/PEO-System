@@ -705,6 +705,7 @@
                         <div class="division-copy">
                             <h3>Admin Division</h3>
                             <p>{{ counts_by_division.admin|default:0 }} project entries</p>
+                            <p>{{ location_meta_by_division.admin|default:"No location yet" }}</p>
                         </div>
                     </a>
                     <a class="division-card {% if selected_division == 'planning' %}active{% endif %}" href="?division=planning{% if query %}&q={{ query|urlencode }}{% endif %}">
@@ -714,6 +715,7 @@
                         <div class="division-copy">
                             <h3>Planning Division</h3>
                             <p>{{ counts_by_division.planning|default:0 }} project entries</p>
+                            <p>{{ location_meta_by_division.planning|default:"No location yet" }}</p>
                         </div>
                     </a>
                     <a class="division-card {% if selected_division == 'construction' %}active{% endif %}" href="?division=construction{% if query %}&q={{ query|urlencode }}{% endif %}">
@@ -723,6 +725,7 @@
                         <div class="division-copy">
                             <h3>Construction Division</h3>
                             <p>{{ counts_by_division.construction|default:0 }} project entries</p>
+                            <p>{{ location_meta_by_division.construction|default:"No location yet" }}</p>
                         </div>
                     </a>
                     <a class="division-card {% if selected_division == 'quality' %}active{% endif %}" href="?division=quality{% if query %}&q={{ query|urlencode }}{% endif %}">
@@ -732,6 +735,7 @@
                         <div class="division-copy">
                             <h3>Quality Division</h3>
                             <p>{{ counts_by_division.quality|default:0 }} project entries</p>
+                            <p>{{ location_meta_by_division.quality|default:"No location yet" }}</p>
                         </div>
                     </a>
                     <a class="division-card {% if selected_division == 'maintenance' %}active{% endif %}" href="?division=maintenance{% if query %}&q={{ query|urlencode }}{% endif %}">
@@ -741,6 +745,7 @@
                         <div class="division-copy">
                             <h3>Maintenance Division</h3>
                             <p>{{ counts_by_division.maintenance|default:0 }} project entries</p>
+                            <p>{{ location_meta_by_division.maintenance|default:"No location yet" }}</p>
                         </div>
                     </a>
                 </section>
@@ -762,6 +767,7 @@
                                             <th>Document</th>
                                             <th>Status</th>
                                             <th>Division</th>
+                                            <th>Location</th>
                                             <th>Date</th>
                                         </tr>
                                     </thead>
@@ -771,6 +777,7 @@
                                             <td>{{ doc.name }}</td>
                                             <td>{{ doc.status }}</td>
                                             <td>{{ doc.division }}</td>
+                                            <td>{{ doc.location|default:"-" }}</td>
                                             <td>{{ doc.created_at|date:"M d, Y" }}</td>
                                         </tr>
                                         {% endfor %}

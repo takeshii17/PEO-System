@@ -7,10 +7,259 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
+from datetime import date, datetime
+from urllib.parse import urlencode
+import re
 
 from .forms import ConstructionStatusReportForm, DocumentForm, PlanningBudgetForm, PlanningProjectForm
 from .models import ConstructionStatusReport, Document, DocumentScan, PlanningBudget, PlanningProject
+
+
+def _normalize_excel_header(header_value):
+    text = str(header_value or "").strip().lower()
+    return re.sub(r"[^a-z0-9]+", " ", text).strip()
+
+
+def _combine_header_text(primary_header, secondary_header):
+    primary = _normalize_excel_header(primary_header)
+    secondary = _normalize_excel_header(secondary_header)
+    if primary and secondary:
+        return f"{primary} {secondary}"
+    return primary or secondary
+
+
+def _to_date(value):
+    if value in (None, ""):
+        return None
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        raw = value.strip()
+        if not raw:
+            return None
+        for fmt in ("%Y-%m-%d", "%m/%d/%Y", "%d/%m/%Y", "%d-%b-%Y", "%B %d, %Y", "%b %d, %Y"):
+            try:
+                return datetime.strptime(raw, fmt).date()
+            except ValueError:
+                continue
+    return None
+
+
+def _to_decimal(value):
+    if value in (None, ""):
+        return None
+    if isinstance(value, Decimal):
+        return value
+    if isinstance(value, (int, float)):
+        return Decimal(str(value))
+    if isinstance(value, str):
+        cleaned = value.strip().replace(",", "").replace("%", "")
+        if not cleaned:
+            return None
+        try:
+            return Decimal(cleaned)
+        except InvalidOperation:
+            return None
+    return None
+
+
+def _to_integer(value):
+    decimal_value = _to_decimal(value)
+    if decimal_value is None:
+        return None
+    try:
+        return int(decimal_value)
+    except (ValueError, OverflowError):
+        return None
+
+
+def _to_text(value):
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _read_excel_construction_rows(uploaded_file):
+    try:
+        from openpyxl import load_workbook
+        from openpyxl.utils.exceptions import InvalidFileException
+    except ImportError:
+        return 0, 0, "Excel import requires `openpyxl`."
+
+    try:
+        workbook = load_workbook(uploaded_file, data_only=True)
+    except InvalidFileException:
+        return 0, 0, "Unsupported Excel format. Please upload a valid .xlsx file."
+    except Exception:
+        return 0, 0, "Unable to read the uploaded Excel file."
+
+    worksheet = workbook.active
+    all_rows = list(worksheet.iter_rows(values_only=True))
+    if not all_rows:
+        return 0, 0, "The Excel file is empty."
+
+    header_map = {
+        "project name": "project_name",
+        "project title": "project_name",
+        "project name title": "project_name",
+        "project": "project_name",
+        "location": "location",
+        "mun": "mun",
+        "municipality": "mun",
+        "contractor": "contractor",
+        "contract cost": "contract_cost",
+        "ntp date": "ntp_date",
+        "cd": "cd",
+        "c d": "cd",
+        "contract period cd": "cd",
+        "contract period c d": "cd",
+        "original expiry date": "original_expiry_date",
+        "contract period original expiry date": "original_expiry_date",
+        "additional cd": "additional_cd",
+        "addl cd": "additional_cd",
+        "add l c d": "additional_cd",
+        "contract period additional cd": "additional_cd",
+        "contract period addl cd": "additional_cd",
+        "contract period add l c d": "additional_cd",
+        "revised expiry date": "revised_expiry_date",
+        "contract period revised expiry date": "revised_expiry_date",
+        "date completed": "date_completed",
+        "revised contract cost": "revised_contract_cost",
+        "previous": "status_previous",
+        "status previous": "status_previous",
+        "current": "status_current",
+        "status current": "status_current",
+        "status december 2025 previous": "status_previous",
+        "status december 2025 current": "status_current",
+        "percent of time elapsed": "percent_time_elapsed",
+        "of time elapsed": "percent_time_elapsed",
+        "time elapsed": "percent_time_elapsed",
+        "slippage": "slippage_percent",
+        "slippage percent": "slippage_percent",
+        "slippage percent ": "slippage_percent",
+        "remarks": "remarks",
+    }
+
+    def nearest_secondary_value(start_row_index, column_index, lookahead=3):
+        for offset in range(1, lookahead + 1):
+            check_row_index = start_row_index + offset
+            if check_row_index >= len(all_rows):
+                break
+            check_row = all_rows[check_row_index] or ()
+            if column_index >= len(check_row):
+                continue
+            value = check_row[column_index]
+            if _normalize_excel_header(value):
+                return value
+        return ""
+
+    header_row_index = None
+    column_indexes = {}
+    best_score = -1
+    scan_limit = min(len(all_rows), 30)
+    core_fields = {
+        "project_name",
+        "location",
+        "contractor",
+        "contract_cost",
+        "ntp_date",
+        "cd",
+        "original_expiry_date",
+        "additional_cd",
+        "status_previous",
+        "status_current",
+        "percent_time_elapsed",
+        "slippage_percent",
+    }
+
+    for row_index in range(scan_limit):
+        candidate_indexes = {}
+        row_values = all_rows[row_index] or ()
+        if not any(_normalize_excel_header(value) for value in row_values):
+            continue
+        for col_index, header in enumerate(row_values):
+            secondary = nearest_secondary_value(row_index, col_index, lookahead=3)
+            normalized_header = _normalize_excel_header(header)
+            combined_header = _combine_header_text(header, secondary)
+            field_name = header_map.get(combined_header) or header_map.get(normalized_header)
+            if field_name and field_name not in candidate_indexes:
+                candidate_indexes[field_name] = col_index
+        if "project_name" not in candidate_indexes:
+            continue
+        score = sum(1 for field in core_fields if field in candidate_indexes)
+        if score > best_score:
+            best_score = score
+            header_row_index = row_index
+            column_indexes = candidate_indexes
+
+    if header_row_index is None:
+        return 0, 0, "Missing required `Project Name` column in Excel."
+
+    created_count = 0
+    skipped_count = 0
+
+    meta_project_labels = {
+        "project name",
+        "prepared by",
+        "checked by",
+        "noted by",
+        "reviewed by",
+        "certified correct",
+        "approved by",
+        "billing",
+        "percentage of billing",
+        "status of billing on process payment received",
+    }
+
+    for row in all_rows[header_row_index + 1:]:
+        if not row:
+            continue
+
+        project_col = column_indexes.get("project_name")
+        project_name = _to_text(row[project_col]) if project_col is not None and project_col < len(row) else ""
+        normalized_project = _normalize_excel_header(project_name)
+        if (
+            (not project_name)
+            or (normalized_project in meta_project_labels)
+            or normalized_project.startswith("prepared by")
+            or normalized_project.startswith("billing")
+            or normalized_project.startswith("percentage of billing")
+            or normalized_project.startswith("status of billing")
+        ):
+            skipped_count += 1
+            continue
+
+        def cell(field):
+            col_index = column_indexes.get(field)
+            if col_index is None or col_index >= len(row):
+                return None
+            return row[col_index]
+
+        ConstructionStatusReport.objects.create(
+            project_name=project_name,
+            location=_to_text(cell("location")),
+            mun=_to_text(cell("mun")),
+            contractor=_to_text(cell("contractor")),
+            contract_cost=_to_decimal(cell("contract_cost")),
+            ntp_date=_to_date(cell("ntp_date")),
+            cd=_to_integer(cell("cd")),
+            original_expiry_date=_to_date(cell("original_expiry_date")),
+            additional_cd=_to_integer(cell("additional_cd")),
+            revised_expiry_date=_to_text(cell("revised_expiry_date")),
+            date_completed=_to_date(cell("date_completed")),
+            revised_contract_cost=_to_decimal(cell("revised_contract_cost")),
+            status_previous=_to_text(cell("status_previous")),
+            status_current=_to_text(cell("status_current")),
+            percent_time_elapsed=_to_decimal(cell("percent_time_elapsed")),
+            slippage_percent=_to_decimal(cell("slippage_percent")),
+            remarks=_to_text(cell("remarks")),
+        )
+        created_count += 1
+
+    return created_count, skipped_count, ""
 
 
 def logout_view(request):
@@ -568,9 +817,18 @@ def maintinance_div_dashboard(request):
 @xframe_options_sameorigin
 def construction_div_dashboard(request):
     embedded_mode = bool(request.GET.get("embedded") or request.POST.get("embedded"))
-    redirect_url = reverse("construction_div_dashboard")
+    page_param = (request.POST.get("page") or request.GET.get("page") or "").strip()
+    redirect_params = {}
     if embedded_mode:
-        redirect_url = f"{redirect_url}?embedded=1"
+        redirect_params["embedded"] = "1"
+    if page_param:
+        redirect_params["page"] = page_param
+    redirect_url = reverse("construction_div_dashboard")
+    if redirect_params:
+        redirect_url = f"{redirect_url}?{urlencode(redirect_params)}"
+    import_success = request.GET.get("imported", "").strip()
+    import_skipped = request.GET.get("skipped", "").strip()
+    import_error = request.GET.get("import_error", "").strip()
 
     if not _table_exists(ConstructionStatusReport):
         context = {
@@ -582,7 +840,10 @@ def construction_div_dashboard(request):
         }
         return render(request, "Construction Division/construction_div.html", context)
 
-    reports = ConstructionStatusReport.objects.all()
+    reports_qs = ConstructionStatusReport.objects.all()
+    reports_paginator = Paginator(reports_qs, 10)
+    reports_page = reports_paginator.get_page(page_param or 1)
+    reports = reports_page.object_list
     show_report_modal = False
     editing_report = None
 
@@ -600,6 +861,34 @@ def construction_div_dashboard(request):
             if delete_id:
                 ConstructionStatusReport.objects.filter(id=delete_id).delete()
             return redirect(redirect_url)
+
+        if action == "bulk_delete":
+            selected_ids = request.POST.get("selected_ids", "")
+            id_list = []
+            for value in selected_ids.split(","):
+                value = value.strip()
+                if not value:
+                    continue
+                try:
+                    id_list.append(int(value))
+                except ValueError:
+                    continue
+            if id_list:
+                ConstructionStatusReport.objects.filter(id__in=id_list).delete()
+            return redirect(redirect_url)
+
+        if action == "import_excel":
+            uploaded_excel = request.FILES.get("excel_file")
+            if not uploaded_excel:
+                query = urlencode({"import_error": "Please choose an Excel file."})
+            else:
+                created_count, skipped_count, error_message = _read_excel_construction_rows(uploaded_excel)
+                if error_message:
+                    query = urlencode({"import_error": error_message})
+                else:
+                    query = urlencode({"imported": str(created_count), "skipped": str(skipped_count)})
+            separator = "&" if "?" in redirect_url else "?"
+            return redirect(f"{redirect_url}{separator}{query}")
 
         if action in {"create", "update"}:
             instance = None
@@ -629,9 +918,13 @@ def construction_div_dashboard(request):
 
     context = {
         "reports": reports,
+        "page_obj": reports_page,
         "report_form": report_form,
         "show_report_modal": show_report_modal,
         "editing_report": editing_report,
+        "import_success": import_success,
+        "import_skipped": import_skipped,
+        "import_error": import_error,
     }
     return render(request, "Construction Division/construction_div.html", context)
 
@@ -731,25 +1024,71 @@ def projects_dashboard(request):
         selected_division = Document.DIV_ADMIN
 
     counts_by_division = {value: 0 for value, _ in division_choices}
+    locations_by_division = {value: set() for value, _ in division_choices}
     selected_projects = []
     project_folders = []
 
     if _table_exists(Document):
+        def _canonical_project_key(raw_value):
+            # Canonical key for de-duplicating project titles across divisions.
+            # It normalizes case, punctuation/symbols, and repeated whitespace.
+            return _normalize_excel_header(raw_value)
+
+        def _quality_entry_title_and_key(document):
+            # Keep Projects grouping consistent with Quality dashboard project derivation.
+            title = ""
+            if document.project_id and document.project:
+                title = (document.project.project_title or "").strip()
+            if not title:
+                title = (document.document_name or "").strip()
+            if not title:
+                title = f"Document #{document.id}"
+            compact_title = re.sub(r"\s+", " ", title).strip()
+            return compact_title, _canonical_project_key(compact_title)
+
         def _entry_title_and_key(document):
             title = ""
             if document.project_id and document.project:
                 title = (document.project.project_title or "").strip()
             if not title:
                 title = (document.document_name or f"Document #{document.id}").strip()
-            return title, title.lower()
+            normalized_title = re.sub(r"\s+", " ", title).strip()
+            return normalized_title, _canonical_project_key(normalized_title)
 
+        division_entry_keys = {value: set() for value, _ in division_choices}
         for div_key, _ in division_choices:
             division_docs = Document.objects.filter(division=div_key).select_related("project")
-            division_entries = set()
             for doc in division_docs:
-                _, entry_key = _entry_title_and_key(doc)
-                division_entries.add(entry_key)
-            counts_by_division[div_key] = len(division_entries)
+                if div_key == Document.DIV_QUALITY:
+                    _, entry_key = _quality_entry_title_and_key(doc)
+                else:
+                    _, entry_key = _entry_title_and_key(doc)
+                division_entry_keys[div_key].add(entry_key)
+                location_value = (doc.location or "").strip()
+                if location_value:
+                    locations_by_division[div_key].add(location_value.lower())
+            counts_by_division[div_key] = len(division_entry_keys[div_key])
+
+        construction_reports_qs = ConstructionStatusReport.objects.none()
+        if _table_exists(ConstructionStatusReport):
+            construction_reports_qs = ConstructionStatusReport.objects.exclude(project_name__isnull=True).exclude(project_name__exact="")
+            for report in construction_reports_qs.only("project_name", "location"):
+                project_key = _canonical_project_key(report.project_name)
+                if project_key:
+                    division_entry_keys[Document.DIV_CONSTRUCTION].add(project_key)
+                location_value = (report.location or "").strip()
+                if location_value:
+                    locations_by_division[Document.DIV_CONSTRUCTION].add(location_value.lower())
+            counts_by_division[Document.DIV_CONSTRUCTION] = len(division_entry_keys[Document.DIV_CONSTRUCTION])
+
+    location_meta_by_division = {}
+    for div_key, _ in division_choices:
+        location_count = len(locations_by_division.get(div_key, set()))
+        if location_count:
+            label = "location" if location_count == 1 else "locations"
+            location_meta_by_division[div_key] = f"{location_count} {label}"
+        else:
+            location_meta_by_division[div_key] = "No location yet"
 
         documents_qs = (
             Document.objects.filter(division=selected_division)
@@ -766,7 +1105,10 @@ def projects_dashboard(request):
 
         folders_map = {}
         for doc in documents_qs:
-            entry_title, entry_key = _entry_title_and_key(doc)
+            if selected_division == Document.DIV_QUALITY:
+                entry_title, entry_key = _quality_entry_title_and_key(doc)
+            else:
+                entry_title, entry_key = _entry_title_and_key(doc)
             bucket = folders_map.setdefault(
                 entry_key,
                 {
@@ -782,13 +1124,89 @@ def projects_dashboard(request):
                     "name": doc.document_name,
                     "status": doc.get_status_display(),
                     "division": doc.get_division_display(),
+                    "location": (doc.location or "").strip(),
                     "created_at": doc.created_at,
                 }
             )
             for scan in doc.scans.all():
                 bucket["files"].append(scan)
 
-        for _, bucket in sorted(folders_map.items(), key=lambda item: item[1]["project_title"].lower()):
+        if selected_division == Document.DIV_CONSTRUCTION and _table_exists(ConstructionStatusReport):
+            if query:
+                construction_reports_qs = construction_reports_qs.filter(
+                    Q(project_name__icontains=query)
+                    | Q(location__icontains=query)
+                    | Q(contractor__icontains=query)
+                    | Q(remarks__icontains=query)
+                )
+            for report in construction_reports_qs.order_by("-created_at"):
+                project_title = (report.project_name or "").strip()
+                if not project_title:
+                    continue
+                entry_key = _canonical_project_key(project_title)
+                bucket = folders_map.setdefault(
+                    entry_key,
+                    {
+                        "project_title": project_title,
+                        "document_count": 0,
+                        "files": [],
+                        "documents": [],
+                    },
+                )
+                bucket["document_count"] += 1
+                status_segments = []
+                if report.status_previous:
+                    status_segments.append(f"Prev: {report.status_previous}")
+                if report.status_current:
+                    status_segments.append(f"Curr: {report.status_current}")
+                if report.slippage_percent is not None:
+                    status_segments.append(f"Slippage: {report.slippage_percent}%")
+                bucket["documents"].append(
+                    {
+                        "name": "Construction Status Report",
+                        "status": " | ".join(status_segments) if status_segments else "Recorded",
+                        "division": "Construction Division",
+                        "location": (report.location or "").strip(),
+                        "created_at": report.created_at,
+                    }
+                )
+
+        consolidated_folders = {}
+        for _, bucket in folders_map.items():
+            canonical_title_key = _canonical_project_key(bucket.get("project_title", ""))
+            merged_bucket = consolidated_folders.setdefault(
+                canonical_title_key,
+                {
+                    "project_title": bucket.get("project_title", ""),
+                    "document_count": 0,
+                    "files": [],
+                    "documents": [],
+                },
+            )
+            merged_bucket["document_count"] += bucket.get("document_count", 0)
+            merged_bucket["files"].extend(bucket.get("files", []))
+            merged_bucket["documents"].extend(bucket.get("documents", []))
+            if len(bucket.get("project_title", "")) > len(merged_bucket.get("project_title", "")):
+                merged_bucket["project_title"] = bucket.get("project_title", "")
+
+        for _, bucket in sorted(consolidated_folders.items(), key=lambda item: item[1]["project_title"].lower()):
+            seen_document_rows = set()
+            deduped_documents = []
+            for doc_row in bucket["documents"]:
+                row_key = (
+                    (doc_row.get("name") or "").strip().casefold(),
+                    (doc_row.get("status") or "").strip().casefold(),
+                    (doc_row.get("division") or "").strip().casefold(),
+                    str(doc_row.get("created_at") or ""),
+                    (doc_row.get("location") or "").strip().casefold(),
+                )
+                if row_key in seen_document_rows:
+                    continue
+                seen_document_rows.add(row_key)
+                deduped_documents.append(doc_row)
+            bucket["documents"] = deduped_documents
+            bucket["document_count"] = len(deduped_documents)
+
             selected_projects.append(
                 {
                     "title": bucket["project_title"],
@@ -802,6 +1220,7 @@ def projects_dashboard(request):
         "selected_division": selected_division,
         "selected_division_label": dict(division_choices).get(selected_division, "Division"),
         "counts_by_division": counts_by_division,
+        "location_meta_by_division": location_meta_by_division,
         "selected_projects": selected_projects,
         "project_folders": project_folders,
     }
