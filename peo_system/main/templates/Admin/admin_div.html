@@ -742,6 +742,7 @@
                             <tr>
                                 <th>Ref #</th>
                                 <th>Project Name</th>
+                                <th>Location</th>
                                 <th>Billing Type</th>
                                 <th>Percentage</th>
                                 <th>Amount</th>
@@ -755,6 +756,7 @@
                             <tr>
                                 <td>BILL-{{ doc.id|stringformat:"04d" }}</td>
                                 <td>{{ doc.document_name }}</td>
+                                <td>{{ doc.location|default:"-" }}</td>
                                 <td>{{ doc.billing_type|default:"-" }}</td>
                                 <td>{% if doc.percentage %}{{ doc.percentage }}%{% else %}-{% endif %}</td>
                                 <td>
@@ -786,7 +788,7 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="8">No billing records found.</td>
+                                <td colspan="9">No billing records found.</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -795,6 +797,7 @@
                             <tr>
                                 <th>Slip No</th>
                                 <th>Document</th>
+                                <th>Location</th>
                                 <th>Type</th>
                                 <th>Contractor</th>
                                 <th>Division</th>
@@ -808,6 +811,7 @@
                             <tr>
                                 <td>{{ doc.slip_ref_no|default:"-" }}</td>
                                 <td>{{ doc.document_name }}</td>
+                                <td>{{ doc.location|default:"-" }}</td>
                                 <td>{{ doc.get_doc_type_display }}</td>
                                 <td>{{ doc.contractor_display|default:"-" }}</td>
                                 <td>{{ doc.get_division_display }}</td>
@@ -839,7 +843,7 @@
                             </tr>
                             {% empty %}
                             <tr>
-                                <td colspan="8">No documents found.</td>
+                                <td colspan="9">No documents found.</td>
                             </tr>
                             {% endfor %}
                         </tbody>

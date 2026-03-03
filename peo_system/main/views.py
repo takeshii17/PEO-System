@@ -444,6 +444,8 @@ def admin_div_dashboard(request):
                                 file=uploaded_file,
                                 uploaded_by=request.user,
                             )
+                        if document.division == Document.DIV_QUALITY:
+                            return redirect("quality_div_dashboard")
                         return redirect("admin_div_dashboard")
 
     search = request.GET.get("q", "").strip()
@@ -677,6 +679,7 @@ def quality_div_dashboard(request):
                     "details": doc.description or "-",
                     "document_no": doc.slip_ref_no or f"DOC-{doc.id:04d}",
                     "project_name": project_title or "-",
+                    "location": (doc.location or "").strip() or "-",
                     "request_letter_url": request_letter_url,
                     "request_letter_name": request_letter_name,
                     "route": "Incoming",
