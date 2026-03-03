@@ -908,7 +908,7 @@
                         <div class="field"><label>Division *</label>{{ form.division }}</div>
                     </div>
                     <div class="field-grid one">
-                        <div class="field is-hidden" id="contractorNameFieldWrap">
+                        <div class="field" id="contractorNameFieldWrap">
                             <label>Contractor Name *</label>
                             {{ form.contractor_name }}
                         </div>
@@ -919,8 +919,9 @@
                         <div class="field"><label>Status *</label>{{ form.status }}</div>
                         <div class="field">
                             <label>Scanned Files</label>
-                            <input type="file" name="scanned_files" multiple accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff">
-                            <small>Upload files from scanner output. Files will be stored under the selected project folder.</small>
+                            <input id="scannedFilesInput" type="file" name="scanned_files" multiple accept=".pdf,.jpg,.jpeg,.png,.tif,.tiff">
+                            <small id="scanHelpText">Upload files from scanner output. Files will be stored under the selected project folder.</small>
+                            <input type="hidden" id="existingScanCount" value="{% if editing_document %}{{ editing_document.scans.count }}{% else %}0{% endif %}">
                         </div>
                     </div>
 
@@ -1014,6 +1015,11 @@
             const statusFilter = filterForm ? filterForm.querySelector("select[name='status']") : null;
             const searchInput = filterForm ? filterForm.querySelector("input[name='q']") : null;
             const docTypeInput = document.getElementById("id_doc_type");
+            const divisionInput = document.getElementById("id_division");
+            const documentForm = document.getElementById("documentForm");
+            const scannedFilesInput = document.getElementById("scannedFilesInput");
+            const scanHelpText = document.getElementById("scanHelpText");
+            const existingScanCountInput = document.getElementById("existingScanCount");
             const contractorWrap = document.getElementById("contractorNameFieldWrap");
             const contractorInput = document.getElementById("id_contractor_name");
             let searchTimer = null;
@@ -1042,13 +1048,48 @@
             function toggleContractorField() {
                 if (!docTypeInput || !contractorWrap || !contractorInput) return;
                 const isContract = docTypeInput.value === "contract";
-                contractorWrap.classList.toggle("is-hidden", !isContract);
                 contractorInput.required = isContract;
             }
 
             if (docTypeInput) {
                 docTypeInput.addEventListener("change", toggleContractorField);
                 toggleContractorField();
+            }
+
+            function getExistingScanCount() {
+                if (!existingScanCountInput) return 0;
+                const parsed = parseInt(existingScanCountInput.value || "0", 10);
+                return Number.isNaN(parsed) ? 0 : parsed;
+            }
+
+            function toggleQualityScanRequirementHint() {
+                if (!divisionInput || !scanHelpText) return;
+                const requiresQualityScan = divisionInput.value === "quality";
+                if (requiresQualityScan) {
+                    scanHelpText.textContent = "For Quality Division, upload the scanned request letter (required).";
+                    scanHelpText.style.color = "#991b1b";
+                } else {
+                    scanHelpText.textContent = "Upload files from scanner output. Files will be stored under the selected project folder.";
+                    scanHelpText.style.color = "";
+                }
+            }
+
+            if (divisionInput) {
+                divisionInput.addEventListener("change", toggleQualityScanRequirementHint);
+                toggleQualityScanRequirementHint();
+            }
+
+            if (documentForm) {
+                documentForm.addEventListener("submit", function (event) {
+                    if (!divisionInput) return;
+                    const requiresQualityScan = divisionInput.value === "quality";
+                    const selectedScanCount = scannedFilesInput && scannedFilesInput.files ? scannedFilesInput.files.length : 0;
+                    const existingScanCount = getExistingScanCount();
+                    if (requiresQualityScan && selectedScanCount === 0 && existingScanCount === 0) {
+                        event.preventDefault();
+                        alert("For Quality Division submissions, upload at least one scanned request letter.");
+                    }
+                });
             }
 
             // Keep the edit/create form open while users are typing.

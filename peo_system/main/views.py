@@ -410,19 +410,29 @@ def admin_div_dashboard(request):
                 form = DocumentForm(form_payload, instance=instance)
                 show_modal = True
                 if form.is_valid():
-                    document = form.save(commit=False)
-                    if instance is None:
-                        document.created_by = request.user
-                    document.save()
-                    for uploaded_file in request.FILES.getlist("scanned_files"):
-                        if uploaded_file:
+                    target_division = form.cleaned_data.get("division")
+                    uploaded_scans = [file for file in request.FILES.getlist("scanned_files") if file]
+                    has_existing_scans = bool(instance and instance.scans.exists())
+                    requires_quality_scan = target_division == Document.DIV_QUALITY
+
+                    if requires_quality_scan and not uploaded_scans and not has_existing_scans:
+                        form.add_error(
+                            None,
+                            "For Quality Division submissions, upload at least one scanned request letter.",
+                        )
+                    else:
+                        document = form.save(commit=False)
+                        if instance is None:
+                            document.created_by = request.user
+                        document.save()
+                        for uploaded_file in uploaded_scans:
                             DocumentScan.objects.create(
                                 document=document,
                                 project=document.project,
                                 file=uploaded_file,
                                 uploaded_by=request.user,
                             )
-                    return redirect("admin_div_dashboard")
+                        return redirect("admin_div_dashboard")
 
     search = request.GET.get("q", "").strip()
     division = request.GET.get("division", "").strip()
@@ -496,11 +506,13 @@ def admin_div_dashboard(request):
                     reports_map[key] = contractor
 
     for doc in page_obj.object_list:
+        contractor_name = (doc.contractor_name or "").strip()
+        if contractor_name:
+            doc.contractor_display = contractor_name
+            continue
+
         doc.contractor_display = "-"
         if doc.doc_type == Document.TYPE_CONTRACT:
-            if (doc.contractor_name or "").strip():
-                doc.contractor_display = doc.contractor_name.strip()
-                continue
             lookup_title = ((doc.project.project_title if doc.project else doc.document_name) or "").strip().lower()
             if lookup_title:
                 doc.contractor_display = reports_map.get(lookup_title, "-")
@@ -613,7 +625,66 @@ def construction_div_dashboard(request):
 @login_required
 @xframe_options_sameorigin
 def quality_div_dashboard(request):
-    return render(request, "Quality Division/quality_div.html")
+    admin_projects = []
+    admin_incoming_documents = []
+    if _table_exists(Document):
+        seen_titles = set()
+        incoming_qs = (
+            Document.objects.filter(division=Document.DIV_QUALITY)
+            .select_related("project")
+            .prefetch_related("scans")
+            .order_by("created_at", "id")
+        )
+
+        for doc in incoming_qs:
+            project_title = ""
+            if doc.project_id and doc.project:
+                project_title = (doc.project.project_title or "").strip()
+            if not project_title:
+                project_title = (doc.document_name or "").strip()
+            if project_title:
+                title_key = project_title.lower()
+                if title_key not in seen_titles:
+                    seen_titles.add(title_key)
+                    admin_projects.append(project_title)
+
+            doc_date = doc.date_received_from_admin or doc.date_released_to_admin
+            received_date = doc.date_received_from_admin or doc.created_at.date()
+            latest_scan = doc.scans.first()
+            request_letter_url = ""
+            request_letter_name = ""
+            if latest_scan and latest_scan.file:
+                request_letter_url = latest_scan.file.url
+                request_letter_name = latest_scan.file.name.split("/")[-1]
+            admin_incoming_documents.append(
+                {
+                    "id": doc.id,
+                    "received_from": "Admin Division",
+                    "doc_letter_date": doc_date,
+                    "particulars": doc.get_doc_type_display(),
+                    "details": doc.description or "-",
+                    "document_no": doc.slip_ref_no or f"DOC-{doc.id:04d}",
+                    "project_name": project_title or "-",
+                    "request_letter_url": request_letter_url,
+                    "request_letter_name": request_letter_name,
+                    "route": "Incoming",
+                    "released_by": "-",
+                    "date_released": None,
+                    "received_by": "Quality Division",
+                    "date_received": received_date,
+                    "transmitted_to": doc.get_division_display(),
+                    "remarks": "-",
+                    "initial_status": doc.get_status_display(),
+                    "owner_representative": "-",
+                    "contact": "-",
+                }
+            )
+
+    context = {
+        "admin_projects": admin_projects,
+        "admin_incoming_documents": admin_incoming_documents,
+    }
+    return render(request, "Quality Division/quality_div.html", context)
 
 
 @login_required

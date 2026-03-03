@@ -517,6 +517,65 @@
             display: block;
         }
 
+        .panel-card {
+            margin-top: 16px;
+            background: #f4f7fb;
+            border: 1px solid #c5cfdb;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 1px 3px rgba(8, 34, 61, 0.08);
+        }
+
+        .panel-card h3 {
+            margin: 0 0 6px;
+            font-size: 1.25rem;
+            color: #0d2d4f;
+        }
+
+        .project-list {
+            margin: 10px 0 0;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .project-item {
+            background: #fff;
+            border: 1px solid #d6dee8;
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: #0f2740;
+            font-size: 0.95rem;
+        }
+
+        .report-grid {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(160px, 1fr));
+            gap: 10px;
+        }
+
+        .report-box {
+            background: #fff;
+            border: 1px solid #d6dee8;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .report-box p {
+            margin: 0;
+            color: #49607b;
+            font-size: 0.84rem;
+        }
+
+        .report-box strong {
+            display: block;
+            margin-top: 6px;
+            color: #0c2e51;
+            font-size: 1.4rem;
+        }
+
         @media (max-width: 1400px) {
             .sidebar { width: 280px; }
         }
@@ -535,6 +594,9 @@
                 width: 100%;
                 overflow-x: auto;
                 white-space: nowrap;
+            }
+            .report-grid {
+                grid-template-columns: 1fr;
             }
             .qc-form-grid {
                 grid-template-columns: 1fr;
@@ -606,9 +668,8 @@
                 <div class="section-line"></div>
 
                 <section class="dashboard-tabs" aria-label="Quality Dashboard Sections">
-                    <button class="dashboard-tab active" type="button">Quality Control Tracker</button>
-                    <button class="dashboard-tab" type="button">Projects</button>
-                    <button class="dashboard-tab" type="button">Report</button>
+                    <button class="dashboard-tab active" type="button" data-tab-target="quality-control-tracker-panel">Quality Control Tracker</button>
+                    <button class="dashboard-tab" type="button" data-tab-target="report-panel">Report</button>
                 </section>
 
                 <section class="dashboard-panel active" id="quality-control-tracker-panel">
@@ -625,29 +686,69 @@
                                             <th>Received From</th>
                                             <th>Doc/Letter Date</th>
                                             <th>Particulars</th>
-                                            <th>Details</th>
                                             <th>Document No.</th>
+                                            <th>Project</th>
+                                            <th>Request Letter</th>
                                             <th>Route</th>
-                                            <th>Released By</th>
-                                            <th>Date Released</th>
                                             <th>Received By</th>
                                             <th>Date Received</th>
-                                            <th>Transmitted To</th>
                                             <th>Remarks</th>
                                             <th>Initial Status</th>
-                                            <th>Owner/Representative</th>
-                                            <th>Contact</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="quality-records-body">
-                                        <tr>
-                                            <td class="tracker-empty" id="quality-empty-state" colspan="16">No quality records found</td>
+                                        {% for row in admin_incoming_documents %}
+                                        <tr data-record-row="true">
+                                            <td>{{ row.received_from }}</td>
+                                            <td>{% if row.doc_letter_date %}{{ row.doc_letter_date|date:"M d, Y" }}{% else %}-{% endif %}</td>
+                                            <td>{{ row.particulars }}</td>
+                                            <td>{{ row.document_no }}</td>
+                                            <td>{{ row.project_name }}</td>
+                                            <td>
+                                                {% if row.request_letter_url %}
+                                                <a class="table-action-btn" href="{{ row.request_letter_url }}" target="_blank" rel="noopener">View Scan</a>
+                                                {% else %}
+                                                -
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ row.route }}</td>
+                                            <td>{{ row.received_by }}</td>
+                                            <td>{% if row.date_received %}{{ row.date_received|date:"M d, Y" }}{% else %}-{% endif %}</td>
+                                            <td>{{ row.remarks }}</td>
+                                            <td>{{ row.initial_status }}</td>
+                                            <td><a class="table-action-btn" href="{% url 'admin_div_dashboard' %}?tab=documents&edit_document={{ row.id }}">Open</a></td>
                                         </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td class="tracker-empty" id="quality-empty-state" colspan="12">No quality records found</td>
+                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
                         </section>
+                    </div>
+                </section>
+
+                <section class="dashboard-panel" id="report-panel">
+                    <div class="panel-card">
+                        <h3>Report</h3>
+                        <p>Quick summary of records currently in the tracker table.</p>
+                        <div class="report-grid">
+                            <article class="report-box">
+                                <p>Total Records</p>
+                                <strong id="report-total-records">0</strong>
+                            </article>
+                            <article class="report-box">
+                                <p>Incoming</p>
+                                <strong id="report-incoming-records">0</strong>
+                            </article>
+                            <article class="report-box">
+                                <p>Outgoing</p>
+                                <strong id="report-outgoing-records">0</strong>
+                            </article>
+                        </div>
                     </div>
                 </section>
             </main>
@@ -662,10 +763,17 @@
             </div>
             <div class="qc-modal-body">
                 <form id="quality-record-form">
+                    <input type="hidden" name="received_from" value="Admin Division">
                     <div class="qc-form-grid">
                         <label class="qc-field">
-                            <span class="qc-label">Received From</span>
-                            <input class="qc-input" type="text" name="received_from" required>
+                            <span class="qc-label">Project (from Admin)</span>
+                            <select class="qc-select" name="project_name" required>
+                                {% for project_name in admin_projects %}
+                                <option value="{{ project_name }}">{{ project_name }}</option>
+                                {% empty %}
+                                <option value="">No projects submitted from Admin yet</option>
+                                {% endfor %}
+                            </select>
                         </label>
                         <label class="qc-field">
                             <span class="qc-label">Doc/Letter Date</span>
@@ -781,6 +889,11 @@
             const recordsBody = document.getElementById('quality-records-body');
             const emptyState = document.getElementById('quality-empty-state');
             const recordCount = document.getElementById('quality-record-count');
+            const tabButtons = document.querySelectorAll('.dashboard-tab[data-tab-target]');
+            const tabPanels = document.querySelectorAll('.dashboard-panel');
+            const reportTotalRecords = document.getElementById('report-total-records');
+            const reportIncomingRecords = document.getElementById('report-incoming-records');
+            const reportOutgoingRecords = document.getElementById('report-outgoing-records');
             const routeSelect = form.querySelector('[name="route"]');
             const transmittedToSelect = form.querySelector('[name="transmitted_to"]');
             const transmittedToOtherField = document.getElementById('transmitted-to-other-field');
@@ -812,6 +925,33 @@
             const updateRecordCount = () => {
                 const count = recordsBody.querySelectorAll('tr[data-record-row="true"]').length;
                 recordCount.textContent = count + ' record' + (count === 1 ? '' : 's') + ' found';
+            };
+
+            const updateReportSummary = () => {
+                const rows = Array.from(recordsBody.querySelectorAll('tr[data-record-row="true"]'));
+                const total = rows.length;
+                let incoming = 0;
+                let outgoing = 0;
+
+                rows.forEach((row) => {
+                    const routeCell = row.children[6];
+                    const routeValue = routeCell ? routeCell.textContent.trim().toLowerCase() : '';
+                    if (routeValue === 'incoming') {
+                        incoming += 1;
+                    } else if (routeValue === 'outgoing') {
+                        outgoing += 1;
+                    }
+                });
+
+                if (reportTotalRecords) {
+                    reportTotalRecords.textContent = String(total);
+                }
+                if (reportIncomingRecords) {
+                    reportIncomingRecords.textContent = String(incoming);
+                }
+                if (reportOutgoingRecords) {
+                    reportOutgoingRecords.textContent = String(outgoing);
+                }
             };
 
             const openModal = () => {
@@ -850,24 +990,19 @@
                 const row = document.createElement('tr');
                 row.setAttribute('data-record-row', 'true');
                 const isIncoming = (data.route || '').toLowerCase() === 'incoming';
-                const isOutgoing = (data.route || '').toLowerCase() === 'outgoing';
 
                 const columns = [
                     data.received_from,
                     formatDate(data.doc_letter_date),
                     data.particulars,
-                    data.details,
                     data.document_no,
+                    data.project_name,
+                    '-',
                     data.route,
-                    isOutgoing ? data.released_by : '',
-                    isOutgoing ? formatDate(data.date_released) : '',
                     isIncoming ? data.received_by : '',
                     isIncoming ? formatDate(data.date_received) : '',
-                    data.transmitted_to,
                     data.remarks,
-                    data.initial_status,
-                    data.owner_representative,
-                    data.contact
+                    data.initial_status
                 ];
 
                 columns.forEach((value) => row.appendChild(createCell(value)));
@@ -880,15 +1015,17 @@
                 deleteBtn.addEventListener('click', () => {
                     row.remove();
                     if (!recordsBody.querySelector('tr[data-record-row="true"]')) {
-                        recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="16">No quality records found</td></tr>';
+                        recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="12">No quality records found</td></tr>';
                     }
                     updateRecordCount();
+                    updateReportSummary();
                 });
                 actionsCell.appendChild(deleteBtn);
                 row.appendChild(actionsCell);
 
                 recordsBody.appendChild(row);
                 updateRecordCount();
+                updateReportSummary();
             };
 
             const toggleTransmittedOther = () => {
@@ -959,6 +1096,19 @@
             if (routeSelect) {
                 routeSelect.addEventListener('change', toggleRouteFields);
             }
+            tabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-tab-target');
+                    if (!targetId) {
+                        return;
+                    }
+                    tabButtons.forEach((tab) => tab.classList.remove('active'));
+                    button.classList.add('active');
+                    tabPanels.forEach((panel) => {
+                        panel.classList.toggle('active', panel.id === targetId);
+                    });
+                });
+            });
 
             modal.addEventListener('click', (event) => {
                 if (event.target === modal) {
@@ -984,8 +1134,9 @@
             });
 
             toggleRouteFields();
+            updateRecordCount();
+            updateReportSummary();
         })();
     </script>
 </body>
 </html>
-
