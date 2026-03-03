@@ -113,6 +113,7 @@
             min-width: 0;
             width: 100%;
             background: #f2f4f7;
+            overflow-x: hidden;
         }
 
         .topbar {
@@ -173,7 +174,10 @@
 
         .logout-btn:hover { background: #e7edf5; }
 
-        .page { padding: 24px 28px; }
+        .page {
+            padding: 24px 28px;
+            overflow-x: hidden;
+        }
 
         .page h2 {
             margin: 0;
@@ -275,7 +279,73 @@
             border: 1px solid #b9c5d3;
             border-radius: 12px;
             background: #f9fbfd;
+            max-width: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .tracker-table-scroll {
+            width: 100%;
+            max-width: 100%;
             overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-gutter: stable;
+            scrollbar-color: #7a7a7a #d9dee5;
+            scrollbar-width: thin;
+        }
+
+        #quality-tracker-table-wrap {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-gutter: stable;
+            scrollbar-color: #7a7a7a #d9dee5;
+            scrollbar-width: thin;
+        }
+
+        #quality-tracker-table-wrap .tracker-table-scroll {
+            overflow: visible;
+            max-width: none;
+            width: auto;
+        }
+
+        .tracker-table-scroll::-webkit-scrollbar {
+            height: 12px;
+            width: 12px;
+        }
+
+        .tracker-table-scroll::-webkit-scrollbar:vertical {
+            width: 0;
+            display: none;
+        }
+
+        .tracker-table-scroll::-webkit-scrollbar:vertical,
+        .tracker-table-scroll *::-webkit-scrollbar:vertical {
+            width: 0;
+            display: none;
+        }
+
+        .tracker-table-scroll::-webkit-scrollbar-track {
+            background: #d9dee5;
+            border-radius: 999px;
+        }
+
+        .tracker-table-scroll::-webkit-scrollbar-thumb {
+            background: #7a7a7a;
+            border-radius: 999px;
+        }
+
+        #quality-tracker-table-wrap::-webkit-scrollbar {
+            height: 12px;
+        }
+
+        #quality-tracker-table-wrap::-webkit-scrollbar-track {
+            background: #d9dee5;
+            border-radius: 999px;
+        }
+
+        #quality-tracker-table-wrap::-webkit-scrollbar-thumb {
+            background: #7a7a7a;
+            border-radius: 999px;
         }
 
         .tracker-table {
@@ -336,6 +406,89 @@
 
         .table-action-btn.delete:hover {
             background: #ffe9eb;
+        }
+
+        .table-status-select {
+            width: 170px;
+            border: 1px solid #c7d2de;
+            border-radius: 8px;
+            background: #fff;
+            color: #112a42;
+            font: inherit;
+            font-size: 0.9rem;
+            padding: 5px 8px;
+        }
+
+        .table-status-select:focus {
+            border-color: #1f4f7c;
+            outline: 2px solid rgba(31, 79, 124, 0.14);
+        }
+
+        .for-action-inline-select,
+        .for-action-inline-textarea,
+        .for-action-inline-range {
+            width: 100%;
+            font: inherit;
+        }
+
+        .for-action-inline-select,
+        .for-action-inline-textarea {
+            border: 1px solid #c7d2de;
+            border-radius: 8px;
+            background: #fff;
+            color: #112a42;
+            padding: 6px 8px;
+            font-size: 0.9rem;
+        }
+
+        .for-action-inline-textarea {
+            min-height: 56px;
+            resize: vertical;
+        }
+
+        .for-action-progress {
+            min-width: 220px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .for-action-progress-row td {
+            background: #f7fafd;
+            border-top: 0;
+        }
+
+        .for-action-progress-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #36516e;
+        }
+
+        .for-action-progress-track {
+            height: 8px;
+            border-radius: 999px;
+            background: #dbe4ef;
+            overflow: hidden;
+        }
+
+        .for-action-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a5a95 0%, #38a3d1 100%);
+            width: 0;
+            transition: width 0.2s ease;
+        }
+
+        .for-release-file {
+            display: grid;
+            gap: 6px;
+            min-width: 220px;
+        }
+
+        .for-release-file small {
+            color: #49607b;
+            font-size: 0.82rem;
         }
 
         .qc-modal {
@@ -669,6 +822,8 @@
 
                 <section class="dashboard-tabs" aria-label="Quality Dashboard Sections">
                     <button class="dashboard-tab active" type="button" data-tab-target="quality-control-tracker-panel">Quality Control Tracker</button>
+                    <button class="dashboard-tab" type="button" data-tab-target="for-action-panel">For Action</button>
+                    <button class="dashboard-tab" type="button" data-tab-target="for-release-panel">For Release</button>
                     <button class="dashboard-tab" type="button" data-tab-target="report-panel">Report</button>
                 </section>
 
@@ -679,7 +834,8 @@
                         <section class="tracker-card">
                             <h3>Quality Control Tracker</h3>
                             <p class="tracker-meta" id="quality-record-count">0 records found</p>
-                            <div class="tracker-table-wrap">
+                            <div class="tracker-table-wrap" id="quality-tracker-table-wrap">
+                                <div class="tracker-table-scroll">
                                 <table class="tracker-table" aria-label="Quality Control Tracker Records">
                                     <thead>
                                         <tr>
@@ -688,6 +844,7 @@
                                             <th>Particulars</th>
                                             <th>Document No.</th>
                                             <th>Project</th>
+                                            <th>Location</th>
                                             <th>Request Letter</th>
                                             <th>Route</th>
                                             <th>Received By</th>
@@ -705,6 +862,7 @@
                                             <td>{{ row.particulars }}</td>
                                             <td>{{ row.document_no }}</td>
                                             <td>{{ row.project_name }}</td>
+                                            <td>{{ row.location }}</td>
                                             <td>
                                                 {% if row.request_letter_url %}
                                                 <a class="table-action-btn" href="{{ row.request_letter_url }}" target="_blank" rel="noopener">View Scan</a>
@@ -716,18 +874,87 @@
                                             <td>{{ row.received_by }}</td>
                                             <td>{% if row.date_received %}{{ row.date_received|date:"M d, Y" }}{% else %}-{% endif %}</td>
                                             <td>{{ row.remarks }}</td>
-                                            <td>{{ row.initial_status }}</td>
-                                            <td><a class="table-action-btn" href="{% url 'admin_div_dashboard' %}?tab=documents&edit_document={{ row.id }}">Open</a></td>
+                                            <td>
+                                                <select class="table-status-select initial-status-select" aria-label="Initial Status">
+                                                    <option value="">Select...</option>
+                                                    <option value="For Filing" {% if row.initial_status == "For Filing" %}selected{% endif %}>For Filing</option>
+                                                    <option value="For Action" {% if row.initial_status == "For Action" %}selected{% endif %}>For Action</option>
+                                                    <option value="For Records Only" {% if row.initial_status == "For Records Only" %}selected{% endif %}>For Records Only</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <button class="table-action-btn" type="button" data-row-action="edit">Edit</button>
+                                                <button class="table-action-btn delete" type="button" data-row-action="delete">Delete</button>
+                                            </td>
                                         </tr>
                                         {% empty %}
                                         <tr>
-                                            <td class="tracker-empty" id="quality-empty-state" colspan="12">No quality records found</td>
+                                            <td class="tracker-empty" id="quality-empty-state" colspan="13">No quality records found</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </section>
+                    </div>
+                </section>
+
+                <section class="dashboard-panel" id="for-action-panel">
+                    <div class="panel-card">
+                        <h3>For Action</h3>
+                        <p class="tracker-meta" id="for-action-count">0 records found</p>
+                        <div class="tracker-table-wrap">
+                            <div class="tracker-table-scroll">
+                            <table class="tracker-table" aria-label="For Action Records">
+                                <thead>
+                                    <tr>
+                                        <th>Document No.</th>
+                                        <th>Project</th>
+                                        <th>Location</th>
+                                        <th>Request Letter</th>
+                                        <th>Route</th>
+                                        <th>Date Received</th>
+                                        <th>Initial Status</th>
+                                        <th>Assign Task</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="for-action-records-body">
+                                    <tr>
+                                        <td class="tracker-empty" id="for-action-empty-state" colspan="9">No for action records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="dashboard-panel" id="for-release-panel">
+                    <div class="panel-card">
+                        <h3>For Release</h3>
+                        <p class="tracker-meta" id="for-release-count">0 records found</p>
+                        <div class="tracker-table-wrap">
+                            <div class="tracker-table-scroll">
+                            <table class="tracker-table" aria-label="For Release Records">
+                                <thead>
+                                    <tr>
+                                        <th>Document No.</th>
+                                        <th>Project Name</th>
+                                        <th>Location</th>
+                                        <th>Certificate File</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="for-release-records-body">
+                                    <tr>
+                                        <td class="tracker-empty" id="for-release-empty-state" colspan="5">No for release records found</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -879,13 +1106,88 @@
         </div>
     </div>
 
+    <div class="qc-modal" id="quality-edit-modal" aria-hidden="true">
+        <div class="qc-modal-card" role="dialog" aria-modal="true" aria-labelledby="quality-edit-modal-title">
+            <div class="qc-modal-head">
+                <h3 id="quality-edit-modal-title">Edit Quality Record</h3>
+                <button class="qc-close-btn" id="close-quality-edit-modal" type="button" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="qc-modal-body">
+                <form id="quality-edit-form">
+                    <div class="qc-form-grid">
+                        <label class="qc-field">
+                            <span class="qc-label">Received From</span>
+                            <input class="qc-input" type="text" name="received_from" required>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Doc/Letter Date</span>
+                            <input class="qc-input" type="date" name="doc_letter_date">
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Particulars</span>
+                            <input class="qc-input" type="text" name="particulars" required>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Document No.</span>
+                            <input class="qc-input" type="text" name="document_no" required>
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Project</span>
+                            <input class="qc-input" type="text" name="project_name" required>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Route</span>
+                            <select class="qc-select" name="route" required>
+                                <option value="">Select...</option>
+                                <option value="Incoming">Incoming</option>
+                                <option value="Outgoing">Outgoing</option>
+                            </select>
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Received By</span>
+                            <input class="qc-input" type="text" name="received_by">
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Date Received</span>
+                            <input class="qc-input" type="date" name="date_received">
+                        </label>
+                        <label class="qc-field">
+                            <span class="qc-label">Initial Status</span>
+                            <select class="qc-select" name="initial_status" required>
+                                <option value="">Select...</option>
+                                <option value="For Filing">For Filing</option>
+                                <option value="For Action">For Action</option>
+                                <option value="For Records Only">For Records Only</option>
+                            </select>
+                        </label>
+                        <label class="qc-field span-2">
+                            <span class="qc-label">Remarks</span>
+                            <textarea class="qc-textarea" name="remarks"></textarea>
+                        </label>
+                    </div>
+                    <div class="qc-modal-actions">
+                        <button class="qc-btn secondary" id="cancel-quality-edit-modal" type="button">Cancel</button>
+                        <button class="qc-btn primary" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function () {
+            const TRACKER_STORAGE_KEY = 'quality_division_tracker_rows_v1';
+            const FOR_ACTION_STORAGE_KEY = 'quality_division_for_action_rows_v1';
+            const FOR_RELEASE_STORAGE_KEY = 'quality_division_for_release_rows_v1';
             const openBtn = document.getElementById('open-quality-record-modal');
             const closeBtn = document.getElementById('close-quality-record-modal');
             const cancelBtn = document.getElementById('cancel-quality-record-modal');
             const modal = document.getElementById('quality-record-modal');
             const form = document.getElementById('quality-record-form');
+            const editModal = document.getElementById('quality-edit-modal');
+            const editForm = document.getElementById('quality-edit-form');
+            const closeEditBtn = document.getElementById('close-quality-edit-modal');
+            const cancelEditBtn = document.getElementById('cancel-quality-edit-modal');
             const recordsBody = document.getElementById('quality-records-body');
             const emptyState = document.getElementById('quality-empty-state');
             const recordCount = document.getElementById('quality-record-count');
@@ -894,6 +1196,10 @@
             const reportTotalRecords = document.getElementById('report-total-records');
             const reportIncomingRecords = document.getElementById('report-incoming-records');
             const reportOutgoingRecords = document.getElementById('report-outgoing-records');
+            const forActionRecordsBody = document.getElementById('for-action-records-body');
+            const forActionCount = document.getElementById('for-action-count');
+            const forReleaseRecordsBody = document.getElementById('for-release-records-body');
+            const forReleaseCount = document.getElementById('for-release-count');
             const routeSelect = form.querySelector('[name="route"]');
             const transmittedToSelect = form.querySelector('[name="transmitted_to"]');
             const transmittedToOtherField = document.getElementById('transmitted-to-other-field');
@@ -906,8 +1212,11 @@
             const receivedByInput = document.getElementById('received-by-input');
             const dateReceivedField = document.getElementById('date-received-field');
             const dateReceivedInput = document.getElementById('date-received-input');
+            let editingRow = null;
+            let forActionState = {};
+            let forReleaseState = {};
 
-            if (!openBtn || !modal || !form || !recordsBody || !recordCount) {
+            if (!openBtn || !modal || !form || !recordsBody || !recordCount || !editModal || !editForm) {
                 return;
             }
 
@@ -922,6 +1231,48 @@
                 return parsed.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' });
             };
 
+            const loadForActionState = () => {
+                try {
+                    const raw = window.localStorage.getItem(FOR_ACTION_STORAGE_KEY);
+                    if (!raw) {
+                        return {};
+                    }
+                    const parsed = JSON.parse(raw);
+                    return parsed && typeof parsed === 'object' ? parsed : {};
+                } catch (error) {
+                    return {};
+                }
+            };
+
+            const persistForActionState = () => {
+                try {
+                    window.localStorage.setItem(FOR_ACTION_STORAGE_KEY, JSON.stringify(forActionState));
+                } catch (error) {
+                    // Ignore persistence errors so tracker UI still works.
+                }
+            };
+
+            const loadForReleaseState = () => {
+                try {
+                    const raw = window.localStorage.getItem(FOR_RELEASE_STORAGE_KEY);
+                    if (!raw) {
+                        return {};
+                    }
+                    const parsed = JSON.parse(raw);
+                    return parsed && typeof parsed === 'object' ? parsed : {};
+                } catch (error) {
+                    return {};
+                }
+            };
+
+            const persistForReleaseState = () => {
+                try {
+                    window.localStorage.setItem(FOR_RELEASE_STORAGE_KEY, JSON.stringify(forReleaseState));
+                } catch (error) {
+                    // Ignore persistence errors so tracker UI still works.
+                }
+            };
+
             const updateRecordCount = () => {
                 const count = recordsBody.querySelectorAll('tr[data-record-row="true"]').length;
                 recordCount.textContent = count + ' record' + (count === 1 ? '' : 's') + ' found';
@@ -934,7 +1285,7 @@
                 let outgoing = 0;
 
                 rows.forEach((row) => {
-                    const routeCell = row.children[6];
+                    const routeCell = row.children[7];
                     const routeValue = routeCell ? routeCell.textContent.trim().toLowerCase() : '';
                     if (routeValue === 'incoming') {
                         incoming += 1;
@@ -951,6 +1302,374 @@
                 }
                 if (reportOutgoingRecords) {
                     reportOutgoingRecords.textContent = String(outgoing);
+                }
+            };
+
+            const updateForActionPanel = () => {
+                if (!forActionRecordsBody) {
+                    return;
+                }
+
+                const trackerRows = Array.from(recordsBody.querySelectorAll('tr[data-record-row="true"]'));
+                const forActionRows = trackerRows.filter((row) => {
+                    const statusValue = getInitialStatusValue(row).toLowerCase();
+                    return statusValue === 'for action';
+                });
+                const testingStatsByProject = {};
+                trackerRows.forEach((row) => {
+                    const projectName = row.children[4] ? row.children[4].textContent.trim() : '';
+                    const projectKey = projectName.toLowerCase();
+                    if (!projectKey) {
+                        return;
+                    }
+                    const particulars = row.children[2] ? row.children[2].textContent.trim().toLowerCase() : '';
+                    const isTestingEntry = particulars.includes('test');
+                    if (!isTestingEntry) {
+                        return;
+                    }
+                    if (!testingStatsByProject[projectKey]) {
+                        testingStatsByProject[projectKey] = { total: 0, done: 0 };
+                    }
+                    testingStatsByProject[projectKey].total += 1;
+                    if (particulars.includes('test result')) {
+                        testingStatsByProject[projectKey].done += 1;
+                    }
+                });
+
+                forActionRecordsBody.innerHTML = '';
+                const activeKeys = {};
+
+                if (!forActionRows.length) {
+                    const emptyRow = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.colSpan = 9;
+                    emptyCell.id = 'for-action-empty-state';
+                    emptyCell.className = 'tracker-empty';
+                    emptyCell.textContent = 'No for action records found';
+                    emptyRow.appendChild(emptyCell);
+                    forActionRecordsBody.appendChild(emptyRow);
+                } else {
+                    forActionRows.forEach((sourceRow) => {
+                        const documentNo = sourceRow.children[3] ? sourceRow.children[3].textContent.trim() : '';
+                        const projectName = sourceRow.children[4] ? sourceRow.children[4].textContent.trim() : '';
+                        const location = sourceRow.children[5] ? sourceRow.children[5].textContent.trim() : '';
+                        const route = sourceRow.children[7] ? sourceRow.children[7].textContent.trim() : '';
+                        const dateReceived = sourceRow.children[9] ? sourceRow.children[9].textContent.trim() : '';
+                        const key = [documentNo, projectName, location, route, dateReceived].join('|').toLowerCase();
+                        activeKeys[key] = true;
+
+                        const existingState = forActionState[key] || {};
+                        const rowState = {
+                            status: existingState.status || 'On Process',
+                            team: existingState.team || '',
+                            progress: typeof existingState.progress === 'number' ? existingState.progress : 0,
+                            remarks: typeof existingState.remarks === 'string'
+                                ? existingState.remarks
+                                : (sourceRow.children[10] ? sourceRow.children[10].textContent.trim() : '')
+                        };
+                        forActionState[key] = rowState;
+
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-for-action-row', 'true');
+                        row.setAttribute('data-for-action-key', key);
+
+                        row.appendChild(createCell(documentNo || '-'));
+                        row.appendChild(createCell(projectName || '-'));
+                        row.appendChild(createCell(location || '-'));
+
+                        const requestLetterCell = document.createElement('td');
+                        const sourceRequestLetter = sourceRow.children[6];
+                        if (sourceRequestLetter && sourceRequestLetter.innerHTML.trim()) {
+                            requestLetterCell.innerHTML = sourceRequestLetter.innerHTML;
+                        } else {
+                            requestLetterCell.textContent = '-';
+                        }
+                        row.appendChild(requestLetterCell);
+
+                        row.appendChild(createCell(route || '-'));
+                        row.appendChild(createCell(dateReceived || '-'));
+
+                        const statusCell = document.createElement('td');
+                        statusCell.innerHTML = ''
+                            + '<select class="for-action-inline-select" data-for-action-field="status">'
+                            + '<option value="On Process">On Process</option>'
+                            + '<option value="Finished">Finished</option>'
+                            + '</select>';
+                        const statusSelect = statusCell.querySelector('select');
+                        statusSelect.value = rowState.status;
+                        row.appendChild(statusCell);
+
+                        const teamCell = document.createElement('td');
+                        teamCell.innerHTML = ''
+                            + '<select class="for-action-inline-select" data-for-action-field="team">'
+                            + '<option value="">Select team...</option>'
+                            + '<option value="Team 1">Team 1</option>'
+                            + '<option value="Team 2">Team 2</option>'
+                            + '<option value="Team 3">Team 3</option>'
+                            + '</select>';
+                        const teamSelect = teamCell.querySelector('select');
+                        teamSelect.value = rowState.team;
+                        row.appendChild(teamCell);
+
+                        const remarksCell = document.createElement('td');
+                        remarksCell.innerHTML = '<textarea class="for-action-inline-textarea" data-for-action-field="remarks"></textarea>';
+                        const remarksInput = remarksCell.querySelector('textarea');
+                        remarksInput.value = rowState.remarks || '';
+                        row.appendChild(remarksCell);
+
+                        forActionRecordsBody.appendChild(row);
+
+                        const projectStats = testingStatsByProject[projectName.toLowerCase()] || { total: 0, done: 0 };
+                        const progressPercent = projectStats.total > 0
+                            ? Math.round((projectStats.done / projectStats.total) * 100)
+                            : 0;
+                        const progressRow = document.createElement('tr');
+                        progressRow.className = 'for-action-progress-row';
+                        progressRow.setAttribute('data-for-action-key', key);
+                        const progressCell = document.createElement('td');
+                        progressCell.colSpan = 9;
+                        progressCell.className = 'for-action-progress';
+                        progressCell.innerHTML = ''
+                            + '<div class="for-action-progress-head"><span>Progress</span><strong data-progress-label="true">0%</strong></div>'
+                            + '<div class="for-action-progress-track"><div class="for-action-progress-fill" data-progress-fill="true"></div></div>'
+                            + '<small>' + String(projectStats.done) + ' of ' + String(projectStats.total) + ' testings done</small>';
+                        const progressLabel = progressCell.querySelector('[data-progress-label="true"]');
+                        const progressFill = progressCell.querySelector('[data-progress-fill="true"]');
+                        progressLabel.textContent = progressPercent + '%';
+                        progressFill.style.width = progressPercent + '%';
+                        progressRow.appendChild(progressCell);
+                        forActionRecordsBody.appendChild(progressRow);
+                    });
+                }
+
+                Object.keys(forActionState).forEach((key) => {
+                    if (!activeKeys[key]) {
+                        delete forActionState[key];
+                    }
+                });
+                persistForActionState();
+
+                if (forActionCount) {
+                    const count = forActionRows.length;
+                    forActionCount.textContent = count + ' record' + (count === 1 ? '' : 's') + ' found';
+                }
+                updateForReleasePanel();
+            };
+
+            const updateForReleasePanel = () => {
+                if (!forReleaseRecordsBody) {
+                    return;
+                }
+                const trackerRows = Array.from(recordsBody.querySelectorAll('tr[data-record-row="true"]'));
+                const forActionRows = trackerRows.filter((row) => {
+                    const statusValue = getInitialStatusValue(row).toLowerCase();
+                    return statusValue === 'for action';
+                });
+
+                const finishedRows = forActionRows.filter((row) => {
+                    const documentNo = row.children[3] ? row.children[3].textContent.trim() : '';
+                    const projectName = row.children[4] ? row.children[4].textContent.trim() : '';
+                    const location = row.children[5] ? row.children[5].textContent.trim() : '';
+                    const route = row.children[7] ? row.children[7].textContent.trim() : '';
+                    const dateReceived = row.children[9] ? row.children[9].textContent.trim() : '';
+                    const key = [documentNo, projectName, location, route, dateReceived].join('|').toLowerCase();
+                    const state = forActionState[key] || {};
+                    return (state.status || 'On Process') === 'Finished';
+                });
+
+                forReleaseRecordsBody.innerHTML = '';
+                const activeKeys = {};
+
+                if (!finishedRows.length) {
+                    const emptyRow = document.createElement('tr');
+                    const emptyCell = document.createElement('td');
+                    emptyCell.colSpan = 5;
+                    emptyCell.id = 'for-release-empty-state';
+                    emptyCell.className = 'tracker-empty';
+                    emptyCell.textContent = 'No for release records found';
+                    emptyRow.appendChild(emptyCell);
+                    forReleaseRecordsBody.appendChild(emptyRow);
+                } else {
+                    finishedRows.forEach((row) => {
+                        const documentNo = row.children[3] ? row.children[3].textContent.trim() : '';
+                        const projectName = row.children[4] ? row.children[4].textContent.trim() : '';
+                        const location = row.children[5] ? row.children[5].textContent.trim() : '';
+                        const route = row.children[7] ? row.children[7].textContent.trim() : '';
+                        const dateReceived = row.children[9] ? row.children[9].textContent.trim() : '';
+                        const key = [documentNo, projectName, location, route, dateReceived].join('|').toLowerCase();
+                        activeKeys[key] = true;
+
+                        const existingState = forReleaseState[key] || {};
+                        forReleaseState[key] = {
+                            certificate_name: existingState.certificate_name || '',
+                            remarks: existingState.remarks || ''
+                        };
+
+                        const releaseRow = document.createElement('tr');
+                        releaseRow.setAttribute('data-for-release-row', 'true');
+                        releaseRow.setAttribute('data-for-release-key', key);
+
+                        releaseRow.appendChild(createCell(documentNo || '-'));
+                        releaseRow.appendChild(createCell(projectName || '-'));
+                        releaseRow.appendChild(createCell(location || '-'));
+
+                        const fileCell = document.createElement('td');
+                        fileCell.className = 'for-release-file';
+                        fileCell.innerHTML = ''
+                            + '<input class="for-action-inline-select" data-for-release-field="certificate_file" type="file" accept=\".pdf,.doc,.docx,.png,.jpg,.jpeg\">'
+                            + '<small data-certificate-name="true"></small>';
+                        const fileNameLabel = fileCell.querySelector('[data-certificate-name="true"]');
+                        fileNameLabel.textContent = forReleaseState[key].certificate_name
+                            ? 'Selected: ' + forReleaseState[key].certificate_name
+                            : 'No certificate uploaded';
+                        releaseRow.appendChild(fileCell);
+
+                        const remarksCell = document.createElement('td');
+                        remarksCell.innerHTML = '<textarea class="for-action-inline-textarea" data-for-release-field="remarks"></textarea>';
+                        const remarksInput = remarksCell.querySelector('textarea');
+                        remarksInput.value = forReleaseState[key].remarks || '';
+                        releaseRow.appendChild(remarksCell);
+
+                        forReleaseRecordsBody.appendChild(releaseRow);
+                    });
+                }
+
+                Object.keys(forReleaseState).forEach((key) => {
+                    if (!activeKeys[key]) {
+                        delete forReleaseState[key];
+                    }
+                });
+                persistForReleaseState();
+
+                if (forReleaseCount) {
+                    const count = finishedRows.length;
+                    forReleaseCount.textContent = count + ' record' + (count === 1 ? '' : 's') + ' found';
+                }
+            };
+
+            const persistTrackerRows = () => {
+                try {
+                    const rows = Array.from(recordsBody.querySelectorAll('tr[data-record-row="true"]')).map((row) => {
+                        const requestLetterCell = row.children[6];
+                        return {
+                            received_from: row.children[0] ? row.children[0].textContent.trim() : '',
+                            doc_letter_date: row.children[1] ? row.children[1].textContent.trim() : '',
+                            particulars: row.children[2] ? row.children[2].textContent.trim() : '',
+                            document_no: row.children[3] ? row.children[3].textContent.trim() : '',
+                            project_name: row.children[4] ? row.children[4].textContent.trim() : '',
+                            location: row.children[5] ? row.children[5].textContent.trim() : '',
+                            request_letter_html: requestLetterCell ? requestLetterCell.innerHTML : '-',
+                            route: row.children[7] ? row.children[7].textContent.trim() : '',
+                            received_by: row.children[8] ? row.children[8].textContent.trim() : '',
+                            date_received: row.children[9] ? row.children[9].textContent.trim() : '',
+                            remarks: row.children[10] ? row.children[10].textContent.trim() : '',
+                            initial_status: getInitialStatusValue(row)
+                        };
+                    });
+                    window.localStorage.setItem(TRACKER_STORAGE_KEY, JSON.stringify(rows));
+                } catch (error) {
+                    // Ignore persistence errors so table interactions are not blocked.
+                }
+            };
+
+            const buildRecordRow = (record) => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-record-row', 'true');
+
+                const values = [
+                    record.received_from || '-',
+                    record.doc_letter_date || '-',
+                    record.particulars || '-',
+                    record.document_no || '-',
+                    record.project_name || '-',
+                    record.location || '-'
+                ];
+                values.forEach((value) => row.appendChild(createCell(value)));
+
+                const requestLetterCell = document.createElement('td');
+                const requestLetterHtml = (record.request_letter_html || '').trim();
+                if (requestLetterHtml && requestLetterHtml !== '-') {
+                    requestLetterCell.innerHTML = requestLetterHtml;
+                } else {
+                    requestLetterCell.textContent = '-';
+                }
+                row.appendChild(requestLetterCell);
+
+                row.appendChild(createCell(record.route || '-'));
+                row.appendChild(createCell(record.received_by || '-'));
+                row.appendChild(createCell(record.date_received || '-'));
+                row.appendChild(createCell(record.remarks || '-'));
+                row.appendChild(createInitialStatusCell(record.initial_status || ''));
+                row.appendChild(createActionsCell());
+                return row;
+            };
+
+            const hydrateTrackerRows = () => {
+                try {
+                    const toRowObject = (row) => {
+                        const requestLetterCell = row.children[6];
+                        return {
+                            received_from: row.children[0] ? row.children[0].textContent.trim() : '',
+                            doc_letter_date: row.children[1] ? row.children[1].textContent.trim() : '',
+                            particulars: row.children[2] ? row.children[2].textContent.trim() : '',
+                            document_no: row.children[3] ? row.children[3].textContent.trim() : '',
+                            project_name: row.children[4] ? row.children[4].textContent.trim() : '',
+                            location: row.children[5] ? row.children[5].textContent.trim() : '',
+                            request_letter_html: requestLetterCell ? requestLetterCell.innerHTML : '-',
+                            route: row.children[7] ? row.children[7].textContent.trim() : '',
+                            received_by: row.children[8] ? row.children[8].textContent.trim() : '',
+                            date_received: row.children[9] ? row.children[9].textContent.trim() : '',
+                            remarks: row.children[10] ? row.children[10].textContent.trim() : '',
+                            initial_status: getInitialStatusValue(row)
+                        };
+                    };
+                    const rowKey = (entry) => {
+                        return [
+                            (entry.document_no || '').trim(),
+                            (entry.project_name || '').trim(),
+                            (entry.location || '').trim(),
+                            (entry.route || '').trim(),
+                            (entry.date_received || '').trim()
+                        ].join('|').toLowerCase();
+                    };
+
+                    const serverRows = Array.from(recordsBody.querySelectorAll('tr[data-record-row="true"]')).map(toRowObject);
+                    const raw = window.localStorage.getItem(TRACKER_STORAGE_KEY);
+                    if (!raw) {
+                        persistTrackerRows();
+                        return;
+                    }
+                    const savedRows = JSON.parse(raw);
+                    if (!Array.isArray(savedRows)) {
+                        persistTrackerRows();
+                        return;
+                    }
+
+                    const savedByKey = {};
+                    savedRows.forEach((entry) => {
+                        savedByKey[rowKey(entry)] = entry;
+                    });
+                    serverRows.forEach((entry) => {
+                        const key = rowKey(entry);
+                        if (!savedByKey[key]) {
+                            savedRows.push(entry);
+                            savedByKey[key] = entry;
+                        }
+                    });
+
+                    recordsBody.innerHTML = '';
+                    if (!savedRows.length) {
+                        recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="13">No quality records found</td></tr>';
+                        persistTrackerRows();
+                        return;
+                    }
+
+                    savedRows.forEach((record) => {
+                        recordsBody.appendChild(buildRecordRow(record));
+                    });
+                    persistTrackerRows();
+                } catch (error) {
+                    // Ignore malformed saved state and continue with server-rendered rows.
                 }
             };
 
@@ -976,10 +1695,132 @@
                 toggleRouteFields();
             };
 
+            const closeEditModal = () => {
+                editModal.classList.remove('open');
+                editModal.setAttribute('aria-hidden', 'true');
+                editForm.reset();
+                editingRow = null;
+            };
+
             const createCell = (text) => {
                 const td = document.createElement('td');
                 td.textContent = text || '-';
                 return td;
+            };
+
+            const getInitialStatusValue = (row) => {
+                if (!row) {
+                    return '';
+                }
+                const statusCell = row.children[11];
+                if (!statusCell) {
+                    return '';
+                }
+                const statusSelect = statusCell.querySelector('.initial-status-select');
+                if (statusSelect) {
+                    return statusSelect.value.trim();
+                }
+                return statusCell.textContent.trim();
+            };
+
+            const normalizeCellForEdit = (value) => {
+                const text = (value || '').trim();
+                return text === '-' ? '' : text;
+            };
+
+            const createInitialStatusCell = (selectedStatus) => {
+                const td = document.createElement('td');
+                const select = document.createElement('select');
+                select.className = 'table-status-select initial-status-select';
+                select.setAttribute('aria-label', 'Initial Status');
+
+                [
+                    { value: '', label: 'Select...' },
+                    { value: 'For Filing', label: 'For Filing' },
+                    { value: 'For Action', label: 'For Action' },
+                    { value: 'For Records Only', label: 'For Records Only' }
+                ].forEach((optionData) => {
+                    const option = document.createElement('option');
+                    option.value = optionData.value;
+                    option.textContent = optionData.label;
+                    if ((selectedStatus || '').trim() === optionData.value) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+
+                td.appendChild(select);
+                return td;
+            };
+
+            const createActionsCell = () => {
+                const td = document.createElement('td');
+
+                const editBtn = document.createElement('button');
+                editBtn.type = 'button';
+                editBtn.className = 'table-action-btn';
+                editBtn.textContent = 'Edit';
+                editBtn.setAttribute('data-row-action', 'edit');
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'table-action-btn delete';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.setAttribute('data-row-action', 'delete');
+
+                td.appendChild(editBtn);
+                td.appendChild(document.createTextNode(' '));
+                td.appendChild(deleteBtn);
+                return td;
+            };
+
+            const deleteRecordRow = (row) => {
+                row.remove();
+                if (!recordsBody.querySelector('tr[data-record-row="true"]')) {
+                    recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="13">No quality records found</td></tr>';
+                }
+                updateRecordCount();
+                updateReportSummary();
+                updateForActionPanel();
+                persistTrackerRows();
+            };
+
+            const editRecordRow = (row) => {
+                editingRow = row;
+                editForm.reset();
+
+                const toInputDate = (displayValue) => {
+                    const raw = (displayValue || '').trim();
+                    if (!raw || raw === '-') {
+                        return '';
+                    }
+                    const parsed = new Date(raw);
+                    if (Number.isNaN(parsed.getTime())) {
+                        return '';
+                    }
+                    const year = parsed.getFullYear();
+                    const month = String(parsed.getMonth() + 1).padStart(2, '0');
+                    const day = String(parsed.getDate()).padStart(2, '0');
+                    return year + '-' + month + '-' + day;
+                };
+
+                editForm.elements['received_from'].value = normalizeCellForEdit(row.children[0] ? row.children[0].textContent : '');
+                editForm.elements['doc_letter_date'].value = toInputDate(row.children[1] ? row.children[1].textContent : '');
+                editForm.elements['particulars'].value = normalizeCellForEdit(row.children[2] ? row.children[2].textContent : '');
+                editForm.elements['document_no'].value = normalizeCellForEdit(row.children[3] ? row.children[3].textContent : '');
+                editForm.elements['project_name'].value = normalizeCellForEdit(row.children[4] ? row.children[4].textContent : '');
+                editForm.elements['route'].value = normalizeCellForEdit(row.children[7] ? row.children[7].textContent : '');
+                editForm.elements['received_by'].value = normalizeCellForEdit(row.children[8] ? row.children[8].textContent : '');
+                editForm.elements['date_received'].value = toInputDate(row.children[9] ? row.children[9].textContent : '');
+                editForm.elements['remarks'].value = normalizeCellForEdit(row.children[10] ? row.children[10].textContent : '');
+                editForm.elements['initial_status'].value = getInitialStatusValue(row);
+
+                editModal.classList.add('open');
+                editModal.setAttribute('aria-hidden', 'false');
+                const firstEditInput = editForm.querySelector('input, select, textarea');
+                if (firstEditInput) {
+                    firstEditInput.focus();
+                }
             };
 
             const addRecordRow = (data) => {
@@ -997,35 +1838,23 @@
                     data.particulars,
                     data.document_no,
                     data.project_name,
+                    data.location || '-',
                     '-',
                     data.route,
                     isIncoming ? data.received_by : '',
                     isIncoming ? formatDate(data.date_received) : '',
-                    data.remarks,
-                    data.initial_status
+                    data.remarks
                 ];
 
                 columns.forEach((value) => row.appendChild(createCell(value)));
-
-                const actionsCell = document.createElement('td');
-                const deleteBtn = document.createElement('button');
-                deleteBtn.type = 'button';
-                deleteBtn.className = 'table-action-btn delete';
-                deleteBtn.textContent = 'Delete';
-                deleteBtn.addEventListener('click', () => {
-                    row.remove();
-                    if (!recordsBody.querySelector('tr[data-record-row="true"]')) {
-                        recordsBody.innerHTML = '<tr><td class="tracker-empty" id="quality-empty-state" colspan="12">No quality records found</td></tr>';
-                    }
-                    updateRecordCount();
-                    updateReportSummary();
-                });
-                actionsCell.appendChild(deleteBtn);
-                row.appendChild(actionsCell);
+                row.appendChild(createInitialStatusCell(data.initial_status));
+                row.appendChild(createActionsCell());
 
                 recordsBody.appendChild(row);
                 updateRecordCount();
                 updateReportSummary();
+                updateForActionPanel();
+                persistTrackerRows();
             };
 
             const toggleTransmittedOther = () => {
@@ -1090,12 +1919,147 @@
             openBtn.addEventListener('click', openModal);
             closeBtn.addEventListener('click', closeModal);
             cancelBtn.addEventListener('click', closeModal);
+            if (closeEditBtn) {
+                closeEditBtn.addEventListener('click', closeEditModal);
+            }
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener('click', closeEditModal);
+            }
             if (transmittedToSelect) {
                 transmittedToSelect.addEventListener('change', toggleTransmittedOther);
             }
             if (routeSelect) {
                 routeSelect.addEventListener('change', toggleRouteFields);
             }
+            recordsBody.addEventListener('change', (event) => {
+                if (event.target && event.target.classList.contains('initial-status-select')) {
+                    updateForActionPanel();
+                    persistTrackerRows();
+                }
+            });
+            recordsBody.addEventListener('click', (event) => {
+                const actionBtn = event.target.closest('button[data-row-action]');
+                if (!actionBtn) {
+                    return;
+                }
+                const row = actionBtn.closest('tr[data-record-row="true"]');
+                if (!row) {
+                    return;
+                }
+                const action = actionBtn.getAttribute('data-row-action');
+                if (action === 'edit') {
+                    editRecordRow(row);
+                } else if (action === 'delete') {
+                    deleteRecordRow(row);
+                }
+            });
+            forActionRecordsBody.addEventListener('input', (event) => {
+                const target = event.target;
+                if (!target || !target.matches('[data-for-action-field]')) {
+                    return;
+                }
+                const row = target.closest('tr[data-for-action-row="true"]');
+                if (!row) {
+                    return;
+                }
+                const key = row.getAttribute('data-for-action-key');
+                if (!key) {
+                    return;
+                }
+                if (!forActionState[key]) {
+                    forActionState[key] = { status: 'On Process', team: '', progress: 0, remarks: '' };
+                }
+                const field = target.getAttribute('data-for-action-field');
+                if (field === 'progress') {
+                    const value = Math.max(0, Math.min(100, Number(target.value) || 0));
+                    forActionState[key].progress = value;
+                    const label = row.querySelector('[data-progress-label="true"]');
+                    const fill = row.querySelector('[data-progress-fill="true"]');
+                    if (label) {
+                        label.textContent = value + '%';
+                    }
+                    if (fill) {
+                        fill.style.width = value + '%';
+                    }
+                } else {
+                    forActionState[key][field] = target.value;
+                }
+                persistForActionState();
+            });
+            forActionRecordsBody.addEventListener('change', (event) => {
+                const target = event.target;
+                if (!target || !target.matches('[data-for-action-field]')) {
+                    return;
+                }
+                const row = target.closest('tr[data-for-action-row="true"]');
+                if (!row) {
+                    return;
+                }
+                const key = row.getAttribute('data-for-action-key');
+                if (!key) {
+                    return;
+                }
+                if (!forActionState[key]) {
+                    forActionState[key] = { status: 'On Process', team: '', progress: 0, remarks: '' };
+                }
+                const field = target.getAttribute('data-for-action-field');
+                forActionState[key][field] = target.value;
+                persistForActionState();
+                if (field === 'status') {
+                    updateForReleasePanel();
+                }
+            });
+            forReleaseRecordsBody.addEventListener('input', (event) => {
+                const target = event.target;
+                if (!target || !target.matches('[data-for-release-field]')) {
+                    return;
+                }
+                const row = target.closest('tr[data-for-release-row="true"]');
+                if (!row) {
+                    return;
+                }
+                const key = row.getAttribute('data-for-release-key');
+                if (!key) {
+                    return;
+                }
+                if (!forReleaseState[key]) {
+                    forReleaseState[key] = { certificate_name: '', remarks: '' };
+                }
+                const field = target.getAttribute('data-for-release-field');
+                if (field === 'remarks') {
+                    forReleaseState[key].remarks = target.value;
+                    persistForReleaseState();
+                }
+            });
+            forReleaseRecordsBody.addEventListener('change', (event) => {
+                const target = event.target;
+                if (!target || !target.matches('[data-for-release-field]')) {
+                    return;
+                }
+                const row = target.closest('tr[data-for-release-row="true"]');
+                if (!row) {
+                    return;
+                }
+                const key = row.getAttribute('data-for-release-key');
+                if (!key) {
+                    return;
+                }
+                if (!forReleaseState[key]) {
+                    forReleaseState[key] = { certificate_name: '', remarks: '' };
+                }
+                const field = target.getAttribute('data-for-release-field');
+                if (field === 'certificate_file') {
+                    const fileName = target.files && target.files[0] ? target.files[0].name : '';
+                    forReleaseState[key].certificate_name = fileName;
+                    const nameLabel = row.querySelector('[data-certificate-name="true"]');
+                    if (nameLabel) {
+                        nameLabel.textContent = fileName ? 'Selected: ' + fileName : 'No certificate uploaded';
+                    }
+                } else if (field === 'remarks') {
+                    forReleaseState[key].remarks = target.value;
+                }
+                persistForReleaseState();
+            });
             tabButtons.forEach((button) => {
                 button.addEventListener('click', () => {
                     const targetId = button.getAttribute('data-tab-target');
@@ -1115,10 +2079,21 @@
                     closeModal();
                 }
             });
+            editModal.addEventListener('click', (event) => {
+                if (event.target === editModal) {
+                    closeEditModal();
+                }
+            });
 
             document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && modal.classList.contains('open')) {
+                if (event.key !== 'Escape') {
+                    return;
+                }
+                if (modal.classList.contains('open')) {
                     closeModal();
+                }
+                if (editModal.classList.contains('open')) {
+                    closeEditModal();
                 }
             });
 
@@ -1133,9 +2108,44 @@
                 closeModal();
             });
 
+            editForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if (!editingRow) {
+                    closeEditModal();
+                    return;
+                }
+
+                const editData = Object.fromEntries(new FormData(editForm).entries());
+                editingRow.children[0].textContent = (editData.received_from || '').trim() || '-';
+                editingRow.children[1].textContent = editData.doc_letter_date ? formatDate(editData.doc_letter_date) : '-';
+                editingRow.children[2].textContent = (editData.particulars || '').trim() || '-';
+                editingRow.children[3].textContent = (editData.document_no || '').trim() || '-';
+                editingRow.children[4].textContent = (editData.project_name || '').trim() || '-';
+                editingRow.children[7].textContent = (editData.route || '').trim() || '-';
+                editingRow.children[8].textContent = (editData.received_by || '').trim() || '-';
+                editingRow.children[9].textContent = editData.date_received ? formatDate(editData.date_received) : '-';
+                editingRow.children[10].textContent = (editData.remarks || '').trim() || '-';
+
+                const statusSelect = editingRow.children[11]
+                    ? editingRow.children[11].querySelector('.initial-status-select')
+                    : null;
+                if (statusSelect) {
+                    statusSelect.value = (editData.initial_status || '').trim();
+                }
+
+                updateReportSummary();
+                updateForActionPanel();
+                persistTrackerRows();
+                closeEditModal();
+            });
+
+            forActionState = loadForActionState();
+            forReleaseState = loadForReleaseState();
+            hydrateTrackerRows();
             toggleRouteFields();
             updateRecordCount();
             updateReportSummary();
+            updateForActionPanel();
         })();
     </script>
 </body>
